@@ -1,0 +1,960 @@
+#!@PERL@
+# nagios: -epn
+## process_perfdata - PNP.
+## Copyright (c) 2006-2009 Joerg Linge (http://www.pnp4nagios.org)
+##
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# $Id: process_perfdata.pl.in 638 2009-06-16 18:47:24Z pitchfork $
+#
+@PERL_LIB_PATH_CODE@
+
+  if( $< == 0 ){
+    print "dont try this as root \n";
+      exit 1;
+  }
+
+use warnings;
+use strict;
+use Getopt::Long;
+use Time::HiRes qw(gettimeofday tv_interval);
+use vars qw ( $TEMPLATE %NAGIOS $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+
+my %conf = (
+    VERSION           => "@PKG_VERSION@",
+    TIMEOUT           => "5",
+    CFG_DIR           => "@sysconfdir@/",
+    USE_RRDs          => 1,
+    RRDPATH           => "@PERFDATA_DIR@",
+    RRDTOOL           => "@RRDTOOL@",
+    RRD_HEARTBEAT     => 8640,
+    RRA_STEP          => 60,
+    RRA_CFG           => "@sysconfdir@/rra.cfg",
+    LOG_FILE          => "@PERFDATA_LOG@",
+    LOG_FILE_MAX_SIZE => "10485760",               #Truncate after 10MB
+    LOG_LEVEL         => @DEBUG@,
+    XML_ENC           => "UTF-8",
+    RRD_DAEMON_OPTS   => ""
+);
+
+#
+# Dont change anything below these lines ...
+#
+#
+# "rrdtool create" Syntax
+#
+my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "RRA:AVERAGE:0.5:30:4320", "RRA:AVERAGE:0.5:360:5840", "RRA:MAX:0.5:1:2880", "RRA:MAX:0.5:5:2880", "RRA:MAX:0.5:30:4320", "RRA:MAX:0.5:360:5840", "RRA:MIN:0.5:1:2880", "RRA:MIN:0.5:5:2880", "RRA:MIN:0.5:30:4320", "RRA:MIN:0.5:360:5840", );
+
+Getopt::Long::Configure('bundling');
+my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b );
+my $opt_t = $conf{TIMEOUT};                            # Default Timeout
+my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
+GetOptions(
+    "V"          => \$opt_V,
+    "version"    => \$opt_V,
+    "h"          => \$opt_h,
+    "help"       => \$opt_h,
+    "i"          => \$opt_i,
+    "inetd"      => \$opt_i,
+    "b=s"        => \$opt_b,
+    "bulk=s"     => \$opt_b,
+    "d=s"        => \$opt_d,
+    "datatype=s" => \$opt_d,
+    "t=i"        => \$opt_t,
+    "timeout=i"  => \$opt_t,
+    "c=s"        => \$opt_c,
+    "config=s"   => \$opt_c,
+    "n"          => \$opt_n,
+    "npcd"       => \$opt_n
+);
+
+parse_config($opt_c);
+$opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
+
+#
+# RRDs Perl Module Detection
+#
+if ( $conf{USE_RRDs} == 1 ) {
+    unless ( eval "use RRDs;1" ) {
+        $conf{USE_RRDs} = 0;
+    }
+}
+
+print_help()    if ($opt_h);
+print_version() if ($opt_V);
+
+init_signals();
+alarm($opt_t);
+main();
+
+#
+# Subs
+#
+# Main function to switch to the right mode.
+sub main {
+    my $t0 = [gettimeofday];
+    if ($opt_i) {
+        print_log( "process_perfdata.pl-$conf{VERSION} starting in INETD Mode", 1 );
+        %NAGIOS = parse_env();
+        process_perfdata();
+    }
+    elsif ( $opt_b && !$opt_n ) {
+        print_log( "process_perfdata.pl-$conf{VERSION} starting in BULK Mode called by Nagios", 1 );
+        process_perfdata_file();
+    }
+    elsif ( $opt_b && $opt_n ) {
+        print_log( "process_perfdata.pl-$conf{VERSION} starting in BULK Mode called by NPCD", 1 );
+        process_perfdata_file();
+    }
+    else {
+        print_log( "process_perfdata.pl-$conf{VERSION} starting in DEFAULT Mode", 1 );
+        %NAGIOS = parse_env();
+        process_perfdata();
+    }
+    my $t1 = [gettimeofday];
+    my $rt = tv_interval $t0, $t1;
+    print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
+    exit 0;
+}
+
+#
+# Parse %ENV and return a global hash %NAGIOS
+#
+sub parse_env {
+    %NAGIOS = ();
+    $NAGIOS{DATATYPE} = "SERVICEPERFDATA";
+    if ($opt_i) {
+        my @input = <STDIN>;
+        foreach my $key (@input) {
+            $key =~ s/([&])/sprintf("%%%02x",ord($1))/eg;        # URLencode
+            $key =~ /<(NAGIOS_[A-Z 0-9_]+)>(.*)<\/NAGIOS_.*>/;
+            $ENV{$1} = $2 if ($2);
+        }
+    }
+
+    if ( !$ENV{NAGIOS_HOSTNAME} ) {
+        print_log( "Cant find Nagios Environment. Exiting ....", 1 );
+        exit 2;
+    }
+    foreach my $key ( sort keys %ENV ) {
+        if ( $key =~ /^NAGIOS_(.*)/ ) {
+            $NAGIOS{$1} = $ENV{$key};
+        }
+    }
+
+    if ($opt_d) {
+        $NAGIOS{DATATYPE} = $opt_d;
+    }
+
+    $NAGIOS{HOSTNAME}      = cleanup( $NAGIOS{HOSTNAME} );
+    $NAGIOS{SERVICEDESC}   = cleanup( $NAGIOS{SERVICEDESC} );
+    $NAGIOS{PERFDATA}      = $NAGIOS{SERVICEPERFDATA};
+    $NAGIOS{CHECK_COMMAND} = $NAGIOS{SERVICECHECKCOMMAND};
+
+    if ( $NAGIOS{DATATYPE} eq "HOSTPERFDATA" ) {
+        $NAGIOS{SERVICEDESC}   = "_HOST_";
+        $NAGIOS{PERFDATA}      = $NAGIOS{HOSTPERFDATA};
+        $NAGIOS{CHECK_COMMAND} = $NAGIOS{HOSTCHECKCOMMAND};
+    }
+    print_log( "Datatype set to '$NAGIOS{DATATYPE}' ", 2 );
+    return %NAGIOS;
+}
+
+#
+# Perfdata sanity check
+#
+sub process_perfdata {
+    if ( !$NAGIOS{PERFDATA} ) {
+        print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
+        if ( !$opt_b ) {
+            print_log( "PNP exiting ...", 1 );
+            exit 1;
+        }
+    }
+
+    if ( $NAGIOS{PERFDATA} =~ /^(.*)\s\[(.*)\]$/ ) {
+        $NAGIOS{PERFDATA}      = $1;
+        $NAGIOS{CHECK_COMMAND} = $2;
+        print_log( "Found Perfdata from Distributed Server $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ($NAGIOS{PERFDATA})", 1 );
+    }
+    else {
+        print_log( "Found Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ($NAGIOS{PERFDATA}) ", 1 );
+    }
+
+    $NAGIOS{PERFDATA} =~ s/,/./g;
+    $NAGIOS{PERFDATA} =~ s/\s+=/=/g;
+    $NAGIOS{PERFDATA} =~ s/=\s+/=/g;
+    $NAGIOS{PERFDATA} .= " ";
+    parse_perfstring( $NAGIOS{PERFDATA} );
+}
+
+#
+# Process Perfdata in Bulk Mode
+#
+sub process_perfdata_file {
+    if ( $opt_b =~ /-PID-(\d+)/ ) {
+        print_log( "Oops: $opt_b already performed by $1 - please check timeout settings", 0 );
+    }
+
+    print_log( "searching for $opt_b", 2 );
+    if ( -e "$opt_b" ) {
+        my $pdfile = "$opt_b" . "-PID-" . $$;
+        print_log( "renaming $opt_b to $pdfile for bulk update", 2 );
+        unless ( rename "$opt_b", "$pdfile" ) {
+            print_log( "ERROR: rename $opt_b to $pdfile failed", 1 );
+            exit 1;
+        }
+
+        print_log( "reading $pdfile for bulk update", 2 );
+        open( PDFILE, "< $pdfile" );
+        my $count = 0;
+        while (<PDFILE>) {
+            $count++;
+            print_log( "Processing Line $count", 2 );
+            my @LINE = split(/\t/);
+            %ENV = ();    # cleaning ENV
+            foreach my $k (@LINE) {
+                $k =~ /([A-Z 0-9_]+)::(.*)$/;
+                $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+            }
+            if ( $ENV{NAGIOS_SERVICEPERFDATA} || $ENV{NAGIOS_HOSTPERFDATA} ) {
+                parse_env();
+                process_perfdata();
+            }
+            else {
+                print_log( "No Perfdata. Skipping line $count", 2 );
+            }
+        }
+
+        print_log( "$count Lines processed", 1 );
+
+        if ( unlink("$pdfile") == 1 ) {
+            print_log( "$pdfile deleted", 1 );
+        }
+        else {
+            print_log( "Could not delete $pdfile:$!", 1 );
+        }
+
+    }
+    else {
+        print_log( "ERROR: File $opt_b not found", 1 );
+    }
+}
+
+#
+# Write Data to RRD Files
+#
+sub data2rrd {
+
+    my @data = @_;
+    print_log( "data2rrd called", 2 );
+    $NAGIOS{RRDFILE}      = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".rrd";
+    $NAGIOS{XMLFILE}      = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".xml";
+    $NAGIOS{SERVICEDESC}  = $data[0]{servicedesc} if ( $data[0]{multi} ge 1 );
+    $NAGIOS{MULTI_PARENT} = "";
+    $NAGIOS{MULTI_PARENT} = $data[0]{multi_parent} if ( $data[0]{multi} ge 1 );
+    $TEMPLATE             = $data[0]{template};
+    my @rrd_state = ();
+
+    unless ( -d "$conf{RRDPATH}" ) {
+        unless ( mkdir "$conf{RRDPATH}" ) {
+            print_log( "mkdir $conf{RRDPATH}, permission denied ", 1 );
+            print_log( "PNP exiting ...",                          1 );
+            exit 1;
+        }
+    }
+
+    unless ( -d "$conf{RRDPATH}/$NAGIOS{HOSTNAME}" ) {
+        unless ( mkdir "$conf{RRDPATH}/$NAGIOS{HOSTNAME}" ) {
+            print_log( "mkdir $conf{RRDPATH}/$NAGIOS{HOSTNAME}, permission denied ", 1 );
+            print_log( "PNP exiting ...",                                            1 );
+            exit 1;
+        }
+    }
+
+    #
+    # Create PHP Template File
+    #
+    open_template( $NAGIOS{XMLFILE} );
+
+    my @ds_create = ();
+    my $ds_update = '';
+
+    for my $i ( 0 .. $#data ) {
+        print_log( " -- Job $i ", 3 );
+        my $DS = $i + 1;
+
+        #
+        # Pro Datasource
+        #
+        for my $job ( sort keys %{ $data[$i] } ) {
+            if ( defined $data[$i]{$job} ) {
+                print_log( "  -- $job -> $data[$i]{$job}", 3 );
+            }
+        }
+        push( @ds_create, "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" );
+        $ds_update = "$ds_update:$data[$i]{value}";
+        write_to_template( "TEMPLATE",        $data[0]{template} );
+        write_to_template( "IS_MULTI",        $data[0]{multi} );
+        write_to_template( "DS",              $DS );
+        write_to_template( "NAME",            "$data[$i]{label}" );
+        write_to_template( "UNIT",            $data[$i]{uom} );
+        write_to_template( "ACT",             $data[$i]{value} );
+        write_to_template( "WARN",            $data[$i]{warning} );
+        write_to_template( "WARN_MIN",        $data[$i]{warning_min} );
+        write_to_template( "WARN_MAX",        $data[$i]{warning_max} );
+        write_to_template( "WARN_RANGE_TYPE", $data[$i]{warning_range_type} );
+        write_to_template( "CRIT",            $data[$i]{critical} );
+        write_to_template( "CRIT_MIN",        $data[$i]{critical_min} );
+        write_to_template( "CRIT_MAX",        $data[$i]{critical_max} );
+        write_to_template( "CRIT_RANGE_TYPE", $data[$i]{critical_range_type} );
+        write_to_template( "MIN",             $data[$i]{min} );
+        write_to_template( "MAX",             $data[$i]{max} );
+
+    }
+
+    # Create or Update the RRD Files
+    #
+
+    if ( !-e "$NAGIOS{RRDFILE}" ) {
+        @rrd_create = parse_rra_config($TEMPLATE);
+        if ( $conf{USE_RRDs} == 1 ) {
+            print_log( "RRDs::create $NAGIOS{RRDFILE} @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
+            RRDs::create( "$NAGIOS{RRDFILE}", @rrd_create, @ds_create, "--start=$NAGIOS{TIMET}", "--step=$conf{RRA_STEP}" );
+            my $err = RRDs::error();
+            if ($err) {
+                print_log( "RRDs::create ERROR $err", 1 );
+                @rrd_state = ( 1, $err );
+            }
+            else {
+                print_log( "$NAGIOS{RRDFILE} created", 2 );
+                @rrd_state = ( 0, "just created" );
+            }
+        }
+        else {
+            print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.",                                   2 );
+            print_log( "$conf{RRDTOOL} create $NAGIOS{RRDFILE} @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
+            system("$conf{RRDTOOL} create $NAGIOS{RRDFILE} @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
+            if ( $? > 0 ) {
+                print_log( "rrdtool create returns $?", 1 );
+                @rrd_state = ( $?, "create failed" );
+            }
+            else {
+                print_log( "rrdtool create returns $?", 1 );
+                @rrd_state = ( 0, "just created" );
+            }
+        }
+    }
+    else {
+        if ( $conf{USE_RRDs} == 1 ) {
+            if ( $conf{RRD_DAEMON_OPTS} ) {
+                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
+                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$NAGIOS{RRDFILE}", "$NAGIOS{TIMET}$ds_update" );
+            }
+            else {
+                print_log( "RRDs::update $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
+                RRDs::update( "$NAGIOS{RRDFILE}", "$NAGIOS{TIMET}$ds_update" );
+            }
+            my $err = RRDs::error();
+            if ($err) {
+                print_log( "RRDs::update ERROR $err", 1 );
+                @rrd_state = ( 1, $err );
+            }
+            else {
+                print_log( "$NAGIOS{RRDFILE} updated", 2 );
+                @rrd_state = ( 0, "successful updated" );
+            }
+        }
+        else {
+            print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.", 2 );
+            if ( $conf{RRD_DAEMON_OPTS} ) {
+                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
+                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update");
+            }
+            else {
+                print_log( "$conf{RRDTOOL} update $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
+                system("$conf{RRDTOOL} update $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update");
+            }
+            if ( $? > 0 ) {
+                print_log( "rrdtool update returns $?", 1 );
+                @rrd_state = ( $?, "update failed" );
+            }
+            else {
+                print_log( "rrdtool update returns $?", 1 );
+                @rrd_state = ( $?, "successful updated" );
+            }
+
+        }
+    }
+    write_state_to_template(@rrd_state);
+    write_env_to_template();
+    close_template( $NAGIOS{XMLFILE} );
+}
+
+#
+# Write Template
+#
+sub open_template {
+    my $xmlfile = shift;
+    open( XML, "> $xmlfile.$$" ) or die "Cant create temporary XML file ", $!;
+    print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
+    print XML "<NAGIOS>\n";
+}
+
+#
+# Close Template FH
+#
+sub close_template {
+    my $xmlfile = shift;
+    printf( XML "</NAGIOS>\n" );
+    close(XML);
+    rename( "$xmlfile.$$", "$xmlfile" );
+}
+
+#
+# Add Lines
+#
+sub write_to_template {
+    my $tag  = shift;
+    my $data = shift;
+    if ( !defined $data ) {
+        $data = "";
+    }
+    if ( $tag =~ /^TEMPLATE$/ ) {
+        printf( XML "  <DATASOURCE>\n" );
+        printf( XML "    <%s>%s</%s>\n", $tag, "$data", $tag );
+    }
+    elsif ( $tag =~ /^MAX$/ ) {
+        printf( XML "    <%s>%s</%s>\n", $tag, "$data", $tag );
+        printf( XML "  </DATASOURCE>\n" );
+    }
+    else {
+        printf( XML "    <%s>%s</%s>\n", $tag, "$data", $tag );
+    }
+}
+
+sub write_state_to_template {
+    my @rrd_state = @_;
+    printf( XML "  <RRD>\n" );
+    printf( XML "    <RC>%s</RC>\n",   $rrd_state[0] );
+    printf( XML "    <TXT>%s</TXT>\n", $rrd_state[1] );
+    printf( XML "  </RRD>\n" );
+}
+
+#
+# Store the complete Nagios ENV
+#
+sub write_env_to_template {
+    foreach my $key ( sort keys %NAGIOS ) {
+        $NAGIOS{$key} =~ s/([&><])/sprintf("%%%02x",ord($1))/eg;    # URLencode
+        printf( XML "  <NAGIOS_%s>%s</NAGIOS_%s>\n", $key, $NAGIOS{$key}, $key );
+    }
+}
+
+#
+# Analyse check_command to find PNP Template .
+#
+sub adjust_template {
+    my $command           = shift;
+    my $uom               = shift;
+    my $count             = shift;
+    my @dstype_list       = ();
+    my $use_min_on_create = 0;
+    my $use_max_on_create = 0;
+
+    if ( $uom eq "c" ) {
+        $dstype = "COUNTER";
+        print_log( "DEBUG: DSTYPE adjusted to $dstype by UOM", 3 );
+    }
+    else {
+        $dstype = "GAUGE";
+    }
+    print_log( "DEBUG: RAW Command -> $command", 3 );
+    my @temp_template = split /\!/, $command;
+    my $template      = cleanup( $temp_template[0] );
+    $template = trim( $template );
+    my $template_cfg  = "$conf{CFG_DIR}/check_commands/$template.cfg";
+    if ( -e $template_cfg ) {
+        print_log( "DEBUG: adjust_template() => $template_cfg", 3 );
+        my $initial_dstype = $dstype;
+        open FH, "<", $template_cfg;
+        while (<FH>) {
+            next if /^#/;
+            next if /^$/;
+            s/#.*//;
+            s/ //g;
+            if (/^(.*)=(.*)$/) {
+                if ( $1 eq "DATATYPE" ) {
+                    $dstype = uc($2);
+                    $dstype =~ s/ //g;
+                    @dstype_list = split /,/, $dstype;
+                    if ( exists $dstype_list[$count] && $dstype_list[$count] =~ /^(COUNTER|GAUGE|ABSOLUTE|DERIVE)$/ ) {
+                        $dstype = $dstype_list[$count];
+                        print_log( "Adapting RRD Datatype to \"$dstype\" as defined in $template_cfg with key $count", 2 );
+                    }
+                    elsif ( $dstype =~ /^(COUNTER|GAUGE|ABSOLUTE|DERIVE)$/ ) {
+                        print_log( "Adapting RRD Datatype to \"$dstype\" as defined in $template_cfg", 2 );
+                    }
+                    else {
+                        print_log( "RRD Datatype \"$dstype\" defined in $template_cfg is invalid", 2 );
+                        $dstype = $initial_dstype;
+                    }
+
+                }
+                if ( $1 eq "CUSTOM_TEMPLATE" ) {
+                    print_log( "Adapting Template using ARG $2", 2 );
+                    my $i = 1;
+                    my @keys = split /,/, $2;
+                    foreach my $keys (@keys) {
+                        if ( $i == 1 ) {
+                            $template = trim( $temp_template[$keys] );
+                            print_log( "Adapting Template to $template.php (added ARG$keys)", 2 );
+                        }
+                        else {
+                            $template .= "_" . trim( $temp_template[$keys] );
+                            print_log( "Adapting Template to $template.php (added ARG$keys)", 2 );
+                        }
+                        $i++;
+                    }
+                    print_log( "Adapting Template to $template.php as defined in $template_cfg", 2 );
+                }
+                if ( $1 eq "USE_MIN_ON_CREATE" && $2 eq "1" ) {
+                    $use_min_on_create = 1;
+                }
+                if ( $1 eq "USE_MAX_ON_CREATE" && $2 eq "1" ) {
+                    $use_max_on_create = 1;
+                }
+            }
+        }
+        close FH;
+    }
+    else {
+        print_log( "No Custom Template found for $template ($template_cfg) ", 2 );
+        print_log( "RRD Datatype is $dstype",                                 2 );
+    }
+    print_log( "Template is $template.php", 2 );
+    return $template, $dstype, $use_min_on_create, $use_max_on_create;
+}
+
+#
+# Parse process_perfdata.cfg
+#
+sub parse_config {
+    my $config_file = shift;
+    my $line        = 0;
+
+    if ( -e $config_file ) {
+        open CFG, '<', "$config_file";
+        while (<CFG>) {
+            $line++;
+            chomp;
+            s/ //g;
+            next if /^#/;
+            next if /^$/;
+            s/#.*//;
+
+            if (/^(.*)=(.*)$/) {
+                if ( defined $conf{$1} ) {
+                    $conf{$1} = $2;
+                }
+            }
+        }
+        close CFG;
+        print_log( "Using Config File $config_file parameters", 2 );
+    }
+    else {
+        print_log( "Config File $config_file not found, using defaults", 2 );
+    }
+}
+
+#
+# Parse rra.cfg
+#
+sub parse_rra_config {
+    my $template = shift;
+    my $rra_template = "";
+    if( -e $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg" ){
+	$rra_template =	$conf{'CFG_DIR'} . "/" . $template . ".rra.cfg";
+        print_log( "Reading $rra_template", 2 );
+    }elsif( -e $conf{'RRA_CFG'} ){
+        $rra_template = $conf{'RRA_CFG'};
+        print_log( "Reading $conf{'RRA_CFG'}", 2 );
+    }else{
+        print_log( "No rra.cfg found. Using default values.", 2 );
+    }
+
+    if( $rra_template ne "" ){	
+	@rrd_create = ();
+	open RRA, "<", $rra_template;
+	while (<RRA>) {
+            next if /^#/;
+            next if /^$/;
+            s/#.*//;
+
+            chomp;
+            push @rrd_create, "$_";
+        }
+        close RRA;
+    }else{
+	@rrd_create = @default_rrd_create;
+    }
+    return @rrd_create;
+
+}
+
+#
+# Function adapted from Nagios::Plugin::Performance
+# Thanks to Gavin Carr and Ton Voon
+#
+sub _parse {
+
+    # Nagios::Plugin::Performance
+    my $string     = shift;
+    my $tmp_string = $string;
+    $string =~ s/^([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*//;
+
+    if ( $tmp_string eq $string ) {
+        print_log( "No pattern match in function _parse($string)", 2 );
+        return undef;
+    }
+
+    return undef unless ( ( defined $1 && $1 ne "" ) && ( defined $2 && $2 ne "" ) );
+
+    # create hash from all performance data values
+
+    my %p = (
+        "label"    => $1,
+        "value"    => $2,
+        "uom"      => $3,
+        "warning"  => $4,
+        "critical" => $5,
+        "min"      => $6,
+        "max"      => $7
+    );
+
+    $p{label} =~ s/['\/\\]//g;    # cleanup
+
+    if ( $p{uom} eq "%" ) {
+        $p{uom} = "%%";
+        print_log( "DEBUG: UOM adjust = $p{uom}", 3 );
+    }
+
+    #
+    # Check for warning and critical ranges
+    #
+    if ( $p{warning} && $p{warning} =~ /^([\d\.\-~@]+)?:([\d\.\-~@]+)?$/ ) {
+        print_log( "DEBUG: Processing warning ranges ( $p{warning} )", 3 );
+        $p{warning_min} = $1;
+        $p{warning_max} = $2;
+        delete( $p{warning} );
+        if ( $p{warning_min} =~ /^@/ ) {
+            $p{warning_min} =~ s/@//;
+            $p{warning_range_type} = "inside";
+        }
+        else {
+            $p{warning_range_type} = "outside";
+        }
+    }
+    if ( $p{critical} && $p{critical} =~ /^([\d\.\-~@]+)?:([\d\.\-~@]+)?$/ ) {
+        print_log( "DEBUG: Processing critical ranges ( $p{critical} )", 3 );
+        $p{critical_min} = $1;
+        $p{critical_max} = $2;
+        delete( $p{critical} );
+        if ( $p{critical_min} =~ /^@/ ) {
+            $p{critical_min} =~ s/@//;
+            $p{critical_range_type} = "inside";
+        }
+        else {
+            $p{critical_range_type} = "outside";
+        }
+    }
+
+    return ( $string, %p );
+}
+
+#
+# clean Strings
+#
+sub cleanup {
+    my $string = shift;
+    $string =~ s/[ :\/\\]/_/g;
+    return $string;
+}
+
+#
+# Trim leading whitespaces
+#
+sub trim {
+    my $string = shift;
+    $string =~ s/^\s*//g;
+    return $string;
+}
+
+#
+# Parse the Performance String and call data2rrd()
+#
+sub parse_perfstring {
+
+    #
+    # Default RRD Datatype
+    # Value will be overwritten by adjust_template()
+    #
+    $dstype = "GAUGE";
+    my $perfstring = shift;
+    $perfstring =~ s/\\/\//g;
+    $perfstring =~ s/\//_/g;
+    my $is_multi = "0";
+    my @perfs;
+    my @multi;
+    my %p;
+    my $use_min_on_create = 0;
+    my $use_max_on_create = 0;
+
+    #
+    # check_multi
+    #
+    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)=/ ) {
+        $is_multi = 1;
+        print_log( "check_multi Perfdata start", 3 );
+        my $count        = 0;
+        my $multi_parent = cleanup( $NAGIOS{SERVICEDESC} );
+        while ($perfstring) {
+            ( $perfstring, %p ) = _parse($perfstring);
+            if ( !$p{label} ) {
+                print_log( "Invalid Perfdata detected ", 1 );
+                @perfs = ();
+                last;
+            }
+            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)$/ ) {
+                @multi = ( $1, $2, $3 );
+                if ( $count == 0 ) {
+                    print_log( "DEBUG: First check_multi block", 3 );
+                    # Keep servicedesc while processing the first block.
+                    $p{servicedesc}  = cleanup( $NAGIOS{SERVICEDESC} );
+                    $p{multi}        = 1;
+                    $p{multi_parent} = $multi_parent;
+                }
+                else {
+                    print_log( "DEBUG: A new check_multi block ($count) starts", 3 );
+                    $p{servicedesc}  = cleanup( $multi[0] );    # Use the multi servicedesc.
+                    $p{multi}        = 2;
+                    $p{multi_parent} = $multi_parent;
+                    $p{servicedesc}  = cleanup( $multi[0] );    # Use the multi servicedesc.
+                    data2rrd(@perfs) if ( $#perfs >= 0 );       # Process when a new block starts.
+                    @perfs = ();                                # Clear the perfs array.
+                }
+                ( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
+                if ( $use_max_on_create == 1 && defined $p{max} ) {
+                    $p{rrd_max} = $p{max};
+                }
+                else {
+                    $p{rrd_max} = "U";
+                }
+                if ( $use_min_on_create == 1 && defined $p{min} ) {
+                    $p{rrd_min} = $p{min};
+                }
+                else {
+                    $p{rrd_min} = "U";
+                }
+                $p{dstype}   = $dstype;
+                $p{label}    = cleanup( $multi[2] );           # store the original label from check_multi header
+                $p{hostname} = cleanup( $NAGIOS{HOSTNAME} );
+                push @perfs, {%p};
+                $count++;
+            }
+            else {
+                print_log( "DEBUG: Next check_multi data for block $count", 3 );
+
+                # additional check_multi data
+                ( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
+                if ( $use_max_on_create == 1 && defined $p{max} ) {
+                    $p{rrd_max} = $p{max};
+                }
+                else {
+                    $p{rrd_max} = "U";
+                }
+                if ( $use_min_on_create == 1 && defined $p{min} ) {
+                    $p{rrd_min} = $p{min};
+                }
+                else {
+                    $p{rrd_min} = "U";
+                }
+                $p{dstype}       = $dstype;
+                $p{hostname}     = cleanup( $NAGIOS{HOSTNAME} );
+                $p{servicedesc}  = cleanup( $multi[0] );           # Use the multi servicedesc.
+                $p{multi}        = $is_multi;
+                $p{multi_parent} = $multi_parent;
+                $p{label}        = cleanup( $p{label} );
+                push @perfs, {%p};
+            }
+        }
+        data2rrd(@perfs) if ( $#perfs >= 0 );
+        @perfs = ();
+    }
+    else {
+
+        #
+        # Normal Performance Data
+        #
+        print_log( "DEBUG: Normal perfdata", 3 );
+        my $count = 0;
+        while ($perfstring) {
+            ( $perfstring, %p ) = _parse($perfstring);
+            if ( !$p{label} ) {
+                print_log( "Invalid Perfdata detected ", 1 );
+                @perfs = ();
+                last;
+            }
+
+            ( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
+
+            if ( $use_max_on_create == 1 && defined $p{max} ) {
+                $p{rrd_max} = $p{max};
+            }
+            else {
+                $p{rrd_max} = "U";
+            }
+            if ( $use_min_on_create == 1 && defined $p{min} ) {
+                $p{rrd_min} = $p{min};
+            }
+            else {
+                $p{rrd_min} = "U";
+            }
+
+            $p{multi}       = $is_multi;
+            $p{dstype}      = $dstype;
+            $p{hostname}    = cleanup( $NAGIOS{HOSTNAME} );
+            $p{servicedesc} = cleanup( $NAGIOS{SERVICEDESC} );
+            $p{label}       = cleanup( $p{label} );
+
+            push @perfs, {%p};
+            $count++;
+        }
+        data2rrd(@perfs) if ( $#perfs >= 0 );
+        @perfs = ();
+    }
+}
+
+#
+# Write to Logfile
+#
+sub print_log {
+    my $out      = shift;
+    my $severity = shift;
+    if ( $severity <= $conf{LOG_LEVEL} ) {
+        open( LOG, ">>" . $conf{LOG_FILE} ) || die "Can't open logfile ($conf{LOG_FILE}) ", $!;
+        if ( -s LOG > $conf{LOG_FILE_MAX_SIZE} ) {
+            truncate( LOG, 0 );
+            printf( LOG "File truncated" );
+        }
+        my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) = localtime(time);
+        printf( LOG "%02d-%02d-%02d %02d:%02d:%02d [%d] [%d] %s\n", $year + 1900, $mon + 1, $mday, $hour, $min, $sec, $$, $severity, $out );
+        close(LOG);
+    }
+}
+
+#
+# Signals and Handlers
+#
+sub init_signals {
+    $SIG{'INT'}  = \&handle_signal;
+    $SIG{'QUIT'} = \&handle_signal;
+    $SIG{'ALRM'} = \&handle_signal;
+    $SIG{'ILL'}  = \&handle_signal;
+    $SIG{'ABRT'} = \&handle_signal;
+    $SIG{'FPE'}  = \&handle_signal;
+    $SIG{'SEGV'} = \&handle_signal;
+    $SIG{'TERM'} = \&handle_signal;
+
+    $SIG{'BUS'}  = \&handle_signal;
+    $SIG{'SYS'}  = \&handle_signal;
+    $SIG{'XCPU'} = \&handle_signal;
+    $SIG{'XFSZ'} = \&handle_signal;
+
+    $SIG{'IOT'} = \&handle_signal;
+
+    $SIG{'PIPE'} = "IGNORE";
+    $SIG{'HUP'}  = \&handle_signal;
+}
+
+#
+# Handle Signals
+#
+sub handle_signal {
+    my ($signal) = (@_);
+    if ( $signal eq "ALRM" ) {
+        print_log( "*** TIMEOUT: Timeout after $opt_t Sec. ****", 0 );
+        if ( $opt_b && !$opt_n ) {
+            print_log( "*** TIMEOUT: Deleting current file to avoid loops",   0 );
+            print_log( "*** TIMEOUT: Please check your process_perfdata.cfg", 0 );
+        }
+        elsif ( $opt_b && $opt_n ) {
+            print_log( "*** TIMEOUT: Deleting current file to avoid NPCD loops", 0 );
+            print_log( "*** TIMEOUT: Please check your npcd.cfg",                0 );
+        }
+    }
+    if ($opt_b) {
+        my $pdfile = "$opt_b" . "-PID-" . $$;
+        if ( unlink("$pdfile") == 1 ) {
+            print_log( "*** TIMEOUT: $pdfile deleted", 0 );
+        }
+        else {
+            print_log( "*** TIMEOUT: Could not delete $pdfile:$!", 0 );
+        }
+    }
+    my $temp_file = "$conf{RRDPATH}/$NAGIOS{HOSTNAME}/$NAGIOS{SERVICEDESC}.xml.$$";
+    if ( -f $temp_file ) {
+        unlink($temp_file);
+    }
+    print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
+    exit 1;
+}
+
+#
+#
+#
+sub print_help {
+    print "Copyright (c) 2005-2008 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
+    print "Use process_perfdata.pl to store Nagios Plugin Performance Data into RRD Databases\n";
+    print "\n";
+    print "Options:\n";
+    print "  -h, --help\n";
+    print "     Print detailed help screen\n";
+    print "  -V, --version\n";
+    print "     Print version information\n";
+    print "  -t, --timeout=INTEGER\n";
+    print "     Seconds before process_perfdata.pl times out (default: $opt_t)\n";
+    print "  -i, --inetd\n";
+    print "     Use this Option if process_perfdata.pl is executed by inetd/xinetd.\n";
+    print "  -d, --datatype\n";
+    print "     Defaults to \"SERVICEPERFDATA\". Use \"HOSTPERFDATA\" to process Perfdata from regular Host Checks\n";
+    print "     Only used in default or inetd Mode\n";
+    print "  -b, --bulk\n";
+    print "     Provide a file for bulk update\n";
+    print "  -c, --config\n";
+    print "     Optional process_perfdata config file\n";
+    print "     Default: @sysconfdir@/process_perfdata.cfg \n";
+    exit 0;
+}
+
+#
+#
+#
+sub print_version {
+    print "Version: process_perfdata.pl $conf{VERSION}\n";
+    print "Copyright (c) 2005-2007 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
+    exit 0;
+}
+

@@ -1,0 +1,88 @@
+#!@SHELL@
+# Init Script for NPCD
+
+PREFIX=@prefix@
+BIN=@bindir@/@npcd_name@
+CONF=@sysconfdir@/npcd.cfg
+PID=/var/run/npcd.pid
+
+get_pid ()
+{
+	PID_NUMBER=`head -n 1 $PID`
+}
+
+case "$1" in
+	start)
+		if [ ! -f $PID ]
+		then 
+			$BIN -d -f $CONF
+			if [ $? -eq 0 ] 
+			then
+				echo "NPCD started."
+				exit 0
+			else
+				echo "Could not start NPCD"
+				exit 1
+			fi
+		else
+			echo "PID File '$PID' exists. NPCD already started"
+			exit 0
+		fi
+		;;
+	stop)
+		if [ -f $PID ] 
+		then
+			get_pid
+			kill $PID_NUMBER
+			if [ $? -eq 0 ] 
+			then
+				rm $PID
+				echo "NPCD stopped."
+				exit 0
+			else
+				echo "Could not stop NPCD"
+				exit 1
+			fi
+		else
+			echo "NPCD was not running."
+			exit 0
+		fi
+		;;
+	restart)
+		$0 stop
+		$0 start
+		;;
+	reload)
+		if [ -f $PID ] 
+		then
+			get_pid
+			kill -HUP $PID_NUMBER
+			if [ $? -eq 0 ]
+			then
+				echo "NPCD reloaded"
+				exit 0
+			else
+				echo "Could not reload"
+				exit 1
+			fi
+		else
+			echo "NPCD no running"
+			exit 1
+		fi
+		;;
+	status)
+		if [ -f $PID ] 
+		then
+			echo "NPCD running."
+			exit 0
+		else
+			echo "NPCD not running."
+			exit 1
+		fi
+		;;
+	*)
+		echo "Usage: npcd {start|stop|restart|reload|status}"
+		exit 1
+		;;
+esac
+

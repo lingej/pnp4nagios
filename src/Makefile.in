@@ -1,0 +1,131 @@
+############################
+# Makefile for PNP
+#
+# Last Modified: 11-17-2008
+############################
+
+
+# Source code directories
+SRC_INCLUDE=../include
+
+CC=@CC@
+CFLAGS=@CFLAGS@ @DEFS@ -DNSCORE
+
+# Compiler flags for use with Valgrind
+#CFLAGS=-O0 -g -DHAVE_CONFIG_H -DNSCORE
+
+# Compiler flags for optimization (overrides default)
+#CFLAGS=-O3 -Wall -fno-strict-aliasing -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -DHAVE_CONFIG_H -DNSCORE
+
+# Compiler flags for optimization (complements default)
+#CFLAGS_WARN=-Wall -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs
+#CFLAGS_DEBUG=-ggdb3 -g3
+#CFLAGS_GPROF=-pg
+#CFLAGS+=$(CFLAGS_WARN) $(CFLAGS_DEBUG) $(CFLAGS_GPROF)
+
+LDFLAGS=@LDFLAGS@
+LIBS=@LIBS@
+
+MOD_LDFLAGS=@MOD_LDFLAGS@
+MOD_CFLAGS=@MOD_CFLAGS@
+
+prefix=@prefix@
+LOGDIR=@localstatedir@
+CFGDIR=@sysconfdir@
+BINDIR=@bindir@
+LIBEXECDIR=@libexecdir@
+CGIDIR=@sbindir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+STRIP=@STRIP@
+DATAROOTDIR=@datarootdir@
+PERFDATA_SPOOL_DIR=@PERFDATA_SPOOL_DIR@
+
+MATHLIBS=-lm
+
+CP=@CP@
+
+OBJS=pnpsender.o npcd.o config.o
+
+NPCDOBJS=utils.o config.o logging.o
+NPCDHEAD=$(SRC_INCLUDE)/pnp.h $(SRC_INCLUDE)/config.h
+
+OBJDEPS=
+
+all: npcd npcdmod.o
+
+# Required Objects
+
+logging: logging.c $(NPCDHEAD)
+	$(CC) $(CFLAGS) -o $@ logging.c
+
+config: config.c $(NPCDHEAD)
+	$(CC) $(CFLAGS) -o $@ config.c 
+
+utils: utils.c $(NPCDHEAD)
+	$(CC) $(CFLAGS) -o $@ utils.c 
+
+###############################
+#
+#           PNPSENDER 
+#
+###############################
+
+pnpsender: pnpsender.c 
+	$(CC) $(CFLAGS) -o $@ pnpsender.c 
+
+###############################
+#
+# 	     NPCD
+#
+###############################
+npcd: npcd.c $(NPCDOBJS) $(NPCDHEAD)
+	$(CC) $(CFLAGS) -o $@ npcd.c $(NPCDOBJS) -lpthread
+
+###############################
+#
+#          NPCDMOD
+#
+###############################
+npcdmod.o: npcdmod.c
+	$(CC) $(MOD_CFLAGS) $(CFLAGS) -o npcdmod.o npcdmod.c $(MOD_LDFLAGS) $(LDFLAGS) $(LIBS) -fPIC
+
+###############################
+#
+#        Cleanups
+#
+###############################
+
+clean:
+	-rm -f pnpsender *.o 
+	-rm -f npcd *.o 
+	-rm -f *~ *.*~
+
+distclean: clean
+	-rm -f Makefile
+
+devclean: distclean
+
+
+###############################
+#
+#         Install
+#
+################################
+
+install:
+	$(MAKE) install-basic
+	$(MAKE) strip-post-install
+
+install-unstripped:
+	$(MAKE) install-basic
+
+install-basic:
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(BINDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATA_SPOOL_DIR)
+	$(INSTALL) -m 754 $(INSTALL_OPTS) @npcd_name@ $(DESTDIR)$(BINDIR)
+	$(INSTALL) -m 754 $(INSTALL_OPTS) npcdmod.o $(DESTDIR)$(BINDIR)
+
+strip-post-install:
+	$(STRIP) $(DESTDIR)$(BINDIR)/@npcd_name@
+	$(STRIP) $(DESTDIR)$(BINDIR)/npcdmod.o

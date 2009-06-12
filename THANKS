@@ -1,0 +1,51 @@
+###########################################
+#              PNP Thanks                 #
+###########################################
+
+Olivier PLATHEY - For providing FPDF
+The Prototype Core Team - For the Prototype Ajax Framework http://www.prototypejs.org/
+Erik Bosrup - For Overlib http://www.bosrup.com/web/overlib/
+Thomas Fuchs - For Script.aculo.us
+
+Hendrik Baecker - Testing ,debugging and english Translation
+Olaf Reiss - Testing
+Andreas Koch - Testing
+Christian Mies - check_nwstat Templates, Testing
+Sebastian Schubert - Internal Design
+Stephan von Gehlen - Testing and Feedback
+Geoffrey Walton - Feedback and Translation
+Frank J. Heym - process_perfdata.pl Patch for check_nrpe Templates
+Rudolf Labuschagne - Testing PNP in distributed setups
+Sven Velt - Multigraph Layout
+Sonja Scholz - Documentation
+Andrea Gabellini - 
+Matthias Flittener - Bugreport
+Ton Kersten - Dutch Language
+Matthias Flacke - check_multi development, npcd load patch
+Markus Dorfer - 
+Christian Claus - Debugging 64bit Counter
+Herbert Straub
+Wolfgang Nieder - English translation
+Max Schubert - 
+Wolfgang Barth -
+Ethan Galstad - Patches and Feedback
+Jan Dreyer - Solaris debugging
+Jean-Marie Le Borgne - French Translation
+Steffen Waitz - ./configure Patch
+Lars Michelsen -
+Philipp Deneu -
+Thomas Stolle - Debugging and testing
+Benjamin Ritcey - Patches
+Franky Van Liedekerke 
+Simon Meggle
+Mattias Ryrlén - Patches
+Nicolas Graziano - Patches
+
+###########################################
+#           NPCD Thanks                   #
+###########################################
+
+Joerg Linge - for giving so much ideas what I have to do ;)
+Ethan Galstad - for many useful code to learn from
+Carsten Schlosser - for all the time I can disturb him to ask silly pointer questions
+My Girlfriend Katrin (without 'h') - for spending so much time without me
