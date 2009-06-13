@@ -1,0 +1,80 @@
+#@PERL@ -w
+@PERL_LIB_PATH_CODE@
+
+my %conf = (
+    VERSION           => "@PKG_VERSION@",
+    USE_RRDs          => "@RRDS@",
+    DEBUG_LEVEL       => "@DEBUG@",
+    PERL_LIB_PATH     => "@PERL_LIB_PATH@"
+);
+
+if ( $conf{USE_RRDs} == 1 ) {
+    unless ( eval "use RRDs;1" ) {
+        $conf{USE_RRDs} = 0;
+    }
+}
+
+if($conf{USE_RRDs} == 1){
+    $rrds_version = $RRDs::VERSION;
+}
+
+my $RRD_BINARY = "@RRDTOOL@";
+@T = `$RRD_BINARY`;
+@v = split(/ /,$T[0]);
+$rrdtool_version = $v[1];
+$rrdtool_message = "";
+if($rrdtool_version == ""){
+    $rrdtool_message = "WARNING: \"$RRD_BINARY\" does not look like rrdtool";
+}else{
+    $rrdtool_message = "$RRD_BINARY Version $rrdtool_version";
+}
+
+printf ("\n\n");
+printf ("*** Configuration summary for %s %s %s ***","@PKG_NAME@","@PKG_VERSION@","@PKG_REL_DATE@");
+printf ("\n\n");
+printf ("  General Options:\n");
+printf ("  -------------------------         -------------------\n");
+printf ("  Nagios user/group:                %s %s\n","@nagios_user@","@nagios_grp@");
+printf ("  Install directory:                %s\n","@prefix@");
+printf ("  HTML Dir:                         %s\n","@datarootdir@");
+printf ("  Config Dir:                       %s\n","@sysconfdir@");
+printf ("  Location of rrdtool binary:       %s\n",$rrdtool_message);
+printf ("  RRDs Perl Modules:                %s\n","*** NOT FOUND ***")            if($conf{USE_RRDs} == 0);
+printf ("  RRDs Perl Modules:                %s (Version %s)\n","FOUND", $rrds_version)    if($conf{USE_RRDs} == 1);
+printf ("  RRDs Perl search path:            %s\n","@PERL_LIB_PATH@")              if($conf{PERL_LIB_PATH} ne "");
+printf ("  RRD Files stored in:              %s\n","@PERFDATA_DIR@");
+printf ("  process_perfdata.pl Logfile:      %s\n","@PERFDATA_LOG@");
+printf ("  Perfdata files (NPCD) stored in:  %s\n","@PERFDATA_SPOOL_DIR@");
+printf ("\n\n"); 
+printf ("  Review the options above for accuracy.  If they look okay,\n");
+printf ("  type 'make all' to compile.\n");
+
+if($conf{USE_RRDs} == 0){
+    print "\n\n";
+    print "  WARNING: The RRDs Perl Modules are not found on your System\n";
+    print "           Using RRDs will speedup things in larger Installtions.\n";
+}
+
+if($ENV{DESTDIR}){
+    print "\n\n";
+    print "  WARNING: \$DESTDIR is set to $ENV{DESTDIR} \n";
+}
+
+if($conf{DEBUG_LEVEL} != 0){
+    printf ("\n\n");
+    printf ("  Found PERL at:                    %s\n","@PERL@");
+    printf ("  Found SHELL at:                   %s\n","@SHELL@");
+    printf ("  Debug Level:                      %s\n","@DEBUG@");
+    printf ("  Libexecdir:                       %s\n","@libexecdir@");
+    printf ("  localstatedir:                    %s\n","@localstatedir@");
+    printf ("  libdir:                           %s\n","@libdir@");
+    printf ("  sysconfdir:                       %s\n","@sysconfdir@");
+    printf ("  datarootdir:                      %s\n","@datarootdir@");
+    printf ("  sbindir:                          %s\n","@sbindir@");
+    printf ("  bindir:                           %s\n","@bindir@");
+    printf ("  System:                           %s\n","@host_os@");
+}
+
+print "\n\n";
+
+exit 0;

@@ -5,15 +5,15 @@ AC_PREREQ(2.61)
 AC_INIT(pnp, 0.4.14, pnp4nagios-devel@lists.sourceforge.net)
 AC_CONFIG_SRCDIR(src/)
 AC_CONFIG_HEADERS(include/config.h:include/config.h.in)
-AC_PREFIX_DEFAULT(/usr/local/nagios)
+AC_PREFIX_DEFAULT(/usr/local/pnp4nagios)
 
 AC_DEFINE([DEFAULT_NAGIOS_USER], [nagios], [Default Nagios User])
 AC_DEFINE([DEFAULT_NAGIOS_GROUP], [nagios], [Default Nagios Group])
 
 PKG_NAME=pnp
-PKG_VERSION="0.4.14"
+PKG_VERSION="0.6.0"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
-PKG_REL_DATE="05-02-2009"
+PKG_REL_DATE="07-03-2009"
 AC_SUBST(PKG_NAME)
 AC_SUBST(PKG_VERSION)
 AC_SUBST(PKG_HOME_URL)
@@ -78,55 +78,49 @@ AC_SUBST(INSTALL_OPTS)
 
 # Checks for programs.
 AC_PATH_PROG(PERL,perl)
-
-AC_ARG_WITH(onlypnpsender,[  --with-onlypnpsender use this if you know that you don't have rrdtools],ONLYPNPSENDER=yes,ONLYPNPSENDER=no)
-
+# Check for Perl lib path
 PERL_LIB_PATH=no
 AC_ARG_WITH(perl_lib_path,[  --with-perl_lib_path=<path_to_perl_libs> sets path to rrdtool RRDs perl modules.],PERL_LIB_PATH=$withval,PERL_LIB_PATH=no)
 AC_SUBST(PERL_LIB_PATH)
-
+# Check for rrdtool
 RRDTOOL=no
 AC_ARG_WITH(rrdtool,[  --with-rrdtool=<path_to_rrdtool> sets path to rrdtool],RRDTOOL=$withval,RRDTOOL=no)
 if test RRDTOOL=no; then
         AC_PATH_PROG(RRDTOOL,rrdtool)
 fi
 
-if test "x$ONLYPNPSENDER" = "xno" ;then
-    AC_MSG_CHECKING(rrdtool path $RRDTOOL)
-    if [ test -d $RRDTOOL ];then
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR([$RRDTOOL is a directory! PNP needs the Path to the rrdtool binary!])
-    fi
-    AC_MSG_RESULT(yes)
-    AC_MSG_CHECKING(for executable Bit on $RRDTOOL)
-    if [ ! test -x $RRDTOOL] ;then
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR([$RRDTOOL is not executable!])
-    fi
-    AC_MSG_RESULT(yes)
-else
-	AC_MSG_WARN([Hope you know that you come along without rrdtools...])
+AC_MSG_CHECKING(rrdtool path $RRDTOOL)
+if [ test -d $RRDTOOL ];then
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([$RRDTOOL is a directory! PNP needs the Path to the rrdtool binary!])
 fi
+AC_MSG_RESULT(yes)
+AC_MSG_CHECKING(for executable Bit on $RRDTOOL)
+if [ ! test -x $RRDTOOL] ;then
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([$RRDTOOL is not executable!])
+fi
+AC_MSG_RESULT(yes)
 
 AC_SUBST(RRDTOOL)
 
 
 AC_ARG_WITH(perfdata-logfile,[  --with-perfdata-logfile=<perfdata_logfile> Tell me where I should store the 'process_perfdata.pl' Logfile],
-            PERFDATA_LOG=$withval,
-	    PERFDATA_LOG=$localstatedir/perfdata.log
+        PERFDATA_LOG=$withval,
+	    PERFDATA_LOG=$localstatedir/log/perfdata.log
 	   )
 AC_SUBST(PERFDATA_LOG)
 
 
 AC_ARG_WITH(perfdata-dir,[  --with-perfdata-dir=<path_to_perfdata> Tell me where I should store the RRD Database Files],
 	    PERFDATA_DIR=$withval,
-	    PERFDATA_DIR=$datarootdir/perfdata
+	    PERFDATA_DIR=$localstatedir/perfdata
 	   )
 AC_SUBST(PERFDATA_DIR)
 
 AC_ARG_WITH(perfdata-spool-dir,[  --with-perfdata-spool-dir=<path_to_perfdata_spool_dir> Tell me where I should store perfdata files for bulk mode with npcd],
 	    PERFDATA_SPOOL_DIR=$withval,
-	    PERFDATA_SPOOL_DIR=$localstatedir/spool/perfdata/
+	    PERFDATA_SPOOL_DIR=$localstatedir/spool/
 	   )
 AC_SUBST(PERFDATA_SPOOL_DIR)
 
@@ -235,29 +229,29 @@ else
 fi
 AC_SUBST(RRDS)
 
-AC_CONFIG_FILES( subst )
+AC_CONFIG_FILES( subst Makefile share/Makefile scripts/Makefile src/Makefile sample-config/Makefile )
 AC_OUTPUT()
 
 $PERL subst summary
-$PERL subst Makefile
-$PERL subst share/Makefile
-$PERL subst scripts/Makefile
-$PERL subst src/Makefile
-$PERL subst sample-config/Makefile
-$PERL subst man/Makefile
+#$PERL subst Makefile
+#$PERL subst share/Makefile
+#$PERL subst scripts/Makefile
+#$PERL subst src/Makefile
+#$PERL subst sample-config/Makefile
+#$PERL subst man/Makefile
 $PERL subst scripts/process_perfdata.pl 
-$PERL subst scripts/net2pnp.pl 
+#$PERL subst scripts/net2pnp.pl 
 $PERL subst scripts/rc.npcd 
 $PERL subst scripts/check_pnp_rrds.pl 
-$PERL subst share/pnp/index.php 
-$PERL subst share/pnp/zoom.php 
-$PERL subst share/pnp/ajax.php 
-$PERL subst sample-config/pnp/config.php 
-$PERL subst sample-config/xinetd.pnp.sample 
-$PERL subst sample-config/misccommands.sample 
-$PERL subst sample-config/pnp/npcd.cfg-sample 
-$PERL subst sample-config/pnp/process_perfdata.cfg-sample
-$PERL subst sample-config/pnp/pnp4nagios_release
-$PERL subst contrib/verify_pnp_config 
+#$PERL subst share/pnp/index.php 
+#$PERL subst share/pnp/zoom.php 
+#$PERL subst share/pnp/ajax.php 
+#$PERL subst sample-config/pnp/config.php 
+#$PERL subst sample-config/xinetd.pnp.sample 
+#$PERL subst sample-config/misccommands.sample 
+#$PERL subst sample-config/pnp/npcd.cfg-sample 
+#$PERL subst sample-config/pnp/process_perfdata.cfg-sample
+#$PERL subst sample-config/pnp/pnp4nagios_release
+#$PERL subst contrib/verify_pnp_config 
 
 $PERL summary

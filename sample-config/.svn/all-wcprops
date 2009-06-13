@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/pnp4nagios/!svn/ver/607/trunk/sample-config
+END
+Makefile.in
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/pnp4nagios/!svn/ver/512/trunk/sample-config/Makefile.in
+END
+misccommands.sample.in
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/pnp4nagios/!svn/ver/160/trunk/sample-config/misccommands.sample.in
+END
+xinetd.pnp.sample.in
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/pnp4nagios/!svn/ver/480/trunk/sample-config/xinetd.pnp.sample.in
+END

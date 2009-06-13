@@ -51,9 +51,6 @@ all:
 	@echo "Enjoy."
 	@echo ""
 
-pnpsender:
-	cd $(SRC_BASE) && $(MAKE)
-
 scripts:
 	cd $(SRC_SCRIPTS) && $(MAKE)
 
@@ -75,7 +72,6 @@ distclean:
 	cd $(SRC_SHARE) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
-	cd $(SRC_MAN) && $(MAKE) $@
 	-rm -f *.cfg core
 	-rm -f *~ *.*~ */*~ */*.*~
 	-rm -f config.log config.status config.cache

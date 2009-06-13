@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/pnp4nagios/!svn/ver/590/trunk/sample-config/pnp/check_commands
+END
+check_nwstat.cfg-sample
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svnroot/pnp4nagios/!svn/ver/590/trunk/sample-config/pnp/check_commands/check_nwstat.cfg-sample
+END

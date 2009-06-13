@@ -1,0 +1,54 @@
+#
+# Config File for process_perfdata.pl
+#
+# $Id: process_perfdata.cfg-sample.in 520 2008-09-16 12:50:10Z pitchfork $
+#
+# process_perfdata.pl Timout 
+#
+TIMEOUT = 5
+#
+# Use RRDs Perl Module
+#
+USE_RRDs = 1 
+#
+# 
+#
+RRDPATH = @PERFDATA_DIR@
+#
+#
+#
+RRDTOOL = @RRDTOOL@
+#
+#
+#
+CFG_DIR = @sysconfdir@
+#
+#
+#
+RRD_HEARTBEAT = 8460 
+#
+#
+#
+RRA_CFG = @sysconfdir@/rra.cfg
+#
+#
+#
+RRA_STEP = 60
+#
+#
+#
+LOG_FILE = @PERFDATA_LOG@
+#
+# Loglevel 0=silent 1=normal 2=debug
+#
+LOG_LEVEL = @DEBUG@
+#
+# XML encoding
+# The supported encodings are ISO-8859-1, UTF-8 and US-ASCII.
+# http://www.php.net/xml-parser-create
+XML_ENC = UTF-8
+#
+# EXPERIMENTAL rrdcached Support
+# Use only with rrdtool svn revision 1511+
+#
+# RRD_DAEMON_OPTS = unix:/tmp/rrdcached.sock

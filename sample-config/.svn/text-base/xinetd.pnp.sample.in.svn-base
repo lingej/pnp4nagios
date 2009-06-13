@@ -1,0 +1,19 @@
+#
+# Config fuer net2pnp
+# Der verwendete Port muss in der /etc/servcies bekannt gegeben werden
+# cps beschraenkt die eingehenden Verbindungen auf 150 pro Sek. und wartet dann 10 sek.
+#
+
+service pnp
+{
+        disable         = no
+        socket_type     = stream
+        protocol        = tcp
+        port            = 5669
+        wait            = no
+        user            = nagios
+        cps             = 150 10
+        server          = /usr/local/nagios/libexec/process_perfdata.pl
+        server_args     = --inetd
+}
+									

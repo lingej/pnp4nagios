@@ -1,1 +1,9 @@
 autom4te.cache
+subst
+summary
+*Makefile
+config.log
+config.status
+scripts/rc.npcd
+scripts/check_pnp_rrds.pl
+scripts/process_perfdata.pl

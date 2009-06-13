@@ -579,7 +579,7 @@ PACKAGE_STRING='pnp 0.4.14'
 PACKAGE_BUGREPORT='pnp4nagios-devel@lists.sourceforge.net'
 
 ac_unique_file="src/"
-ac_default_prefix=/usr/local/nagios
+ac_default_prefix=/usr/local/pnp4nagios
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -1287,7 +1287,6 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-nagios-user=<user> sets user name to run nagios
   --with-nagios-group=<grp> sets group name to run nagios
-  --with-onlypnpsender use this if you know that you don't have rrdtools
   --with-perl_lib_path=<path_to_perl_libs> sets path to rrdtool RRDs perl modules.
   --with-rrdtool=<path_to_rrdtool> sets path to rrdtool
   --with-perfdata-logfile=<perfdata_logfile> Tell me where I should store the 'process_perfdata.pl' Logfile
@@ -1754,9 +1753,9 @@ _ACEOF
 
 
 PKG_NAME=pnp
-PKG_VERSION="0.4.14"
+PKG_VERSION="0.6.0"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
-PKG_REL_DATE="05-02-2009"
+PKG_REL_DATE="07-03-2009"
 
 
 
@@ -5586,16 +5585,7 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 
-
-
-# Check whether --with-onlypnpsender was given.
-if test "${with_onlypnpsender+set}" = set; then
-  withval=$with_onlypnpsender; ONLYPNPSENDER=yes
-else
-  ONLYPNPSENDER=no
-fi
-
-
+# Check for Perl lib path
 PERL_LIB_PATH=no
 
 # Check whether --with-perl_lib_path was given.
@@ -5606,7 +5596,7 @@ else
 fi
 
 
-
+# Check for rrdtool
 RRDTOOL=no
 
 # Check whether --with-rrdtool was given.
@@ -5659,33 +5649,28 @@ fi
 
 fi
 
-if test "x$ONLYPNPSENDER" = "xno" ;then
-    { echo "$as_me:$LINENO: checking rrdtool path $RRDTOOL" >&5
+{ echo "$as_me:$LINENO: checking rrdtool path $RRDTOOL" >&5
 echo $ECHO_N "checking rrdtool path $RRDTOOL... $ECHO_C" >&6; }
-    if  test -d $RRDTOOL ;then
-        { echo "$as_me:$LINENO: result: no" >&5
+if  test -d $RRDTOOL ;then
+    { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-        { { echo "$as_me:$LINENO: error: $RRDTOOL is a directory! PNP needs the Path to the rrdtool binary!" >&5
+    { { echo "$as_me:$LINENO: error: $RRDTOOL is a directory! PNP needs the Path to the rrdtool binary!" >&5
 echo "$as_me: error: $RRDTOOL is a directory! PNP needs the Path to the rrdtool binary!" >&2;}
    { (exit 1); exit 1; }; }
-    fi
-    { echo "$as_me:$LINENO: result: yes" >&5
+fi
+{ echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-    { echo "$as_me:$LINENO: checking for executable Bit on $RRDTOOL" >&5
+{ echo "$as_me:$LINENO: checking for executable Bit on $RRDTOOL" >&5
 echo $ECHO_N "checking for executable Bit on $RRDTOOL... $ECHO_C" >&6; }
-    if  ! test -x $RRDTOOL ;then
-        { echo "$as_me:$LINENO: result: no" >&5
+if  ! test -x $RRDTOOL ;then
+    { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-        { { echo "$as_me:$LINENO: error: $RRDTOOL is not executable!" >&5
+    { { echo "$as_me:$LINENO: error: $RRDTOOL is not executable!" >&5
 echo "$as_me: error: $RRDTOOL is not executable!" >&2;}
    { (exit 1); exit 1; }; }
-    fi
-    { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-else
-	{ echo "$as_me:$LINENO: WARNING: Hope you know that you come along without rrdtools..." >&5
-echo "$as_me: WARNING: Hope you know that you come along without rrdtools..." >&2;}
 fi
+{ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
 
 
 
@@ -5695,7 +5680,7 @@ fi
 if test "${with_perfdata_logfile+set}" = set; then
   withval=$with_perfdata_logfile; PERFDATA_LOG=$withval
 else
-  PERFDATA_LOG=$localstatedir/perfdata.log
+  PERFDATA_LOG=$localstatedir/log/perfdata.log
 
 fi
 
@@ -5707,7 +5692,7 @@ fi
 if test "${with_perfdata_dir+set}" = set; then
   withval=$with_perfdata_dir; PERFDATA_DIR=$withval
 else
-  PERFDATA_DIR=$datarootdir/perfdata
+  PERFDATA_DIR=$localstatedir/perfdata
 
 fi
 
@@ -5718,7 +5703,7 @@ fi
 if test "${with_perfdata_spool_dir+set}" = set; then
   withval=$with_perfdata_spool_dir; PERFDATA_SPOOL_DIR=$withval
 else
-  PERFDATA_SPOOL_DIR=$localstatedir/spool/perfdata/
+  PERFDATA_SPOOL_DIR=$localstatedir/spool/
 
 fi
 
@@ -5851,7 +5836,7 @@ echo "${ECHO_T}yes" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files subst"
+ac_config_files="$ac_config_files subst Makefile share/Makefile scripts/Makefile src/Makefile sample-config/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6408,6 +6393,11 @@ do
   case $ac_config_target in
     "include/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/config.h:include/config.h.in" ;;
     "subst") CONFIG_FILES="$CONFIG_FILES subst" ;;
+    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "share/Makefile") CONFIG_FILES="$CONFIG_FILES share/Makefile" ;;
+    "scripts/Makefile") CONFIG_FILES="$CONFIG_FILES scripts/Makefile" ;;
+    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+    "sample-config/Makefile") CONFIG_FILES="$CONFIG_FILES sample-config/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -6987,25 +6977,25 @@ fi
 
 
 $PERL subst summary
-$PERL subst Makefile
-$PERL subst share/Makefile
-$PERL subst scripts/Makefile
-$PERL subst src/Makefile
-$PERL subst sample-config/Makefile
-$PERL subst man/Makefile
+#$PERL subst Makefile
+#$PERL subst share/Makefile
+#$PERL subst scripts/Makefile
+#$PERL subst src/Makefile
+#$PERL subst sample-config/Makefile
+#$PERL subst man/Makefile
 $PERL subst scripts/process_perfdata.pl
-$PERL subst scripts/net2pnp.pl
+#$PERL subst scripts/net2pnp.pl
 $PERL subst scripts/rc.npcd
 $PERL subst scripts/check_pnp_rrds.pl
-$PERL subst share/pnp/index.php
-$PERL subst share/pnp/zoom.php
-$PERL subst share/pnp/ajax.php
-$PERL subst sample-config/pnp/config.php
-$PERL subst sample-config/xinetd.pnp.sample
-$PERL subst sample-config/misccommands.sample
-$PERL subst sample-config/pnp/npcd.cfg-sample
-$PERL subst sample-config/pnp/process_perfdata.cfg-sample
-$PERL subst sample-config/pnp/pnp4nagios_release
-$PERL subst contrib/verify_pnp_config
+#$PERL subst share/pnp/index.php
+#$PERL subst share/pnp/zoom.php
+#$PERL subst share/pnp/ajax.php
+#$PERL subst sample-config/pnp/config.php
+#$PERL subst sample-config/xinetd.pnp.sample
+#$PERL subst sample-config/misccommands.sample
+#$PERL subst sample-config/pnp/npcd.cfg-sample
+#$PERL subst sample-config/pnp/process_perfdata.cfg-sample
+#$PERL subst sample-config/pnp/pnp4nagios_release
+#$PERL subst contrib/verify_pnp_config
 
 $PERL summary

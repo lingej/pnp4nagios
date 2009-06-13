@@ -21,10 +21,10 @@
 #
 @PERL_LIB_PATH_CODE@
 
-  if( $< == 0 ){
+if( $< == 0 ){
     print "dont try this as root \n";
-      exit 1;
-  }
+    exit 1;
+}
 
 use warnings;
 use strict;
@@ -55,7 +55,19 @@ my %conf = (
 #
 # "rrdtool create" Syntax
 #
-my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "RRA:AVERAGE:0.5:30:4320", "RRA:AVERAGE:0.5:360:5840", "RRA:MAX:0.5:1:2880", "RRA:MAX:0.5:5:2880", "RRA:MAX:0.5:30:4320", "RRA:MAX:0.5:360:5840", "RRA:MIN:0.5:1:2880", "RRA:MIN:0.5:5:2880", "RRA:MIN:0.5:30:4320", "RRA:MIN:0.5:360:5840", );
+my @default_rrd_create = (  "RRA:AVERAGE:0.5:1:2880",
+							"RRA:AVERAGE:0.5:5:2880", 
+							"RRA:AVERAGE:0.5:30:4320",
+							"RRA:AVERAGE:0.5:360:5840",
+							"RRA:MAX:0.5:1:2880",
+							"RRA:MAX:0.5:5:2880",
+							"RRA:MAX:0.5:30:4320",
+							"RRA:MAX:0.5:360:5840",
+							"RRA:MIN:0.5:1:2880",
+							"RRA:MIN:0.5:5:2880",
+							"RRA:MIN:0.5:30:4320",
+							"RRA:MIN:0.5:360:5840",
+						 );
 
 Getopt::Long::Configure('bundling');
 my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b );
