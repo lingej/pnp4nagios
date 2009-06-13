@@ -1,0 +1,2 @@
+<!-- Header Template -->
+<?=$title?>
