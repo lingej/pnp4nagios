@@ -28,29 +28,29 @@ class Data_Model extends Model
     *
     */
     public function getHosts() {
-        $hosts = array();
-	$conf = $this->config->conf;
-	$i = 0;
-        if (is_dir($conf['rrdbase'])) {
-            if ($dh = opendir($conf['rrdbase'])) {
-                while (($file = readdir($dh)) !== false) {
-                    if ($file == "." || $file == "..")
-                        continue;
-                    $stat = stat($conf['rrdbase'] . "/" . $file);
-                    $age = (time() - $stat['mtime']);
-                    $hosts[$i]['name'] = $file;
-                    if ($age < $conf['max_age']) {
-                        $hosts[$i]['state'] = 'active';
-                    } else {
-                        $hosts[$i]['state'] = 'inactive';
-                    }
-		$i++;
-                }
-                closedir($dh);
-            } else {
-		throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
-            }
-        }
+    	$hosts = array();
+		$conf = $this->config->conf;
+		$i = 0;
+       	if (is_dir($conf['rrdbase'])) {
+           	if ($dh = opendir($conf['rrdbase'])) {
+               	while (($file = readdir($dh)) !== false) {
+                   	if ($file == "." || $file == "..")
+                       	continue;
+                   	$stat = stat($conf['rrdbase'] . "/" . $file);
+                   	$age = (time() - $stat['mtime']);
+                   	$hosts[$i]['name'] = $file;
+                   	if ($age < $conf['max_age']) {
+                       	$hosts[$i]['state'] = 'active';
+                   	} else {
+                       	$hosts[$i]['state'] = 'inactive';
+                   	}
+				$i++;
+               	}
+               	closedir($dh);
+           	} else {
+				throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
+           	}
+       	}
         if(sizeof($hosts)>0){
             natsort($hosts);
         }
@@ -65,7 +65,7 @@ class Data_Model extends Model
     function getServices($hostname) {
         $services = array ();
         $host     = array();
-	$conf     = $this->config->conf;
+		$conf     = $this->config->conf;
         $i        = 0;
         $path     = $conf['rrdbase'] . $hostname;
         if (is_dir($path)) {
@@ -179,60 +179,60 @@ class Data_Model extends Model
     *
     */
     public function buildDataStruct ($host = FALSE, $service = FALSE, $view = "", $source = ""){
-	if($host === false && $service === false){
-	    return false;
-	}
-	$conf        = $this->config->conf;
-	$xml         = $this->readXML($host,$service);
-    	$this->includeTemplate($this->DS[0]['TEMPLATE']);
-	if( $view == "" ){
-	    foreach($this->config->views as $view_key=>$view_val){
-		$i=0;
-	        foreach( $this->RRD['def'] as $key=>$val){
-		    if($source != "" && $source != $key )
-			continue;
-	            $tmp_struct = array();
-	            #$tmp_struct['def']           = $this->RRD['def'][$key];
-	            #$tmp_struct['opt']           = $this->RRD['opt'][$key];
-		    $tmp_struct['LEVEL']         = $i;
-		    $tmp_struct['VIEW']          = $view_key;
-		    $tmp_struct['SOURCE']        = $key;
-		    $tmp_struct['RRD_CALL']      = $this->TIMERANGE[0]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-	            if(array_key_exists('ds_name',$this->RRD) ){
-	     	        $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
-		    }else{
-	     	        $tmp_struct['ds_name']   = $this->DS[$key]['NAME'];
-		    }
-	            $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$key];
-	            $tmp_struct['DS']            = $this->DS[$i];
-	            $tmp_struct['MACRO']         = $this->MACRO;
-	            $this->addToDataStruct($tmp_struct);
-	            $i++;
-	        }
-	    }
-	}else{
-	    $view = intval($view);
-	    $i=0;
-	    foreach( $this->RRD['def'] as $key=>$val){
-		if( $source != "" && $source != $key )
-		    continue;
-	        $tmp_struct = array();
-		$tmp_struct['LEVEL']         = $i;
-		$tmp_struct['VIEW']          = $view;
-		$tmp_struct['SOURCE']        = $key;
-	        $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-	        if(array_key_exists('ds_name',$this->RRD) ){
-	     	    $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
-		}else{
-	     	    $tmp_struct['ds_name']   = $this->DS[$key]['NAME'];
+		if($host === false && $service === false){
+	    	return false;
 		}
-	        $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
-	        $tmp_struct['DS']      = $this->DS[$i];
-	        $tmp_struct['MACRO']   = $this->MACRO;
-	        $this->addToDataStruct($tmp_struct);
-	        $i++;
+		$conf        = $this->config->conf;
+		$xml         = $this->readXML($host,$service);
+    	$this->includeTemplate($this->DS[0]['TEMPLATE']);
+		if( $view == "" ){
+	    	foreach($this->config->views as $view_key=>$view_val){
+			$i=0;
+	        	foreach( $this->RRD['def'] as $key=>$val){
+		    	if($source != "" && $source != $key )
+					continue;
+	            	$tmp_struct = array();
+	            	#$tmp_struct['def']           = $this->RRD['def'][$key];
+	            	#$tmp_struct['opt']           = $this->RRD['opt'][$key];
+		    		$tmp_struct['LEVEL']         = $i;
+		    		$tmp_struct['VIEW']          = $view_key;
+		   	 		$tmp_struct['SOURCE']        = $key;
+		    		$tmp_struct['RRD_CALL']      = $this->TIMERANGE[0]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	            	if(array_key_exists('ds_name',$this->RRD) ){
+	     	        	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
+		    		}else{
+	     	        	$tmp_struct['ds_name']   = $this->DS[$key]['NAME'];
+		    		}
+	            	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$key];
+	            	$tmp_struct['DS']            = $this->DS[$i];
+	            	$tmp_struct['MACRO']         = $this->MACRO;
+	            	$this->addToDataStruct($tmp_struct);
+	            	$i++;
+	        	}
+	    	}
+		}else{
+	    	$view = intval($view);
+	    	$i=0;
+	    	foreach( $this->RRD['def'] as $key=>$val){
+				if( $source != "" && $source != $key )
+		    	continue;
+	        	$tmp_struct = array();
+				$tmp_struct['LEVEL']         = $i;
+				$tmp_struct['VIEW']          = $view;
+				$tmp_struct['SOURCE']        = $key;
+	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	        	if(array_key_exists('ds_name',$this->RRD) ){
+	     	    	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
+				}else{
+	     	    	$tmp_struct['ds_name']   = $this->DS[$key]['NAME'];
+				}
+	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
+	        	$tmp_struct['DS']      = $this->DS[$i];
+	        	$tmp_struct['MACRO']   = $this->MACRO;
+	        	$this->addToDataStruct($tmp_struct);
+	        	$i++;
             }
-	}
+		}
 	#print Kohana::debug($this->STRUCT);
     }
 
@@ -252,43 +252,43 @@ class Data_Model extends Model
     *
     */
     private function includeTemplate($template=FALSE){
-	if($template===FALSE){
-	    return FALSE;
-	}
-	$template_file = $this->findTemplate( $template );
-	#print_r($template_file);
-	$hostname      = $this->MACRO['HOSTNAME'];
-	$servicedesc   = $this->MACRO['SERVICEDESC'];
-	$rrdfile = "rrr";
-	$def     = FALSE;
-	$opt     = FALSE;
-	$ds_name = FALSE;
-	$i = 0;
-	/*
-	* Fill some Vars 
-	*/
-	foreach($this->DS as $key=>$val ){
+		if($template===FALSE){
+	    	return FALSE;
+		}
+		$template_file = $this->findTemplate( $template );
+		#print_r($template_file);
+		$hostname      = $this->MACRO['HOSTNAME'];
+		$servicedesc   = $this->MACRO['SERVICEDESC'];
+		$rrdfile = "rrr";
+		$def     = FALSE;
+		$opt     = FALSE;
+		$ds_name = FALSE;
+		$i = 0;
+		/*
+		* Fill some Vars 
+		*/
+		foreach($this->DS as $key=>$val ){
             foreach(array_keys($val) as $tag){
-	        ${$tag}[] = $val[$tag];
+	        	${$tag}[] = $val[$tag];
             }
         }
-	ob_start();
-	include($template_file);
-	ob_end_clean();
-	if( $def != FALSE ){
-	    $this->RRD['def'] = $def;
+		ob_start();
+		include($template_file);
+		ob_end_clean();
+		if( $def != FALSE ){
+	    	$this->RRD['def'] = $def;
         }else{
             throw new Kohana_User_Exception('Template Error', "Template $template_file does not provide the array \$def");
-	}
-	if( $opt != FALSE ){
-	    $this->RRD['opt'] = $opt;
+		}
+		if( $opt != FALSE ){
+	    	$this->RRD['opt'] = $opt;
         }else{
             throw new Kohana_User_Exception('Template Error', "Template $template_file does not provide the array \$def");
-	}
-	if( $ds_name != FALSE ){
-	    $this->RRD['ds_name'] = $ds_name;
+		}
+		if( $ds_name != FALSE ){
+	    	$this->RRD['ds_name'] = $ds_name;
         }
-	return TRUE;		
+		return TRUE;		
     }
 	
     /*

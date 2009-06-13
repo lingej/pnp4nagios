@@ -30,6 +30,7 @@ MOD_LDFLAGS=@MOD_LDFLAGS@
 MOD_CFLAGS=@MOD_CFLAGS@
 
 prefix=@prefix@
+exec_prefix=@exec_prefix@
 LOGDIR=@localstatedir@
 CFGDIR=@sysconfdir@
 BINDIR=@bindir@
@@ -122,6 +123,7 @@ install-unstripped:
 
 install-basic:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(BINDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LOGDIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATA_SPOOL_DIR)
 	$(INSTALL) -m 754 $(INSTALL_OPTS) @npcd_name@ $(DESTDIR)$(BINDIR)
 	$(INSTALL) -m 754 $(INSTALL_OPTS) npcdmod.o $(DESTDIR)$(BINDIR)

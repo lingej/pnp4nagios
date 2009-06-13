@@ -103,16 +103,9 @@ $config['modules'] = array
 );
 
 /**
- * Theme config
+ * PNP Config
  *
- * theme_path points to the views subdirectory where ALL
- * available themes are stored
+ * pnp_etc_path points to $sysconfdir
  */
-$config['theme_path'] = 'themes/';
-
-/**
- * current_theme is the subdirectory to 'theme_path' above
- * that holds the currently active theme.
- */
-$config['current_theme'] = 'default/';
+$config['pnp_etc_path'] = '@sysconfdir@';
 

@@ -12,13 +12,13 @@ class Config_Model extends Model
 		if(getenv('PNP_CONFIG_FILE') != ""){
     			$config = getenv('PNP_CONFIG_FILE');
 		}else{
-    			$config = "/usr/local/pnp4nagios/etc/config";
+    			$config = Kohana::config('core.pnp_etc_path');;
 		}
 
 		if (is_readable($config . ".php")) {
     			include ($config . ".php");
 		}else {
-    			throw new Kohana_User_Exception('Main Config not found', "Can´t find $config.php");
+    			throw new Kohana_Exception('config-not-found', $config);
 		}
 
 		if (is_readable($config . "_local.php")) {

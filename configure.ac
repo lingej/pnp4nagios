@@ -66,6 +66,37 @@ AC_FUNC_STAT
 
 AC_C_CONST
 
+dnl Layout Methods
+layout="default"
+AC_ARG_WITH(layout,[  --with-layout=\[default,default-0.4,debian,suse\] sets directory layout],layout=$withval)
+
+case $layout in
+	debian)
+		sysconfdir="/etc/pnp4nagios"
+		localstatedir="/var/pnp4nagios"
+		datarootdir="/var/www/pnp4nagios"
+		bindir="/usr/bin"
+		sbindir="/usr/sbin"
+	;;
+	default-0.4)
+		prefix="/usr/local/nagios"
+		sysconfdir="${prefix}/etc/pnp"
+		localstatedir="${prefix}/var"
+		datarootdir="${prefix}/share/pnp"
+		libdir="${prefix}/lib/pnp"
+		PERFDATA_LOG=${prefix}/var/perfdata.log
+		PERFDATA_DIR=${prefix}/share/perfdata
+		PERFDATA_SPOOL_DIR=${prefix}/var/spool/perfdata
+	;;
+	*)
+		prefix="/usr/local/pnp4nagios"
+		localstatedir="${prefix}/var"
+		datarootdir="${prefix}/var"
+		libdir="${prefix}/lib"
+	;;
+esac
+
+
 
 AC_ARG_WITH(nagios_user,[  --with-nagios-user=<user> sets user name to run nagios],nagios_user=$withval,nagios_user=nagios)
 AC_ARG_WITH(nagios_group,[  --with-nagios-group=<grp> sets group name to run nagios],nagios_grp=$withval,nagios_grp=nagios)
@@ -246,12 +277,13 @@ $PERL subst scripts/check_pnp_rrds.pl
 #$PERL subst share/pnp/index.php 
 #$PERL subst share/pnp/zoom.php 
 #$PERL subst share/pnp/ajax.php 
-#$PERL subst sample-config/pnp/config.php 
+$PERL subst sample-config/pnp/config.php 
+$PERL subst share/pnp/application/config/config.php 
 #$PERL subst sample-config/xinetd.pnp.sample 
 #$PERL subst sample-config/misccommands.sample 
-#$PERL subst sample-config/pnp/npcd.cfg-sample 
-#$PERL subst sample-config/pnp/process_perfdata.cfg-sample
-#$PERL subst sample-config/pnp/pnp4nagios_release
+$PERL subst sample-config/pnp/npcd.cfg-sample 
+$PERL subst sample-config/pnp/process_perfdata.cfg-sample
+$PERL subst sample-config/pnp/pnp4nagios_release
 #$PERL subst contrib/verify_pnp_config 
 
 $PERL summary

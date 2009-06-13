@@ -5,22 +5,22 @@
 #my ${datarootdir};
 
 my ${prefix}="@prefix@";
-my $use_default_prefix = 0;
-if(${prefix} eq "/usr/local/nagios"){
-    $use_default_prefix = 1;
-}
+#my $use_default_prefix = 0;
+#if(${prefix} eq "/usr/local/nagios"){
+#    $use_default_prefix = 1;
+#}
 
 my ${exec_prefix}="@exec_prefix@";
 
 my ${datarootdir}="@datarootdir@";
-if($datarootdir eq "${prefix}/share" && $use_default_prefix == 1){
-    $datarootdir="${prefix}/share/pnp";
-}
+#if($datarootdir eq "${prefix}/share" && $use_default_prefix == 1){
+#    $datarootdir="${prefix}/share/pnp";
+#}
 
 my ${datadir}="@datadir@";
-if($datadir eq "${prefix}/share" && $use_default_prefix == 1){
-    $datadir="${prefix}/share/pnp";
-}
+#if($datadir eq "${prefix}/share" && $use_default_prefix == 1){
+#    $datadir="${prefix}/share/pnp";
+#}
 
 my $PERL="@PERL@";
 my $PERL_LIB_PATH="@PERL_LIB_PATH@";
@@ -57,9 +57,9 @@ my $libdir="@libdir@";
 my $sysconfdir="@sysconfdir@";
 my $host_os="@host_os@";
 
-if($sysconfdir eq "${prefix}/etc" && $use_default_prefix == 1 ){
-    $sysconfdir="${prefix}/etc/pnp";
-}
+#if($sysconfdir eq "${prefix}/etc" && $use_default_prefix == 1 ){
+#    $sysconfdir="${prefix}/etc/pnp";
+#}
 my $sbindir="@sbindir@";
 my $bindir="@bindir@";
 my $srcdir="@srcdir@";
