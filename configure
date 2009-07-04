@@ -5872,7 +5872,7 @@ echo "${ECHO_T}yes" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files subst Makefile share/Makefile scripts/Makefile src/Makefile sample-config/Makefile"
+ac_config_files="$ac_config_files subst Makefile share/Makefile lib/Makefile scripts/Makefile src/Makefile sample-config/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6431,6 +6431,7 @@ do
     "subst") CONFIG_FILES="$CONFIG_FILES subst" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "share/Makefile") CONFIG_FILES="$CONFIG_FILES share/Makefile" ;;
+    "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
     "scripts/Makefile") CONFIG_FILES="$CONFIG_FILES scripts/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "sample-config/Makefile") CONFIG_FILES="$CONFIG_FILES sample-config/Makefile" ;;

@@ -1,0 +1,20 @@
+prefix=@prefix@
+LOGDIR=@localstatedir@
+CFGDIR=@sysconfdir@
+BINDIR=@bindir@
+CGIDIR=@sbindir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+DATAROOTDIR=@datarootdir@
+
+CP=@CP@
+
+all html:
+
+clean:
+
+distclean: clean
+
+devclean: distclean
+
+install:
