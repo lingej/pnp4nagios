@@ -693,6 +693,7 @@ PERFDATA_LOG
 PERFDATA_DIR
 PERFDATA_SPOOL_DIR
 DEBUG
+HTTPD_CONF
 init_dir
 pnpsender_name
 npcd_name
@@ -1294,6 +1295,7 @@ Optional Packages:
   --with-perfdata-dir=<path_to_perfdata> Tell me where I should store the RRD Database Files
   --with-perfdata-spool-dir=<path_to_perfdata_spool_dir> Tell me where I should store perfdata files for bulk mode with npcd
   --with-debug Enable debuging for process_perfdata.pl
+--with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory
   --with-init-dir=<path> sets directory to place init script into
 
 Some influential environment variables:
@@ -5764,8 +5766,27 @@ fi
 
 
 
+HTTP_CONF=no
 
-#AC_CHECK_FILE($HTML_DIR,[PNP_UPDATE="true"],[PNP_UPDATE="false"])
+# Check whether --with-httpd_conf was given.
+if test "${with_httpd_conf+set}" = set; then
+  withval=$with_httpd_conf; HTTPD_CONF=$withval
+else
+  HTTPD_CONF=no
+fi
+
+if test x$HTTPD_CONF = xno; then
+        if test -d /etc/httpd/conf.d; then
+                HTTPD_CONF="/etc/httpd/conf.d"
+        elif test -d /etc/apache2/conf.d; then
+                HTTPD_CONF="/etc/apache2/conf.d"
+        elif test -d /etc/apache/conf.d; then
+                HTTPD_CONF="/etc/apache/conf.d"
+        else
+                HTTPD_CONF="/etc/httpd/conf.d"
+        fi
+fi
+
 
 init_dir=/etc/rc.d/init.d
 if test -d /etc/rc.d/init.d; then
@@ -6581,6 +6602,7 @@ PERFDATA_LOG!$PERFDATA_LOG$ac_delim
 PERFDATA_DIR!$PERFDATA_DIR$ac_delim
 PERFDATA_SPOOL_DIR!$PERFDATA_SPOOL_DIR$ac_delim
 DEBUG!$DEBUG$ac_delim
+HTTPD_CONF!$HTTPD_CONF$ac_delim
 init_dir!$init_dir$ac_delim
 pnpsender_name!$pnpsender_name$ac_delim
 npcd_name!$npcd_name$ac_delim
@@ -6591,7 +6613,7 @@ RRDS!$RRDS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 85; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 86; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -7033,10 +7055,11 @@ $PERL subst scripts/process_perfdata.pl
 $PERL subst scripts/rc.npcd
 $PERL subst scripts/check_pnp_rrds.pl
 $PERL subst share/pnp/index.php
-$PERL subst sample-config/pnp/config.php
 $PERL subst share/pnp/application/config/config.php
 #$PERL subst sample-config/xinetd.pnp.sample
 #$PERL subst sample-config/misccommands.sample
+$PERL subst sample-config/httpd.conf
+$PERL subst sample-config/pnp/config.php
 $PERL subst sample-config/pnp/npcd.cfg-sample
 $PERL subst sample-config/pnp/process_perfdata.cfg-sample
 $PERL subst sample-config/pnp/pnp4nagios_release

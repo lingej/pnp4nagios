@@ -170,8 +170,21 @@ AC_ARG_WITH(debug,[  --with-debug Enable debuging for process_perfdata.pl],
 	   )
 AC_SUBST(DEBUG)
 
-										
-#AC_CHECK_FILE($HTML_DIR,[PNP_UPDATE="true"],[PNP_UPDATE="false"])
+dnl Check for location of Apache conf.d directory
+HTTP_CONF=no
+AC_ARG_WITH(httpd_conf,--with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory,HTTPD_CONF=$withval,HTTPD_CONF=no)
+if test x$HTTPD_CONF = xno; then
+        if test -d /etc/httpd/conf.d; then
+                HTTPD_CONF="/etc/httpd/conf.d"
+        elif test -d /etc/apache2/conf.d; then
+                HTTPD_CONF="/etc/apache2/conf.d"
+        elif test -d /etc/apache/conf.d; then
+                HTTPD_CONF="/etc/apache/conf.d"
+        else
+                HTTPD_CONF="/etc/httpd/conf.d"
+        fi
+fi
+AC_SUBST(HTTPD_CONF)
 
 dnl Check for location of init scripts
 init_dir=/etc/rc.d/init.d
@@ -284,10 +297,11 @@ $PERL subst scripts/process_perfdata.pl
 $PERL subst scripts/rc.npcd 
 $PERL subst scripts/check_pnp_rrds.pl 
 $PERL subst share/pnp/index.php 
-$PERL subst sample-config/pnp/config.php 
 $PERL subst share/pnp/application/config/config.php 
 #$PERL subst sample-config/xinetd.pnp.sample 
 #$PERL subst sample-config/misccommands.sample 
+$PERL subst sample-config/httpd.conf 
+$PERL subst sample-config/pnp/config.php 
 $PERL subst sample-config/pnp/npcd.cfg-sample 
 $PERL subst sample-config/pnp/process_perfdata.cfg-sample
 $PERL subst sample-config/pnp/pnp4nagios_release

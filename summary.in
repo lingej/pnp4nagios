@@ -30,7 +30,7 @@ if($rrdtool_version == ""){
 }
 
 printf ("\n\n");
-printf ("*** Configuration summary for %s %s %s ***","@PKG_NAME@","@PKG_VERSION@","@PKG_REL_DATE@");
+printf ("*** Configuration summary for %s-%s %s ***","@PKG_NAME@","@PKG_VERSION@","@PKG_REL_DATE@");
 printf ("\n\n");
 printf ("  General Options:\n");
 printf ("  -------------------------         -------------------\n");
@@ -45,6 +45,11 @@ printf ("  RRDs Perl search path:            %s\n","@PERL_LIB_PATH@")           
 printf ("  RRD Files stored in:              %s\n","@PERFDATA_DIR@");
 printf ("  process_perfdata.pl Logfile:      %s\n","@PERFDATA_LOG@");
 printf ("  Perfdata files (NPCD) stored in:  %s\n","@PERFDATA_SPOOL_DIR@");
+printf ("\n");
+printf ("  Web Interface Options:");
+printf ("  -------------------------         -------------------\n");
+printf ("  HTML URL:                         %s\n","http://localhost/@PKG_NAME@/");
+printf ("  Apache Config File:               %s\n","@HTTPD_CONF@/@PKG_NAME@.conf");
 printf ("\n\n"); 
 printf ("  Review the options above for accuracy.  If they look okay,\n");
 printf ("  type 'make all' to compile.\n");

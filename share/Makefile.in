@@ -42,6 +42,9 @@ install:
 	for file in pnp/application/controllers/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/controllers; done
 
+	for file in pnp/application/config/*.php; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/config; done
+
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/templates.dist
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/templates

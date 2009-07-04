@@ -8,6 +8,7 @@
 # Source code directories
 SRC_BASE=@srcdir@/src
 SRC_SHARE=@srcdir@/share
+SRC_LIB=@srcdir@/lib
 SRC_SCRIPTS=@srcdir@/scripts
 SRC_CONFIG=@srcdir@/sample-config
 SRC_MAN=@srcdir@/man
@@ -23,6 +24,7 @@ LOGDIR=@localstatedir@
 CFGDIR=@sysconfdir@
 BINDIR=@bindir@
 LIBEXECDIR=@libexecdir@
+LIBDIR=@libdir@
 CGIDIR=@sbindir@
 INSTALL=@INSTALL@
 INSTALL_OPTS=@INSTALL_OPTS@
@@ -41,6 +43,7 @@ none:
 all:
 	cd $(SRC_BASE) && $(MAKE)
 	cd $(SRC_SHARE) && $(MAKE)
+	cd $(SRC_LIB) && $(MAKE)
 	cd $(SRC_SCRIPTS) && $(MAKE)
 
 	@echo ""
@@ -61,6 +64,7 @@ share:
 clean:
 	cd $(SRC_BASE) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
+	cd $(SRC_LIB) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
 	-rm -f *.cfg core
@@ -70,6 +74,7 @@ clean:
 distclean: 
 	cd $(SRC_BASE) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
+	cd $(SRC_LIB) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
 	-rm -f *.cfg core
@@ -92,17 +97,21 @@ install-processperfdata:
 	cd $(SRC_SCRIPTS) && $(MAKE) install
 
 install-init:
-	cd $(SRC_SCRIPTS) && $(MAKE) install-init
+	cd $(SRC_SCRIPTS) && $(MAKE) $@
 
 install-config:
-	cd $(SRC_CONFIG) && $(MAKE) install-config
+	cd $(SRC_CONFIG) && $(MAKE) $@
+
+install-webconf:
+	cd $(SRC_CONFIG) && $(MAKE) $@
 
 install-plugins:
-	cd $(SRC_SCRIPTS) && $(MAKE) install-plugins
+	cd $(SRC_SCRIPTS) && $(MAKE) $@
 
 install:
 	cd $(SRC_BASE) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
+	cd $(SRC_LIB) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
 	$(MAKE) install-basic

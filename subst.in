@@ -46,6 +46,7 @@ my $RRDS="@RRDS@";
 my $PKG_REL_DATE="@PKG_REL_DATE@";
 my $PKG_VERSION="@PKG_VERSION@";
 my $PKG_NAME="@PKG_NAME@";
+my $HTTPD_CONF="@HTTPD_CONF@";
 my $init_dir="@init_dir@";
 my $npcd_name="@npcd_name@";
 my $pp_pl_name="@pp_pl_name@";
@@ -57,9 +58,6 @@ my $libdir="@libdir@";
 my $sysconfdir="@sysconfdir@";
 my $host_os="@host_os@";
 
-#if($sysconfdir eq "${prefix}/etc" && $use_default_prefix == 1 ){
-#    $sysconfdir="${prefix}/etc/pnp";
-#}
 my $sbindir="@sbindir@";
 my $bindir="@bindir@";
 my $srcdir="@srcdir@";
@@ -106,6 +104,7 @@ while ($f = shift @ARGV) {
 		s|\@PKG_REL_DATE\@|$PKG_REL_DATE|g;
 		s|\@PKG_VERSION\@|$PKG_VERSION|g;
 		s|\@PKG_NAME\@|$PKG_NAME|g;
+		s|\@HTTPD_CONF\@|$HTTPD_CONF|g;
 		s|\@npcd_name\@|$npcd_name|g;
 		s|\@pp_pl_name\@|$pp_pl_name|g;
 		s|\@nagios_user\@|$nagios_user|g;

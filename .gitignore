@@ -16,3 +16,4 @@ sample-config/pnp/process_perfdata.cfg-sample
 sample-config/pnp/npcd.cfg-sample
 share/pnp/application/config/config.php
 share/pnp/index.php
+sample-config/httpd.conf

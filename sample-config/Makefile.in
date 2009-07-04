@@ -8,7 +8,8 @@ INSTALL=@INSTALL@
 INSTALL_OPTS=@INSTALL_OPTS@
 PERFDATADIR=@PERFDATA_DIR@
 DATAROOTDIR=@datarootdir@
-
+PKG_NAME=@PKG_NAME@
+HTTPD_CONF=@HTTPD_CONF@
 CP=@CP@
 
 all html:
@@ -19,6 +20,7 @@ clean:
 	-rm -f pnp/npcd.cfg-sample
 	-rm -f misccommands.sample 
 	-rm -f xinetd.pnp.sample
+	-rm -f httpd.conf 
 	-rm -f pnp/pnp4nagios_release
 
 distclean: clean
@@ -37,7 +39,6 @@ install:
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/background.pdf $(DESTDIR)$(SYSCONFDIR)
 
 install-config: 
-	-rm -f $(DESTDIR)$(HTMLDIR)/conf/config.php
 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/check_commands
@@ -50,4 +51,10 @@ install-config:
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/pages/web_traffic.cfg-sample $(DESTDIR)$(SYSCONFDIR)/pages
 
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)
+
+	$(INSTALL) -m 644 httpd.conf $(DESTDIR)$(HTTPD_CONF)/$(PKG_NAME).conf
+
+	@echo ""
+	@echo "*** PNP4Nagios/Apache conf file installed ***"
+	@echo ""
 	

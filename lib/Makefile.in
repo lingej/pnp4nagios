@@ -3,6 +3,7 @@ LOGDIR=@localstatedir@
 CFGDIR=@sysconfdir@
 BINDIR=@bindir@
 CGIDIR=@sbindir@
+LIBDIR=@libdir@
 INSTALL=@INSTALL@
 INSTALL_OPTS=@INSTALL_OPTS@
 DATAROOTDIR=@datarootdir@
@@ -18,3 +19,73 @@ distclean: clean
 devclean: distclean
 
 install:
+
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/config
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/controllers
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/core
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/core/utf8
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/fonts
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/helpers
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Cache
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Captcha
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Database
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Image
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Session
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/views
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/module
+
+	for file in kohana/system/config/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/config; done
+
+	for file in kohana/system/controllers/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/controllers; done
+
+	for file in kohana/system/core/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/core; done
+
+	for file in kohana/system/core/utf8/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/core/utf8; done
+
+	for file in kohana/system/fonts/*; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/fonts; done
+
+	for file in kohana/system/helpers/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/helpers; done
+
+	for file in kohana/system/i18n/de_DE/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE; done
+
+	for file in kohana/system/i18n/en_US/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US; done
+
+	for file in kohana/system/i18n/fr_FR/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR; done
+
+	for file in kohana/system/libraries/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/libraries; done
+
+	for file in kohana/system/libraries/drivers/Cache/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Cache; done
+
+	for file in kohana/system/libraries/drivers/Captcha/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Captcha; done
+
+	for file in kohana/system/libraries/drivers/Database/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Database; done
+
+	for file in kohana/system/libraries/drivers/Image/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Image; done
+
+	for file in kohana/system/libraries/drivers/Session/*.php; \
+                do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Session; done
+
+
