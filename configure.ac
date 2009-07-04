@@ -10,7 +10,7 @@ AC_PREFIX_DEFAULT(/usr/local/pnp4nagios)
 AC_DEFINE([DEFAULT_NAGIOS_USER], [nagios], [Default Nagios User])
 AC_DEFINE([DEFAULT_NAGIOS_GROUP], [nagios], [Default Nagios Group])
 
-PKG_NAME=pnp
+PKG_NAME=pnp4nagios
 PKG_VERSION="0.6.0"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
 PKG_REL_DATE="07-03-2009"
@@ -72,9 +72,13 @@ AC_ARG_WITH(layout,[  --with-layout=\[default,default-0.4,debian,suse\] sets dir
 
 case $layout in
 	debian)
-		sysconfdir="/etc/pnp4nagios"
-		localstatedir="/var/pnp4nagios"
-		datarootdir="/var/www/pnp4nagios"
+		sysconfdir="/etc/${PKG_NAME}"
+		localstatedir="/var/${PKG_NAME}"
+		libexecdir="/usr/libexec/${PKG_NAME}"
+		datarootdir="/var/www/${PKG_NAME}"
+		PERFDATA_LOG="/var/log/${PKG_NAME}/perfdata.log"
+		PERFDATA_DIR="/var/lib/${PKG_NAME}/perfdata"
+		PERFDATA_SPOOL_DIR="/var/spool/${PKG_NAME}"
 		bindir="/usr/bin"
 		sbindir="/usr/sbin"
 	;;
@@ -82,6 +86,7 @@ case $layout in
 		prefix="/usr/local/nagios"
 		sysconfdir="${prefix}/etc/pnp"
 		localstatedir="${prefix}/var"
+		libexecdir="${prefix}/libexec"
 		datarootdir="${prefix}/share/pnp"
 		libdir="${prefix}/lib/pnp"
 		PERFDATA_LOG=${prefix}/var/perfdata.log
@@ -89,10 +94,15 @@ case $layout in
 		PERFDATA_SPOOL_DIR=${prefix}/var/spool/perfdata
 	;;
 	*)
-		prefix="/usr/local/pnp4nagios"
+		prefix="/usr/local/${PKG_NAME}"
+		sysconfdir="${prefix}/etc"
 		localstatedir="${prefix}/var"
-		datarootdir="${prefix}/var"
+		libexecdir="${prefix}/libexec"
+		datarootdir="${prefix}/share"
 		libdir="${prefix}/lib"
+		PERFDATA_LOG="${localstatedir}/perfdata.log"
+		PERFDATA_DIR="${localstatedir}/perfdata"
+		PERFDATA_SPOOL_DIR="${localstatedir}/spool"
 	;;
 esac
 
@@ -150,8 +160,7 @@ AC_ARG_WITH(perfdata-dir,[  --with-perfdata-dir=<path_to_perfdata> Tell me where
 AC_SUBST(PERFDATA_DIR)
 
 AC_ARG_WITH(perfdata-spool-dir,[  --with-perfdata-spool-dir=<path_to_perfdata_spool_dir> Tell me where I should store perfdata files for bulk mode with npcd],
-	    PERFDATA_SPOOL_DIR=$withval,
-	    PERFDATA_SPOOL_DIR=$localstatedir/spool/
+	    PERFDATA_SPOOL_DIR=$withval
 	   )
 AC_SUBST(PERFDATA_SPOOL_DIR)
 
@@ -274,9 +283,7 @@ $PERL subst scripts/process_perfdata.pl
 #$PERL subst scripts/net2pnp.pl 
 $PERL subst scripts/rc.npcd 
 $PERL subst scripts/check_pnp_rrds.pl 
-#$PERL subst share/pnp/index.php 
-#$PERL subst share/pnp/zoom.php 
-#$PERL subst share/pnp/ajax.php 
+$PERL subst share/pnp/index.php 
 $PERL subst sample-config/pnp/config.php 
 $PERL subst share/pnp/application/config/config.php 
 #$PERL subst sample-config/xinetd.pnp.sample 

@@ -63,7 +63,6 @@ clean:
 	cd $(SRC_SHARE) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
-	cd $(SRC_MAN) && $(MAKE) $@
 	-rm -f *.cfg core
 	-rm -f *~ *.*~ */*~ */*.*~
 	-rm -f config.log config.status config.cache
