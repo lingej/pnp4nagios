@@ -44,6 +44,9 @@ install:
 	for file in pnp/application/config/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/config; done
 
+	for file in pnp/application/helpers/*.php; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/helpers; done
+
 	for file in pnp/application/i18n/de_DE/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/i18n/de_DE; done
 
