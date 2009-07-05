@@ -1,6 +1,6 @@
 <!-- Search Box Start -->
 <div class="ui-widget">
- <div class="ui-widget-header">
+ <div class="ui-widget-header ui-corner-top">
  Search
  </div>
  <div class="p4 ui-widget-content ui-corner-bottom">

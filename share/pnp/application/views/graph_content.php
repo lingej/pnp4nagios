@@ -4,7 +4,7 @@
     <?php if($value['LEVEL'] == 0)
 	echo "<h5>".$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "</h5>\n";
     ?>
-     <div class="ui-widget-header">
+     <div class="ui-widget-header ui-corner-top">
        <table border=0 width=100%><tr>
        <td align=left><?php echo Kohana::lang('common.datasource',$value['ds_name'])?>
        </td><td align=right>

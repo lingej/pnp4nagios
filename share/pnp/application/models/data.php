@@ -7,8 +7,8 @@ class Data_Model extends Model
 {
 
     private $XML   = array();
-    private $DS    = array();
-    private $MACRO = array();
+    public  $DS    = array();
+    public  $MACRO = array();
     private $RRD   = array();
     public  $STRUCT  = array();
     public  $TIMERANGE = array();	
@@ -17,8 +17,8 @@ class Data_Model extends Model
     *
     */
     public function __construct(){
-	$this->config = new Config_Model();	
-	$this->config->read_config();
+		$this->config = new Config_Model();	
+		$this->config->read_config();
     	#print Kohana::debug($this->config->views);
     }
 
@@ -29,8 +29,8 @@ class Data_Model extends Model
     */
     public function getHosts() {
     	$hosts = array();
-	$conf = $this->config->conf;
-	$i = 0;
+		$conf = $this->config->conf;
+		$i = 0;
        	if (is_dir($conf['rrdbase'])) {
            	if ($dh = opendir($conf['rrdbase'])) {
                	while (($file = readdir($dh)) !== false) {
@@ -81,12 +81,12 @@ class Data_Model extends Model
                     $fullpath = $path . "/" . $file;
                     $stat = stat("$fullpath");
                     $age = (time() - $stat['mtime']);
-		    $xml = $this->readXML($hostname, $servicedesc[1]);
+		    		$xml = $this->readXML($hostname, $servicedesc[1]);
 	
-		    $state = "active";	
+		    		$state = "active";	
                     if ($age > $conf['max_age']) { # 6Stunden
-		        $state = "inactive";
-		    }
+		        		$state = "inactive";
+		    		}
 		
                     if($servicedesc[1] == "_HOST_"){
                         $host[0]['name']             = "_HOST_";
@@ -151,10 +151,10 @@ class Data_Model extends Model
 	$this->XML   = array();
 	$this->MACRO = array();
 	$this->DS    = array();
-	$xml	     =array();
+	$xml	     = array();
 	$xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
 	if (file_exists($xmlfile)) {
-    	    $xml = simplexml_load_file($xmlfile);
+    	$xml = simplexml_load_file($xmlfile);
 	    foreach ( $xml as $key=>$val ){
 		if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
 		    #print $match[1]." => ".$val."\n";
@@ -162,11 +162,16 @@ class Data_Model extends Model
 		    $this->MACRO[$key] = (string) $val;
 		}
 	    }
+            if($this->MACRO['DATATYPE'] == 'HOSTPERFDATA'){
+		$this->MACRO['DISP_SERVICEDESC'] = 'Host Perfdata';
+            }else{
+		$this->MACRO['DISP_SERVICEDESC'] = $this->MACRO['SERVICEDESC'];
+	    }
 	    $i=0;
 	    foreach ( $xml->DATASOURCE as $datasource ){
 	        foreach ( $datasource  as $key=>$val){
-		    #print "$key => $val\n";
-		    #$$key[$i] = (string) $val;
+		    	#print "$key => $val\n";
+		    	#$$key[$i] = (string) $val;
 	            $this->DS[$i][$key] = (string) $val;
 	        }
 	        $i++; 
@@ -187,12 +192,14 @@ class Data_Model extends Model
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
     	$this->includeTemplate($this->DS[0]['TEMPLATE']);
+		#print Kohana::debug($this->RRD);
 		if( $view == "" ){
 	    	foreach($this->config->views as $view_key=>$view_val){
-			$i=0;
+				$i=0;
 	        	foreach( $this->RRD['def'] as $key=>$val){
-		    	if($source != "" && $source != $key )
-					continue;
+		    		if($source != "" && $source != $key ){
+						continue;
+					}
 	            	$tmp_struct = array();
 	            	#$tmp_struct['def']           = $this->RRD['def'][$key];
 	            	#$tmp_struct['opt']           = $this->RRD['opt'][$key];
@@ -201,9 +208,9 @@ class Data_Model extends Model
 		   	 		$tmp_struct['SOURCE']        = $key;
 		    		$tmp_struct['RRD_CALL']      = $this->TIMERANGE[0]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
 	            	if(array_key_exists('ds_name',$this->RRD) ){
-	     	        	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
+	     	       		$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
 		    		}else{
-	     	        	$tmp_struct['ds_name']   = $this->DS[$key]['NAME'];
+	     	       		$tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
 		    		}
 	            	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$key];
 	            	$tmp_struct['DS']            = $this->DS[$i];
@@ -216,8 +223,9 @@ class Data_Model extends Model
 	    	$view = intval($view);
 	    	$i=0;
 	    	foreach( $this->RRD['def'] as $key=>$val){
-				if( $source != "" && $source != $key )
-		    	continue;
+				if( $source != "" && $source != $key ){
+		    		continue;
+				}
 	        	$tmp_struct = array();
 				$tmp_struct['LEVEL']         = $i;
 				$tmp_struct['VIEW']          = $view;
@@ -226,7 +234,7 @@ class Data_Model extends Model
 	        	if(array_key_exists('ds_name',$this->RRD) ){
 	     	    	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
 				}else{
-	     	    	$tmp_struct['ds_name']   = $this->DS[$key]['NAME'];
+	     	    	$tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
 				}
 	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
 	        	$tmp_struct['DS']      = $this->DS[$i];
@@ -257,21 +265,21 @@ class Data_Model extends Model
 		if($template===FALSE){
 	    	return FALSE;
 		}
+		$this->RRD = array();
 		$template_file = $this->findTemplate( $template );
-		#print_r($template_file);
 		$hostname      = $this->MACRO['HOSTNAME'];
 		$servicedesc   = $this->MACRO['SERVICEDESC'];
-		$rrdfile = "rrr";
+		$rrdfile = $this->MACRO['RRDFILE'];
 		$def     = FALSE;
 		$opt     = FALSE;
 		$ds_name = FALSE;
-		$i = 0;
 		/*
-		* Fill some Vars 
+		* 0.4.x Template compatibility 
 		*/
 		foreach($this->DS as $key=>$val ){
+			$key++;
             foreach(array_keys($val) as $tag){
-	        	${$tag}[] = $val[$tag];
+	        	${$tag}[$key] = $val[$tag];
             }
         }
 		ob_start();

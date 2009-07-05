@@ -40,10 +40,10 @@ class Graph_Controller extends System_Controller  {
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
 		    $services = $this->data->getServices($this->host);
-		    $this->title = "Service Details $this->host -> $this->service";
+		    $this->data->buildDataStruct($this->host,$this->service,$view);
+		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 		    $this->template->body->service_box->services = $services;
 		    $this->template->body->service_box->host = $this->host;
-		    $this->data->buildDataStruct($this->host,$this->service,$view);
 		    #print Kohana::debug($this->data->STRUCT);
 		}elseif(isset($this->host)){
 		    $this->host    = pnp::clean($this->host);
