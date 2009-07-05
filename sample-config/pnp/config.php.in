@@ -147,4 +147,5 @@ $views[4]["start"] = ( 60*60*24*365 );
 # $conf['RRD_DAEMON_OPTS'] = 'unix:/tmp/rrdcached.sock';
 $conf['RRD_DAEMON_OPTS'] = '';
 
+$conf['template_dir'] = '@datarootdir@';
 ?>

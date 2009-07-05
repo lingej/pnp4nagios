@@ -25,9 +25,6 @@ class Config_Model extends Model
     			include ($config . "_local.php");
 		}
 
-		if(!isset($conf['template_dir'])){
-        		$conf['template_dir'] = dirname(__file__);
-		}
 		$this->conf = $conf;
 		$this->views = $views;
 	}
