@@ -78,7 +78,7 @@ log_level = 0
 # perfdata_spool_dir = </path/to/directory/>
 #
 
-perfdata_spool_dir = @PERFDATA_SPOOL_DIR@
+perfdata_spool_dir = @PERFDATA_SPOOL_DIR@/
 
 
 # Execute following command for each found file
@@ -165,7 +165,7 @@ pid_file=/var/run/npcd.pid
 # perfdata_file = </path/to/file>
 #
 
-perfdata_file = @localstatedir@/perfdata
+perfdata_file = @localstatedir@/perfdata.dump
 
 # We have to end with a newline
 
