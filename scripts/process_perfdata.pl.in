@@ -170,15 +170,18 @@ sub parse_env {
         $NAGIOS{DATATYPE} = $opt_d;
     }
 
-    $NAGIOS{HOSTNAME}      = cleanup( $NAGIOS{HOSTNAME} );
-    $NAGIOS{SERVICEDESC}   = cleanup( $NAGIOS{SERVICEDESC} );
-    $NAGIOS{PERFDATA}      = $NAGIOS{SERVICEPERFDATA};
-    $NAGIOS{CHECK_COMMAND} = $NAGIOS{SERVICECHECKCOMMAND};
+    $NAGIOS{DISP_HOSTNAME}      = $NAGIOS{HOSTNAME};
+    $NAGIOS{DISP_SERVICEDESC}   = $NAGIOS{SERVICEDESC};
+    $NAGIOS{HOSTNAME}           = cleanup( $NAGIOS{HOSTNAME} );
+    $NAGIOS{SERVICEDESC}        = cleanup( $NAGIOS{SERVICEDESC} );
+    $NAGIOS{PERFDATA}           = $NAGIOS{SERVICEPERFDATA};
+    $NAGIOS{CHECK_COMMAND}      = $NAGIOS{SERVICECHECKCOMMAND};
 
     if ( $NAGIOS{DATATYPE} eq "HOSTPERFDATA" ) {
-        $NAGIOS{SERVICEDESC}   = "_HOST_";
-        $NAGIOS{PERFDATA}      = $NAGIOS{HOSTPERFDATA};
-        $NAGIOS{CHECK_COMMAND} = $NAGIOS{HOSTCHECKCOMMAND};
+        $NAGIOS{SERVICEDESC}        = "_HOST_";
+        $NAGIOS{DISP_SERVICEDESC}   = "Host Perfdata";
+        $NAGIOS{PERFDATA}           = $NAGIOS{HOSTPERFDATA};
+        $NAGIOS{CHECK_COMMAND}      = $NAGIOS{HOSTCHECKCOMMAND};
     }
     print_log( "Datatype set to '$NAGIOS{DATATYPE}' ", 2 );
     return %NAGIOS;
@@ -319,6 +322,7 @@ sub data2rrd {
         push( @ds_create, "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" );
         $ds_update = "$ds_update:$data[$i]{value}";
         write_to_template( "TEMPLATE",        $data[0]{template} );
+        write_to_template( "RRDFILE",         $NAGIOS{RRDFILE} );
         write_to_template( "IS_MULTI",        $data[0]{multi} );
         write_to_template( "DS",              $DS );
         write_to_template( "NAME",            "$data[$i]{label}" );

@@ -96,10 +96,10 @@ class Data_Model extends Model
                     }else{
                         $services[$i]['name']        = $servicedesc[1];
                         $services[$i]['state']       = $state;
-                        $services[$i]['hostname']    = (string) $xml->NAGIOS_HOSTNAME;
-                        $services[$i]['servicedesc'] = (string) $xml->NAGIOS_SERVICEDESC;
+                        $services[$i]['hostname']    = (string) $xml->NAGIOS_DISP_HOSTNAME;
+                        $services[$i]['servicedesc'] = (string) $xml->NAGIOS_DISP_SERVICEDESC;
                     }
-		$i++;
+				$i++;
                 }
                 closedir($dh);
             }
@@ -107,6 +107,7 @@ class Data_Model extends Model
 	    throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
         }
         if( is_array($host) ){
+			sort($services);
             array_unshift($services, $host[0]);
         }
         return $services;
@@ -156,16 +157,11 @@ class Data_Model extends Model
 	if (file_exists($xmlfile)) {
     	$xml = simplexml_load_file($xmlfile);
 	    foreach ( $xml as $key=>$val ){
-		if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
-		    #print $match[1]." => ".$val."\n";
-		    $key = $match[1];
-		    $this->MACRO[$key] = (string) $val;
-		}
-	    }
-            if($this->MACRO['DATATYPE'] == 'HOSTPERFDATA'){
-		$this->MACRO['DISP_SERVICEDESC'] = 'Host Perfdata';
-            }else{
-		$this->MACRO['DISP_SERVICEDESC'] = $this->MACRO['SERVICEDESC'];
+			if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
+		    	#print $match[1]." => ".$val."\n";
+		    	$key = $match[1];
+		    	$this->MACRO[$key] = (string) $val;
+			}
 	    }
 	    $i=0;
 	    foreach ( $xml->DATASOURCE as $datasource ){
