@@ -12,7 +12,7 @@ class Config_Model extends Model
 		if(getenv('PNP_CONFIG_FILE') != ""){
     			$config = getenv('PNP_CONFIG_FILE');
 		}else{
-    			$config = Kohana::config('core.pnp_etc_path');;
+    			$config = Kohana::config('core.pnp_etc_path')."/config";
 		}
 
 		if (is_readable($config . ".php")) {

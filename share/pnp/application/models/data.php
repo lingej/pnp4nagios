@@ -29,8 +29,8 @@ class Data_Model extends Model
     */
     public function getHosts() {
     	$hosts = array();
-		$conf = $this->config->conf;
-		$i = 0;
+	$conf = $this->config->conf;
+	$i = 0;
        	if (is_dir($conf['rrdbase'])) {
            	if ($dh = opendir($conf['rrdbase'])) {
                	while (($file = readdir($dh)) !== false) {
@@ -48,12 +48,14 @@ class Data_Model extends Model
                	}
                	closedir($dh);
            	} else {
-				throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
+			throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
            	}
        	}
         if(sizeof($hosts)>0){
             natsort($hosts);
-        }
+        }else{
+		throw new Kohana_Exception('common.perfdata-dir-empty', $conf['rrdbase'] );
+	}
         return $hosts;
     }
 

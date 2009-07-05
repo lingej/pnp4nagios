@@ -26,10 +26,9 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/hooks
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/de_DE
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/en_EN
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/fr_FR
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/en_US
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/libraries
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/logs
+	$(INSTALL) -m 777 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/logs
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/models
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/views
 
@@ -45,9 +44,15 @@ install:
 	for file in pnp/application/config/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/config; done
 
+	for file in pnp/application/i18n/de_DE/*.php; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/i18n/de_DE; done
+
+	for file in pnp/application/i18n/en_US/*.php; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/i18n/en_US; done
+
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/templates.dist
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/templates
 	$(INSTALL) -m 644 $(INSTALL_OPTS) pnp/index.php $(DESTDIR)$(DATAROOTDIR)
-	$(INSTALL) -m 644 $(INSTALL_OPTS) pnp/install.php $(DESTDIR)$(DATAROOTDIR)
+	#$(INSTALL) -m 644 $(INSTALL_OPTS) pnp/install.php $(DESTDIR)$(DATAROOTDIR)
 
