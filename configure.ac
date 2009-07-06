@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT(pnp, 0.4.14, pnp4nagios-devel@lists.sourceforge.net)
+AC_INIT(pnp, 0.6.0, pnp4nagios-devel@lists.sourceforge.net)
 AC_CONFIG_SRCDIR(src/)
 AC_CONFIG_HEADERS(include/config.h:include/config.h.in)
 AC_PREFIX_DEFAULT(/usr/local/pnp4nagios)
@@ -13,7 +13,7 @@ AC_DEFINE([DEFAULT_NAGIOS_GROUP], [nagios], [Default Nagios Group])
 PKG_NAME=pnp4nagios
 PKG_VERSION="0.6.0"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
-PKG_REL_DATE="07-03-2009"
+PKG_REL_DATE="07-07-2009"
 AC_SUBST(PKG_NAME)
 AC_SUBST(PKG_VERSION)
 AC_SUBST(PKG_HOME_URL)
@@ -72,10 +72,12 @@ AC_ARG_WITH(layout,[  --with-layout=\[default,default-0.4,debian,suse\] sets dir
 
 case $layout in
 	debian)
+		prefix="/"
 		sysconfdir="/etc/${PKG_NAME}"
-		localstatedir="/var/${PKG_NAME}"
-		libexecdir="/usr/libexec/${PKG_NAME}"
-		datarootdir="/var/www/${PKG_NAME}"
+		localstatedir="/var/log/${PKG_NAME}"
+		libexecdir="/usr/lib/${PKG_NAME}/libexec"
+		libdir="/usr/lib/${PKG_NAME}"
+		datarootdir="/usr/share/${PKG_NAME}/html"
 		PERFDATA_LOG="/var/log/${PKG_NAME}/perfdata.log"
 		PERFDATA_DIR="/var/lib/${PKG_NAME}/perfdata"
 		PERFDATA_SPOOL_DIR="/var/spool/${PKG_NAME}"
@@ -154,8 +156,7 @@ AC_SUBST(PERFDATA_LOG)
 
 
 AC_ARG_WITH(perfdata-dir,[  --with-perfdata-dir=<path_to_perfdata> Tell me where I should store the RRD Database Files],
-	    PERFDATA_DIR=$withval,
-	    PERFDATA_DIR=$localstatedir/perfdata
+	    PERFDATA_DIR=$withval
 	   )
 AC_SUBST(PERFDATA_DIR)
 
