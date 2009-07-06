@@ -181,15 +181,16 @@ class Data_Model extends Model
     * 
     *
     */
-    public function buildDataStruct ($host = FALSE, $service = FALSE, $view = "", $source = ""){
+    public function buildDataStruct ($host = FALSE, $service = FALSE, $view = "", $source = "", $single = FALSE){
 		if($host === false && $service === false){
 	    	return false;
 		}
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
     	$this->includeTemplate($this->DS[0]['TEMPLATE']);
-		#print Kohana::debug($this->RRD);
+		#print Kohana::debug($this->TIMERANGE);
 		if( $view == "" ){
+			$v = 0;
 	    	foreach($this->config->views as $view_key=>$view_val){
 				$i=0;
 	        	foreach( $this->RRD['def'] as $key=>$val){
@@ -202,18 +203,19 @@ class Data_Model extends Model
 		    		$tmp_struct['LEVEL']         = $i;
 		    		$tmp_struct['VIEW']          = $view_key;
 		   	 		$tmp_struct['SOURCE']        = $key;
-		    		$tmp_struct['RRD_CALL']      = $this->TIMERANGE[0]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+		    		$tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
 	            	if(array_key_exists('ds_name',$this->RRD) ){
 	     	       		$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
 		    		}else{
 	     	       		$tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
 		    		}
-	            	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$key];
+	            	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$v];
 	            	$tmp_struct['DS']            = $this->DS[$i];
 	            	$tmp_struct['MACRO']         = $this->MACRO;
 	            	$this->addToDataStruct($tmp_struct);
 	            	$i++;
 	        	}
+			$v++;
 	    	}
 		}else{
 	    	$view = intval($view);
@@ -226,7 +228,8 @@ class Data_Model extends Model
 				$tmp_struct['LEVEL']         = $i;
 				$tmp_struct['VIEW']          = $view;
 				$tmp_struct['SOURCE']        = $key;
-	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	        	#$tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
 	        	if(array_key_exists('ds_name',$this->RRD) ){
 	     	    	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
 				}else{
@@ -364,7 +367,7 @@ class Data_Model extends Model
                 $end = $timestamp;
             }
         }else{
-            $end = pnp::clean($end);
+            $end = $end;
         }
 
         if(!$start){
@@ -381,7 +384,7 @@ class Data_Model extends Model
         }
 
     if($start >= $end){
-	throw new Kohana_User_Exception('Wrong Timerange', "start >= end");
+		throw new Kohana_User_Exception('Wrong Timerange', "start >= end");
     }
     $timerange['start']   = $start;
     $timerange['f_start'] = date($this->config->conf['date_fmt'],$start);

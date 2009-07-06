@@ -5,7 +5,7 @@ Actions
 <div class="p4 ui-widget-content ui-corner-bottom" >
 <script type="text/javascript">
 	$(function() {
-		$("#datepicker").datepicker({showOn: 'button', buttonImage: 'media/images/calendar.png', dateFormat: '@', buttonImageOnly: true, onSelect: function(dateText, inst) { window.location.href = 'graph<?=$this->url?>&end=' + dateText }});
+		$("#datepicker").datepicker({showOn: 'button', buttonImage: 'media/images/calendar.png', dateFormat: '@', buttonImageOnly: true, onSelect: function(dateText, inst) { window.location.href = 'graph<?=$this->url?>&end=' + (dateText / 1000) }});
 	});
 	</script>
 

@@ -22,8 +22,8 @@ class Image_Controller extends System_Controller  {
 		$service = $this->input->get('srv');
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
-		$view    = 1;
-		$source  = 0;
+		$view    = "";
+		$source  = "";
 
 		if($this->input->get('view') != "" )
 			$view = $this->input->get('view') ;

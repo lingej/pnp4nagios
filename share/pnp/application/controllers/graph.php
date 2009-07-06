@@ -24,7 +24,6 @@ class Graph_Controller extends System_Controller  {
 	{
 		$this->template->body->graph_content = $this->add_view('graph_content');
 		$this->template->body->header        = $this->add_view('header');
-		#$this->template->body->header->title = "Start Index";
 		$this->template->body->search_box    = $this->add_view('search_box');
 		$this->template->body->service_box   = $this->add_view('service_box');
 
@@ -40,7 +39,7 @@ class Graph_Controller extends System_Controller  {
 		if(isset($this->host) && isset($this->service)){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
-			$this->url     = "?host=".$this->host."&srv=".$this->service;
+			$this->url      = "?host=".$this->host."&srv=".$this->service;
 		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$view);
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
