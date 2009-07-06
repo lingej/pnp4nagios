@@ -1,10 +1,8 @@
 <div class="pagebody b1">
-    <div class="p4 ui-widget-header">
 	<?php if (!empty($header)) {
      		echo $header;
 	} ?>
 
-    </div>
     <table class="body"><tr><td valign="top">
     <div class="left">
 	<?php if (!empty($graph_content)) {

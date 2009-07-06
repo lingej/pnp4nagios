@@ -11,10 +11,7 @@ class System_Controller extends Template_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->theme_path = Kohana::config('config.theme_path').Kohana::config('config.current_theme');
-		$this->theme_url = 'application/views/'.$this->theme_path; 
 
-		# set base template file to current theme
 		$this->template = $this->add_view('template');
 
 		$this->data      = new Data_Model();
@@ -44,36 +41,37 @@ class System_Controller extends Template_Controller {
 		if (empty($view)) {
 			return false;
 		}
-		return new View($this->theme_path.$view);
+		#return new View($this->theme_path.$view);
+		return new View($view);
 	}
 
 	/**
 	 * Set correct image path considering
 	 * the path to current theme.
 	 */
-	public function img_path($rel_path='')
-	{
-		return $this->add_path($rel_path);
-	}
+#	public function img_path($rel_path='')
+#	{
+#		return $this->add_path($rel_path);
+#	}
 
 	/**
 	 * Set correct image path considering
 	 * the path to current theme.
 	 */
-	public function add_path($rel_path)
-	{
-		$rel_path = trim($rel_path);
-		if (empty($rel_path)) {
-			return false;
-		}
-
-		$path = false;
-		# assume rel_path is relative from current theme
-		$path = 'application/views/'.$this->theme_path.$rel_path;
-		# make sure we didn't mix up start/end slashes
-		$path = str_replace('//', '/', $path);
-		return $path;
-	}
+#	public function add_path($rel_path)
+#	{
+#		$rel_path = trim($rel_path);
+#		if (empty($rel_path)) {
+#			return false;
+#		}
+#
+#		$path = false;
+#		# assume rel_path is relative from current theme
+#		$path = 'application/views/'.$this->theme_path.$rel_path;
+#		# make sure we didn't mix up start/end slashes
+#		$path = str_replace('//', '/', $path);
+#		return $path;
+#	}
 
     public function isAuthorizedFor($auth) {
         $conf = $this->config->conf;

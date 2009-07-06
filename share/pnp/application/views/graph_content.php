@@ -8,8 +8,8 @@
        <table border=0 width=100%><tr>
        <td align=left><?php echo Kohana::lang('common.datasource',$value['ds_name'])?>
        </td><td align=right>
-	<?php echo html::image('application/views/'.$this->theme_path.'images/PDF_16.png');?>
-	<?php echo html::image('application/views/'.$this->theme_path.'images/XML_16.png');?>
+	<?php echo html::image('media/images/PDF_16.png');?>
+	<?php echo html::image('media/images/XML_16.png');?>
        </td></tr></table>
      </div>
     <div class="p4 gh ui-widget-content ui-corner-bottom">

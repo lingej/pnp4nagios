@@ -63,6 +63,9 @@ install:
 	for file in pnp/media/css/*.css; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css; done
 
+	for file in pnp/media/css/ui-lightness/*.css; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css/ui-lightness; done
+
 	for file in pnp/media/css/ui-lightness/images/*; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css/ui-lightness/images; done
 

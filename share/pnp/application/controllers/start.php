@@ -20,7 +20,7 @@ class Start_Controller extends System_Controller  {
 		    $host = $this->data->getFirstHost();
 		    url::redirect("graph?host=$host", 302);
 		}
-		$this->template->body          = $this->add_view('body');
+		$this->template->body                = $this->add_view('body');
 		$this->template->body->graph_content = $this->add_view('graph_content');
 		$this->template->body->header        = $this->add_view('header');
 		$this->template->body->header->title = "Start Index";

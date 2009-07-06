@@ -15,8 +15,9 @@ class Graph_Controller extends System_Controller  {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->template->body          = $this->add_view('body');
-		$this->config->read_config();
+		$this->template->body    = $this->add_view('body');
+		$this->host              = $this->input->get('host');
+		$this->service           = $this->input->get('srv');
 	}
 
 	public function index()
@@ -26,8 +27,7 @@ class Graph_Controller extends System_Controller  {
 		#$this->template->body->header->title = "Start Index";
 		$this->template->body->search_box    = $this->add_view('search_box');
 		$this->template->body->service_box   = $this->add_view('service_box');
-		$this->host    = $this->input->get('host');
-		$this->service = $this->input->get('srv');
+
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
 		$view    = '';
@@ -36,10 +36,12 @@ class Graph_Controller extends System_Controller  {
 			$view = pnp::clean($this->input->get('view') );
 
 		$this->data->getTimeRange($start,$end,$view);
+
 		if(isset($this->host) && isset($this->service)){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
-		    $services = $this->data->getServices($this->host);
+			$this->url     = "?host=".$this->host."&srv=".$this->service;
+		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$view);
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 		    $this->template->body->service_box->services = $services;
@@ -47,8 +49,9 @@ class Graph_Controller extends System_Controller  {
 		    #print Kohana::debug($this->data->STRUCT);
 		}elseif(isset($this->host)){
 		    $this->host    = pnp::clean($this->host);
-		    $view    = 1;
-		    $this->title = "Start $this->host";
+			$this->url     = "?host=".$this->host;
+		    $view    	   = 1;
+		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
 		    $this->template->body->service_box->services = $services;
 		    $this->template->body->service_box->host = $this->host;

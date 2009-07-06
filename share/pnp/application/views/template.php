@@ -7,7 +7,7 @@
 		<title><?php if (isset($title)) echo html::specialchars($title) ?></title>
 		<?php echo html::stylesheet('media/css/common.css') ?>
 		<?php echo html::stylesheet('media/css/autocomplete.css') ?>
-		<?php echo html::stylesheet('media/css/jquery-ui.css') ?>
+		<?php echo html::stylesheet('media/css/ui-lightness/jquery-ui.css') ?>
 		<?php echo html::link('media/images/favicon.ico','icon','image/ico') ?>
 		<?php echo html::script('media/js/jquery-min.js')?>
 		<?php echo html::script('media/js/jquery-ui.min.js')?>
