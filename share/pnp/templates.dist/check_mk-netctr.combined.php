@@ -32,21 +32,17 @@
 #    5: rx_errors
 #    6: tx_errors
 #    7: tx_collisions
-                        
 
-#
 $x = explode("_", $servicedesc);
 $nic = $x[1];
-$opt[1] = "--vertical-label 'Byte/s' -l0 -u1048576  --title \"$hostname / NIC $nic\" ";
+$opt[1] = "--slope-mode --vertical-label 'Byte/s' -l0 --title \"$hostname / NIC $nic\" ";
 #
 #
 #
 $def[1] =  "DEF:rx_bytes=$rrdfile:$DS[1]:MAX " ;
 $def[1] .= "DEF:tx_bytes=$rrdfile:$DS[2]:MAX " ;
-#$def[1] .= "CDEF:rx_mb=rx_bytes,1048576.0,/ " ;
-#$def[1] .= "CDEF:tx_mb=tx_bytes,1048576.0,/ " ;
-$def[1] .= "CDEF:rx_mb=rx_bytes,1.0,/ " ;
-$def[1] .= "CDEF:tx_mb=tx_bytes,1.0,/ " ;
+$def[1] .= "CDEF:rx_mb=rx_bytes,8,*,100000000,GT,UNKN,rx_bytes,8,*,IF " ;
+$def[1] .= "CDEF:tx_mb=tx_bytes,8,*,100000000,GT,UNKN,tx_bytes,8,*,IF " ; 
 $def[1] .= "DEF:rx_errors=$rrdfile:$DS[5]:MAX " ;
 $def[1] .= "DEF:tx_errors=$rrdfile:$DS[6]:MAX " ;
 $def[1] .= "DEF:tx_collisions=$rrdfile:$DS[7]:MAX " ;
@@ -54,11 +50,11 @@ $def[1] .= "CDEF:errors=rx_errors,tx_errors,+ ";
 $def[1] .= "CDEF:problems_x=errors,tx_collisions,+ ";
 $def[1] .= "CDEF:problems=problems_x,1000000,* "; # Skaliere Probleme hoch, damit man was sieht
 
-$def[1] .= "AREA:problems#ff0000:\"Errors \" " ;
-$def[1] .= "GPRINT:problems:LAST:\"%.0lf/s\" " ;
-$def[1] .= "LINE:rx_mb#2060a0:\"Receive \" " ;
-$def[1] .= "GPRINT:rx_mb:LAST:\"%.1lfMB/s\" " ;
-$def[1] .= "LINE:tx_mb#60a020:\"Transmit \" " ;
-$def[1] .= "GPRINT:tx_mb:LAST:\"%.1lfMB/s\" " ;
+$def[1] .= "AREA:problems#ff0000:\"Errors \\t\" " ;
+$def[1] .= "GPRINT:problems:LAST:\"%.0lf/s\\n\" " ;
+$def[1] .= "LINE:rx_mb#2060a0:\"Receive \\t\" " ;
+$def[1] .= "GPRINT:rx_mb:LAST:\"%.1lf %sbit/s\\n\" " ;
+$def[1] .= "LINE:tx_mb#60a020:\"Transmit \\t\" " ;
+$def[1] .= "GPRINT:tx_mb:LAST:\"%.1lf %sbit/s\\n\" " ;
 
 ?>
