@@ -1,9 +1,9 @@
-<!-- Search Box Start -->
+<!-- Icon Box Start -->
 <div class="ui-widget">
-<div class="p4 ui-widget-header ui-corner-top">
+<div class="ui-widget-header ui-corner-top">
 Actions
 </div>
-<div class="ui-widget-content ui-corner-bottom" >
+<div class="p4 ui-widget-content ui-corner-bottom" >
 <script type="text/javascript">
 	$(function() {
 		$("#datepicker").datepicker({showOn: 'button', buttonImage: 'media/images/calendar.png', dateFormat: '@', buttonImageOnly: true, onSelect: function(dateText, inst) { window.location.href = 'graph<?=$this->url?>&end=' + (dateText / 1000) }});
@@ -16,5 +16,5 @@ Actions
 
 </div>
 </div><p>
-<!-- Search Box End -->
+<!-- Icon Box End -->
 
