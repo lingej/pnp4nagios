@@ -5729,8 +5729,6 @@ echo "${ECHO_T}yes" >&6; }
 # Check whether --with-perfdata-logfile was given.
 if test "${with_perfdata_logfile+set}" = set; then
   withval=$with_perfdata_logfile; PERFDATA_LOG=$withval
-else
-  PERFDATA_LOG=$localstatedir/log/perfdata.log
 
 fi
 

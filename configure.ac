@@ -149,8 +149,7 @@ AC_SUBST(RRDTOOL)
 
 
 AC_ARG_WITH(perfdata-logfile,[  --with-perfdata-logfile=<perfdata_logfile> Tell me where I should store the 'process_perfdata.pl' Logfile],
-        PERFDATA_LOG=$withval,
-	    PERFDATA_LOG=$localstatedir/log/perfdata.log
+        PERFDATA_LOG=$withval
 	   )
 AC_SUBST(PERFDATA_LOG)
 

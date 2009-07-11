@@ -161,8 +161,8 @@ sub parse_env {
         exit 2;
     }
     foreach my $key ( sort keys %ENV ) {
-        if ( $key =~ /^NAGIOS_(.*)/ ) {
-            $NAGIOS{$1} = $ENV{$key};
+        if ( $key =~ /^(NAGIOS|ICINGA)_(.*)/ ) {
+            $NAGIOS{$2} = $ENV{$key};
         }
     }
 
