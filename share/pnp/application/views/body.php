@@ -25,6 +25,9 @@
 	<?php if (!empty($service_box)) {
      		echo $service_box;
 	} ?>
+	<?php if (!empty($logo_box)) {
+     		echo $logo_box;
+	} ?>
     </div>
     </td></tr></table>
     <div class="left w99 cb ui-corner-all">

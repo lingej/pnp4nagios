@@ -105,3 +105,8 @@ div.pagebody {
 	padding: 4px;
 }
 
+div.logo {
+	padding: 6px;
+	text-align: center;
+	vertical-align: center;
+}

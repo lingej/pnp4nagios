@@ -67,6 +67,7 @@ class Graph_Controller extends System_Controller  {
 		    }			
 		}
 		$this->template->body->icon_box      = $this->add_view('icon_box');
+		$this->template->body->logo_box      = $this->add_view('logo_box');
 		$this->template->body->header->title = $this->title;
 	}
 }

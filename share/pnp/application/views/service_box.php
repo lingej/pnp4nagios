@@ -14,5 +14,5 @@ foreach($services as $service){
 ?>
 </div>
 </div>
-
+<p>
 <?php } ?>
