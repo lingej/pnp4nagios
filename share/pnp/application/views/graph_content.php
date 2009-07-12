@@ -13,9 +13,8 @@
        </td></tr></table>
      </div>
     <div class="p4 gh ui-widget-content ui-corner-bottom">
-    <img src="image?host=<?=$value['MACRO']['HOSTNAME']?>&srv=<?=$value['MACRO']['SERVICEDESC']?>&view=<?=$value['VIEW']?>&source=<?=$value['SOURCE']?>&start=<?=$value['TIMERANGE']['start']?>&end=<?=$value['TIMERANGE']['end']?>">
+    <img src="image?host=<?php echo $value['MACRO']['HOSTNAME'] ?>&srv=<?php echo $value['MACRO']['SERVICEDESC'] ?>&view=<?php echo $value['VIEW'] ?>&source=<?php echo $value['SOURCE'] ?>&start=<?php echo$value['TIMERANGE']['start'] ?>&end=<?php echo $value['TIMERANGE']['end'] ?>">
   </div><p>
 <?php } ?>
 </div>
 <!-- Graph Content End-->
-
