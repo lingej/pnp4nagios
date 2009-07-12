@@ -268,7 +268,6 @@ class Data_Model extends Model
 		$template_file = $this->findTemplate( $template );
 		$hostname      = $this->MACRO['HOSTNAME'];
 		$servicedesc   = $this->MACRO['SERVICEDESC'];
-		$rrdfile = $this->MACRO['RRDFILE'];
 		$def     = FALSE;
 		$opt     = FALSE;
 		$ds_name = FALSE;
@@ -281,6 +280,7 @@ class Data_Model extends Model
 	        	${$tag}[$key] = $val[$tag];
             }
         }
+		$rrdfile = $RRDFILE[1];
 		ob_start();
 		include($template_file);
 		ob_end_clean();

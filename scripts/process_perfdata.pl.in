@@ -30,7 +30,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
 my %conf = (
     VERSION           => "@PKG_VERSION@",
@@ -39,6 +39,7 @@ my %conf = (
     USE_RRDs          => 1,
     RRDPATH           => "@PERFDATA_DIR@",
     RRDTOOL           => "@RRDTOOL@",
+    RRD_STORAGE_TYPE  => "SINGLE",
     RRD_HEARTBEAT     => 8640,
     RRA_STEP          => 60,
     RRA_CFG           => "@sysconfdir@/rra.cfg",
@@ -274,14 +275,15 @@ sub process_perfdata_file {
 sub data2rrd {
 
     my @data = @_;
+	my @rrd_state = ();
+	my $rrd_storage_type;
+
     print_log( "data2rrd called", 2 );
-    $NAGIOS{RRDFILE}      = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".rrd";
     $NAGIOS{XMLFILE}      = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".xml";
     $NAGIOS{SERVICEDESC}  = $data[0]{servicedesc} if ( $data[0]{multi} ge 1 );
     $NAGIOS{MULTI_PARENT} = "";
     $NAGIOS{MULTI_PARENT} = $data[0]{multi_parent} if ( $data[0]{multi} ge 1 );
     $TEMPLATE             = $data[0]{template};
-    my @rrd_state = ();
 
     unless ( -d "$conf{RRDPATH}" ) {
         unless ( mkdir "$conf{RRDPATH}" ) {
@@ -304,13 +306,12 @@ sub data2rrd {
     #
     open_template( $NAGIOS{XMLFILE} );
 
-    my @ds_create = ();
-    my $ds_update = '';
+    @ds_create = ();
+    $ds_update = '';
 
     for my $i ( 0 .. $#data ) {
         print_log( " -- Job $i ", 3 );
         my $DS = $i + 1;
-
         #
         # Pro Datasource
         #
@@ -319,13 +320,37 @@ sub data2rrd {
                 print_log( "  -- $job -> $data[$i]{$job}", 3 );
             }
         }
-        push( @ds_create, "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" );
-        $ds_update = "$ds_update:$data[$i]{value}";
+
+	    if ( $data[$i]{rrd_storage_type} eq "MULTIPLE" ){
+            print_log( "DEBUG: MULTIPLE Storage Type", 3 );
+			# PNP 0.4.x Template compatibility
+    		$NAGIOS{RRDFILE} = "";
+			#
+			$rrd_storage_type = "MULTIPLE";
+			$rrdfile   = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . "_" .$data[$i]{label} . ".rrd";
+			# DS is set to 1 
+			@ds_create = "DS:1:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" ;
+            $ds_update = ":$data[$i]{value}";
+            @rrd_state = write_rrd();
+        	@ds_create = ();
+        	$ds_update = "";
+    	}else{
+            print_log( "DEBUG: SINGLE Storage Type", 3 );
+			# PNP 0.4.x Template compatibility
+    		$NAGIOS{RRDFILE} = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".rrd";
+			#
+			$rrd_storage_type = "SINGLE";
+			$rrdfile   = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . ".rrd";
+            push( @ds_create, "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" );
+            $ds_update = "$ds_update:$data[$i]{value}";
+    	}
+
         write_to_template( "TEMPLATE",        $data[0]{template} );
-        write_to_template( "RRDFILE",         $NAGIOS{RRDFILE} );
+        write_to_template( "RRDFILE",         $rrdfile );
+        write_to_template( "RRD_STORAGE_TYPE",$data[$i]{rrd_storage_type} );
         write_to_template( "IS_MULTI",        $data[0]{multi} );
         write_to_template( "DS",              $DS );
-        write_to_template( "NAME",            "$data[$i]{label}" );
+        write_to_template( "NAME",            $data[$i]{label} );
         write_to_template( "UNIT",            $data[$i]{uom} );
         write_to_template( "ACT",             $data[$i]{value} );
         write_to_template( "WARN",            $data[$i]{warning} );
@@ -341,28 +366,43 @@ sub data2rrd {
 
     }
 
-    # Create or Update the RRD Files
-    #
+	if( $rrd_storage_type eq "SINGLE" ){
+        @rrd_state = write_rrd();
+    }
 
-    if ( !-e "$NAGIOS{RRDFILE}" ) {
+    write_state_to_template(@rrd_state);
+    write_env_to_template();
+    close_template( $NAGIOS{XMLFILE} );
+}
+
+sub write_rrd {
+    my @rrd_create = ();
+    my @rrd_state = ();
+
+    print_log( "DEBUG: TPL-> $TEMPLATE",3);
+    print_log( "DEBUG: CRE-> @ds_create",3);
+    print_log( "DEBUG: UPD-> $ds_update",3);
+
+    if ( !-e "$rrdfile" ) {
         @rrd_create = parse_rra_config($TEMPLATE);
         if ( $conf{USE_RRDs} == 1 ) {
-            print_log( "RRDs::create $NAGIOS{RRDFILE} @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
-            RRDs::create( "$NAGIOS{RRDFILE}", @rrd_create, @ds_create, "--start=$NAGIOS{TIMET}", "--step=$conf{RRA_STEP}" );
+            print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
+            RRDs::create( "$rrdfile", @rrd_create, @ds_create, "--start=$NAGIOS{TIMET}", "--step=$conf{RRA_STEP}" );
+
             my $err = RRDs::error();
             if ($err) {
                 print_log( "RRDs::create ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
             }
             else {
-                print_log( "$NAGIOS{RRDFILE} created", 2 );
+                print_log( "$rrdfile created", 2 );
                 @rrd_state = ( 0, "just created" );
             }
         }
         else {
             print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.",                                   2 );
-            print_log( "$conf{RRDTOOL} create $NAGIOS{RRDFILE} @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
-            system("$conf{RRDTOOL} create $NAGIOS{RRDFILE} @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
+            print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
+            system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
             if ( $? > 0 ) {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( $?, "create failed" );
@@ -376,12 +416,12 @@ sub data2rrd {
     else {
         if ( $conf{USE_RRDs} == 1 ) {
             if ( $conf{RRD_DAEMON_OPTS} ) {
-                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
-                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$NAGIOS{RRDFILE}", "$NAGIOS{TIMET}$ds_update" );
+                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
             }
             else {
-                print_log( "RRDs::update $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
-                RRDs::update( "$NAGIOS{RRDFILE}", "$NAGIOS{TIMET}$ds_update" );
+                print_log( "RRDs::update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                RRDs::update( "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
             }
             my $err = RRDs::error();
             if ($err) {
@@ -389,19 +429,19 @@ sub data2rrd {
                 @rrd_state = ( 1, $err );
             }
             else {
-                print_log( "$NAGIOS{RRDFILE} updated", 2 );
+                print_log( "$rrdfile updated", 2 );
                 @rrd_state = ( 0, "successful updated" );
             }
         }
         else {
             print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.", 2 );
             if ( $conf{RRD_DAEMON_OPTS} ) {
-                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
-                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update");
+                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update");
             }
             else {
-                print_log( "$conf{RRDTOOL} update $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update", 2 );
-                system("$conf{RRDTOOL} update $NAGIOS{RRDFILE} $NAGIOS{TIMET}$ds_update");
+                print_log( "$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                system("$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update");
             }
             if ( $? > 0 ) {
                 print_log( "rrdtool update returns $?", 1 );
@@ -411,13 +451,11 @@ sub data2rrd {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "successful updated" );
             }
-
         }
     }
-    write_state_to_template(@rrd_state);
-    write_env_to_template();
-    close_template( $NAGIOS{XMLFILE} );
+    return @rrd_state;
 }
+
 
 #
 # Write Template
@@ -489,6 +527,7 @@ sub adjust_template {
     my @dstype_list       = ();
     my $use_min_on_create = 0;
     my $use_max_on_create = 0;
+	my $rrd_storage_type  = $conf{'RRD_STORAGE_TYPE'}; 
 
     if ( $uom eq "c" ) {
         $dstype = "COUNTER";
@@ -552,6 +591,9 @@ sub adjust_template {
                 if ( $1 eq "USE_MAX_ON_CREATE" && $2 eq "1" ) {
                     $use_max_on_create = 1;
                 }
+                if ( $1 eq "RRD_STORAGE_TYPE" && uc($2) eq "MULTIPLE" ) {
+                    $rrd_storage_type = uc($2);
+                }
             }
         }
         close FH;
@@ -561,7 +603,13 @@ sub adjust_template {
         print_log( "RRD Datatype is $dstype",                                 2 );
     }
     print_log( "Template is $template.php", 2 );
-    return $template, $dstype, $use_min_on_create, $use_max_on_create;
+	my %CTPL = ( TEMPLATE          => $template,
+		         DSTYPE            => $dstype,
+		         RRD_STORAGE_TYPE  => $rrd_storage_type,
+		         USE_MIN_ON_CREATE => $use_min_on_create,
+		         USE_MAX_ON_CREATE => $use_max_on_create,
+		       );
+    return %CTPL;
 }
 
 #
@@ -705,7 +753,9 @@ sub _parse {
 #
 sub cleanup {
     my $string = shift;
-    $string =~ s/[ :\/\\]/_/g;
+	if($string){
+    	$string =~ s/[ :\/\\]/_/g;
+	}
     return $string;
 }
 
@@ -727,6 +777,7 @@ sub parse_perfstring {
     # Default RRD Datatype
     # Value will be overwritten by adjust_template()
     #
+	my %CTPL = ();
     $dstype = "GAUGE";
     my $perfstring = shift;
     $perfstring =~ s/\\/\//g;
@@ -771,22 +822,26 @@ sub parse_perfstring {
                     data2rrd(@perfs) if ( $#perfs >= 0 );       # Process when a new block starts.
                     @perfs = ();                                # Clear the perfs array.
                 }
-                ( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
-                if ( $use_max_on_create == 1 && defined $p{max} ) {
+				%CTPL = adjust_template( $multi[1], $p{uom}, $count );
+
+                #( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
+                if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
                 }
                 else {
                     $p{rrd_max} = "U";
                 }
-                if ( $use_min_on_create == 1 && defined $p{min} ) {
+                if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
                 }
                 else {
                     $p{rrd_min} = "U";
                 }
-                $p{dstype}   = $dstype;
-                $p{label}    = cleanup( $multi[2] );           # store the original label from check_multi header
-                $p{hostname} = cleanup( $NAGIOS{HOSTNAME} );
+                $p{template}         = $CTPL{'TEMPLATE'};
+                $p{dstype}           = $CTPL{'DSTYPE'};
+                $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
+                $p{label}            = cleanup( $multi[2] );           # store the original label from check_multi header
+                $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 push @perfs, {%p};
                 $count++;
             }
@@ -794,25 +849,28 @@ sub parse_perfstring {
                 print_log( "DEBUG: Next check_multi data for block $count", 3 );
 
                 # additional check_multi data
-                ( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
-                if ( $use_max_on_create == 1 && defined $p{max} ) {
+				%CTPL = adjust_template( $multi[1], $p{uom}, $count );
+                #( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
+                if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
                 }
                 else {
                     $p{rrd_max} = "U";
                 }
-                if ( $use_min_on_create == 1 && defined $p{min} ) {
+                if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
                 }
                 else {
                     $p{rrd_min} = "U";
                 }
-                $p{dstype}       = $dstype;
-                $p{hostname}     = cleanup( $NAGIOS{HOSTNAME} );
-                $p{servicedesc}  = cleanup( $multi[0] );           # Use the multi servicedesc.
-                $p{multi}        = $is_multi;
-                $p{multi_parent} = $multi_parent;
-                $p{label}        = cleanup( $p{label} );
+                $p{template}         = $CTPL{'TEMPLATE'};
+                $p{dstype}           = $CTPL{'DSTYPE'};
+                $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
+                $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
+                $p{servicedesc}      = cleanup( $multi[0] );           # Use the multi servicedesc.
+                $p{multi}            = $is_multi;
+                $p{multi_parent}     = $multi_parent;
+                $p{label}            = cleanup( $p{label} );
                 push @perfs, {%p};
             }
         }
@@ -833,27 +891,29 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
+			%CTPL = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
+            #( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
 
-            ( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
-
-            if ( $use_max_on_create == 1 && defined $p{max} ) {
+            if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                 $p{rrd_max} = $p{max};
             }
             else {
                 $p{rrd_max} = "U";
             }
-            if ( $use_min_on_create == 1 && defined $p{min} ) {
+            if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                 $p{rrd_min} = $p{min};
             }
             else {
                 $p{rrd_min} = "U";
             }
 
-            $p{multi}       = $is_multi;
-            $p{dstype}      = $dstype;
-            $p{hostname}    = cleanup( $NAGIOS{HOSTNAME} );
-            $p{servicedesc} = cleanup( $NAGIOS{SERVICEDESC} );
-            $p{label}       = cleanup( $p{label} );
+            $p{template}         = $CTPL{'TEMPLATE'};
+            $p{dstype}           = $CTPL{'DSTYPE'};
+            $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
+            $p{multi}            = $is_multi;
+            $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
+            $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
+            $p{label}            = cleanup( $p{label} );
 
             push @perfs, {%p};
             $count++;
