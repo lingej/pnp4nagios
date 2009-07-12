@@ -1,16 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Default controller.
- * Does not require login but should display default page
+ * Xml controller.
  *
- * @package    NINJA
- * @author     op5 AB
+ * @package    PNP4Nagios
+ * @author     Jorg Linge
  * @license    GPL
  */
 class Xml_Controller extends System_Controller  {
-
-	#public $csrf_config = false;
-	#public $route_config = false;
 
 	public function __construct()
 	{

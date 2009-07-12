@@ -1,10 +1,9 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Default controller.
- * Does not require login but should display default page
+ * Ajax controller.
  *
- * @package    NINJA
- * @author     op5 AB
+ * @package    PNP4Nagios 
+ * @author     Joerg Linge 
  * @license    GPL
  */
 class Ajax_Controller extends System_Controller  {

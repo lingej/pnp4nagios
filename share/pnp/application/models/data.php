@@ -250,10 +250,10 @@ class Data_Model extends Model
     *
     */
     private function addToDataStruct ($data=FALSE) {
-	if($data === FALSE)
-		return FALSE;
+		if($data === FALSE)
+			return FALSE;
 
-	array_push($this->STRUCT, $data);
+		array_push($this->STRUCT, $data);
     } 
 
     /*
