@@ -86,22 +86,21 @@ case $layout in
 	;;
 	default-0.4)
 		prefix="/usr/local/nagios"
-		sysconfdir="${prefix}/etc/pnp"
-		localstatedir="${prefix}/var"
-		libexecdir="${prefix}/libexec"
-		datarootdir="${prefix}/share/pnp"
-		libdir="${prefix}/lib/pnp"
-		PERFDATA_LOG=${prefix}/var/perfdata.log
-		PERFDATA_DIR=${prefix}/share/perfdata
-		PERFDATA_SPOOL_DIR=${prefix}/var/spool/perfdata
+		sysconfdir="\${prefix}/etc/pnp"
+		localstatedir="\${prefix}/var"
+		libexecdir="\${prefix}/libexec"
+		datarootdir="\${prefix}/share/pnp"
+		libdir="\${prefix}/lib/pnp"
+		PERFDATA_LOG="\${prefix}/var/perfdata.log"
+		PERFDATA_DIR="\${prefix}/share/perfdata"
+		PERFDATA_SPOOL_DIR="\${prefix}/var/spool/perfdata"
 	;;
-	*)
-		prefix="/usr/local/${PKG_NAME}"
-		sysconfdir="${prefix}/etc"
-		localstatedir="${prefix}/var"
-		libexecdir="${prefix}/libexec"
-		datarootdir="${prefix}/share"
-		libdir="${prefix}/lib"
+	default)
+		sysconfdir="\${prefix}/etc"
+		localstatedir="\${prefix}/var"
+		libexecdir="\${prefix}/libexec"
+		datarootdir="\${prefix}/share"
+		libdir="\${prefix}/lib"
 		PERFDATA_LOG="${localstatedir}/perfdata.log"
 		PERFDATA_DIR="${localstatedir}/perfdata"
 		PERFDATA_SPOOL_DIR="${localstatedir}/spool"
@@ -286,25 +285,15 @@ AC_CONFIG_FILES( subst Makefile share/Makefile lib/Makefile scripts/Makefile src
 AC_OUTPUT()
 
 $PERL subst summary
-#$PERL subst Makefile
-#$PERL subst share/Makefile
-#$PERL subst scripts/Makefile
-#$PERL subst src/Makefile
-#$PERL subst sample-config/Makefile
-#$PERL subst man/Makefile
 $PERL subst scripts/process_perfdata.pl 
-#$PERL subst scripts/net2pnp.pl 
 $PERL subst scripts/rc.npcd 
 $PERL subst scripts/check_pnp_rrds.pl 
 $PERL subst share/pnp/index.php 
 $PERL subst share/pnp/application/config/config.php 
-#$PERL subst sample-config/xinetd.pnp.sample 
-#$PERL subst sample-config/misccommands.sample 
 $PERL subst sample-config/httpd.conf 
 $PERL subst sample-config/pnp/config.php 
 $PERL subst sample-config/pnp/npcd.cfg-sample 
 $PERL subst sample-config/pnp/process_perfdata.cfg-sample
 $PERL subst sample-config/pnp/pnp4nagios_release
-#$PERL subst contrib/verify_pnp_config 
 
 $PERL summary
