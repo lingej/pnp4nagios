@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Last Modified: 2009-04-01
+ * Last Modified: 07-12-2009
  *
  * $Id: npcdmod.c 636 2009-05-23 18:17:38Z hendrikb $
  *
@@ -76,7 +76,7 @@ int nebmodule_init(int flags, char *args, nebmodule *handle) {
 
 	if (process_performance_data == FALSE) {
 		write_to_all_logs("npcdmod: I can not work with disabled performance data in nagios.cfg.", NSLOG_INFO_MESSAGE);
-		write_to_all_logs("npcdmod: Please enable it with 'process_perf_data=1' in nagios.cfg", NSLOG_INFO_MESSAGE);
+		write_to_all_logs("npcdmod: Please enable it with 'process_performance_data=1' in nagios.cfg", NSLOG_INFO_MESSAGE);
 		return -1;
 	}
 
