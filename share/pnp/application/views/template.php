@@ -8,7 +8,7 @@
 		<title><?php if (isset($this->title)) echo html::specialchars($this->title) ?></title>
 		<?php echo html::stylesheet('media/css/common.css') ?>
 		<?php echo html::stylesheet('media/css/autocomplete.css') ?>
-		<?php echo html::stylesheet('media/css/ui-lightness/jquery-ui.css') ?>
+		<?php echo html::stylesheet('media/css/ui-'.$this->config->conf['ui-theme'].'/jquery-ui.css') ?>
 		<?php echo html::link('media/images/favicon.ico','icon','image/ico') ?>
 		<?php echo html::script('media/js/jquery-min.js')?>
 		<?php echo html::script('media/js/jquery-ui.min.js')?>

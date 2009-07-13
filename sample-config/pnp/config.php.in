@@ -85,6 +85,11 @@ $conf['allowed_for_pages'] = "EVERYONE";
 #
 $conf['overview-range'] = 1 ;
 #
+# Jquery UI Theme
+# http://jqueryui.com/themeroller/
+# Posuble Valies are: lightness, smoothness
+$conf['ui-theme'] = 'lightness';
+
 # Use Language lang/lang_['lang'].php .
 # Valid Options are de,en,nl,se,fr
 #
