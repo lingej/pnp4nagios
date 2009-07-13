@@ -13,7 +13,9 @@
        </td></tr></table>
      </div>
     <div class="p4 gh ui-widget-content ui-corner-bottom">
-    <img src="image?host=<?php echo $value['MACRO']['HOSTNAME'] ?>&srv=<?php echo $value['MACRO']['SERVICEDESC'] ?>&view=<?php echo $value['VIEW'] ?>&source=<?php echo $value['SOURCE'] ?>&start=<?php echo$value['TIMERANGE']['start'] ?>&end=<?php echo $value['TIMERANGE']['end'] ?>">
+    <a href="graph?host=<?php echo $value['MACRO']['HOSTNAME'] ?>&srv=<?php echo $value['MACRO']['SERVICEDESC'] ?>">
+	<img src="image?host=<?php echo $value['MACRO']['HOSTNAME'] ?>&srv=<?php echo $value['MACRO']['SERVICEDESC'] ?>&view=<?php echo $value['VIEW'] ?>&source=<?php echo $value['SOURCE'] ?>&start=<?php echo$value['TIMERANGE']['start'] ?>&end=<?php echo $value['TIMERANGE']['end'] ?>">
+	</a>
   </div><p>
 <?php } ?>
 </div>
