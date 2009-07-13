@@ -39,6 +39,7 @@ class Data_Model extends Model
                    	$stat = stat($conf['rrdbase'] . "/" . $file);
                    	$age = (time() - $stat['mtime']);
                    	$hosts[$i]['name'] = $file;
+                   	$hosts[$i]['sort'] = strtoupper($file);
                    	if ($age < $conf['max_age']) {
                        	$hosts[$i]['state'] = 'active';
                    	} else {
@@ -48,14 +49,20 @@ class Data_Model extends Model
                	}
                	closedir($dh);
            	} else {
-			throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
+				throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
            	}
        	}
         if(sizeof($hosts)>0){
-            natsort($hosts);
+			# Obtain a list of columns
+			foreach ($hosts as $key => $row) {
+		    	$sort[$key]  = $row['sort'];
+			}
+			# Sort the data with volume descending, edition ascending
+			# Add $data as the last parameter, to sort by the common key
+			array_multisort($sort, SORT_ASC, $hosts);
         }else{
-		throw new Kohana_Exception('common.perfdata-dir-empty', $conf['rrdbase'] );
-	}
+			throw new Kohana_Exception('common.perfdata-dir-empty', $conf['rrdbase'] );
+		}
         return $hosts;
     }
 
@@ -95,6 +102,7 @@ class Data_Model extends Model
                         $host[0]['servicedesc']      = "Host Perfdata";
                     }else{
                         $services[$i]['name']        = $servicedesc[1];
+                        $services[$i]['sort']        = strtoupper($servicedesc[1]);
                         $services[$i]['state']       = $state;
                         $services[$i]['hostname']    = (string) $xml->NAGIOS_DISP_HOSTNAME;
                         $services[$i]['servicedesc'] = (string) $xml->NAGIOS_DISP_SERVICEDESC;
@@ -104,12 +112,20 @@ class Data_Model extends Model
                 closedir($dh);
             }
         } else {
-	    throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
+	    	throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
         }
-        if( is_array($host) ){
-			sort($services);
+        if( is_array($services) && sizeof($services) > 0){
+			# Obtain a list of columns
+			foreach ($services as $key => $row) {
+		    	$sort[$key]  = $row['sort'];
+			}
+			# Sort the data with volume descending, edition ascending
+			# Add $data as the last parameter, to sort by the common key
+			array_multisort($sort, SORT_STRING, $services);
             array_unshift($services, $host[0]);
-        }
+        }else{
+			throw new Kohana_Exception('common.host-perfdata-dir-empty', $path );
+		}		
         return $services;
     }
 

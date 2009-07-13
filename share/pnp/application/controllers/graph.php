@@ -35,7 +35,7 @@ class Graph_Controller extends System_Controller  {
 
 		$this->data->getTimeRange($start,$end,$view);
 
-		if(isset($this->host) && isset($this->service)){
+		if($this->host != "" && $this->service != ""){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
 			$this->url      = "?host=".$this->host."&srv=".$this->service;
@@ -45,7 +45,7 @@ class Graph_Controller extends System_Controller  {
 		    $this->template->body->service_box->services = $services;
 		    $this->template->body->service_box->host = $this->host;
 		    #print Kohana::debug($this->data->STRUCT);
-		}elseif(isset($this->host)){
+		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host;
 		    $view    	   = 1;
