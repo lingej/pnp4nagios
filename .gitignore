@@ -9,6 +9,7 @@ scripts/check_pnp_rrds.pl
 scripts/process_perfdata.pl
 src/*.o
 src/npcd
+include/config.h
 
 sample-config/pnp/config.php
 sample-config/pnp/pnp4nagios_release
