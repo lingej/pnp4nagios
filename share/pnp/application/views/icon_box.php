@@ -6,7 +6,11 @@ Actions
 <div class="p4 ui-widget-content ui-corner-bottom" >
 <script type="text/javascript">
 	$(function() {
-		$("#datepicker").datepicker({showOn: 'button', buttonImage: 'media/images/calendar.png', dateFormat: '@', buttonImageOnly: true, onSelect: function(dateText, inst) { window.location.href = 'graph<?php echo $this->url ?>&end=' + (dateText / 1000) }});
+		var currentTime = new Date()
+		var hours = (currentTime.getHours() * 60 * 60)
+		var minutes = (currentTime.getMinutes() * 60)
+		var sec = (hours + minutes)
+		$("#datepicker").datepicker({showOn: 'button', buttonImage: 'media/images/calendar.png', dateFormat: '@', buttonImageOnly: true, onSelect: function(dateText, inst) { window.location.href = 'graph<?php echo $this->url ?>&end=' + (dateText / 1000 + sec) }});
 	});
 	</script>
 
