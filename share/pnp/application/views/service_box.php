@@ -9,7 +9,7 @@ foreach($services as $service){
 	echo html::anchor($this->uri->string().
 		"?host=".$host.
 		"&srv=".$service['name'],
-		$service['servicedesc']."<br>");
+		pnp::shorten($service['servicedesc']))."<br>\n";
 }
 ?>
 </div>

@@ -14,7 +14,7 @@ class Graph_Controller extends System_Controller  {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->template->graph    = $this->add_view('graph');
+		$this->template->graph   = $this->add_view('graph');
 		$this->host              = $this->input->get('host');
 		$this->service           = $this->input->get('srv');
 	}
@@ -25,6 +25,7 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph->header        = $this->add_view('header');
 		$this->template->graph->search_box    = $this->add_view('search_box');
 		$this->template->graph->service_box   = $this->add_view('service_box');
+		$this->template->graph->status_box    = $this->add_view('status_box');
 
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
@@ -42,16 +43,28 @@ class Graph_Controller extends System_Controller  {
 		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$view);
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
+			// Status Box Vars
+		    $this->template->graph->status_box->host     = $this->host;
+		    $this->template->graph->status_box->lhost    = $this->host;
+		    $this->template->graph->status_box->service  = $this->data->MACRO['DISP_SERVICEDESC'];
+		    $this->template->graph->status_box->lservice = $this->data->MACRO['SERVICEDESC'];
+		    $this->template->graph->status_box->timet    = date($this->config->conf['date_fmt'],$this->data->MACRO['TIMET']);
+			// Service Box Vars
 		    $this->template->graph->service_box->services = $services;
 		    $this->template->graph->service_box->host = $this->host;
-		    #print Kohana::debug($this->data->STRUCT);
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host;
 		    $view    	   = 1;
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
-		    $this->template->graph->service_box->services = $services;
+			// Status Box Vars
+		    $this->template->graph->status_box->host    = $this->host;
+		    $this->template->graph->status_box->lhost   = $this->host;
+		    $this->template->graph->status_box->shost   = pnp::shorten($this->host);
+		    $this->template->graph->status_box->timet   = date($this->config->conf['date_fmt'],$this->data->MACRO['TIMET']);
+			// Service Box Vars
+			$this->template->graph->service_box->services = $services;
 		    $this->template->graph->service_box->host = $this->host;
 		    $this->title = "Service Overview for $this->host";
 		    foreach($services as $service){
@@ -63,7 +76,7 @@ class Graph_Controller extends System_Controller  {
 		    if(isset($this->host)){
 		    	url::redirect("/graph?host=$this->host");
 		    }else{
-			throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
+				throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
 		    }			
 		}
 		$this->template->graph->icon_box      = $this->add_view('icon_box');

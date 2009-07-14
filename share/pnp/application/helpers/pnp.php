@@ -17,5 +17,14 @@ class pnp_Core {
 	    return $string;
 	
 	}
+	public static function shorten($string = FALSE, $length = 25){
+	    if($string === FALSE){
+	        return;
+	    }
+		if(strlen($string) > $length){
+			$string = substr($string, 0, $length) . "...";
+		}
+		return $string;
+	}
 
 } 

@@ -24,5 +24,8 @@
 <?php if (!empty($graph)) {
      echo $graph;
 } ?>
+<?php if (!empty($debug)) {
+     echo $debug;
+} ?>
 </body>
 </html>
