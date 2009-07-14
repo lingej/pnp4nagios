@@ -1,88 +1,167 @@
 #!@SHELL@
-# Init Script for NPCD
+# 
+### BEGIN INIT INFO
+# Provides:          npcd
+# Required-Start:    
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: PNP4Nagios NPCD Daemon
+# Description: 	     Nagios Performance Data C Daemon
+### END INIT INFO
 
-PREFIX=@prefix@
-BIN=@bindir@/@npcd_name@
-CONF=@sysconfdir@/npcd.cfg
-PID=/var/run/npcd.pid
-
-get_pid ()
+# chkconfig: 345 99 01
+#
+# File : npcd
+#
+  
+status_npcd ()
 {
-	PID_NUMBER=`head -n 1 $PID`
+
+	pid_npcd
+
+	if ps -p $NpcdPID > /dev/null 2>&1; then
+		return 0
+	else
+		if test -f $NpcdLockDir/$NpcdLockFile; then
+       			return 2
+		else
+			return 1
+		fi
+        fi
+
+        return 1
 }
 
+printstatus_npcd()
+{
+	if status_npcd $1 $2; then
+		echo "$servicename (pid $NpcdPID) is running..."
+	elif test $? == 2; then
+		echo "$servicename is not running but subsystem locked"
+	else
+		echo "$servicename is not running"
+	fi
+}
+
+
+killproc_npcd ()
+{
+
+	kill $2 $NpcdPID
+
+}
+
+
+pid_npcd ()
+{
+
+	if test ! -f $NpcdRunFile; then
+		return 1
+	fi
+
+	NpcdPID=`head -n 1 $NpcdRunFile`
+	return 0
+}
+
+
+# Source function library
+# Solaris doesn't have an rc.d directory, so do a test first
+if [ -f /etc/rc.d/init.d/functions ]; then
+	. /etc/rc.d/init.d/functions
+elif [ -f /etc/init.d/functions ]; then
+	. /etc/init.d/functions
+fi
+
+servicename=@npcd_name@
+prefix=@prefix@
+exec_prefix=${prefix}
+NpcdBin=@bindir@/@npcd_name@
+NpcdCfgFile=@sysconfdir@/npcd.cfg
+NpcdVarDir=@localstatedir@
+NpcdRunFile=/var/run/npcd.pid
+NpcdLockDir=/var/lock/subsys
+NpcdLockFile=@npcd_name@
+
+
+# Check that npcd exists.
+if [ ! -f $NpcdBin ]; then
+    echo "Executable file $NpcdBin not found.  Exiting."
+    exit 1
+fi
+
+# Check that npcd.cfg exists.
+if [ ! -f $NpcdCfgFile ]; then
+    echo "Configuration file $NpcdCfgFile not found.  Exiting."
+    exit 1
+fi
+          
+# See how we were called.
 case "$1" in
+
 	start)
-		if [ ! -f $PID ]
-		then 
-			$BIN -d -f $CONF
-			if [ $? -eq 0 ] 
-			then
-				echo "NPCD started."
-				exit 0
-			else
-				echo "Could not start NPCD"
-				exit 1
-			fi
-		else
-			echo "PID File '$PID' exists. NPCD already started"
-			exit 0
+		status_npcd
+		if [ $? -eq 0 ]; then
+			echo "$servicename already started..."
+			exit 1
 		fi
+		echo -n "Starting $servicename:"
+		touch $NpcdRunFile
+		chown $NpcdUser:$NpcdGroup $NpcdRunFile
+		$NpcdBin -d -f $NpcdCfgFile
+		if [ -d $NpcdLockDir ]; then touch $NpcdLockDir/$NpcdLockFile; fi
+		echo " done."
+		exit 0
 		;;
+
 	stop)
-		if [ -f $PID ] 
-		then
-			get_pid
-			kill $PID_NUMBER
-			if [ $? -eq 0 ] 
-			then
-				rm $PID
-				echo "NPCD stopped."
-				exit 0
-			else
-				echo "Could not stop NPCD"
-				exit 1
-			fi
-		else
-			echo "NPCD was not running."
-			exit 0
+		status_npcd
+		if ! [ $? -eq 0 ]; then
+			echo "$servicename was not running... could not stop"
+			exit 1
 		fi
+		echo -n "Stopping $servicename: "
+
+		pid_npcd
+		killproc_npcd npcd
+
+ 		# now we have to wait for npcd to exit and remove its
+ 		# own NpcdRunFile, otherwise a following "start" could
+ 		# happen, and then the exiting npcd will remove the
+ 		# new NpcdRunFile, allowing multiple npcd daemons
+ 		# to (sooner or later) run - John Sellens
+		#echo -n 'Waiting for npcd to exit .'
+ 		for i in 1 2 3 4 5 6 7 8 9 10 ; do
+ 		    if status_npcd > /dev/null; then
+ 			echo -n '.'
+ 			sleep 1
+ 		    else
+ 			break
+ 		    fi
+ 		done
+ 		if status_npcd > /dev/null; then
+ 		    echo ''
+ 		    echo 'Warning - $servicename did not exit in a timely manner'
+ 		else
+ 		    echo 'done.'
+ 		fi
+		rm -f $NpcdLockDir/$NpcdLockFile 
 		;;
+
+        status)
+		printstatus_npcd
+                ;;
+
 	restart)
 		$0 stop
 		$0 start
 		;;
-	reload)
-		if [ -f $PID ] 
-		then
-			get_pid
-			kill -HUP $PID_NUMBER
-			if [ $? -eq 0 ]
-			then
-				echo "NPCD reloaded"
-				exit 0
-			else
-				echo "Could not reload"
-				exit 1
-			fi
-		else
-			echo "NPCD no running"
-			exit 1
-		fi
-		;;
-	status)
-		if [ -f $PID ] 
-		then
-			echo "NPCD running."
-			exit 0
-		else
-			echo "NPCD not running."
-			exit 1
-		fi
-		;;
+
 	*)
-		echo "Usage: npcd {start|stop|restart|reload|status}"
+		echo "Usage: $servicename {start|stop|restart|status}"
 		exit 1
 		;;
-esac
 
+esac
+  
+# End of this script
