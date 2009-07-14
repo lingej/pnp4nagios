@@ -112,7 +112,7 @@ class Data_Model extends Model
                 closedir($dh);
             }
         } else {
-	    	throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
+	    	throw new Kohana_Exception('common.perfdata-dir-for-host', $path, $hostname);
         }
         if( is_array($services) && sizeof($services) > 0){
 			# Obtain a list of columns
@@ -141,6 +141,9 @@ class Data_Model extends Model
                 break;
             }
         }
+		if(sizeof($srv) == 0){
+			throw new Kohana_Exception('common.get-first-service', $hostname );
+		}
         return $srv['name'];
     }
 
@@ -156,6 +159,9 @@ class Data_Model extends Model
                 break;
             }
         }
+		if(sizeof($host) == 0){
+			throw new Kohana_Exception('common.get-first-host');
+		}
         return $host['name'];
     }
 
@@ -164,33 +170,33 @@ class Data_Model extends Model
     *
     */
     public function readXML ($hostname, $servicedesc){
-	$conf        = $this->config->conf;
-	$this->XML   = array();
-	$this->MACRO = array();
-	$this->DS    = array();
-	$xml	     = array();
-	$xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
-	if (file_exists($xmlfile)) {
-    	$xml = simplexml_load_file($xmlfile);
-	    foreach ( $xml as $key=>$val ){
-			if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
-		    	#print $match[1]." => ".$val."\n";
-		    	$key = $match[1];
-		    	$this->MACRO[$key] = (string) $val;
-			}
-	    }
-	    $i=0;
-	    foreach ( $xml->DATASOURCE as $datasource ){
-	        foreach ( $datasource  as $key=>$val){
-		    	#print "$key => $val\n";
-		    	#$$key[$i] = (string) $val;
-	            $this->DS[$i][$key] = (string) $val;
-	        }
-	        $i++; 
-	    } 
-	    return $xml;
-	}
-	return false;
+		$conf        = $this->config->conf;
+		$this->XML   = array();
+		$this->MACRO = array();
+		$this->DS    = array();
+		$xml	     = array();
+		$xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
+		if (file_exists($xmlfile)) {
+    		$xml = simplexml_load_file($xmlfile);
+	    	foreach ( $xml as $key=>$val ){
+				if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
+		    		#print $match[1]." => ".$val."\n";
+		    		$key = $match[1];
+		    		$this->MACRO[$key] = (string) $val;
+				}
+	    	}
+	    	$i=0;
+	    	foreach ( $xml->DATASOURCE as $datasource ){
+	        	foreach ( $datasource  as $key=>$val){
+		    		#print "$key => $val\n";
+		    		#$$key[$i] = (string) $val;
+	            	$this->DS[$i][$key] = (string) $val;
+	        	}
+	        	$i++; 
+	    	}	 
+	    	return $xml;
+		}else
+			throw new Kohana_Exception('common.xml-not-found', $xmlfile);
     }
 
     /*
@@ -201,9 +207,10 @@ class Data_Model extends Model
 		if($host === false && $service === false){
 	    	return false;
 		}
+
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
-    	$this->includeTemplate($this->DS[0]['TEMPLATE']);
+		$this->includeTemplate($this->DS[0]['TEMPLATE']);
 		#print Kohana::debug($this->TIMERANGE);
 		if( $view == "" ){
 			$v = 0;
