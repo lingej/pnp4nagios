@@ -21,8 +21,8 @@
 	</head>
 
 <body>
-<?php if (!empty($body)) {
-     echo $body;
+<?php if (!empty($graph)) {
+     echo $graph;
 } ?>
 </body>
 </html>
