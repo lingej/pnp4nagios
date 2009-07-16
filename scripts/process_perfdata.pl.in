@@ -477,7 +477,7 @@ sub open_template {
 sub close_template {
     my $xmlfile = shift;
 	printf( XML "  <XML>\n" );
-	printf( XML "   <VERSION>%d</VRSION>\n",$const{'XML_STRUCTURE_VERSION'} );
+	printf( XML "   <VERSION>%d</VERSION>\n",$const{'XML_STRUCTURE_VERSION'} );
 	printf( XML "  </XML>\n" );
 	
 	printf( XML "</NAGIOS>\n" );

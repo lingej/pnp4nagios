@@ -211,7 +211,6 @@ class Data_Model extends Model
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
 		$this->includeTemplate($this->DS[0]['TEMPLATE']);
-		#print Kohana::debug($this->TIMERANGE);
 		if( $view == "" ){
 			$v = 0;
 	    	foreach($this->config->views as $view_key=>$view_val){
@@ -235,6 +234,11 @@ class Data_Model extends Model
 	            	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$v];
 	            	$tmp_struct['DS']            = $this->DS[$i];
 	            	$tmp_struct['MACRO']         = $this->MACRO;
+					if(isset($xml->XML->VERSION)){
+	            		$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+					}else{
+						$tmp_struct['VERSION']   = pnp::xml_version_check("0");
+					}
 	            	$this->addToDataStruct($tmp_struct);
 	            	$i++;
 	        	}
@@ -261,6 +265,11 @@ class Data_Model extends Model
 	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
 	        	$tmp_struct['DS']      = $this->DS[$i];
 	        	$tmp_struct['MACRO']   = $this->MACRO;
+				if(isset($xml->XML->VERSION)){
+	            	$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+				}else{
+					$tmp_struct['VERSION']   = pnp::xml_version_check("0");
+				}
 	        	$this->addToDataStruct($tmp_struct);
 	        	$i++;
             }

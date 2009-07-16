@@ -17,6 +17,10 @@
 define('IN_PRODUCTION', FALSE);
 
 /**
+* The current XML Structure Tag for this PNP Version
+*/
+define('XML_STRUCTURE_VERSION', '@XML_STRUCTURE_VERSION@');
+/**
  * Website application directory. This directory should contain your application
  * configuration, controllers, models, views, and other resources.
  *

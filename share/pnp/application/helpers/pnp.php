@@ -27,4 +27,16 @@ class pnp_Core {
 		return $string;
 	}
 
+	public static function xml_version_check($string = FALSE){
+	    if($string === FALSE){
+	        return;
+	    }
+		if( $string == XML_STRUCTURE_VERSION ){
+			$string = "valid";
+		}else{
+			$string = Kohana::lang('common.xml-structure-mismatch', $string, XML_STRUCTURE_VERSION);
+		}
+		return $string;
+	}
+
 } 

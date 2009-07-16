@@ -10,4 +10,5 @@ $lang = array
     'xml-not-found' => 'XML File "%s" not found',
     'get-first-service' => 'Can´t find first service for host "%s".',
     'get-first-host' => 'Can´t find any Host.',
+	'xml-structure-mismatch' => 'XML Structure mismatch. Found Version "%d" but should be "%d"',
 );
