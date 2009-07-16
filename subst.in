@@ -1,26 +1,12 @@
 #!@PERL@ -w
 
-#my ${exec_prefix};
-#my ${prefix};
-#my ${datarootdir};
-
 my ${prefix}="@prefix@";
-#my $use_default_prefix = 0;
-#if(${prefix} eq "/usr/local/nagios"){
-#    $use_default_prefix = 1;
-#}
 
 my ${exec_prefix}="@exec_prefix@";
 
 my ${datarootdir}="@datarootdir@";
-#if($datarootdir eq "${prefix}/share" && $use_default_prefix == 1){
-#    $datarootdir="${prefix}/share/pnp";
-#}
 
 my ${datadir}="@datadir@";
-#if($datadir eq "${prefix}/share" && $use_default_prefix == 1){
-#    $datadir="${prefix}/share/pnp";
-#}
 
 my $PERL="@PERL@";
 my $PERL_LIB_PATH="@PERL_LIB_PATH@";
@@ -43,6 +29,7 @@ my $PERFDATA_LOG="@PERFDATA_LOG@";
 my $PERFDATA_SPOOL_DIR="@PERFDATA_SPOOL_DIR@";
 my $RRDTOOL="@RRDTOOL@";
 my $RRDS="@RRDS@";
+my $XML_STRUCTURE_VERSION="@XML_STRUCTURE_VERSION@";
 my $PKG_REL_DATE="@PKG_REL_DATE@";
 my $PKG_VERSION="@PKG_VERSION@";
 my $PKG_NAME="@PKG_NAME@";
@@ -101,6 +88,7 @@ while ($f = shift @ARGV) {
 		s|\@PERFDATA_SPOOL_DIR\@|$PERFDATA_SPOOL_DIR|g;
 		s|\@RRDTOOL\@|$RRDTOOL|g;
 		s|\@RRDS\@|$RRDS|g;
+		s|\@XML_STRUCTURE_VERSION\@|$XML_STRUCTURE_VERSION|g;
 		s|\@PKG_REL_DATE\@|$PKG_REL_DATE|g;
 		s|\@PKG_VERSION\@|$PKG_VERSION|g;
 		s|\@PKG_NAME\@|$PKG_NAME|g;

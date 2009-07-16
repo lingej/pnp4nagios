@@ -657,6 +657,7 @@ PKG_NAME
 PKG_VERSION
 PKG_HOME_URL
 PKG_REL_DATE
+XML_STRUCTURE_VERSION
 INSTALL_PROGRAM
 INSTALL_SCRIPT
 INSTALL_DATA
@@ -1762,6 +1763,8 @@ PKG_REL_DATE="07-07-2009"
 
 
 
+
+XML_STRUCTURE_VERSION="4"
 
 
 
@@ -5541,14 +5544,14 @@ case $layout in
 	;;
 	default-0.4)
 		prefix="/usr/local/nagios"
-		sysconfdir="${prefix}/etc/pnp"
-		localstatedir="${prefix}/var"
-		libexecdir="${prefix}/libexec"
-		datarootdir="${prefix}/share/pnp"
-		libdir="${prefix}/lib/pnp"
-		PERFDATA_LOG=${prefix}/var/perfdata.log
-		PERFDATA_DIR=${prefix}/share/perfdata
-		PERFDATA_SPOOL_DIR=${prefix}/var/spool/perfdata
+		sysconfdir="\${prefix}/etc/pnp"
+		localstatedir="\${prefix}/var"
+		libexecdir="\${prefix}/libexec"
+		datarootdir="\${prefix}/share/pnp"
+		libdir="\${prefix}/lib/pnp"
+		PERFDATA_LOG="\${prefix}/var/perfdata.log"
+		PERFDATA_DIR="\${prefix}/share/perfdata"
+		PERFDATA_SPOOL_DIR="\${prefix}/var/spool/perfdata"
 	;;
 	default)
 		sysconfdir="\${prefix}/etc"
@@ -6563,6 +6566,7 @@ PKG_NAME!$PKG_NAME$ac_delim
 PKG_VERSION!$PKG_VERSION$ac_delim
 PKG_HOME_URL!$PKG_HOME_URL$ac_delim
 PKG_REL_DATE!$PKG_REL_DATE$ac_delim
+XML_STRUCTURE_VERSION!$XML_STRUCTURE_VERSION$ac_delim
 INSTALL_PROGRAM!$INSTALL_PROGRAM$ac_delim
 INSTALL_SCRIPT!$INSTALL_SCRIPT$ac_delim
 INSTALL_DATA!$INSTALL_DATA$ac_delim
@@ -6610,7 +6614,7 @@ RRDS!$RRDS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 86; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 87; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -7041,25 +7045,15 @@ fi
 
 
 $PERL subst summary
-#$PERL subst Makefile
-#$PERL subst share/Makefile
-#$PERL subst scripts/Makefile
-#$PERL subst src/Makefile
-#$PERL subst sample-config/Makefile
-#$PERL subst man/Makefile
 $PERL subst scripts/process_perfdata.pl
-#$PERL subst scripts/net2pnp.pl
 $PERL subst scripts/rc.npcd
 $PERL subst scripts/check_pnp_rrds.pl
 $PERL subst share/pnp/index.php
 $PERL subst share/pnp/application/config/config.php
-#$PERL subst sample-config/xinetd.pnp.sample
-#$PERL subst sample-config/misccommands.sample
 $PERL subst sample-config/httpd.conf
 $PERL subst sample-config/pnp/config.php
 $PERL subst sample-config/pnp/npcd.cfg-sample
 $PERL subst sample-config/pnp/process_perfdata.cfg-sample
 $PERL subst sample-config/pnp/pnp4nagios_release
-#$PERL subst contrib/verify_pnp_config
 
 $PERL summary

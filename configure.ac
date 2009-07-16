@@ -18,6 +18,8 @@ AC_SUBST(PKG_NAME)
 AC_SUBST(PKG_VERSION)
 AC_SUBST(PKG_HOME_URL)
 AC_SUBST(PKG_REL_DATE)
+XML_STRUCTURE_VERSION="4"
+AC_SUBST(XML_STRUCTURE_VERSION)
 
 dnl Figure out how to invoke "install" and what install options to use.
 

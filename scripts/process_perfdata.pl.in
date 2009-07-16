@@ -33,7 +33,6 @@ use Time::HiRes qw(gettimeofday tv_interval);
 use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
 my %conf = (
-    VERSION           => "@PKG_VERSION@",
     TIMEOUT           => "5",
     CFG_DIR           => "@sysconfdir@/",
     USE_RRDs          => 1,
@@ -50,6 +49,11 @@ my %conf = (
     RRD_DAEMON_OPTS   => ""
 );
 
+my %const = (
+	XML_STRUCTURE_VERSION => "@XML_STRUCTURE_VERSION@",
+    VERSION               => "@PKG_VERSION@",
+);
+	
 #
 # Dont change anything below these lines ...
 #
@@ -119,20 +123,20 @@ main();
 sub main {
     my $t0 = [gettimeofday];
     if ($opt_i) {
-        print_log( "process_perfdata.pl-$conf{VERSION} starting in INETD Mode", 1 );
+        print_log( "process_perfdata.pl-$const{VERSION} starting in INETD Mode", 1 );
         %NAGIOS = parse_env();
         process_perfdata();
     }
     elsif ( $opt_b && !$opt_n ) {
-        print_log( "process_perfdata.pl-$conf{VERSION} starting in BULK Mode called by Nagios", 1 );
+        print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
         process_perfdata_file();
     }
     elsif ( $opt_b && $opt_n ) {
-        print_log( "process_perfdata.pl-$conf{VERSION} starting in BULK Mode called by NPCD", 1 );
+        print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
         process_perfdata_file();
     }
     else {
-        print_log( "process_perfdata.pl-$conf{VERSION} starting in DEFAULT Mode", 1 );
+        print_log( "process_perfdata.pl-$const{VERSION} starting in DEFAULT Mode", 1 );
         %NAGIOS = parse_env();
         process_perfdata();
     }
@@ -472,7 +476,11 @@ sub open_template {
 #
 sub close_template {
     my $xmlfile = shift;
-    printf( XML "</NAGIOS>\n" );
+	printf( XML "  <XML>\n" );
+	printf( XML "   <VERSION>%d</VRSION>\n",$const{'XML_STRUCTURE_VERSION'} );
+	printf( XML "  </XML>\n" );
+	
+	printf( XML "</NAGIOS>\n" );
     close(XML);
     rename( "$xmlfile.$$", "$xmlfile" );
 }
@@ -1029,7 +1037,7 @@ sub print_help {
 #
 #
 sub print_version {
-    print "Version: process_perfdata.pl $conf{VERSION}\n";
+    print "Version: process_perfdata.pl $const{VERSION}\n";
     print "Copyright (c) 2005-2007 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
     exit 0;
 }
