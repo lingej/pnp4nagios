@@ -22,6 +22,11 @@
 	<?php if (!empty($status_box)) {
      		echo $status_box;
 	} ?>
+
+	<?php if (!empty($timerange_box)) {
+     		echo $timerange_box;
+	} ?>
+
 	<?php if (!empty($service_box)) {
      		echo $service_box;
 	} ?>

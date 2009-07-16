@@ -418,12 +418,14 @@ class Data_Model extends Model
     if($start >= $end){
 		throw new Kohana_User_Exception('Wrong Timerange', "start >= end");
     }
+    $timerange['title']   = $this->config->views[$view]['title'];
     $timerange['start']   = $start;
     $timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
     $timerange['end']     = $end;
     $timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
     $timerange['cmd']     = " --start $start --end $end ";
     for ($i = 0; $i < sizeof($this->config->views); $i++) {
+    	$timerange[$i]['title']   = $this->config->views[$view]['title'];
         $timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
         $timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
         $timerange[$i]['end']     = $end;

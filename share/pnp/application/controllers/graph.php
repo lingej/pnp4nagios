@@ -55,7 +55,6 @@ class Graph_Controller extends System_Controller  {
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host;
-		    $view    	   = 1;
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
 			// Status Box Vars
@@ -66,7 +65,11 @@ class Graph_Controller extends System_Controller  {
 			// Service Box Vars
 			$this->template->graph->service_box->services = $services;
 		    $this->template->graph->service_box->host = $this->host;
-		    $this->title = "Service Overview for $this->host";
+			// Timerange Box Vars
+			$this->template->graph->timerange_box = $this->add_view('timerange_box');
+		    $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
+
+			$this->title = "Service Overview for $this->host";
 		    foreach($services as $service){
 			if($service['state'] == 'active')
 		   	    $this->data->buildDataStruct($this->host,$service['name'],$view);
