@@ -122,7 +122,9 @@ class Data_Model extends Model
 			# Sort the data with volume descending, edition ascending
 			# Add $data as the last parameter, to sort by the common key
 			array_multisort($sort, SORT_STRING, $services);
-            array_unshift($services, $host[0]);
+			if(is_array($host) && sizeof($host) > 0 ){
+				array_unshift($services, $host[0]);
+			}
         }else{
 			throw new Kohana_Exception('common.host-perfdata-dir-empty', $path );
 		}		
