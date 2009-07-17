@@ -22,10 +22,10 @@ class Debug_Controller extends System_Controller  {
 
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
-		$view    = '';
+		$view    = FALSE;
 
-		if($this->input->get('view') )
-			$view = pnp::clean($this->input->get('view') );
+        if(isset($_GET['view']) && $_GET['view'] != "" )
+			$view = pnp::clean($_GET['view']);
 
 		$this->data->getTimeRange($start,$end,$view);
 

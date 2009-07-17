@@ -29,13 +29,14 @@ class Graph_Controller extends System_Controller  {
 
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
-		$view    = '';
+		$view    = FALSE;
 
-		if($this->input->get('view') )
-			$view = pnp::clean($this->input->get('view') );
+		if(isset($_GET['view']) && $_GET['view'] != "" )
+			$view = pnp::clean($_GET['view']);
 
 		$this->data->getTimeRange($start,$end,$view);
 
+		// Service Details
 		if($this->host != "" && $this->service != ""){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
@@ -52,8 +53,12 @@ class Graph_Controller extends System_Controller  {
 			// Service Box Vars
 		    $this->template->graph->service_box->services = $services;
 		    $this->template->graph->service_box->host = $this->host;
+		// Host Overview
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
+			if($view == FALSE){
+				$view = $this->config->conf['overview-range'];
+			}
 			$this->url     = "?host=".$this->host;
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
@@ -71,8 +76,8 @@ class Graph_Controller extends System_Controller  {
 
 			$this->title = "Service Overview for $this->host";
 		    foreach($services as $service){
-			if($service['state'] == 'active')
-		   	    $this->data->buildDataStruct($this->host,$service['name'],$view);
+				if($service['state'] == 'active')
+		   	    	$this->data->buildDataStruct($this->host,$service['name'],$view);
 		    }
 		}else{
 		    $this->host = $this->data->getFirstHost();
