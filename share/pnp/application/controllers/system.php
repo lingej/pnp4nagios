@@ -14,8 +14,8 @@ class System_Controller extends Template_Controller {
 
 		$this->template = $this->add_view('template');
 
-		$this->data      = new Data_Model();
-		$this->config    = new Config_Model();
+		$this->data       = new Data_Model();
+		$this->config     = new Config_Model();
 		$this->rrdtool    = new Rrdtool_Model();
 		$this->config->read_config();
 	}

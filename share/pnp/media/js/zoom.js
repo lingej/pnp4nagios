@@ -28,7 +28,7 @@
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 // Global constant
-var cURLBase = "zoom.php?";
+var cURLBase = "zoom?";
 
 // Global variables
 var gZoomGraphName = "zoomGraphImage";
@@ -585,7 +585,7 @@ function onMouseUpEvent(e) {
 		var source = gUrlObj.getUrlParameterValue("source");
 		var titleFontSize = gUrlObj.getUrlParameterValue("title_font_size");
 
-		open(urlBase + "$special=" + special +"&host=" + host + "&srv=" + srv + "&view=" + view + "&source=" + source + "&start=" + newGraphStart + "&end=" + newGraphEnd + "&graph_height=" + graphHeight + "&graph_width=" + graphWidth + "&title_font_size=" + titleFontSize, "_self");
+		open(urlBase + "special=" + special +"&host=" + host + "&srv=" + srv + "&view=" + view + "&source=" + source + "&start=" + newGraphStart + "&end=" + newGraphEnd + "&graph_height=" + graphHeight + "&graph_width=" + graphWidth + "&title_font_size=" + titleFontSize, "_self");
 	}
 
 	// zoom in action

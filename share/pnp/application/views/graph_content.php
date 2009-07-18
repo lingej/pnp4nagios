@@ -19,8 +19,7 @@ foreach($this->data->STRUCT as $key=>$value){
     echo "<div class=\"ui-widget-header ui-corner-top\">";
     echo "<table border=0 width=100%><tr>\n";
     echo "<td align=left>".Kohana::lang('common.datasource',$value['ds_name'])."</td><td align=right>\n";
-	echo html::image('media/images/PDF_16.png');
-	echo html::image('media/images/XML_16.png');
+	echo pnp::zoom_icon($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'],$value['SOURCE'],$value['VIEW']);
     echo "</td></tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";

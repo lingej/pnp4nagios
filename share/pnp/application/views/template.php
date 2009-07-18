@@ -13,19 +13,22 @@
 		<?php echo html::script('media/js/jquery-min.js')?>
 		<?php echo html::script('media/js/jquery-ui.min.js')?>
 		<?php echo html::script('media/js/jquery.autocomplete.min.js')?>
-		<?php
-			if (!empty($css_header)) {
-				echo $css_header;
-			}
-		?>
+        <script type="text/javascript">
+        function Gzoom (url) {
+          GzoomWindow = window.open(url, "PNP", "width=600,height=300,resizable=yes,scrollbars=yes");
+          GzoomWindow.focus();
+        }
+        </script>
 	</head>
-
 <body>
 <?php if (!empty($graph)) {
      echo $graph;
 } ?>
 <?php if (!empty($debug)) {
      echo $debug;
+} ?>
+<?php if (!empty($zoom)) {
+     echo $zoom;
 } ?>
 </body>
 </html>

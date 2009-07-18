@@ -26,7 +26,9 @@ class pnp_Core {
 		}
 		return $string;
 	}
-
+	/*
+	*
+	*/
 	public static function xml_version_check($string = FALSE){
 	    if($string === FALSE){
 	        return;
@@ -38,5 +40,12 @@ class pnp_Core {
 		}
 		return $string;
 	}
+	/*
+	*
+	*/
+	public static function zoom_icon($host,$service,$start,$end,$source,$view){
+		print "<a href=\"javascript:Gzoom('zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\"><img src=\"media/images/zoom.png\" title=\"Zoom into the Graph\" ></a>\n";
+	}
+
 
 } 
