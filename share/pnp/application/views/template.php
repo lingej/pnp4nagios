@@ -15,7 +15,7 @@
 		<?php echo html::script('media/js/jquery.autocomplete.min.js')?>
         <script type="text/javascript">
         function Gzoom (url) {
-          GzoomWindow = window.open(url, "PNP", "width=600,height=300,resizable=yes,scrollbars=yes");
+          GzoomWindow = window.open(url, "PNP", "width=640,height=300,resizable=yes,scrollbars=yes,location=no,menubar=no,status=no");
           GzoomWindow.focus();
         }
         </script>
