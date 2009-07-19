@@ -100,12 +100,21 @@ class Data_Model extends Model
                         $host[0]['hostname']         = (string) $xml->NAGIOS_HOSTNAME;
                         $host[0]['state']            = $state;
                         $host[0]['servicedesc']      = "Host Perfdata";
+                        $host[0]['is_multi']         = (string) $xml->DATASOURCE[0]->IS_MULTI[0];
                     }else{
                         $services[$i]['name']        = $servicedesc[1];
-                        $services[$i]['sort']        = strtoupper($servicedesc[1]);
-                        $services[$i]['state']       = $state;
+						// Sorting check_multi
+                 		if( (string) $xml->NAGIOS_MULTI_PARENT == ""){
+				 			$services[$i]['sort']        = strtoupper($servicedesc[1]);
+						}else{
+                        	$services[$i]['sort']       = strtoupper((string) $xml->NAGIOS_MULTI_PARENT);
+							$services[$i]['sort']       .= (string) $xml->DATASOURCE[0]->IS_MULTI[0];
+				 			$services[$i]['sort']       .= strtoupper($servicedesc[1]);
+						}
+						$services[$i]['state']       = $state;
                         $services[$i]['hostname']    = (string) $xml->NAGIOS_DISP_HOSTNAME;
                         $services[$i]['servicedesc'] = (string) $xml->NAGIOS_DISP_SERVICEDESC;
+						$services[$i]['is_multi']    = (string) $xml->DATASOURCE[0]->IS_MULTI[0];
                     }
 				$i++;
                 }
@@ -128,6 +137,7 @@ class Data_Model extends Model
         }else{
 			throw new Kohana_Exception('common.host-perfdata-dir-empty', $path );
 		}		
+		#print Kohana::debug($services);
         return $services;
     }
 

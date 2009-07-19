@@ -6,10 +6,7 @@
 <div class="p4 ui-widget-content ui-corner-bottom">
 <?php
 foreach($services as $service){
-	echo html::anchor($this->uri->string().
-		"?host=".$host.
-		"&srv=".$service['name'],
-		pnp::shorten($service['servicedesc']))."<br>\n";
+	echo "<a href=\"".$this->uri->string()."?host=".$host."&srv=".$service['name']."\" class=\"multi".$service['is_multi']."\">".pnp::shorten($service['servicedesc'])."</a><br>\n";
 }
 ?>
 </div>

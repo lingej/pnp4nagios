@@ -88,6 +88,15 @@ fieldset {
 .p4 {
 	padding: 4px;
 }
+.multi0 {
+	padding: 2px;
+}
+.multi1 {
+	padding: 2px;
+}
+.multi2 {
+	padding: 6px;
+}
 div.right {
 	width: 200px;
 	margin-top: 4px;
