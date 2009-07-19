@@ -27,14 +27,14 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph->service_box   = $this->add_view('service_box');
 		$this->template->graph->status_box    = $this->add_view('status_box');
 
-		$start   = $this->input->get('start');
-		$end     = $this->input->get('end');
-		$view    = FALSE;
+		$this->start   = $this->input->get('start');
+		$this->end     = $this->input->get('end');
+		$this->view    = FALSE;
 
 		if(isset($_GET['view']) && $_GET['view'] != "" )
-			$view = pnp::clean($_GET['view']);
+			$this->view = pnp::clean($_GET['view']);
 
-		$this->data->getTimeRange($start,$end,$view);
+		$this->data->getTimeRange($this->start,$this->end,$this->view);
 
 		// Service Details
 		if($this->host != "" && $this->service != ""){
@@ -42,7 +42,7 @@ class Graph_Controller extends System_Controller  {
 		    $this->host    = pnp::clean($this->host);
 			$this->url      = "?host=".$this->host."&srv=".$this->service;
 		    $services      = $this->data->getServices($this->host);
-		    $this->data->buildDataStruct($this->host,$this->service,$view);
+		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 			// Status Box Vars
 		    $this->template->graph->status_box->host     = $this->host;
@@ -56,8 +56,8 @@ class Graph_Controller extends System_Controller  {
 		// Host Overview
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
-			if($view == FALSE){
-				$view = $this->config->conf['overview-range'];
+			if($this->view == FALSE){
+				$this->view = $this->config->conf['overview-range'];
 			}
 			$this->url     = "?host=".$this->host;
 		    $this->title   = "Start $this->host";
@@ -77,7 +77,7 @@ class Graph_Controller extends System_Controller  {
 			$this->title = "Service Overview for $this->host";
 		    foreach($services as $service){
 				if($service['state'] == 'active')
-		   	    	$this->data->buildDataStruct($this->host,$service['name'],$view);
+		   	    	$this->data->buildDataStruct($this->host,$service['name'],$this->view);
 		    }
 		}else{
 		    $this->host = $this->data->getFirstHost();

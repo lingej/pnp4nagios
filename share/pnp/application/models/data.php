@@ -437,7 +437,7 @@ class Data_Model extends Model
     $timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
     $timerange['cmd']     = " --start $start --end $end ";
     for ($i = 0; $i < sizeof($this->config->views); $i++) {
-    	$timerange[$i]['title']   = $this->config->views[$view]['title'];
+    	$timerange[$i]['title']   = $this->config->views[$i]['title'];
         $timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
         $timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
         $timerange[$i]['end']     = $end;

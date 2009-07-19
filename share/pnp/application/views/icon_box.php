@@ -15,7 +15,7 @@ Actions
 	</script>
 
 <input type="hidden" id="datepicker">
-<a title="PDF View" href="pdf<?php echo $this->url ?>"><img src="media/images/PDF_32.png"></a>
+<a title="PDF View" href="pdf<?php echo $this->url ?>&view=<?php echo $this->view?>"><img src="media/images/PDF_32.png"></a>
 <a title="XML View" href="xml<?php echo $this->url ?>"><img src="media/images/XML_32.png"></a>
 
 </div>

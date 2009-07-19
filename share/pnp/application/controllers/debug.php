@@ -38,8 +38,9 @@ class Debug_Controller extends System_Controller  {
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 		}elseif(isset($this->host)){
 		    $this->host    = pnp::clean($this->host);
-			$this->url     = "?host=".$this->host;
-		    $view    	   = 1;
+           	if($view == FALSE){
+		    	$view = $this->config->conf['overview-range'];
+			}
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
 		    $this->title = "Service Overview for $this->host";
