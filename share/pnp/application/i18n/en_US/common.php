@@ -11,4 +11,5 @@ $lang = array
     'get-first-service' => 'Can´t find first service for host "%s".',
     'get-first-host' => 'Can´t find any Host.',
 	'xml-structure-mismatch' => 'XML Structure mismatch. Found Version "%d" but should be "%d"',
+	'save-rrd-image' => 'fopen "%s" failed',
 );
