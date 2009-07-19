@@ -34,8 +34,6 @@ class Pdf_Controller extends System_Controller  {
 		if($this->host != "" && $this->service != ""){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
-			$this->url      = "?host=".$this->host."&srv=".$this->service;
-		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$view);
 		// Host Overview
 		}elseif($this->host != ""){
@@ -43,8 +41,6 @@ class Pdf_Controller extends System_Controller  {
 			if($view == FALSE){
 				$view = $this->config->conf['overview-range'];
 			}
-			$this->url     = "?host=".$this->host;
-		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
 		    foreach($services as $service){
 				if($service['state'] == 'active')
@@ -71,9 +67,30 @@ class Pdf_Controller extends System_Controller  {
 		$pdf->SetFont('Arial', '', 10);
 		$pdf->Cell(120, 4, '', 0, 1, 'L');
 		// Title
-		$pdf->CELL(120, 5, $this->host." -- ".$this->service, 0, 1);
 		foreach($this->data->STRUCT as $data){
-			$pdf->CELL(120, 5, $data['TIMERANGE']['title']." ".$data['TIMERANGE']['f_start']." <-> ".$data['TIMERANGE']['f_end'], 0, 1);
+			if ($pdf->GetY() > 220) {
+				$pdf->AddPage();
+				//if($use_bg){$pdf->useTemplate($tplIdx);}
+            }
+			if($data['SOURCE'] == 1){
+				$pdf->SetFont('Arial', '', 12);
+				$pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
+				$pdf->SetFont('Arial', '', 10);
+				$pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
+				$pdf->SetFont('Arial', '', 8);
+				$pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+			}else{
+				$pdf->SetFont('Arial', '', 8);
+				$pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+			}
+			$image = $this->rrdtool->doImage($data['RRD_CALL']);
+			$img = $this->rrdtool->saveImage($image);
+            $Y = $pdf->GetY();
+            $cell_height = ($img['height'] * 0.23);
+            $cell_width = ($img['width'] * 0.23);
+            $pdf->Image($img['file'], 12.5, $Y, $cell_width, $cell_height, 'PNG');
+            $pdf->CELL(120, $cell_height, '', 0, 1);
+            unlink($img['file']);
 		}
 		$pdf->Output("pnp4nagios.pdf","I");
 
