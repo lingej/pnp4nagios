@@ -818,7 +818,7 @@ sub parse_perfstring {
 
                     # Keep servicedesc while processing the first block.
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
-                    $p{disp_servicedesc} = $NAGIOS{SERVICEDESC};
+                    $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
                     $p{multi}            = 1;
                     $p{multi_parent}     = $multi_parent;
                 }
@@ -852,7 +852,7 @@ sub parse_perfstring {
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
                 $p{label}            = cleanup( $multi[2] );           # store the original label from check_multi header
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
-                $p{disp_hostname}    = $NAGIOS{HOSTNAME};
+                $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
                 push @perfs, {%p};
                 $count++;
             }
@@ -879,10 +879,10 @@ sub parse_perfstring {
                 $p{dstype}           = $CTPL{'DSTYPE'};
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
-                $p{disp_hostname}    = $NAGIOS{HOSTNAME};
+                $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
                 if ( $count == 1 ) {
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );    # Use the servicedesc.
-                    $p{disp_servicedesc} = $NAGIOS{SERVICEDESC};               # Use the servicedesc.
+                    $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};               # Use the servicedesc.
                 }
                 else {
                     $p{servicedesc}      = cleanup( $multi[0] );               # Use the multi servicedesc.
@@ -933,9 +933,9 @@ sub parse_perfstring {
             $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
             $p{multi}            = $is_multi;
             $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
-            $p{disp_hostname}    = $NAGIOS{HOSTNAME};
+            $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
             $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
-            $p{disp_servicedesc} = $NAGIOS{SERVICEDESC};
+            $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
             $p{label}            = cleanup( $p{label} );
 
             push @perfs, {%p};
