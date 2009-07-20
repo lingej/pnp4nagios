@@ -54,9 +54,9 @@ div.left {
 img {
 	border: none;
 }
-fieldset {
-	border: solid #FE880F;
-	border-width: 1px;
+
+input.textbox {
+	width: 97%;
 }
 
 .b1 {
