@@ -2,7 +2,7 @@
 /**
  * Request helper class.
  *
- * $Id: request.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: request.php 4355 2009-05-15 17:18:28Z kiall $
  *
  * @package    Core
  * @author     Kohana Team
@@ -33,7 +33,7 @@ class request_Core {
 			if (strpos($ref, url::base(FALSE)) === 0)
 			{
 				// Remove the base URL from the referrer
-				$ref = substr($ref, strlen(url::base(TRUE)));
+				$ref = substr($ref, strlen(url::base(FALSE)));
 			}
 		}
 

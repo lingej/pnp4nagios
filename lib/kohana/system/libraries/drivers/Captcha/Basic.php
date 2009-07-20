@@ -2,7 +2,7 @@
 /**
  * Captcha driver for "basic" style.
  *
- * $Id: Basic.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Basic.php 3769 2008-12-15 00:48:56Z zombor $
  *
  * @package    Captcha
  * @author     Kohana Team

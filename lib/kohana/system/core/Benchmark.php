@@ -2,7 +2,7 @@
 /**
  * Simple benchmarking.
  *
- * $Id: Benchmark.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Benchmark.php 4149 2009-04-01 13:32:50Z Shadowhand $
  *
  * @package    Core
  * @author     Kohana Team
@@ -109,7 +109,7 @@ final class Benchmark {
 	 *
 	 * @return  integer
 	 */
-	private function memory_usage()
+	private static function memory_usage()
 	{
 		static $func;
 

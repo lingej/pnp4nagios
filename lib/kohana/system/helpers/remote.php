@@ -2,7 +2,7 @@
 /**
  * Remote url/file helper.
  *
- * $Id: remote.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: remote.php 3769 2008-12-15 00:48:56Z zombor $
  *
  * @package    Core
  * @author     Kohana Team

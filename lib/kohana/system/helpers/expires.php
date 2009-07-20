@@ -2,7 +2,7 @@
 /**
  * Controls headers that effect client caching of pages
  *
- * $Id: expires.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: expires.php 4272 2009-04-25 21:47:26Z zombor $
  *
  * @package    Core
  * @author     Kohana Team
@@ -88,7 +88,8 @@ class expires_Core {
 	{
 		foreach (headers_list() as $header)
 		{
-			if (stripos($header, 'Last-Modified:') === 0 OR stripos($header, 'Expires:') === 0)
+			if ((session_cache_limiter() == '' AND stripos($header, 'Last-Modified:') === 0)
+			    OR stripos($header, 'Expires:') === 0)
 			{
 				return FALSE;
 			}

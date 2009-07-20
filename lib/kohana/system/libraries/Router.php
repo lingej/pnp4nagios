@@ -2,7 +2,7 @@
 /**
  * Router
  *
- * $Id: Router.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Router.php 4391 2009-06-04 03:10:12Z zombor $
  *
  * @package    Core
  * @author     Kohana Team
@@ -214,19 +214,16 @@ class Router_Core {
 		{
 			Router::$current_uri = $_SERVER['PHP_SELF'];
 		}
-
-		// The front controller directory and filename
-		$fc = substr(realpath($_SERVER['SCRIPT_FILENAME']), strlen(DOCROOT));
-
-		if (($strpos_fc = strpos(Router::$current_uri, $fc)) !== FALSE)
+		
+		if (($strpos_fc = strpos(Router::$current_uri, KOHANA)) !== FALSE)
 		{
 			// Remove the front controller from the current uri
-			Router::$current_uri = substr(Router::$current_uri, $strpos_fc + strlen($fc));
+			Router::$current_uri = (string) substr(Router::$current_uri, $strpos_fc + strlen(KOHANA));
 		}
-
+		
 		// Remove slashes from the start and end of the URI
 		Router::$current_uri = trim(Router::$current_uri, '/');
-
+		
 		if (Router::$current_uri !== '')
 		{
 			if ($suffix = Kohana::config('core.url_suffix') AND strpos(Router::$current_uri, $suffix) !== FALSE)

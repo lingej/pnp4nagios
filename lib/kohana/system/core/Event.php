@@ -4,7 +4,7 @@
  * to be added to 'events'. Events can be run multiple times, and can also
  * process event-specific data. By default, Kohana has several system events.
  *
- * $Id: Event.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Event.php 4390 2009-06-04 03:05:36Z zombor $
  *
  * @package    Core
  * @author     Kohana Team

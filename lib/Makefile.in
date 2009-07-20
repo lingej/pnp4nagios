@@ -20,34 +20,16 @@ devclean: distclean
 
 install:
 
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules/auth
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries/drivers
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries/drivers/Auth
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/modules/auth/config
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/controllers
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/helpers
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/VerboseSending
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/Decorator
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator/PopB4Smtp
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Iterator
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Cache
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Log
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/libraries/drivers/Database
@@ -62,19 +44,6 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/views/kohana
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/views/pagination
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/fonts
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/example.htaccess $(DESTDIR)$(LIBDIR)/kohana/example.htaccess
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/models/role.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models/role.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/models/auth_user_token.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models/auth_user_token.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/models/user.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models/user.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/models/user_token.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models/user_token.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/models/auth_role.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models/auth_role.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/models/auth_user.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/models/auth_user.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/libraries/Auth.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries/Auth.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/libraries/drivers/Auth.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries/drivers/Auth.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/libraries/drivers/Auth/ORM.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries/drivers/Auth/ORM.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/libraries/drivers/Auth/File.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/libraries/drivers/Auth/File.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/modules/auth/config/auth.php $(DESTDIR)$(LIBDIR)/kohana/modules/auth/config/auth.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/kohana.png $(DESTDIR)$(LIBDIR)/kohana/kohana.png
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/controllers/captcha.php $(DESTDIR)$(LIBDIR)/kohana/system/controllers/captcha.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/controllers/template.php $(DESTDIR)$(LIBDIR)/kohana/system/controllers/template.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/de_DE/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE/validation.php
@@ -93,6 +62,38 @@ install:
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/de_DE/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE/event.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/de_DE/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE/errors.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/de_DE/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE/swift.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/validation.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/core.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/core.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/pagination.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/captcha.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/captcha.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/encrypt.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/encrypt.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/orm.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/orm.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/image.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/image.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/session.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/session.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/database.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/database.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/calendar.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/calendar.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/profiler.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/profiler.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/cache.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/cache.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/upload.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/upload.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/event.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/errors.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/nl_NL/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL/swift.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/validation.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/core.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/core.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/pagination.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/captcha.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/captcha.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/encrypt.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/encrypt.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/orm.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/orm.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/image.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/image.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/session.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/session.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/database.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/database.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/calendar.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/calendar.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/profiler.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/profiler.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/cache.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/cache.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/upload.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/upload.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/event.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/errors.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/swift.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/en_US/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US/validation.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/en_US/core.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US/core.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/en_US/pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US/pagination.php
@@ -125,6 +126,22 @@ install:
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/fr_FR/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR/event.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/fr_FR/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR/errors.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/fr_FR/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR/swift.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/validation.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/core.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/core.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/pagination.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/captcha.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/captcha.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/encrypt.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/encrypt.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/orm.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/orm.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/image.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/image.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/session.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/session.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/database.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/database.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/calendar.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/calendar.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/profiler.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/profiler.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/cache.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/cache.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/upload.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/upload.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/event.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/errors.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/it_IT/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT/swift.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/helpers/remote.php $(DESTDIR)$(LIBDIR)/kohana/system/helpers/remote.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/helpers/url.php $(DESTDIR)$(LIBDIR)/kohana/system/helpers/url.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/helpers/feed.php $(DESTDIR)$(LIBDIR)/kohana/system/helpers/feed.php
@@ -145,79 +162,6 @@ install:
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/helpers/security.php $(DESTDIR)$(LIBDIR)/kohana/system/helpers/security.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/helpers/num.php $(DESTDIR)$(LIBDIR)/kohana/system/helpers/num.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/helpers/inflector.php $(DESTDIR)$(LIBDIR)/kohana/system/helpers/inflector.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/EasySwift.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/EasySwift.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/AddressContainer.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/AddressContainer.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/ConnectionBase.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/ConnectionBase.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/EasySwiftResponseTracker.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/EasySwiftResponseTracker.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/Decorator.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/Decorator.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/VerboseSending/AbstractView.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/VerboseSending/AbstractView.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/VerboseSending/DefaultView.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/VerboseSending/DefaultView.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/ConnectionRotator.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/ConnectionRotator.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/MailSend.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/MailSend.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/AntiFlood.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/AntiFlood.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/BandwidthMonitor.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/BandwidthMonitor.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/VerboseSending.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/VerboseSending.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/Throttler.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/Throttler.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/FileEmbedder.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/FileEmbedder.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Plugin/Decorator/Replacements.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Plugin/Decorator/Replacements.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Connection/Sendmail.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection/Sendmail.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Connection/NativeMail.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection/NativeMail.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Connection/Rotator.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection/Rotator.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Connection/SMTP.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection/SMTP.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Connection/Multi.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection/Multi.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Cache.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Cache.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Authenticator.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/RecipientList.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/RecipientList.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Authenticator/@PopB4Smtp.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator/@PopB4Smtp.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Authenticator/PLAIN.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator/PLAIN.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Authenticator/CRAMMD5.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator/CRAMMD5.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Authenticator/PopB4Smtp/Pop3Connection.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator/PopB4Smtp/Pop3Connection.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Authenticator/LOGIN.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Authenticator/LOGIN.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Iterator/MySQLResult.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Iterator/MySQLResult.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Iterator/Array.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Iterator/Array.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Exception.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Exception.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Cache/Memory.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Cache/Memory.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Cache/Disk.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Cache/Disk.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Cache/JointOutputStream.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Cache/JointOutputStream.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Cache/OutputStream.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Cache/OutputStream.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Log/DefaultLog.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Log/DefaultLog.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/EmbeddedFile.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/EmbeddedFile.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/Attachment.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/Attachment.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/MimeException.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/MimeException.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/Image.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/Image.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/Mime.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/Mime.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/Encoder.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/Encoder.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/Part.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/Part.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Message/Headers.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Message/Headers.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/BadResponseException.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/BadResponseException.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Connection.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Connection.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/CacheFactory.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/CacheFactory.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Iterator.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Iterator.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/LogContainer.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/LogContainer.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Address.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Address.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/FileException.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/FileException.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/DisconnectListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/DisconnectListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/SendEvent.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/SendEvent.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/ResponseListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/ResponseListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/ResponseEvent.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/ResponseEvent.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/DisconnectEvent.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/DisconnectEvent.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/ConnectEvent.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/ConnectEvent.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/CommandEvent.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/CommandEvent.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/ListenerMapper.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/ListenerMapper.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/CommandListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/CommandListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/ConnectListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/ConnectListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/BeforeSendListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/BeforeSendListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/BeforeCommandListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/BeforeCommandListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/SendListener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/SendListener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Events/Listener.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Events/Listener.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/ClassLoader.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/ClassLoader.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/BatchMailer.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/BatchMailer.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/Log.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/Log.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/File.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/File.php
-	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/vendor/swift/Swift/ConnectionException.php $(DESTDIR)$(LIBDIR)/kohana/system/vendor/swift/Swift/ConnectionException.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/libraries/Pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/libraries/Pagination.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/libraries/ORM_Tree.php $(DESTDIR)$(LIBDIR)/kohana/system/libraries/ORM_Tree.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/libraries/Encrypt.php $(DESTDIR)$(LIBDIR)/kohana/system/libraries/Encrypt.php

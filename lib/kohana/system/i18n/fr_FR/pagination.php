@@ -10,6 +10,6 @@ $lang = array
 	'of'       => 'sur',
 	'first'    => 'premier',
 	'last'     => 'dernier',
-	'previous' => 'précédant',
+	'previous' => 'précédent',
 	'next'     => 'suivant',
 );

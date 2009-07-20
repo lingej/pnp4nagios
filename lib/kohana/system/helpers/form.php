@@ -2,7 +2,7 @@
 /**
  * Form helper class.
  *
- * $Id: form.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: form.php 4291 2009-04-29 22:51:58Z kiall $
  *
  * @package    Core
  * @author     Kohana Team
@@ -233,7 +233,7 @@ class form_Core {
 	 *
 	 * @param   string|array  input name or an array of HTML attributes
 	 * @param   array         select options, when using a name
-	 * @param   string        option key that should be selected by default
+	 * @param   string|array  option key(s) that should be selected by default
 	 * @param   string        a string to be attached to the end of the attributes
 	 * @return  string
 	 */

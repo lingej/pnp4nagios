@@ -4,7 +4,7 @@
  *
  * [ref-tcl]: http://en.wikipedia.org/wiki/Tag_cloud
  *
- * $Id: Tagcloud.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Tagcloud.php 3824 2008-12-20 17:13:06Z samsoir $
  *
  * @package    Tagcloud
  * @author     Kohana Team

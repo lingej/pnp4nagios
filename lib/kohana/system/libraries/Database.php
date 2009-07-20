@@ -2,7 +2,7 @@
 /**
  * Provides database access in a platform agnostic way, using simple query building blocks.
  *
- * $Id: Database.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Database.php 4342 2009-05-08 16:56:01Z jheathco $
  *
  * @package    Core
  * @author     Kohana Team
@@ -341,10 +341,10 @@ class Database_Core {
 
 		foreach ($sql as $val)
 		{
-			if (($val = trim($val)) === '') continue;
-
 			if (is_string($val))
 			{
+				if (($val = trim($val)) === '') continue;
+
 				// TODO: Temporary solution, this should be moved to database driver (AS is checked for twice)
 				if (stripos($val, ' AS ') !== FALSE)
 				{
@@ -462,7 +462,18 @@ class Database_Core {
 	public function where($key, $value = NULL, $quote = TRUE)
 	{
 		$quote = (func_num_args() < 2 AND ! is_array($key)) ? -1 : $quote;
-		$keys  = is_array($key) ? $key : array($key => $value);
+		if (is_object($key))
+		{
+			$keys = array((string) $key => '');
+		}
+		elseif ( ! is_array($key))
+		{
+			$keys = array($key => $value);
+		}
+		else
+		{
+			$keys = $key;
+		}
 
 		foreach ($keys as $key => $value)
 		{
@@ -484,7 +495,18 @@ class Database_Core {
 	public function orwhere($key, $value = NULL, $quote = TRUE)
 	{
 		$quote = (func_num_args() < 2 AND ! is_array($key)) ? -1 : $quote;
-		$keys  = is_array($key) ? $key : array($key => $value);
+		if (is_object($key))
+		{
+			$keys = array((string) $key => '');
+		}
+		elseif ( ! is_array($key))
+		{
+			$keys = array($key => $value);
+		}
+		else
+		{
+			$keys = $key;
+		}
 
 		foreach ($keys as $key => $value)
 		{
@@ -1165,7 +1187,7 @@ class Database_Core {
 	{
 		$this->link or $this->connect();
 
-		return $this->driver->list_tables($this);
+		return $this->driver->list_tables();
 	}
 
 	/**

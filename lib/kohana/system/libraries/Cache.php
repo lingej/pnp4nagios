@@ -4,7 +4,7 @@
  * resources. Caches are identified by a unique string. Tagging of caches is
  * also supported, and caches can be found and deleted by id or tag.
  *
- * $Id: Cache.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: Cache.php 4321 2009-05-04 01:39:44Z kiall $
  *
  * @package    Cache
  * @author     Kohana Team
@@ -135,13 +135,13 @@ class Cache_Core {
 	 * Set a cache item by id. Tags may also be added and a custom lifetime
 	 * can be set. Non-string data is automatically serialized.
 	 *
-	 * @param   string   unique cache id
-	 * @param   mixed    data to cache
-	 * @param   array    tags for this item
-	 * @param   integer  number of seconds until the cache expires
+	 * @param   string        unique cache id
+	 * @param   mixed         data to cache
+	 * @param   array|string  tags for this item
+	 * @param   integer       number of seconds until the cache expires
 	 * @return  boolean
 	 */
-	function set($id, $data, array $tags = NULL, $lifetime = NULL)
+	function set($id, $data, $tags = NULL, $lifetime = NULL)
 	{
 		if (is_resource($data))
 			throw new Kohana_Exception('cache.resources');
@@ -155,7 +155,7 @@ class Cache_Core {
 			$lifetime = $this->config['lifetime'];
 		}
 
-		return $this->driver->set($id, $data, $tags, $lifetime);
+		return $this->driver->set($id, $data, (array) $tags, $lifetime);
 	}
 
 	/**

@@ -32,7 +32,8 @@ $config = array
 );
 
 // DOUBLE
-$config['double'] = $config['double unsigned'] = $config['decimal'] = $config['real'] = $config['numeric'] = $config['float'];
+$config['double'] = $config['double precision'] = $config['decimal'] = $config['real'] = $config['numeric'] = $config['float'];
+$config['double unsigned'] = $config['float unsigned'];
 
 // BIT
 $config['bit'] = $config['boolean'];
@@ -47,7 +48,7 @@ $config['enum'] = $config['set'] = $config['varchar'];
 $config['tinytext'] = $config['mediumtext'] = $config['longtext'] = $config['text'];
 
 // BLOB
-$config['tinyblob'] = $config['mediumblob'] = $config['longblob'] = $config['clob'] = $config['bytea'] = $config['blob'];
+$config['tsvector'] = $config['tinyblob'] = $config['mediumblob'] = $config['longblob'] = $config['clob'] = $config['bytea'] = $config['blob'];
 
 // CHARACTER
 $config['character'] = $config['char'];

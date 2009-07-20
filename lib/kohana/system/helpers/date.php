@@ -2,7 +2,7 @@
 /**
  * Date helper class.
  *
- * $Id: date.php 4134 2009-03-28 04:37:54Z zombor $
+ * $Id: date.php 4316 2009-05-04 01:03:54Z kiall $
  *
  * @package    Core
  * @author     Kohana Team
@@ -374,7 +374,7 @@ class date_Core {
 			$span = array();
 			foreach ($difference as $name => $amount)
 			{
-				if ($name !== $last AND $amount === 0)
+				if ($amount === 0)
 				{
 					// Skip empty amounts
 					continue;
@@ -382,6 +382,12 @@ class date_Core {
 
 				// Add the amount to the span
 				$span[] = ($name === $last ? ' and ' : ', ').$amount.' '.($amount === 1 ? inflector::singular($name) : $name);
+			}
+
+			// If the difference is less than 60 seconds, remove the preceding and.
+			if (count($span) === 1)
+			{
+				$span[0] = ltrim($span[0], 'and ');
 			}
 
 			// Replace difference by making the span into a string
