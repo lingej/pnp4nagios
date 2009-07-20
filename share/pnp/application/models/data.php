@@ -11,7 +11,9 @@ class Data_Model extends Model
     public  $MACRO = array();
     private $RRD   = array();
     public  $STRUCT  = array();
-    public  $TIMERANGE = array();	
+    public  $TIMERANGE  = array();	
+    public  $PAGE_DEF   = array();	
+    public  $PAGE_GRAPH = array();	
     /*
     * 
     *
@@ -134,8 +136,8 @@ class Data_Model extends Model
 			if(is_array($host) && sizeof($host) > 0 ){
 				array_unshift($services, $host[0]);
 			}
-        }else{
-			throw new Kohana_Exception('common.host-perfdata-dir-empty', $path );
+        //}else{
+		//	throw new Kohana_Exception('common.host-perfdata-dir-empty', $path );
 		}		
 		#print Kohana::debug($services);
         return $services;
@@ -427,27 +429,154 @@ class Data_Model extends Model
             $start = pnp::clean($start);
         }
 
-    if($start >= $end){
-		throw new Kohana_User_Exception('Wrong Timerange', "start >= end");
-    }
-    $timerange['title']   = $this->config->views[$view]['title'];
-    $timerange['start']   = $start;
-    $timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
-    $timerange['end']     = $end;
-    $timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
-    $timerange['cmd']     = " --start $start --end $end ";
-    for ($i = 0; $i < sizeof($this->config->views); $i++) {
-    	$timerange[$i]['title']   = $this->config->views[$i]['title'];
-        $timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
-        $timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
-        $timerange[$i]['end']     = $end;
-        $timerange[$i]['f_end']   = date($this->config->conf['date_fmt'],$end);
-        $timerange[$i]['cmd']     = " --start " . ($end - $this->config->views[$i]['start']) . " --end  $end" ;
-    }
-    $this->TIMERANGE = $timerange;
-    #print Kohana::debug($timerange);
-}
-    private function getGraphDimensions () {
+    	if($start >= $end){
+			throw new Kohana_User_Exception('Wrong Timerange', "start >= end");
+    	}
+    	$timerange['title']   = $this->config->views[$view]['title'];
+    	$timerange['start']   = $start;
+    	$timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
+    	$timerange['end']     = $end;
+    	$timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
+    	$timerange['cmd']     = " --start $start --end $end ";
+    	for ($i = 0; $i < sizeof($this->config->views); $i++) {
+    		$timerange[$i]['title']   = $this->config->views[$i]['title'];
+        	$timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
+        	$timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
+        	$timerange[$i]['end']     = $end;
+        	$timerange[$i]['f_end']   = date($this->config->conf['date_fmt'],$end);
+        	$timerange[$i]['cmd']     = " --start " . ($end - $this->config->views[$i]['start']) . " --end  $end" ;
+    	}
+    	$this->TIMERANGE = $timerange;
+    	#print Kohana::debug($timerange);
+	}
 
-    }
+	public function buildPageStruct($page,$view){
+		$servicelist = array();
+		$this->parse_page_cfg($page);
+		$hosts = $this->getHostsByPage();
+		foreach($hosts as $host){
+			$services = $this->getServices($host);
+			foreach($services as $service) {
+				if($this->filterServiceByPage($host,$service)){
+					$servicelist[] = array( 'host' => $host, 'service' => $service['name']);
+				}
+			}
+		}
+		#print Kohana::debug(sizeof($servicelist));
+		if(sizeof($servicelist) > 0 ){
+			foreach($servicelist as $s){
+				$this->buildDataStruct($s['host'],$s['service'],$view);
+			}
+		}else{
+			// FIXME Add Kohana Error
+			throw new Kohana_User_Exception('Page Config', "No data for $page.cfg");
+		}
+	}
+
+
+	public function parse_page_cfg($page){
+        $page_cfg = $this->config->conf['page_dir'].$page.".cfg";
+        if(is_readable($page_cfg)){
+            $data = file($page_cfg);
+        }else{
+			// FIXME Add Kohana Error
+        	throw new Kohana_User_Exception('Page Config', "Can not open $page_cfg");
+        }
+        $l = 0;
+        $line = "";
+        $tag = "";
+        $inside=0;
+        $this->PAGE_DEF   = array();
+        $this->PAGE_GRAPH = array();
+        $allowed_tags = array("page", "graph");
+        foreach($data as $line){
+	        if(ereg('(^#|^;)',$line)) {
+				continue;
+			}
+
+			preg_match('/define\s+(\w+)\W+{/' ,$line, $tag);
+			if(isset($tag[1]) && in_array($tag[1],$allowed_tags)){
+				$inside = 1;
+				$t = $tag[1];
+				$l++;
+				continue;
+			}
+			if(preg_match('/\s?(\w+)\s+(.*$)/',$line, $key) && $inside == 1){
+				$k=$key[1];
+				$v=$key[2];
+				if($t=='page'){
+					$this->PAGE_DEF[$k] = trim($v);
+				}elseif($t=='graph'){
+					$this->PAGE_GRAPH[$l][$k] = trim($v);
+				}
+			}
+			if(preg_match('/}/',$line)){
+				$inside=0;
+				$t = "";
+				continue;
+			}
+		}
+	}
+
+	/*
+	*
+	*/
+	public function getHostsByPage(){
+		$hosts = $this->getHosts();
+		$new_hosts = array();
+		foreach( $hosts as $host){
+			if($host['state'] == "inactive"){
+				continue;
+			}
+			$new_hosts[] = $this->filterHostByPage($host['name']);
+		}
+		return $new_hosts;
+	}
+	/*
+	*
+	*/
+	private function filterHostByPage($host){
+		if(isset($this->PAGE_DEF['use_regex']) && $this->PAGE_DEF['use_regex'] == 1){
+			// Search Host by regex
+			foreach( $this->PAGE_GRAPH as $g ){
+				if(isset($g['host_name']) && preg_match('/'.$g['host_name'].'/',$host)){
+					return $host;
+				}
+			}
+		}else{
+			foreach( $this->PAGE_GRAPH as $g ){
+				$hosts_to_search_for = explode(",", $g['host_name']);
+				if(isset($g['host_name']) && in_array($host ,$hosts_to_search_for) ){
+					return $host;
+				}
+			}
+		}
+		return FALSE;
+	}
+
+	private function filterServiceByPage($host,$service){
+		if(isset($this->PAGE_DEF['use_regex']) && $this->PAGE_DEF['use_regex'] == 1){
+			// Search Host by regex
+			foreach( $this->PAGE_GRAPH as $g ){
+				if(isset($g['host_name']) && preg_match('/'.$g['host_name'].'/',$host)){
+					if(isset($g['service_desc']) && preg_match('/'.$g['service_desc'].'/',$service['name'])){
+						return $service['name'];
+					}
+				}
+			}
+		}else{
+			foreach( $this->PAGE_GRAPH as $g ){
+				$hosts_to_search_for = explode(",", $g['host_name']);
+				$services_to_search_for = explode(",", $g['service_desc']);
+				if(isset($g['host_name']) && in_array($host ,$hosts_to_search_for) ){
+					if(isset($g['service_desc']) && in_array($service ,$services_to_search_for) ){
+						return $service['name'];
+					}
+				}
+			}
+		}
+		return FALSE;
+	}
+
+
 }
