@@ -84,6 +84,7 @@ class Graph_Controller extends System_Controller  {
 		    if(isset($this->host)){
 		    	url::redirect("/graph?host=$this->host");
 		    }else{
+				// FIXME 
 				throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
 		    }			
 		}

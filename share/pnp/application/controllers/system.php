@@ -73,6 +73,13 @@ class System_Controller extends Template_Controller {
 #		return $path;
 #	}
 
+	public function check_mod_rewrite(){
+		if(!in_array('mod_rewrite', apache_get_modules())){
+			// FXME
+			throw new Kohana_User_Exception('Apache MOD Rewrite', "Mod Rewrite is not enablad.");
+		}
+	}
+
     public function isAuthorizedFor($auth) {
         $conf = $this->config->conf;
         if ($auth == "service_links") {

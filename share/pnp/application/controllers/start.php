@@ -10,12 +10,12 @@ class Start_Controller extends System_Controller  {
 
 	public function __construct()
 	{
+		$this->check_mod_rewrite();		
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		
 		if($this->isAuthorizedFor('host_overview' ) ){
 		    $host = $this->data->getFirstHost();
 		    url::redirect("graph?host=$host", 302);

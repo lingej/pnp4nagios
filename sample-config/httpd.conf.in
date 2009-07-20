@@ -13,15 +13,17 @@ Alias /@PKG_NAME@ "@datarootdir@"
    	AuthType Basic
    	AuthUserFile /usr/local/nagios/etc/htpasswd.users
    	Require valid-user
-	# Turn on URL rewriting
-	RewriteEngine On
-	# Installation directory
-	RewriteBase /@PKG_NAME@/
-	# Protect application and system files from being viewed
-	RewriteRule ^(application|modules|system) - [F,L]
-	# Allow any files or directories that exist to be displayed directly
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	# Rewrite all other URLs to index.php/URL
-	RewriteRule .* index.php/$0 [PT,L]
+	<IfModule mod_rewrite.c>
+		# Turn on URL rewriting
+		RewriteEngine On
+		# Installation directory
+		RewriteBase /@PKG_NAME@/
+		# Protect application and system files from being viewed
+		RewriteRule ^(application|modules|system) - [F,L]
+		# Allow any files or directories that exist to be displayed directly
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		# Rewrite all other URLs to index.php/URL
+		RewriteRule .* index.php/$0 [PT,L]
+	</IfModule>
 </Directory>
