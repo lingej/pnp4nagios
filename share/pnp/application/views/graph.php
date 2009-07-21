@@ -1,16 +1,16 @@
-<div class="pagebody b1">
+<div class="pagebody">
 	<?php if (!empty($header)) {
      		echo $header;
 	} ?>
 
     <table class="body"><tr><td valign="top">
-    <div class="left ui-corner-all">
+    <div class="left ui-widget-content ui-corner-all">
 	<?php if (!empty($graph_content)) {
      		echo $graph_content;
 	} ?>
     </div>
     </td><td valign="top">
-    <div class="right ui-corner-all">
+	<div class="right ui-widget-content ui-corner-all">
 	<?php if (!empty($search_box)) {
      		echo $search_box;
 	} ?>
@@ -33,7 +33,7 @@
 	<?php if (!empty($logo_box)) {
      		echo $logo_box;
 	} ?>
-    </div>
+	</div>
     </td></tr></table>
     <div class="left w99 cb ui-corner-all">
 	<?php if (!empty($footer)) {

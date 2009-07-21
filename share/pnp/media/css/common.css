@@ -35,7 +35,7 @@ div.left {
 	float: left;
 	padding: 4px 4px 4px 4px;
 	margin: 4px 4px 4px 0px; 
-	background-color: #d9d8d1;
+	#background-color: #d9d8d1;
 	
 }
 
@@ -106,13 +106,13 @@ div.right {
 	margin-top: 4px;
 	float: right;	
 	padding: 4px;
-	background-color: #d9d8d1;
+	#background-color: #d9d8d1;
 }
 
 div.header {
 	margin-top: 2px;
 	padding: 2px;
-	background-color: #c5d8d1;
+	#background-color: #c5d8d1;
 }
 
 div.pagebody {
