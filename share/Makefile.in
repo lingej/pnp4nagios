@@ -65,6 +65,8 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/css/ui-lightness/images
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/css/ui-smoothness
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/css/ui-smoothness/images
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/css/ui-redmond
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/css/ui-redmond/images
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/images
 
 	for file in pnp/media/css/*.css; \
@@ -81,6 +83,12 @@ install:
 
 	for file in pnp/media/css/ui-smoothness/images/*; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css/ui-smoothness/images; done
+
+	for file in pnp/media/css/ui-redmond/*.css; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css/ui-redmond; done
+
+	for file in pnp/media/css/ui-redmond/images/*; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css/ui-redmond/images; done
 
 	for file in pnp/media/js/*; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/js; done

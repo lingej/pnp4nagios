@@ -87,7 +87,7 @@ $conf['overview-range'] = 1 ;
 #
 # Jquery UI Theme
 # http://jqueryui.com/themeroller/
-# Posuble Valies are: lightness, smoothness
+# Posuble Valies are: lightness, smoothness, redmond
 $conf['ui-theme'] = 'lightness';
 
 # Use Language lang/lang_['lang'].php .
