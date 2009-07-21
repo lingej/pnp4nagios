@@ -1,6 +1,6 @@
 <!-- Icon Box Start -->
 <div class="ui-widget">
-<div class="ui-widget-header ui-corner-top">
+<div class="p2 ui-widget-header ui-corner-top">
 Actions
 </div>
 <div class="p4 ui-widget-content ui-corner-bottom" >

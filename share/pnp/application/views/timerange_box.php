@@ -1,6 +1,6 @@
 <?php 
 echo "<div class=\"ui-widget\">\n";
-echo "<div class=\"ui-widget-header ui-corner-top\">\n";
+echo "<div class=\"p2 ui-widget-header ui-corner-top\">\n";
 echo "Timeranges"; 
 echo "</div>\n";
 echo "<div class=\"p4 ui-widget-content ui-corner-bottom\">\n";
