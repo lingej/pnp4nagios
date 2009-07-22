@@ -90,10 +90,10 @@ $conf['overview-range'] = 1 ;
 # Posuble Valies are: lightness, smoothness, redmond
 $conf['ui-theme'] = 'lightness';
 
-# Use Language lang/lang_['lang'].php .
-# Valid Options are de,en,nl,se,fr
+# Language Defintions to use.
+# Valid Options are en_US, de_DE, es_ES 
 #
-$conf['lang'] = "en";
+$conf['lang'] = "en_US";
 #
 # Date Format
 #
