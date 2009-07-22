@@ -10,6 +10,11 @@ $lang = array
     'xml-not-found' => 'XML File "%s" not found',
     'get-first-service' => 'Can´t find first service for host "%s".',
     'get-first-host' => 'Can´t find any Host.',
-	'xml-structure-mismatch' => 'XML Structure mismatch. Found Version "%d" but should be "%d"',
-	'save-rrd-image' => 'fopen "%s" failed',
+    'xml-structure-mismatch' => 'XML Structure mismatch. Found Version "%d" but should be "%d"',
+    'save-rrd-image' => 'php fopen("%s") failed',
+    'status-box-header' => 'Status',
+    'search-box-header' => 'Search',
+    'icon-box-header' => 'Actions',
+    'timerange-box-header' => 'Timeranges',
+    'service-box-header' => 'Services',
 );

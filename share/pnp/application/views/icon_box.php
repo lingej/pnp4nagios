@@ -1,7 +1,7 @@
 <!-- Icon Box Start -->
 <div class="ui-widget">
 <div class="p2 ui-widget-header ui-corner-top">
-Actions
+<?php echo Kohana::lang('common.icon-box-header') ?>
 </div>
 <div class="p4 ui-widget-content ui-corner-bottom" >
 <script type="text/javascript">

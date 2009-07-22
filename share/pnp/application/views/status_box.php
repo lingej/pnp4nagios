@@ -1,6 +1,6 @@
 <div class="ui-widget">
  <div class="p2 ui-widget-header ui-corner-top">
-Status
+<?php echo Kohana::lang('common.status-box-header') ?>
  </div>
  <div class="p4 ui-widget-content ui-corner-bottom">
 <?php if(isset($host)) echo "<strong>Host:&nbsp;</strong>".

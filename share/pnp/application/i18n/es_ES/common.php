@@ -10,6 +10,12 @@ $lang = array
     'xml-not-found' => 'Fichero XML "%s" no encontrado.',
     'get-first-service' => 'No puedo encontrar el primer servicio para el equipo "%s".',
     'get-first-host' => 'No puedo encuentrar ningún Equipo.',
-	'xml-structure-mismatch' => 'Error en la Estructura XML. Versión Encontrada "%d" pero debería ser "%d"',
-	'save-rrd-image' => 'fallo en fopen "%s"',
+    'xml-structure-mismatch' => 'Error en la Estructura XML. Versión Encontrada "%d" pero debería ser "%d"',
+    'save-rrd-image' => 'fallo en php fopen("%s")',
+    'status-box-header' => 'Status',
+    'search-box-header' => 'Search',
+    'icon-box-header' => 'Actions',
+    'timerange-box-header' => 'Timeranges',
+    'service-box-header' => 'Services',
+
 );
