@@ -12,10 +12,10 @@ $lang = array
     'get-first-host' => 'No puedo encuentrar ningún Equipo.',
     'xml-structure-mismatch' => 'Error en la Estructura XML. Versión Encontrada "%d" pero debería ser "%d"',
     'save-rrd-image' => 'fallo en php fopen("%s")',
-    'status-box-header' => 'Status',
-    'search-box-header' => 'Search',
-    'icon-box-header' => 'Actions',
-    'timerange-box-header' => 'Timeranges',
-    'service-box-header' => 'Services',
+    'status-box-header' => 'Estado',
+    'search-box-header' => 'Buscar',
+    'icon-box-header' => 'Acciones',
+    'timerange-box-header' => 'Intervalos de Tiempo',
+    'service-box-header' => 'Servicios',
 
 );
