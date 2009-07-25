@@ -803,6 +803,7 @@ sub parse_perfstring {
         $is_multi = 1;
         print_log( "check_multi Perfdata start", 3 );
         my $count        = 0;
+        my $check_multi_blockcount = 0;
         my $multi_parent = cleanup( $NAGIOS{SERVICEDESC} );
         while ($perfstring) {
             ( $perfstring, %p ) = _parse($perfstring);
@@ -831,10 +832,11 @@ sub parse_perfstring {
                     $p{disp_servicedesc} = cleanup( $multi[0] );    # Use the multi servicedesc.
                     data2rrd(@perfs) if ( $#perfs >= 0 );           # Process when a new block starts.
                     @perfs = ();                                    # Clear the perfs array.
+                    # reset check_multi block count
+                    $check_multi_blockcount = 0;
                 }
-                %CTPL = adjust_template( $multi[1], $p{uom}, $count );
+                %CTPL = adjust_template( $multi[1], $p{uom}, $check_multi_blockcount++ );
 
-                #( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
                 }
@@ -857,12 +859,11 @@ sub parse_perfstring {
                 $count++;
             }
             else {
-                print_log( "DEBUG: Next check_multi data for block $count", 3 );
+                print_log( "DEBUG: Next check_multi data for block $count multiblock $check_multi_blockcount", 3 );
 
                 # additional check_multi data
-                %CTPL = adjust_template( $multi[1], $p{uom}, $count );
+                %CTPL = adjust_template( $multi[1], $p{uom}, $check_multi_blockcount++ );
 
-                #( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $multi[1], $p{uom}, $count );
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
                 }

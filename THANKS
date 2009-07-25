@@ -3,9 +3,6 @@
 ###########################################
 
 Olivier PLATHEY - For providing FPDF
-The Prototype Core Team - For the Prototype Ajax Framework http://www.prototypejs.org/
-Erik Bosrup - For Overlib http://www.bosrup.com/web/overlib/
-Thomas Fuchs - For Script.aculo.us
 
 Hendrik Baecker - Testing ,debugging and english Translation
 Olaf Reiss - Testing
@@ -41,6 +38,8 @@ Simon Meggle
 Mattias Ryrlén - Patches
 Nicolas Graziano - Patches
 Joe Precious - Testing
+Stefan Priebe - Patches
+Carlos de Nova - i18n
 
 ###########################################
 #           NPCD Thanks                   #
