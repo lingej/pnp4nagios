@@ -22,7 +22,7 @@ class Debug_Controller extends System_Controller  {
 
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
-		$view    = FALSE;
+		$view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
 			$view = pnp::clean($_GET['view']);
@@ -38,7 +38,7 @@ class Debug_Controller extends System_Controller  {
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 		}elseif(isset($this->host)){
 		    $this->host    = pnp::clean($this->host);
-           	if($view == FALSE){
+           	if($view == ""){
 		    	$view = $this->config->conf['overview-range'];
 			}
 		    $this->title   = "Start $this->host";
@@ -52,6 +52,7 @@ class Debug_Controller extends System_Controller  {
 		    if(isset($this->host)){
 		    	url::redirect("/graph");
 		    }else{
+				// FIXME
 				throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
 		    }			
 		}

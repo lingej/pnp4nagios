@@ -29,7 +29,7 @@ class Graph_Controller extends System_Controller  {
 
 		$this->start   = $this->input->get('start');
 		$this->end     = $this->input->get('end');
-		$this->view    = FALSE;
+		$this->view    = "";
 
 		if(isset($_GET['view']) && $_GET['view'] != "" )
 			$this->view = pnp::clean($_GET['view']);
@@ -56,7 +56,7 @@ class Graph_Controller extends System_Controller  {
 		// Host Overview
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
-			if($this->view == FALSE){
+			if($this->view == ""){
 				$this->view = $this->config->conf['overview-range'];
 			}
 			$this->url     = "?host=".$this->host;
