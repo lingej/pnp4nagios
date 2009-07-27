@@ -1,7 +1,7 @@
 <?php if (!empty($services)) { ?>
 <div class="ui-widget">
  <div class="p2 ui-widget-header ui-corner-top">
- Services
+ <?php echo Kohana::lang('common.service-box-header') ?> 
  </div>
 <div class="p4 ui-widget-content ui-corner-bottom">
 <?php

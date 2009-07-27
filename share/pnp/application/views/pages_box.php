@@ -1,7 +1,7 @@
 <?php if (!empty($pages)) { ?>
 <div class="ui-widget">
  <div class="p2 ui-widget-header ui-corner-top">
- Pages
+ <?php echo Kohana::lang('common.pages-box-header') ?>
  </div>
 <div class="p4 ui-widget-content ui-corner-bottom">
 <?php

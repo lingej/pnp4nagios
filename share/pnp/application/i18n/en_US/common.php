@@ -17,4 +17,5 @@ $lang = array
     'icon-box-header' => 'Actions',
     'timerange-box-header' => 'Timeranges',
     'service-box-header' => 'Services',
+    'pages-box-header' => 'Pages',
 );
