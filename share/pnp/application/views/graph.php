@@ -35,10 +35,7 @@
 	} ?>
 	</div>
     </td></tr></table>
-    <div class="left w99 cb ui-corner-all">
-	<?php if (!empty($footer)) {
-     		echo $footer .  Kohana::lang('core.stats_footer');
-	} ?>
+    <div class="cb p4 ui-widget-content ui-corner-all">
 	<?php echo Kohana::lang('core.stats_footer') ?>
     </div>
 </div>

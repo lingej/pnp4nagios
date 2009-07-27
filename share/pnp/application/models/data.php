@@ -578,5 +578,44 @@ class Data_Model extends Model
 		return FALSE;
 	}
 
+	public function getPages() {
+        $pages = array();
+        if (is_dir($this->config->conf['page_dir'])) {
+            if ($dh = opendir($this->config->conf['page_dir'])) {
+                 while (($file = readdir($dh)) !== false) {
+                      if(preg_match('/(.*)\.cfg$/',basename($file),$page)){
+                           $pages[] = urlencode($page[1]);
+                      }
+                 }
+                closedir($dh);
+            } else {
+                die("Cannot open directory:  $path");
+        	}
+		}
+        if(sizeof($pages)>0){
+			
+            natsort($pages);
+        }else{
+        	return FALSE; 
+        }
+        return $pages;
+	}
+
+	public function getFirstPage(){
+        $pages = $this->getPages();
+        if(sizeof($pages) > 0 ){
+        	return urldecode($pages[0]);
+        }else{
+			return FALSE;
+		}
+	}
+
+	public function getPageDetails($page){
+        $this->parse_page_cfg($page);
+		return $this->PAGE_DEF['page_name'];
+	}
+
+
+
 
 }

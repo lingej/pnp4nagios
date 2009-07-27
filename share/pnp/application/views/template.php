@@ -30,5 +30,8 @@
 <?php if (!empty($zoom)) {
      echo $zoom;
 } ?>
+<?php if (!empty($page)) {
+     echo $page;
+} ?>
 </body>
 </html>
