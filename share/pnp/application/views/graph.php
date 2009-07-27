@@ -1,9 +1,10 @@
 <div class="pagebody">
+    <table class="body"><tr><td colspan="2" valign="top">
 	<?php if (!empty($header)) {
      		echo $header;
 	} ?>
-
-    <table class="body"><tr><td valign="top">
+	</td></tr>
+	<tr><td>
     <div class="left ui-widget-content ui-corner-all">
 	<?php if (!empty($graph_content)) {
      		echo $graph_content;
@@ -34,8 +35,10 @@
      		echo $logo_box;
 	} ?>
 	</div>
-    </td></tr></table>
+    </td></tr>
+	<tr><td colspan="2">
     <div class="cb p4 ui-widget-content ui-corner-all">
 	<?php echo Kohana::lang('core.stats_footer') ?>
     </div>
+	</td></tr></table>
 </div>
