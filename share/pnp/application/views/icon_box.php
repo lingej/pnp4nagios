@@ -15,9 +15,13 @@
 	</script>
 
 <input type="hidden" id="datepicker">
-<a title="PDF View" href="pdf<?php echo $this->url ?>&view=<?php echo $this->view?>"><img src="media/images/PDF_32.png"></a>
-<a title="XML View" href="xml<?php echo $this->url ?>"><img src="media/images/XML_32.png"></a>
-
+<?php
+if($this->config->conf['use_fpdf'] == 1){
+	echo "<a title=\"PDF View\" href=\"pdf".$this->url."&view=".$this->view."\"><img src=\"media/images/PDF_32.png\"></a>\n";
+}
+if($this->config->conf['show_xml_icon'] == 1){
+	echo "<a title=\"XML View\" href=\"xml".$this->url."\"><img src=\"media/images/XML_32.png\"></a>\n";
+}?>
 </div>
 </div><p>
 <!-- Icon Box End -->
