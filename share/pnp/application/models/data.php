@@ -217,7 +217,7 @@ class Data_Model extends Model
     * 
     *
     */
-    public function buildDataStruct ($host = FALSE, $service = FALSE, $view = FALSE, $source = FALSE){
+    public function buildDataStruct ($host = FALSE, $service = FALSE, $view = "", $source = ""){
 		if($host === false && $service === false){
 	    	return false;
 		}
@@ -225,7 +225,7 @@ class Data_Model extends Model
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
 		$this->includeTemplate($this->DS[0]['TEMPLATE']);
-		if( $view === FALSE ){
+		if( $view === "" ){
 			$v = 0;
 	    	foreach($this->config->views as $view_key=>$view_val){
 				$i=0;
