@@ -1,16 +1,16 @@
 <div class="pagebody">
-    <table class="body"><tr><td colspan="2" valign="top">
+    <table class="body"><tr valign="top"><td colspan="2">
 	<?php if (!empty($header)) {
      		echo $header;
 	} ?>
 	</tr></td>
-	<tr><td>
+	<tr valign="top"><td>
     <div class="left ui-widget-content ui-corner-all">
 	<?php if (!empty($graph_content)) {
      		echo $graph_content;
 	} ?>
     </div>
-    </td><td valign="top">
+    </td><td>
 	<div class="right ui-widget-content ui-corner-all">
 	<?php if (!empty($search_box)) {
      		echo $search_box;
@@ -36,7 +36,7 @@
 	} ?>
 	</div>
     </td></tr>
-	<td><tr colspan="2">
+	<td valign="top"><tr colspan="2">
     <div class="left w99 cb ui-corner-all">
 	<?php if (!empty($footer)) {
      		echo $footer .  Kohana::lang('core.stats_footer');
