@@ -53,6 +53,9 @@ class Graph_Controller extends System_Controller  {
 			// Service Box Vars
 		    $this->template->graph->service_box->services = $services;
 		    $this->template->graph->service_box->host = $this->host;
+			// Timerange Box Vars
+			$this->template->graph->timerange_box = $this->add_view('timerange_box');
+		    $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
 		// Host Overview
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
