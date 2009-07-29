@@ -16,6 +16,7 @@ Alias /@PKG_NAME@ "@datarootdir@"
 	<IfModule mod_rewrite.c>
 		# Turn on URL rewriting
 		RewriteEngine On
+		Options FollowSymLinks
 		# Installation directory
 		RewriteBase /@PKG_NAME@/
 		# Protect application and system files from being viewed
