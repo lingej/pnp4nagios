@@ -21,9 +21,9 @@ foreach($this->data->STRUCT as $key=>$value){
     echo "<td width=100% align=left>";
 	echo Kohana::lang('common.datasource',$value['ds_name'])."</td>\n";
 	echo "<td align=right>";
-	echo nagios::SummaryLink($value['MACRO']['HOSTNAME'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
+	echo nagios::SummaryLink($value['MACRO']['DISP_HOSTNAME'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
 	echo "<td align=right>";
-	echo nagios::AvailLink($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
+	echo nagios::AvailLink($value['MACRO']['DISP_HOSTNAME'],$value['MACRO']['DISP_SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
 	echo "<td align=right>";
 	echo pnp::zoom_icon($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'],$value['SOURCE'],$value['VIEW'])."</td>\n";
     echo "</tr></table>\n";

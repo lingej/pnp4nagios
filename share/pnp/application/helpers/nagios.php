@@ -24,6 +24,8 @@ class nagios_Core {
 	}
 
 	public function AvailLink($hostname,$servicedesc,$start,$end){
+		$hostname = urlencode($hostname);	
+		$servicedesc = urlencode($servicedesc);	
 		$smon = date('m' , $start);
         $sday = date('d' , $start);
         $syear = date('Y' , $start);
