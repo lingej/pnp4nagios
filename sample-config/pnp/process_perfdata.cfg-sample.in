@@ -35,7 +35,7 @@ CFG_DIR = @sysconfdir@
 # One RRD Database per Datasource.
 # RRD_STORAGE_TYPE = MULTIPLE
 #
-RRD_STORAGA_TYPE = SINGLE
+RRD_STORAGE_TYPE = SINGLE
 
 #
 #
