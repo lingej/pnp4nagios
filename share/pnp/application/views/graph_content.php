@@ -4,7 +4,7 @@ echo "<div class=\"gw ui-widget\">\n";
 $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 
     if($value['LEVEL'] == 0){
-		echo "<h3>".$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "</h3>\n";
+		echo "<h3>".$value['TIMERANGE']['title']. " " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "</h3>\n";
 		$count = 0;
 	}
 	if($value['VERSION'] != "valid" && $count == 0){
