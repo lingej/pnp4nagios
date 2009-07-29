@@ -36,6 +36,7 @@ class Zoom_Controller extends System_Controller  {
 		if(isset($this->host) && isset($this->service)){
 			$this->template->host    = $this->host;
 			$this->template->srv     = $this->service;
+			$this->template->view    = $view;
 			$this->template->source  = $source;
 			$this->template->end     = $end;
 			$this->template->start   = $start;
