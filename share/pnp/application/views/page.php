@@ -5,7 +5,7 @@
 	} ?>
 	</tr></td>
 	<tr valign="top"><td>
-    <div class="left ui-widget-content ui-corner-all">
+	<div class="left ui-widget-content ui-corner-all">
 	<?php if (!empty($graph_content)) {
      		echo $graph_content;
 	} ?>
@@ -36,11 +36,9 @@
 	} ?>
 	</div>
     </td></tr>
-	<td valign="top"><tr colspan="2">
-    <div class="left w99 cb ui-corner-all">
-	<?php if (!empty($footer)) {
-     		echo $footer .  Kohana::lang('core.stats_footer');
-	} ?>
+	<tr valign="top"><td colspan="2">
+    <div class="cb p4 w99 ui-widget-content ui-corner-all">
+    <?php echo Kohana::lang('core.stats_footer');?>
     </div>
 	</td></tr></table>
 </div>
