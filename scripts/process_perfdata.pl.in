@@ -317,16 +317,16 @@ sub data2rrd {
 
         if ( $data[$i]{rrd_storage_type} eq "MULTIPLE" ) {
             print_log( "DEBUG: MULTIPLE Storage Type", 3 );
-
+			$DS = 1;
             # PNP 0.4.x Template compatibility
             $NAGIOS{RRDFILE} = "";
-
+			
             #
             $rrd_storage_type = "MULTIPLE";
             $rrdfile          = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . "_" . $data[$i]{label} . ".rrd";
 
             # DS is set to 1
-            @ds_create = "DS:1:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}";
+            @ds_create = "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}";
             $ds_update = ":$data[$i]{value}";
             @rrd_state = write_rrd();
             @ds_create = ();
