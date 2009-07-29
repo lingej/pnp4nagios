@@ -22,7 +22,7 @@ class Image_Controller extends System_Controller  {
 		$service = $this->input->get('srv');
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
-		$view    = "";
+		$view    = 0; //fake value
 		$source  = "";
 
 		if($this->input->get('view') != "" )

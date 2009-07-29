@@ -23,7 +23,7 @@ class Zoom_Controller extends System_Controller  {
 		$start   = $this->input->get('start');
 		$end     = $this->input->get('end');
 		$source  = $this->input->get('source');
-		$view    = FALSE;
+		$view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
 			$view = pnp::clean($_GET['view']);

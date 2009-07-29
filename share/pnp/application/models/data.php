@@ -225,7 +225,7 @@ class Data_Model extends Model
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
 		$this->includeTemplate($this->DS[0]['TEMPLATE']);
-		if( $view === "" ){
+		if( $view == "" ){
 			$v = 0;
 	    	foreach($this->config->views as $view_key=>$view_val){
 				$i=0;
@@ -397,7 +397,7 @@ class Data_Model extends Model
         return $template_file;
     }
 
-    public function getTimeRange($start=FALSE ,$end=FALSE ,$view=1) {
+    public function getTimeRange($start=FALSE ,$end=FALSE ,$view="") {
         $view=intval( pnp::clean($view) );
         if($view >= sizeof($this->config->views)){
             $view = 1;
