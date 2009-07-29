@@ -44,7 +44,7 @@ class pnp_Core {
 	*
 	*/
 	public static function zoom_icon($host,$service,$start,$end,$source,$view){
-		print "<a href=\"javascript:Gzoom('zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><span class=\"ui-icon ui-icon-zoomin\"/></a>\n";
+		print "<a href=\"javascript:Gzoom('zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"media/images/zoom.png\"></a>\n";
 	}
 
 

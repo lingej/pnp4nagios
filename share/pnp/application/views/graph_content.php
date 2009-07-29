@@ -18,9 +18,15 @@ foreach($this->data->STRUCT as $key=>$value){
 
     echo "<div class=\"ui-widget-header ui-corner-top\">";
     echo "<table border=0 width=100%><tr>\n";
-    echo "<td align=left>".Kohana::lang('common.datasource',$value['ds_name'])."</td><td align=right>\n";
-	echo pnp::zoom_icon($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'],$value['SOURCE'],$value['VIEW']);
-    echo "</td></tr></table>\n";
+    echo "<td width=100% align=left>";
+	echo Kohana::lang('common.datasource',$value['ds_name'])."</td>\n";
+	echo "<td align=right>";
+	echo nagios::SummaryLink($value['MACRO']['HOSTNAME'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
+	echo "<td align=right>";
+	echo nagios::AvailLink($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
+	echo "<td align=right>";
+	echo pnp::zoom_icon($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'],$value['SOURCE'],$value['VIEW'])."</td>\n";
+    echo "</tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
     echo "<a href=\"graph?host=" . $value['MACRO']['HOSTNAME'] . "&srv=".$value['MACRO']['SERVICEDESC'] ."\">\n";
