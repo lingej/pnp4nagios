@@ -18,6 +18,6 @@ $lang = array
     'timerange-box-header' => 'Intervalos de Tiempo',
     'service-box-header' => 'Servicios',
 	'pages-box-header' => 'Páginas',
-    'nagios-summary-link-title' => 'Most Recent Alerts for this Timerange',
-	'nagios-avail-link-title'   => 'Nagios Availability Report for this Timerange',
+    'nagios-summary-link-title' => 'Alertas Recientes en el Intervalo de Tiempo',
+	'nagios-avail-link-title'   => 'Informe de Disponibilidad en el Intervalo de Tiempo',
 );
