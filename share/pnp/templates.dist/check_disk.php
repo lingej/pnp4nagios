@@ -7,24 +7,24 @@
 #
 # RRDtool Options
 
-foreach ($DS as $i) {
-
-	$opt[1] = "--vertical-label MB -l 0 -u $MAX[$i] --title \"Filesystem $hostname / $servicedesc\" ";
+foreach ($DS as $key=>$val) {
+	$ds_name[$key] = str_replace("_","/",$NAME[$key]);
+	$opt[$key] = "--vertical-label MB -l 0 -u $MAX[$key] --title \" i=$key j=$j Filesystem $ds_name\" ";
 	#
 	#
 	# Graph Definitions
-	$def[$i]  = "DEF:var1=$RRDFILE[$i]:$DS[$i]:AVERAGE "; 
-	$def[$i] .= "AREA:var1#c6c6c6:\"$servicedesc\\n\" "; 
-	$def[$i] .= "LINE1:var1#003300: "; 
-	$def[$i] .= "HRULE:$MAX[$i]#003300:\"Size $MAX[$i] MB \" ";
-	if ($WARN[$i] != "") {  
-		$def[$i] .= "HRULE:$WARN[$i]#ffff00:\"Warning on $WARN[$i] MB \" ";
+	$def[$key]  = "DEF:var1=$RRDFILE[$key]:$DS[$key]:AVERAGE "; 
+	$def[$key] .= "AREA:var1#c6c6c6:\"$servicedesc\\n\" "; 
+	$def[$key] .= "LINE1:var1#003300: "; 
+	$def[$key] .= "HRULE:$MAX[$key]#003300:\"Size $MAX[$key] MB \" ";
+	if ($WARN[$key] != "") {  
+		$def[$key] .= "HRULE:$WARN[$key]#ffff00:\"Warning on $WARN[$key] MB \" ";
 	}
-	if ($CRIT[$i] != "") {  
-		$def[$i] .= "HRULE:$CRIT[$i]#ff0000:\"Critical on $CRIT[$i] MB \\n\" ";       
+	if ($CRIT[$key] != "") {  
+		$def[$key] .= "HRULE:$CRIT[$key]#ff0000:\"Critical on $CRIT[$key] MB \\n\" ";       
 	}
-	$def[$i] .= "GPRINT:var1:LAST:\"%6.2lf MB of $MAX[$i] MB used \\n\" ";
-	$def[$i] .= "GPRINT:var1:MAX:\"%6.2lf MB max used \\n\" ";
-	$def[$i] .= "GPRINT:var1:AVERAGE:\"%6.2lf MB avg used\" ";
+	$def[$key] .= "GPRINT:var1:LAST:\"%6.2lf MB of $MAX[$key] MB used \\n\" ";
+	$def[$key] .= "GPRINT:var1:MAX:\"%6.2lf MB max used \\n\" ";
+	$def[$key] .= "GPRINT:var1:AVERAGE:\"%6.2lf MB avg used\" ";
 }
 ?>
