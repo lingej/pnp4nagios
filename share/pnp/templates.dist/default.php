@@ -48,7 +48,7 @@ foreach ($DS as $i) {
 
 	$opt[$i] = '--vertical-label "' . $vlabel . '" --title "' . $hostname . ' / ' . $servicedesc . '"' . $lower;
 
-	$def[$i] = "DEF:var1=$rrdfile:$DS[$i]:AVERAGE ";
+	$def[$i]  = "DEF:var1=$RRDFILE[$i]:$DS[$i]:AVERAGE ";
 	$def[$i] .= "AREA:var1" . $_AREA . ":\"$NAME[$i] \" ";
 	$def[$i] .= "LINE1:var1" . $_LINE . ":\"\" ";
 	$def[$i] .= "GPRINT:var1:LAST:\"%3.4lf $UNIT[$i] LAST \" ";

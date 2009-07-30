@@ -8,7 +8,7 @@
 $opt[1] = "--lower=$MIN[1] --vertical-label \"Users\"  --title \"Users\" ";
 
 
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:MAX " ;
+$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:MAX " ;
 $def[1] .= "AREA:var1#00FF00:\"Users logged in \" " ;
 $def[1] .= "LINE1:var1#000000:\"\" " ;
 

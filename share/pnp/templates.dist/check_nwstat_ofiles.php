@@ -10,13 +10,11 @@ $opt[1] = "--vertical-label \"$UNIT[1]\" --title \"Open Files $hostname / $servi
 #
 #
 #
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
+$def[1]  =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
 $def[1] .=  "CDEF:sp1=var1,100,/,12,* " ;
 $def[1] .=  "CDEF:sp2=var1,100,/,30,* " ;
 $def[1] .=  "CDEF:sp3=var1,100,/,50,* " ;
 $def[1] .=  "CDEF:sp4=var1,100,/,70,* " ;
-
-
 
 if ($WARN[1] != "") {
 	$def[1] .= "HRULE:$WARN[1]#FFFF00 ";

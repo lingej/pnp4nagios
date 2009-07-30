@@ -11,7 +11,7 @@ $opt[1] = "--vertical-label GB -u $MAX[1] -l 0 --title \"Used Diskspace for $hos
 #
 #
 # Graph Definitions
-$def[1] =  "DEF:var1=$rrdfile:1:AVERAGE "; 
+$def[1]  =  "DEF:var1=$RRDFILE[1]:1:AVERAGE "; 
 $def[1] .= "AREA:var1#c6c6c6: ";
 $def[1] .= "LINE1:var1#003300: ";
 $def[1] .= "HRULE:$MAX[1]#003300:\"Capacity $MAX[1]GB \" ";

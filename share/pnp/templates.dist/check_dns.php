@@ -9,7 +9,7 @@
 $opt[1] = "--lower=$MIN[1] --vertical-label $UNIT[1]  --title \"DNS Response Time\" ";
 
 
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
+$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
 $def[1] .= "AREA:var1#FF6600:\"DNS Response Time\" " ;
 $def[1] .= "LINE1:var1#000000:\"\" " ;
 

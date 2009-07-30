@@ -7,9 +7,9 @@
 $opt[1] = "--slope-mode --watermark \"Created by PNP4Nagios\" --title \"PNP4Nagios XML Statistics\" ";
 #
 #
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:MAX " ;
-$def[1] .= "DEF:var2=$rrdfile:$DS[2]:MAX " ;
-$def[1] .= "DEF:var3=$rrdfile:$DS[3]:MAX " ;
+$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:MAX " ;
+$def[1] .= "DEF:var2=$RRDFILE[2]:$DS[2]:MAX " ;
+$def[1] .= "DEF:var3=$RRDFILE[3]:$DS[3]:MAX " ;
 $def[1] .= "CDEF:total=var1,var2,-,var3,- " ;
 $def[1] .= "AREA:var1#FF8C00:\"Total XML Files \" " ;
 $def[1] .= "LINE1:total#000000 " ;

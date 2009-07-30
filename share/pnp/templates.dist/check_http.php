@@ -10,7 +10,7 @@ $opt[1] = "--vertical-label \"$UNIT[1]\" --title \"Response Times $hostname / $s
 #
 #
 #
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
+$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
 if ($WARN[1] != "") {
 	$def[1] .= "HRULE:$WARN[1]#FFFF00 ";
 }
@@ -31,7 +31,7 @@ $opt[2] = "--vertical-label \"$UNIT[2]\" --title \"Size $hostname / $servicedesc
 #
 #
 #
-$def[2] =  "DEF:var1=$rrdfile:$DS[2]:AVERAGE " ;
+$def[2] =  "DEF:var1=$RRDFILE[2]:$DS[2]:AVERAGE " ;
 if ($WARN[2] != "") {
 	$def[2] .= "HRULE:$WARN[2]#FFFF00 ";
 }

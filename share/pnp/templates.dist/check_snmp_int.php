@@ -6,8 +6,8 @@
 #
 #
 $opt[1] = " --vertical-label \"Traffic\" -b 1000 --title \"Interface Traffic for $hostname / $servicedesc\" ";
-$def[1] = "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
-$def[1] .= "DEF:var2=$rrdfile:$DS[2]:AVERAGE " ;
+$def[1] = "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
+$def[1] .= "DEF:var2=$RRDFILE[2]:$DS[2]:AVERAGE " ;
 $def[1] .= "LINE1:var1#003300:\"in  \" " ;
 $def[1] .= "GPRINT:var1:LAST:\"%7.2lf %Sb/s last\" " ;
 $def[1] .= "GPRINT:var1:AVERAGE:\"%7.2lf %Sb/s avg\" " ;

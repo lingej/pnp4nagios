@@ -8,8 +8,8 @@
 #
 #
 $opt[1] = " --vertical-label \"Traffic\" -b 1000 --title \"Interface Traffic for $hostname / $servicedesc\" ";
-$def[1] = "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
-$def[1] .= "DEF:var2=$rrdfile:$DS[2]:AVERAGE " ;
+$def[1] = "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
+$def[1] .= "DEF:var2=$RRDFILE[2]:$DS[2]:AVERAGE " ;
 $def[1] .= "CDEF:in_bits=var1,8,* ";
 $def[1] .= "CDEF:out_bits=var2,8,* ";
 $def[1] .= "LINE1:in_bits#003300:\"in  \" " ;

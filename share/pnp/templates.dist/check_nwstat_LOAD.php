@@ -10,7 +10,7 @@ $opt[1] = " -u 100 -l 0 --vertical-label \"$UNIT[1]\" --title \"CPU Load $hostna
 #
 #
 #
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
+$def[1]  =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
 $def[1] .=  "CDEF:sp1=var1,100,/,12,* " ;
 $def[1] .=  "CDEF:sp2=var1,100,/,30,* " ;
 $def[1] .=  "CDEF:sp3=var1,100,/,50,* " ;

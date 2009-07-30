@@ -9,7 +9,7 @@
 $ds_name[1] = "Round Trip Times";
 $opt[1]  =  "--vertical-label \"RTA\"  --title \"Ping times for  $hostname / $servicedesc\" ";
 
-$def[1]  =  "DEF:var1=$rrdfile:$DS[2]:AVERAGE " ;
+$def[1]  =  "DEF:var1=$RRDFILE[2]:$DS[2]:AVERAGE " ;
 $def[1] .=  "CDEF:sp1=var1,100,/,12,* " ;
 $def[1] .=  "CDEF:sp2=var1,100,/,30,* " ;
 $def[1] .=  "CDEF:sp3=var1,100,/,50,* " ;
@@ -36,7 +36,7 @@ if($CRIT[2] != ""){
 $ds_name[2] = "Packets Lost";
 $opt[2] = "--vertical-label \"Packets lost\" -l0 -u105 --title \"Packets lost for  $hostname / $servicedesc\" ";
 
-$def[2]  =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
+$def[2]  =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
 $def[2] .=  "CDEF:sp1=var1,100,/,12,* " ;
 $def[2] .=  "CDEF:sp2=var1,100,/,30,* " ;
 $def[2] .=  "CDEF:sp3=var1,100,/,50,* " ;

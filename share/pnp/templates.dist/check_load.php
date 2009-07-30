@@ -9,9 +9,9 @@ $opt[1] = "--vertical-label Load -l0  --title \"CPU Load for $hostname / $servic
 #
 #
 #
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE " ;
-$def[1] .= "DEF:var2=$rrdfile:$DS[2]:AVERAGE " ;
-$def[1] .= "DEF:var3=$rrdfile:$DS[3]:AVERAGE " ;
+$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
+$def[1] .= "DEF:var2=$RRDFILE[2]:$DS[2]:AVERAGE " ;
+$def[1] .= "DEF:var3=$RRDFILE[3]:$DS[3]:AVERAGE " ;
 if ($WARN[1] != "") {
     $def[1] .= "HRULE:$WARN[1]#FFFF00 ";
 }

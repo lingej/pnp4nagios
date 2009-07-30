@@ -10,7 +10,7 @@ $opt[1] = "-X 0 --vertical-label MB -l 0 -u $MAX[1] --title \"Swap usage $hostna
 #
 #
 # Graphen Definitions
-$def[1] = "DEF:var1=$rrdfile:$DS[1]:AVERAGE "; 
+$def[1] = "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE "; 
 $def[1] .= "AREA:var1#c6c6c6:\"$servicedesc\\n\" "; 
 $def[1] .= "LINE1:var1#003300: "; 
 $def[1] .= "HRULE:$MAX[1]#003300:\"Capacity $MAX[1] MB \" ";

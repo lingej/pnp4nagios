@@ -39,13 +39,13 @@ $opt[1] = "--slope-mode --vertical-label 'Byte/s' -l0 --title \"$hostname / NIC 
 #
 #
 #
-$def[1] =  "DEF:rx_bytes=$rrdfile:$DS[1]:MAX " ;
-$def[1] .= "DEF:tx_bytes=$rrdfile:$DS[2]:MAX " ;
+$def[1] =  "DEF:rx_bytes=$RRDFILE[1]:$DS[1]:MAX " ;
+$def[1] .= "DEF:tx_bytes=$RRDFILE[1]:$DS[2]:MAX " ;
 $def[1] .= "CDEF:rx_mb=rx_bytes,8,*,100000000,GT,UNKN,rx_bytes,8,*,IF " ;
 $def[1] .= "CDEF:tx_mb=tx_bytes,8,*,100000000,GT,UNKN,tx_bytes,8,*,IF " ; 
-$def[1] .= "DEF:rx_errors=$rrdfile:$DS[5]:MAX " ;
-$def[1] .= "DEF:tx_errors=$rrdfile:$DS[6]:MAX " ;
-$def[1] .= "DEF:tx_collisions=$rrdfile:$DS[7]:MAX " ;
+$def[1] .= "DEF:rx_errors=$RRDFILE[5]:$DS[5]:MAX " ;
+$def[1] .= "DEF:tx_errors=$RRDFILE[6]:$DS[6]:MAX " ;
+$def[1] .= "DEF:tx_collisions=$RRDFILE[7]:$DS[7]:MAX " ;
 $def[1] .= "CDEF:errors=rx_errors,tx_errors,+ ";
 $def[1] .= "CDEF:problems_x=errors,tx_collisions,+ ";
 $def[1] .= "CDEF:problems=problems_x,1000000,* "; # Skaliere Probleme hoch, damit man was sieht

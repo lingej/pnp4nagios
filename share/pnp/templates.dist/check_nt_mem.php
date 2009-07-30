@@ -7,7 +7,7 @@
 #
 $opt[1] = "-X0 --vertical-label \"Megabyte\" -u $MAX[1] -l 0  --title \"Windows Memory\" ";
 
-$def[1] =  "DEF:var1=$rrdfile:$DS[1]:AVERAGE "; 
+$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE "; 
 $def[1] .= "AREA:var1#00FF00:\"Memory usage\" " ; 
 $def[1] .= "LINE1:var1#00000c " ; 
 if ($WARN[1] != "") {  
