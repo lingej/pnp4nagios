@@ -9,7 +9,7 @@
 
 foreach ($DS as $key=>$val) {
 	$ds_name[$key] = str_replace("_","/",$NAME[$key]);
-	$opt[$key] = "--vertical-label MB -l 0 -u $MAX[$key] --title \" i=$key j=$j Filesystem $ds_name\" ";
+	$opt[$key] = "--vertical-label MB -l 0 -u $MAX[$key] --title \"Filesystem $ds_name\" ";
 	#
 	#
 	# Graph Definitions
