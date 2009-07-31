@@ -84,6 +84,7 @@ distclean:
 	rm -f sample-config/xinetd.pnp.sample sample-config/misccommands.sample
 	rm -f subst summary
 	rm -f $(SRC_CONTRIB)/verify_pnp_config
+	rm -f $(SRC_CONTRIB)/ssi/status-header.ssi
 
 devclean: distclean
 

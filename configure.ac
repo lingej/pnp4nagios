@@ -13,7 +13,7 @@ AC_DEFINE([DEFAULT_NAGIOS_GROUP], [nagios], [Default Nagios Group])
 PKG_NAME=pnp4nagios
 PKG_VERSION="0.6.0"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
-PKG_REL_DATE="07-07-2009"
+PKG_REL_DATE="07-30-2009"
 AC_SUBST(PKG_NAME)
 AC_SUBST(PKG_VERSION)
 AC_SUBST(PKG_HOME_URL)
@@ -297,5 +297,6 @@ $PERL subst sample-config/pnp/config.php
 $PERL subst sample-config/pnp/npcd.cfg-sample 
 $PERL subst sample-config/pnp/process_perfdata.cfg-sample
 $PERL subst sample-config/pnp/pnp4nagios_release
+$PERL subst contrib/ssi/status-header.ssi 
 
 $PERL summary
