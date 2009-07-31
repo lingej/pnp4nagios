@@ -16,7 +16,7 @@ $_LINE     = '#000000';
 # Initial Logic ...
 #
 
-foreach ($DS as $key=>$val) {
+foreach ($this->DS as $KEY=>$VAL) {
 
 	$warning = "";
 	$minimum = "";
@@ -25,42 +25,42 @@ foreach ($DS as $key=>$val) {
 	$vlabel = "";
 	$lower = "0";
 	
-	if ($WARN[$key] != "") {
-		$warning = $WARN[$key];
+	if ($VAL['WARN'] != "") {
+		$warning = $VAL['WARN'];
 	}
-	if ($CRIT[$key] != "") {
-		$critical = $CRIT[$key];
+	if ($VAL['CRIT'] != "") {
+		$critical = $VAL['CRIT'];
 	}
-	if ($MIN[$key] != "") {
-		$lower = " --lower=" . $MIN[$key];
-		$minimum = $MIN[$key];
+	if ($VAL['MIN'] != "") {
+		$lower = " --lower=" . $VAL['MIN'];
+		$minimum = $VAL['MIN'];
 	}
-	if ($MAX[$key] != "") {
-		$upper = " --upper=" . $MAX[$key];
-		$maximum = $MAX[$key];
+	if ($VAL['MAX'] != "") {
+		$upper = " --upper=" . $VAL['MAX'];
+		$maximum = $VAL['MAX'];
 	}
-	if ($UNIT[$key] == "%%") {
+	if ($VAL['UNIT'] == "%%") {
 		$vlabel = "%";
 	}
 	else {
-		$vlabel = $UNIT[$key];
+		$vlabel = $VAL['UNIT'];
 	}
 
-	$opt[$key] = '--vertical-label "' . $vlabel . '" --title "' . $hostname . ' / ' . $servicedesc . '"' . $lower;
+	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $hostname . ' / ' . $servicedesc . '"' . $lower;
 
-	$def[$key]  = "DEF:var1=$RRDFILE[$key]:$DS[$key]:AVERAGE ";
-	$def[$key] .= "AREA:var1" . $_AREA . ":\"$NAME[$key] \" ";
-	$def[$key] .= "LINE1:var1" . $_LINE . ":\"\" ";
-	$def[$key] .= "GPRINT:var1:LAST:\"%3.4lf $UNIT[$key] LAST \" ";
-	$def[$key] .= "GPRINT:var1:MAX:\"%3.4lf $UNIT[$key] MAX \" ";
-	$def[$key] .= "GPRINT:var1:AVERAGE:\"%3.4lf $UNIT[$key] AVERAGE \\n\" ";
+	$def[$KEY]  = "DEF:var1=".$VAL['RRDFILE'].":".$VAL['DS'].":AVERAGE ";
+	$def[$KEY] .= "AREA:var1" . $_AREA . ":\"".$VAL['NAME']." \" ";
+	$def[$KEY] .= "LINE1:var1" . $_LINE . ":\"\" ";
+	$def[$KEY] .= "GPRINT:var1:LAST:\"%3.4lf ".$VAL['UNIT']." LAST \" ";
+	$def[$KEY] .= "GPRINT:var1:MAX:\"%3.4lf ".$VAL['UNIT']." MAX \" ";
+	$def[$KEY] .= "GPRINT:var1:AVERAGE:\"%3.4lf ".$VAL['UNIT']." AVERAGE \\n\" ";
 	if ($warning != "") {
-		$def[$key] .= "HRULE:" . $warning . $_WARNRULE . ':"Warning on  ' . $warning . '\n" ';
+		$def[$KEY] .= "HRULE:" . $warning . $_WARNRULE . ':"Warning on  ' . $warning . '\n" ';
 	}
 	if ($critical != "") {
-		$def[$key] .= "HRULE:" . $critical . $_CRITRULE . ':"Critical on ' . $critical . '\n" ';
+		$def[$KEY] .= "HRULE:" . $critical . $_CRITRULE . ':"Critical on ' . $critical . '\n" ';
 	}
-	$def[$key] .= 'COMMENT:"Default Template\r" ';
-	$def[$key] .= 'COMMENT:"Check Command ' . $TEMPLATE[$key] . '\r" ';
+	$def[$KEY] .= 'COMMENT:"Default Template\r" ';
+	$def[$KEY] .= 'COMMENT:"Check Command ' . $VAL['TEMPLATE'] . '\r" ';
 }
 ?>
