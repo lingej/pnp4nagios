@@ -31,15 +31,23 @@ class Popup_Controller extends System_Controller  {
 			$view = $this->config->conf['overview-range'];
 		}
 
+		if(isset($this->config->conf['popup-width']) &&$this->config->conf['popup-width'] != ""){ 
+			$this->imgwidth = $this->config->conf['popup-width'];
+		}else{
+			$this->imgwidth = FALSE;
+		}
+
 		$this->data->getTimeRange($start,$end,$view);
 
 		if(isset($this->host) && isset($this->service)){
-			$this->template->host    = $this->host;
-			$this->template->srv     = $this->service;
-			$this->template->view    = $view;
-			$this->template->source  = $source;
-			$this->template->end     = $end;
-			$this->template->start   = $start;
+			$this->data->buildDataStruct($this->host,$this->service,$view);
+			$this->template->host      = $this->host;
+			$this->template->srv       = $this->service;
+			$this->template->view      = $view;
+			$this->template->source    = $source;
+			$this->template->end       = $end;
+			$this->template->start     = $start;
+			$this->template->imgwidth  = $this->imgwidth;
 		}else{
 		    url::redirect("/graph");
 		}
