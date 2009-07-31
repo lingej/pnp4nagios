@@ -1,7 +1,7 @@
 <!-- Search Box Start -->
 <div class="ui-widget">
  <div class="p2 ui-widget-header ui-corner-top">
- Search
+ <?php echo Kohana::lang('common.search-box-header') ?>
  </div>
  <div class="p4 ui-widget-content ui-corner-bottom">
         <div id="selection"></div>
@@ -27,7 +27,7 @@
       width: 200,
       delimiter: /(,|;)\s*/,
       onSelect: onAutocompleteSelect,
-      deferRequestBy: 200, //miliseconds
+      deferRequestBy: 200 //miliseconds
     });
 
   });

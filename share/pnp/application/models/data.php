@@ -333,11 +333,13 @@ class Data_Model extends Model
 		if( $def != FALSE ){
 	    	$this->RRD['def'] = $def;
         }else{
+			// FIXME i18n
             throw new Kohana_User_Exception('Template Error', "Template $template_file does not provide the array \$def");
 		}
 		if( $opt != FALSE ){
 	    	$this->RRD['opt'] = $opt;
         }else{
+			// FIXME i18n
             throw new Kohana_User_Exception('Template Error', "Template $template_file does not provide the array \$def");
 		}
 		if( $ds_name != FALSE ){
