@@ -12,6 +12,7 @@ $lang = array
     'get-first-host' => 'Can´t find any Host.',
     'xml-structure-mismatch' => 'XML Structure mismatch. Found Version "%d" but should be "%d"',
     'save-rrd-image' => 'php fopen("%s") failed',
+    'zoom-header' => 'Zoom',
     'status-box-header' => 'Status',
     'search-box-header' => 'Search',
     'icon-box-header' => 'Actions',

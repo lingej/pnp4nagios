@@ -6,7 +6,7 @@
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <div class="ui-widget">
 <div class="ui-widget-header ui-corner-top">
-Zoom
+<?php echo Kohana::lang('common.zoom-header') ?>
 </div>
 <div class="p4 ui-widget-content ui-corner-bottom">
 <h3> <?php echo $this->data->TIMERANGE['f_start']?> --- <?php echo $this->data->TIMERANGE['f_end']?> </h3>
