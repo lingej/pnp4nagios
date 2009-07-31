@@ -17,6 +17,7 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph   = $this->add_view('graph');
 		$this->host              = $this->input->get('host');
 		$this->service           = $this->input->get('srv');
+		$this->session->set("graph", "Test");
 	}
 
 	public function index()
@@ -35,6 +36,7 @@ class Graph_Controller extends System_Controller  {
 			$this->view = pnp::clean($_GET['view']);
 
 		$this->data->getTimeRange($this->start,$this->end,$this->view);
+
 
 		// Service Details
 		if($this->host != "" && $this->service != ""){
@@ -56,6 +58,14 @@ class Graph_Controller extends System_Controller  {
 			// Timerange Box Vars
 			$this->template->graph->timerange_box = $this->add_view('timerange_box');
 		    $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
+			// Experimental Session
+			$seen = array();
+			//$this->session->delete("seen");
+			$seen = $this->session->get("seen");
+			$seen[] = array('host' => $this->host, 'srv' => $this->service);
+			$this->session->set("seen", $seen);
+			$this->template->graph->seen_box = $this->add_view('seen_box');
+			//
 		// Host Overview
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);

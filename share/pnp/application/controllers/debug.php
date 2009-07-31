@@ -15,6 +15,7 @@ class Debug_Controller extends System_Controller  {
 		$this->template->debug   = $this->add_view('debug');
 		$this->host              = $this->input->get('host');
 		$this->service           = $this->input->get('srv');
+		#$this->session->set("debug", "Test");
 	}
 
 	public function index()

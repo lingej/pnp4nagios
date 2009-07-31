@@ -20,6 +20,10 @@
      		echo $icon_box;
 	} ?>
 
+	<?php if (!empty($seen_box)) {
+     		echo $seen_box;
+	} ?>
+
 	<?php if (!empty($status_box)) {
      		echo $status_box;
 	} ?>

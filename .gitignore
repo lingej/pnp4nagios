@@ -19,3 +19,4 @@ share/pnp/application/config/config.php
 share/pnp/index.php
 sample-config/httpd.conf
 share/pnp/application/logs/*
+contrib/ssi/status-header.ssi
