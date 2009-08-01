@@ -1,4 +1,4 @@
-prefix=@prefix@
+refix=@prefix@
 LOGDIR=@localstatedir@
 CFGDIR=@sysconfdir@
 BINDIR=@bindir@
@@ -75,6 +75,8 @@ install:
 
 	for file in pnp/media/css/*.css; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css; done
+
+	$(INSTALL) -m 644 $(INSTALL_OPTS) pnp/media/css/shadow.png $(DESTDIR)$(DATAROOTDIR)/media/css
 
 	for file in pnp/media/css/ui-lightness/*.css; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css/ui-lightness; done
