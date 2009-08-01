@@ -17,7 +17,6 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph   = $this->add_view('graph');
 		$this->host              = $this->input->get('host');
 		$this->service           = $this->input->get('srv');
-		$this->session->set("graph", "Test");
 	}
 
 	public function index()
