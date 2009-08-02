@@ -70,57 +70,57 @@ La forma más sencilla de compilar el paquete es la siguiente:
 Compiladores y Opciones
 =======================
 
-Some systems require unusual options for compilation or linking that the
-`configure' script does not know about.  Run `./configure --help' for
-details on some of the pertinent environment variables.
+   Algunos sistemas requieren opciones para la compilación o enlazado
+no usuales que el script `configure' no gestiona automáticamente.
+Ejecute `./configure --help' para detalles sobre las variables de
+entorno necesarias.
 
-   You can give `configure' initial values for configuration parameters
-by setting variables in the command line or in the environment.  Here
-is an example:
+   Puede dar valores iniciales a los parámetros de configuración,
+ajustando las variables en línea de comandos o en el entorno. Puede
+ver a continuación un ejemplo:
 
      ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
-
-   *Note Defining Variables::, for more details.
 
 Compilando Para Múltiples Arquitecturas
 =======================================
 
-You can compile the package for more than one kind of computer at the
-same time, by placing the object files for each architecture in their
-own directory.  To do this, you must use a version of `make' that
-supports the `VPATH' variable, such as GNU `make'.  `cd' to the
-directory where you want the object files and executables to go and run
-the `configure' script.  `configure' automatically checks for the
-source code in the directory that `configure' is in and in `..'.
+   Se puede compilar el paquete para más de un tipo de ordenador
+al mismo tiempo, colocando los objetos para cada arquitectura en su
+propio directorio. Para hacer esto, debe usar una versión de `make'
+que soporte la variable `VPATH', por ejemplo el GNU `make'. `cd' al
+directorio en el que quiere los ficheros objeto y ejecutables y
+ejecute el script `configure'. Automáticamente se chequea el código
+fuente en el directorio en el que `configure' está y en `..'.
 
-   If you have to use a `make' that does not support the `VPATH'
-variable, you have to compile the package for one architecture at a
-time in the source code directory.  After you have installed the
-package for one architecture, use `make distclean' before reconfiguring
-for another architecture.
+   Si tiene que usar un `make' que no soporta la variable `VPATH',
+tendrá que compilar el paquete para cada arquitectura cada vez en el
+directorio del código fuente. Después de que haya instalado el paquete
+para cada arquitectura, deberá ejecutar `make distclean' antes de
+reconfigurarlo para otra arquitectura.
 
 Nombres de Instalación
 ======================
 
-By default, `make install' installs the package's commands under
-`/usr/local/bin', include files under `/usr/local/include', etc.  You
-can specify an installation prefix other than `/usr/local' by giving
-`configure' the option `--prefix=PREFIX'.
+   Por defecto, `make install' instala los ejecutables del paquete
+en `/usr/local/bin', los ficheros include en `/usr/local/include', etc.
+Se puede especificar otro prefijo de instalación diferente a `/usr/local'
+pasando la opción `--prefix=PREFIX' a `configure'
 
-   You can specify separate installation prefixes for
-architecture-specific files and architecture-independent files.  If you
-pass the option `--exec-prefix=PREFIX' to `configure', the package uses
-PREFIX as the prefix for installing programs and libraries.
-Documentation and other data files still use the regular prefix.
+   Se pueden especificar prefijos de instalación separados para ficheros
+dependientes e independientes de la arquitectura. Si pasamos la opción
+`--exec-prefix=PREFIX' a `configure', el paquete usa PREFIX como el 
+prefijo para la instalación de binarios y librerías. La documentación
+y otros ficheros de datos seguirán usando el prefijo estándar.
 
-   In addition, if you use an unusual directory layout you can give
-options like `--bindir=DIR' to specify different values for particular
-kinds of files.  Run `configure --help' for a list of the directories
-you can set and what kinds of files go in them.
+   Si se quiere utilizar una estructura no habitual de directorios
+podemos usar opciones como `--bindir=DIR' para especificar diferentes
+valores para clases concretas de ficheros. Ejecute `configure --help'
+para ver una lista de los directorios que se pueden especificary qué
+clase de archivos pueden contener. 
 
-   If the package supports it, you can cause programs to be installed
-with an extra prefix or suffix on their names by giving `configure' the
-option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
+   Pasando la opción `--program-prefix=PREFIX' o `--program-suffix=SUFFIX'
+conseguirá que los binarios sean instalados con un prefijoo sufijo  extra
+en sus nombres.
 
 Características Opcionales
 ==========================
