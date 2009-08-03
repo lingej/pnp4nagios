@@ -1,4 +1,4 @@
-refix=@prefix@
+prefix=@prefix@
 LOGDIR=@localstatedir@
 CFGDIR=@sysconfdir@
 BINDIR=@bindir@
