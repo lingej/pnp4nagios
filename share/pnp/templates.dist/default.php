@@ -18,7 +18,7 @@ $_LINE     = '#000000';
 
 foreach ($this->DS as $KEY=>$VAL) {
 
-	$warning  = "";
+	$maximum  = "";
 	$minimum  = "";
 	$critical = "";
 	$warning  = "";
