@@ -26,6 +26,7 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph->search_box    = $this->add_view('search_box');
 		$this->template->graph->service_box   = $this->add_view('service_box');
 		$this->template->graph->status_box    = $this->add_view('status_box');
+		$this->template->graph->seen_box      = $this->add_view('basket_box');
 
 		$this->start   = $this->input->get('start');
 		$this->end     = $this->input->get('end');
@@ -57,13 +58,6 @@ class Graph_Controller extends System_Controller  {
 			// Timerange Box Vars
 			$this->template->graph->timerange_box = $this->add_view('timerange_box');
 		    $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
-			// Experimental Session
-			$seen = array();
-			//$this->session->delete("seen");
-			$seen = $this->session->get("seen");
-			$seen[] = array('host' => $this->host, 'srv' => $this->service);
-			$this->session->set("seen", $seen);
-			$this->template->graph->seen_box = $this->add_view('seen_box');
 			//
 		// Host Overview
 		}elseif($this->host != ""){

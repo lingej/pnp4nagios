@@ -44,4 +44,4 @@ $config['regenerate'] = 0;
 /**
  * Percentage probability that the gc (garbage collection) routine is started.
  */
-$config['gc_probability'] = 2;
+$config['gc_probability'] = 0;

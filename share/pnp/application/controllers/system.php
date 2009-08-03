@@ -13,7 +13,6 @@ class System_Controller extends Template_Controller {
 		parent::__construct();
 
 		$this->session = Session::instance();
-		$this->session->set("test", "Test");
 
 		$this->template = $this->add_view('template');
 
