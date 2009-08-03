@@ -49,6 +49,7 @@ FILE *fp = NULL;
 
 void *npcdmod_module_handle = NULL;
 char *perfdata_file = "/usr/local/nagios/var/perfdata";
+char *perfdata_spool_file = "perfdata";
 char *spool_dir = NULL;
 
 void npcdmod_file_roller();
@@ -158,7 +159,7 @@ void npcdmod_file_roller() {
 
 	time(&current_time);
 
-	sprintf(spool_file, "%sperfdata.%d", spool_dir, current_time);
+	sprintf(spool_file, "%s%s.%d", spool_dir, perfdata_spool_file, current_time);
 	spool_file[sizeof(spool_file) - 1] = '\x0';
 
 	/* close actual file */
@@ -422,6 +423,9 @@ int npcdmod_process_config_var(char *arg) {
 
 	else if (!strcmp(var, "perfdata_file"))
 		perfdata_file = strdup(val);
+
+	else if (!strcmp(var, "perfdata_spool_file"))
+		perfdata_spool_file = strdup(val);
 
 	else if (!strcmp(var, "user"))
 		;
