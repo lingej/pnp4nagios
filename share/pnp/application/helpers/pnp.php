@@ -44,8 +44,15 @@ class pnp_Core {
 	*
 	*/
 	public static function zoom_icon($host,$service,$start,$end,$source,$view){
-		print "<a href=\"javascript:Gzoom('zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"media/images/zoom.png\"></a>\n";
+		print "<a href=\"javascript:Gzoom('".url::base()."zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"".url::base()."media/images/zoom.png\"></a>\n";
 	}
+
+	/*
+	*
+	*/
+	public static function add_to_basket_icon($host,$service){
+		print "<span id=\"basket_action_add\"><a title=\"Add This Item\" id=\"".$host."::".$service."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span><br>\n";
+}
 
 
 } 

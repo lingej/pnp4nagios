@@ -37,18 +37,35 @@ class Page_Controller extends System_Controller  {
 	}
 
 	public function index(){
+			$this->data->buildPageStruct($this->page,$this->view);
+			// FIXME i18n
+			$this->template->page->header->title = "Page: ".$this->data->PAGE_DEF['page_name'];
+			$this->url = "?page&page=$this->page";
+        	// Timerange Box Vars
+        	$this->template->page->timerange_box = $this->add_view('timerange_box');
+        	$this->template->page->timerange_box->timeranges = $this->data->TIMERANGE;
+			// Pages Box
+			$this->pages = $this->data->getPages();
+        	$this->template->page->pages_box = $this->add_view('pages_box');
+        	$this->template->page->pages_box->pages = $this->pages;
+	}
 
-		$this->data->buildPageStruct($this->page,$this->view);
-		// FIXME i18n
-		$this->template->page->header->title = "Page: ".$this->data->PAGE_DEF['page_name'];
-		$this->url = "?page&page=$this->page";
-        // Timerange Box Vars
-        $this->template->page->timerange_box = $this->add_view('timerange_box');
-        $this->template->page->timerange_box->timeranges = $this->data->TIMERANGE;
-		// Pages Box
-		$this->pages = $this->data->getPages();
-        $this->template->page->pages_box = $this->add_view('pages_box');
-        $this->template->page->pages_box->pages = $this->pages;
-
+	public function basket(){
+			$basket = $this->session->get("basket");
+            if(is_array($basket)){
+                foreach($basket as $item){
+					list($host,$service) = explode("::",$item);
+					$this->data->buildDataStruct($host, $service, $this->view);
+                }
+			// FIXME i18n
+			$this->template->page->header->title = "Page: Basket";
+			$this->url = "basket?";
+        	// Timerange Box Vars
+        	$this->template->page->timerange_box = $this->add_view('timerange_box');
+        	$this->template->page->timerange_box->timeranges = $this->data->TIMERANGE;
+			// Pages Box
+			$this->pages = $this->data->getPages();
+        	$this->template->page->pages_box = $this->add_view('pages_box');
+            }
 	}
 }

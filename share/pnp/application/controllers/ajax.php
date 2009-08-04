@@ -38,19 +38,19 @@ class Ajax_Controller extends System_Controller  {
 	public function basket($action=FALSE){
 		// Disable auto-rendering
         $this->auto_render = FALSE;
-		$host = false;
-		$service=false;
-       	$basket = array();
+		$host     = false;
+		$service  = false;
+       	$basket   = array();
 
 		if($action == "list"){
-			echo "List Action $host $service";
         	$basket = $this->session->get("basket");
-			echo "<pre>";
-			print_r($_SESSION);
-			echo "</pre>";
+			if(is_array($basket)){
+				foreach($basket as $item){
+					echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+				}
+			}
 		}elseif($action == "add"){
 			$item = $_POST['item'];
-			echo "<li id=\"$item\">$item<a id=\"$item\" href=ajax/basket/delete/$item onClick=\"return false;\">del</a></li>\n";
         	$basket = $this->session->get("basket");
 			if(!is_array($basket)){
         		$basket[] = "$item";
@@ -60,7 +60,10 @@ class Ajax_Controller extends System_Controller  {
 				}
 			}
         	$this->session->set("basket", $basket);
-		}elseif($action == "delete"){
+			foreach($basket as $item){
+				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+			}
+		}elseif($action == "remove"){
         	$basket = $this->session->get("basket");
 			$item_to_remove = $_POST['item'];
 			$new_basket = array();
@@ -70,12 +73,21 @@ class Ajax_Controller extends System_Controller  {
 				}
 				$new_basket[] = $item;
 			}
-			$this->session->set("basket", $new_basket);
-		}elseif($action == "delete_all"){
+			$basket = $new_basket;
+			$this->session->set("basket", $basket);
+			foreach($basket as $item){
+				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+			}
+		}elseif($action == "remove-all"){
         	$this->session->delete("basket");
-			echo "Delete All Action";
 		}else{
 			echo "Action $action not known";
+		}
+       	$basket = $this->session->get("basket");
+		if(sizeof($basket) == 0){
+			echo "ajax basket is empty";
+		}else{
+			echo "<a href=\"".url::base()."page/basket\">ajax show basket</a>";
 		}
 	}
 

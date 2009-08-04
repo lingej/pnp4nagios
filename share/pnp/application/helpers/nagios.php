@@ -20,7 +20,7 @@ class nagios_Core {
         $esec = date('s' , $end);
         $nagios_base = $this->config->conf['nagios_base'];
         print "<a href=\"$nagios_base/summary.cgi?report=1&displaytype=1&timeperiod=custom&smon=$smon&sday=$sday&syear=$syear&shour=$shour&smin=$smin&ssec=$ssec&emon=$emon&eday=$eday&eyear=$eyear&ehour=$ehour&emin=$emin&esec=$esec&hostgroup=all&servicegroup=all&host=$hostname&alerttypes=3&statetypes=3&hoststates=7&servicestates=120&limit=999\"";
-        print " title=\"".Kohana::lang('common.nagios-summary-link-title')."\"><img src=\"media/images/notify.gif\"></a>\n";
+        print " title=\"".Kohana::lang('common.nagios-summary-link-title')."\"><img src=\"".url::base()."media/images/notify.gif\"></a>\n";
 	}
 
 	public function AvailLink($hostname,$servicedesc,$start,$end){
@@ -49,7 +49,7 @@ syear&shour=$shour&smin=$smin&ssec=$ssec&emon=$emon&eday=$eday&eyear=$eyear&ehou
 tateretention=yes&assumestatesduringnotrunning=yes&includesoftstates=yes&initialassumedservicestate=6&backtrack=4\"";
 
         }
-        print " title=\"".Kohana::lang('common.nagios-avail-link-title')."\"><img src=\"media/images/trends.gif\" ></a>\n";
+        print " title=\"".Kohana::lang('common.nagios-avail-link-title')."\"><img src=\"".url::base()."media/images/trends.gif\" ></a>\n";
 }
 
 
