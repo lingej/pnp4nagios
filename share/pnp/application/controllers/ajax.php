@@ -24,21 +24,71 @@ class Ajax_Controller extends System_Controller  {
 		$result    = array();
 		$result['query'] = $query;
 		$result['suggestions'] = array();
-	        if(strlen($query)>=1) {
-                     $hosts = $this->data->getHosts();
-                     foreach($hosts as $host){
-                         if(preg_match("/$query/i",$host['name'])){
-				array_push($result['suggestions'],$host['name']);
-                         }
-                     }
-		     echo json_encode($result);
-                }
+        if(strlen($query)>=1) {
+	        $hosts = $this->data->getHosts();
+            foreach($hosts as $host){
+            	if(preg_match("/$query/i",$host['name'])){
+					array_push($result['suggestions'],$host['name']);
+            	}
+            }
+		    echo json_encode($result);
+		}
 	}
 
-	public function popup() {
-	    $host    = $this->input->get('host');
-	    $service = $this->input->get('srv');
-	    $timet   = time();
-	    echo html::image("image?host=$host&srv=$service&time=$timet");
+	public function basket($action=FALSE){
+		// Disable auto-rendering
+        $this->auto_render = FALSE;
+		$host     = false;
+		$service  = false;
+       	$basket   = array();
+
+		if($action == "list"){
+        	$basket = $this->session->get("basket");
+			if(is_array($basket)){
+				foreach($basket as $item){
+					echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+				}
+			}
+		}elseif($action == "add"){
+			$item = $_POST['item'];
+        	$basket = $this->session->get("basket");
+			if(!is_array($basket)){
+        		$basket[] = "$item";
+			}else{
+				if(!in_array($item,$basket)){
+        			$basket[] = $item;
+				}
+			}
+        	$this->session->set("basket", $basket);
+			foreach($basket as $item){
+				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+			}
+		}elseif($action == "remove"){
+        	$basket = $this->session->get("basket");
+			$item_to_remove = $_POST['item'];
+			$new_basket = array();
+			foreach($basket as $item){
+				if($item ==  $item_to_remove){
+					continue;
+				}
+				$new_basket[] = $item;
+			}
+			$basket = $new_basket;
+			$this->session->set("basket", $basket);
+			foreach($basket as $item){
+				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+			}
+		}elseif($action == "remove-all"){
+        	$this->session->delete("basket");
+		}else{
+			echo "Action $action not known";
+		}
+       	$basket = $this->session->get("basket");
+		if(sizeof($basket) == 0){
+			echo "ajax basket is empty";
+		}else{
+			echo "<a href=\"".url::base()."page/basket\">ajax show basket</a>";
+		}
 	}
+
 }

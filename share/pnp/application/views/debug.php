@@ -17,6 +17,7 @@
 	<div id="tabs-1">
 	<h3>$this->data->STRUCT</h3>
 	<pre>
+<?php print_r($this->session->get());?>
 <?php print_r($this->data->STRUCT);?>
 	</pre>
 	</div>
