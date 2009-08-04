@@ -7,7 +7,7 @@
 # RTA
 #
 $ds_name[1] = "Round Trip Times";
-$opt[1]  =  "--vertical-label \"RTA\"  --title \"Ping times for  $hostname / $servicedesc\" ";
+$opt[1]  =  "--vertical-label \"RTA\"  --title \"Ping times\" ";
 
 $def[1]  =  "DEF:var1=$RRDFILE[2]:$DS[2]:AVERAGE " ;
 $def[1] .=  "CDEF:sp1=var1,100,/,12,* " ;
@@ -26,15 +26,15 @@ $def[1] .= "GPRINT:var1:MAX:\"%6.2lf $UNIT[2] max \" " ;
 $def[1] .= "GPRINT:var1:AVERAGE:\"%6.2lf $UNIT[2] avg \\n\" " ;
 $def[1] .= "LINE1:var1#000000:\"\" " ;
 if($WARN[2] != ""){
-  $def[1] .= "HRULE:".$WARN[2]."#000000:\"Warning ".$WARN[2]."%% \" " ;
+  $def[1] .= "HRULE:".$WARN[2]."#000000:\"Warning ".$WARN[2].$UNIT[2]." \" " ;
 }
 if($CRIT[2] != ""){
-  $def[1] .= "HRULE:".$CRIT[2]."#FF0000:\"Critical ".$CRIT[2]."%% \" " ;
+  $def[1] .= "HRULE:".$CRIT[2]."#FF0000:\"Critical ".$CRIT[2].$UNIT[2]." \" " ;
 }
 #
 # Packets Lost
 $ds_name[2] = "Packets Lost";
-$opt[2] = "--vertical-label \"Packets lost\" -l0 -u105 --title \"Packets lost for  $hostname / $servicedesc\" ";
+$opt[2] = "--vertical-label \"Packets lost\" -l0 -u105 --title \"Packets lost\" ";
 
 $def[2]  =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
 $def[2] .=  "CDEF:sp1=var1,100,/,12,* " ;
@@ -54,10 +54,10 @@ $def[2] .= "GPRINT:var1:AVERAGE:\"%6.2lg $UNIT[1] avg \\n\" " ;
 $def[2] .= "LINE1:var1#000000: " ;
 $def[2] .= "HRULE:100#000000:\"\" " ;
 if($WARN[1] != ""){
-  $def[2] .= "HRULE:".$WARN[1]."#FFFF00:\"Warning ".$WARN[1]."%% \" " ;
+  $def[2] .= "HRULE:".$WARN[1]."#FFFF00:\"Warning ".$WARN[1].$UNIT[1]." \" " ;
 }
 if($CRIT[1] != ""){
-  $def[2] .= "HRULE:".$CRIT[1]."#FF0000:\"Critical ".$CRIT[1]."%% \" " ;
+  $def[2] .= "HRULE:".$CRIT[1]."#FF0000:\"Critical ".$CRIT[1].$UNIT[1]." \" " ;
 }
 
 ?>
