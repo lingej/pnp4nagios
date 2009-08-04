@@ -12,6 +12,8 @@ class System_Controller extends Template_Controller {
 	{
 		parent::__construct();
 
+		$this->session = Session::instance();
+
 		$this->template = $this->add_view('template');
 
 		$this->data       = new Data_Model();

@@ -25,12 +25,14 @@ foreach($this->data->STRUCT as $key=>$value){
 	echo "<td align=right>";
 	echo nagios::AvailLink($value['MACRO']['DISP_HOSTNAME'],$value['MACRO']['DISP_SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'])."</td>\n";
 	echo "<td align=right>";
+	echo pnp::add_to_basket_icon($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'])."</td>\n";
+	echo "<td align=right>";
 	echo pnp::zoom_icon($value['MACRO']['HOSTNAME'],$value['MACRO']['SERVICEDESC'],$value['TIMERANGE']['start'],$value['TIMERANGE']['end'],$value['SOURCE'],$value['VIEW'])."</td>\n";
     echo "</tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
-    echo "<a href=\"graph?host=" . $value['MACRO']['HOSTNAME'] . "&srv=".$value['MACRO']['SERVICEDESC'] ."\">\n";
-	echo "<img src=\"image?host=" . $value['MACRO']['HOSTNAME'] . "&srv=" . $value['MACRO']['SERVICEDESC'] . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\"></a>\n";
+    echo "<a href=\"".url::base()."graph?host=" . $value['MACRO']['HOSTNAME'] . "&srv=".$value['MACRO']['SERVICEDESC'] ."\">\n";
+	echo "<img src=\"".url::base()."image?host=" . $value['MACRO']['HOSTNAME'] . "&srv=" . $value['MACRO']['SERVICEDESC'] . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\"></a>\n";
     echo "</div><p>\n";
 }
 echo "</div>\n";
