@@ -18,12 +18,13 @@ $_LINE     = '#000000';
 
 foreach ($this->DS as $KEY=>$VAL) {
 
-	$warning = "";
-	$minimum = "";
+	$warning  = "";
+	$minimum  = "";
 	$critical = "";
-	$warning = "";
-	$vlabel = "";
-	$lower = "0";
+	$warning  = "";
+	$vlabel   = "";
+	$lower    = "";
+	$upper    = "";
 	
 	if ($VAL['WARN'] != "") {
 		$warning = $VAL['WARN'];
@@ -46,7 +47,7 @@ foreach ($this->DS as $KEY=>$VAL) {
 		$vlabel = $VAL['UNIT'];
 	}
 
-	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $hostname . ' / ' . $servicedesc . '"' . $lower;
+	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $this->MACRO['DISP_HOSTNAME'] . ' / ' . $this->MACRO['DISP_SERVICEDESC'] . '"' . $lower;
 
 	$def[$KEY]  = "DEF:var1=".$VAL['RRDFILE'].":".$VAL['DS'].":AVERAGE ";
 	$def[$KEY] .= "AREA:var1" . $_AREA . ":\"".$VAL['NAME']." \" ";
