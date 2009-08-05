@@ -6,7 +6,7 @@ echo "</div>\n";
 echo "<div class=\"p4 ui-widget-content ui-corner-bottom\">\n";
 
 foreach($this->config->views as $key=>$view){
-	echo "<a href=\"".$this->url."&view=".$key."\">".$view['title']."</a><br>\n"; 
+	echo "<a class=\"multi0\" href=\"".$this->url."&view=".$key."\">".$view['title']."</a><br>\n"; 
 }
 echo "</div>\n";
 echo "</div><p>\n";

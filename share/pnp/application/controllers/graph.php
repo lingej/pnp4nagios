@@ -26,7 +26,7 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph->search_box    = $this->add_view('search_box');
 		$this->template->graph->service_box   = $this->add_view('service_box');
 		$this->template->graph->status_box    = $this->add_view('status_box');
-		$this->template->graph->seen_box      = $this->add_view('basket_box');
+		$this->template->graph->basket_box    = $this->add_view('basket_box');
 
 		$this->start   = $this->input->get('start');
 		$this->end     = $this->input->get('end');

@@ -48,6 +48,8 @@ class Page_Controller extends System_Controller  {
 			$this->pages = $this->data->getPages();
         	$this->template->page->pages_box = $this->add_view('pages_box');
         	$this->template->page->pages_box->pages = $this->pages;
+			// Basket Box
+			$this->template->page->basket_box      = $this->add_view('basket_box');
 	}
 
 	public function basket(){
@@ -58,6 +60,7 @@ class Page_Controller extends System_Controller  {
 					$this->data->buildDataStruct($host, $service, $this->view);
                 }
 			// FIXME i18n
+			$this->template->page->basket_box      = $this->add_view('basket_box');
 			$this->template->page->header->title = "Page: Basket";
 			$this->url = "basket?";
         	// Timerange Box Vars
@@ -66,6 +69,7 @@ class Page_Controller extends System_Controller  {
 			// Pages Box
 			$this->pages = $this->data->getPages();
         	$this->template->page->pages_box = $this->add_view('pages_box');
+        	$this->template->page->pages_box->pages = $this->pages;
             }
 	}
 }

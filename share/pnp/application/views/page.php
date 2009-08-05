@@ -24,6 +24,10 @@
      		echo $timerange_box;
 	} ?>
 
+	<?php if (!empty($basket_box)) {
+     		echo $basket_box;
+	} ?>
+
 	<?php if (!empty($pages_box)) {
      		echo $pages_box;
 	} ?>

@@ -4,13 +4,18 @@
 *
 */
 
+
 $(document).ready(function(){ 
+
+	var path = location.pathname.split("/");
+	path = "/" + path[1] + "/";
+	$("img").fadeIn(1500);
 
 	$("#basket_action_add a").click(function(){
 		var item = (this.id)
 		$.ajax({
       		type: "POST",
-      		url: "ajax/basket/add",
+      		url: path + "ajax/basket/add",
       		data: { item: item },
       		success: function(msg){
     			$("#basket_items").html(msg);
@@ -21,7 +26,7 @@ $(document).ready(function(){
   	$("#basket_action_remove-all a").click(function(){
 		$.ajax({
       		type: "POST",
-      		url: "ajax/basket/remove-all/",
+      		url: path + "ajax/basket/remove-all/",
       		success: function(msg){
     			$("#basket_items").html(msg);
       		}
@@ -31,7 +36,7 @@ $(document).ready(function(){
 		var item = (this.id)
 		$.ajax({
       		type: "POST",
-      		url: "ajax/basket/remove/"+item,
+      		url: path + "ajax/basket/remove/"+item,
       		data: { item: item },
       		success: function(msg){
     			$("#basket_items").html(msg);

@@ -7,7 +7,7 @@
 <?php
 foreach($pages as $page){
 	$this->data->getPageDetails($page);
-	echo "<a href=\"".$this->uri->string()."?page=".$page."\">".pnp::shorten($this->data->PAGE_DEF['page_name'])."</a><br>\n";
+	echo "<a class=\"multi0\" href=\"".url::base()."page?page=".$page."\" title=\"".$this->data->PAGE_DEF['page_name']."\">".pnp::shorten($this->data->PAGE_DEF['page_name'])."</a><br>\n";
 }
 ?>
 </div>

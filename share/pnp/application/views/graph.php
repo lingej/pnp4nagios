@@ -20,8 +20,8 @@
      		echo $icon_box;
 	} ?>
 
-	<?php if (!empty($seen_box)) {
-     		echo $seen_box;
+	<?php if (!empty($basket_box)) {
+     		echo $basket_box;
 	} ?>
 
 	<?php if (!empty($status_box)) {

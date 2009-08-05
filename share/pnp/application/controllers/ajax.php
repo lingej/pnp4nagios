@@ -44,9 +44,9 @@ class Ajax_Controller extends System_Controller  {
 
 		if($action == "list"){
         	$basket = $this->session->get("basket");
-			if(is_array($basket)){
+			if(is_array($basket) && sizeof($basket) > 0){
 				foreach($basket as $item){
-					echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+					echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".$item."</span><br>\n";
 				}
 			}
 		}elseif($action == "add"){
@@ -61,7 +61,7 @@ class Ajax_Controller extends System_Controller  {
 			}
         	$this->session->set("basket", $basket);
 			foreach($basket as $item){
-				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".$item."</span><br>\n";
 			}
 		}elseif($action == "remove"){
         	$basket = $this->session->get("basket");
@@ -76,7 +76,7 @@ class Ajax_Controller extends System_Controller  {
 			$basket = $new_basket;
 			$this->session->set("basket", $basket);
 			foreach($basket as $item){
-				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"media/images/remove.png\"></a>".$item."</span><br>\n";
+				echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".$item."</span><br>\n";
 			}
 		}elseif($action == "remove-all"){
         	$this->session->delete("basket");
@@ -84,10 +84,10 @@ class Ajax_Controller extends System_Controller  {
 			echo "Action $action not known";
 		}
        	$basket = $this->session->get("basket");
-		if(sizeof($basket) == 0){
-			echo "ajax basket is empty";
+		if(is_array($basket) && sizeof($basket) == 0){
+			echo "basket is empty";
 		}else{
-			echo "<a href=\"".url::base()."page/basket\">ajax show basket</a>";
+			echo "<a class=\"multi0\" href=\"".url::base()."page/basket\">ajax show basket</a>";
 		}
 	}
 
