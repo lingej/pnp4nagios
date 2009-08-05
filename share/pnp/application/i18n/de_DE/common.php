@@ -3,7 +3,9 @@ $lang = array
 (
     'rrdtool-not-found' => 'RRDTool not found in %s',
     'config-not-found' => 'Config File %s not found.',
-    'datasource' => 'Datasource: %s',
+    'host' => 'Host: %s',
+	'service' => 'Service: %s',
+	'datasource' => 'Datasource: %s',
     'perfdata-dir-empty' => 'Perfdata Directory "%s" is empty. Please check your Nagios Config.',
     'host-perfdata-dir-empty' => 'Perfdata Directory "%s" is empty. Please check your Nagios Config.',
     'perfdata-dir-for-host' => 'Perfdata Directory "%s" for Host "%s" does not exist.',
