@@ -95,6 +95,7 @@ class Graph_Controller extends System_Controller  {
 		    }			
 		}
 		$this->template->graph->icon_box      = $this->add_view('icon_box');
+		$this->template->graph->icon_box->position = "graph";
 		$this->template->graph->logo_box      = $this->add_view('logo_box');
 		$this->template->graph->header->title = $this->title;
 	}
