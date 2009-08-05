@@ -1,8 +1,9 @@
 <script src="/@PKG_NAME@/media/js/jquery-min.js" type="text/javascript"></script>
 <script src="/@PKG_NAME@/media/js/jquery.cluetip.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/@PKG_NAME@/media/css/jquery.cluetip.css" type="text/css" />
 <script type="text/javascript">
 $(document).ready(function() {
-  $('a.tips').cluetip({width: '600px',dropShadow: false,showTitle: false});
+  $('a.tips').cluetip({width: "310px", ajaxCache: false, dropShadow: true,showTitle: false });
 });
 </script>
 

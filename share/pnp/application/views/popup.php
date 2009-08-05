@@ -1,4 +1,4 @@
-<table style="background-color:#FFF"><tr><td>
+<table><tr><td>
 <?php
 foreach ( $this->data->STRUCT as $KEY=>$VAL){
 	$source = $VAL['SOURCE'];
