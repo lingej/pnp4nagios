@@ -40,7 +40,7 @@ class Rrdtool_Model extends Model
             fclose($pipes[1]);
             fclose($pipes[2]);
             proc_close($process);
-	    return $data;
+	    	return $data;
         }
     }
 
@@ -74,6 +74,27 @@ class Rrdtool_Model extends Model
 			return FALSE;
         }
     }
+
+	/*
+	*
+	*/
+	public function doXport($RRD_CMD){
+		$conf = $this->config->conf;
+        if(isset($conf['RRD_DAEMON_OPTS']) && $conf['RRD_DAEMON_OPTS'] != '' ){
+            $command = " xport --daemon=" . $conf['RRD_DAEMON_OPTS'] . " - ";
+        }else{
+            $command = " xport ";
+        }
+        $command .= $RRD_CMD;
+		$this->RRD_CMD = $command;
+        $data = $this->rrdtool_execute();
+		$data = preg_replace('/OK.*/','',$data);
+        if($data){
+            return $data;
+        }else{
+            return FALSE;
+        }
+	}
 
     public function streamImage($data = FALSE){
 		if (preg_match('/^ERROR/', $data)) {

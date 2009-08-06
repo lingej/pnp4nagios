@@ -13,7 +13,8 @@ class Data_Model extends Model
     public  $STRUCT  = array();
     public  $TIMERANGE  = array();	
     public  $PAGE_DEF   = array();	
-    public  $PAGE_GRAPH = array();	
+    public  $PAGE_GRAPH = array();
+	public  $XPORT = "";
     /*
     * 
     *
@@ -353,7 +354,7 @@ class Data_Model extends Model
     *
     */
     public function findTemplate($template){
-	$conf = $this->config->conf;
+		$conf = $this->config->conf;
         $r_template = $this->findRecursiveTemplate($template,"templates");
         $r_template_dist = $this->findRecursiveTemplate($template,"templates.dist");
 
@@ -580,6 +581,9 @@ class Data_Model extends Model
 		return FALSE;
 	}
 
+	/*
+	*
+	*/
 	public function getPages() {
         $pages = array();
         if (is_dir($this->config->conf['page_dir'])) {
@@ -603,6 +607,9 @@ class Data_Model extends Model
         return $pages;
 	}
 
+	/*
+	*
+	*/
 	public function getFirstPage(){
         $pages = $this->getPages();
         if(sizeof($pages) > 0 ){
@@ -612,12 +619,28 @@ class Data_Model extends Model
 		}
 	}
 
+	/*
+	*
+	*/
 	public function getPageDetails($page){
         $this->parse_page_cfg($page);
 		return $this->PAGE_DEF['page_name'];
 	}
 
-
-
-
+	/*
+	*
+	*/
+	public function buildXport($host,$service){
+		$this->XPORT = "";
+		$this->readXML($host,$service);
+		$count = 0;
+		$RRAs = array('MIN','MAX','AVERAGE');
+		foreach($this->DS as $key=>$value){
+			foreach($RRAs as $RRA){ 
+				$this->XPORT .= sprintf("DEF:%d%s=%s:%d:%s ",$count,$RRA,$value['RRDFILE'],$value['DS'],$RRA);
+				$this->XPORT .= sprintf("XPORT:%d%s:%s_%s "    ,$count,$RRA,$value['NAME'],$RRA);
+			}
+			$count++;
+		}
+	}
 }
