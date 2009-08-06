@@ -31,7 +31,7 @@ class pnp_Core {
 	*/
 	public static function xml_version_check($string = FALSE){
 	    if($string === FALSE){
-	        return;
+	        return FALSE;
 	    }
 		if( $string == XML_STRUCTURE_VERSION ){
 			$string = "valid";
