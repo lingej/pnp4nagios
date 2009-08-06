@@ -1296,7 +1296,7 @@ Optional Packages:
   --with-perfdata-dir=<path_to_perfdata> Tell me where I should store the RRD Database Files
   --with-perfdata-spool-dir=<path_to_perfdata_spool_dir> Tell me where I should store perfdata files for bulk mode with npcd
   --with-debug Enable debuging for process_perfdata.pl
---with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory
+  --with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory
   --with-init-dir=<path> sets directory to place init script into
 
 Some influential environment variables:

@@ -173,7 +173,7 @@ AC_SUBST(DEBUG)
 
 dnl Check for location of Apache conf.d directory
 HTTP_CONF=no
-AC_ARG_WITH(httpd_conf,--with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory,HTTPD_CONF=$withval,HTTPD_CONF=no)
+AC_ARG_WITH(httpd_conf,[  --with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory],HTTPD_CONF=$withval,HTTPD_CONF=no)
 if test x$HTTPD_CONF = xno; then
         if test -d /etc/httpd/conf.d; then
                 HTTPD_CONF="/etc/httpd/conf.d"
