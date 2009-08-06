@@ -3,7 +3,7 @@ $basket = $this->session->get('basket');
 
 echo "<div class=\"ui-widget\">\n";
 echo "<div class=\"p2 ui-widget-header ui-corner-top\">\n";
-echo "Basket Box</div>\n";
+echo Kohana::lang('common.basket-box-header')."</div>\n";
 echo "<div class=\"p4 ui-widget-content ui-corner-bottom\">\n";
 echo '<div id="basket_items">';
 if(is_array($basket) && sizeof($basket) > 0 ){

@@ -18,6 +18,7 @@ $lang = array
 	'status-box-header' => 'Estado',
     'search-box-header' => 'Buscar',
     'icon-box-header' => 'Acciones',
+	'basket-box-header' => 'My Basket',
     'timerange-box-header' => 'Intervalos de Tiempo',
     'service-box-header' => 'Servicios',
 	'pages-box-header' => 'Páginas',
