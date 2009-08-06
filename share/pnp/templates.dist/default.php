@@ -10,7 +10,7 @@
 #
 $_WARNRULE = '#FFFF00';
 $_CRITRULE = '#FF0000';
-$_AREA     = '#EACC00';
+$_AREA     = '#256aef';
 $_LINE     = '#000000';
 #
 # Initial Logic ...
