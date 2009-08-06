@@ -208,11 +208,16 @@ class Data_Model extends Model
 	            	$this->DS[$i][$key] = (string) $val;
 	        	}
 	        	$i++; 
-	    	}	 
-	    	return $xml;
-		}else
+	    	}
+			// Throw Examption without a salid Structure Version
+			if(!isset($xml->XML->VERSION)){
+				throw new Kohana_User_Exception("XML Structure","XML Structure looks like PNP-0.4.x");
+			}
+			return $xml;
+		}else{
 			throw new Kohana_Exception('common.xml-not-found', $xmlfile);
-    }
+		}
+	}
 
     /*
     * 
