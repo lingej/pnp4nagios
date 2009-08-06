@@ -49,8 +49,10 @@ class Xport_Controller extends System_Controller  {
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
 			$this->data->buildXport($this->host,$this->service);
-		    $data    = $this->rrdtool->doXport($this->data->XPORT);
-		    print $data; 
+		    $data = $this->rrdtool->doXport($this->data->XPORT);
+		    $csv = $this->data->xml2csv($data);
+			header("Content-Type: text/plain; charset=UTF-8");
+			print $csv;
 		}else{
 		    print "ERROR";
 		}

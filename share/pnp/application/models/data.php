@@ -631,16 +631,38 @@ class Data_Model extends Model
 	*
 	*/
 	public function buildXport($host,$service){
-		$this->XPORT = "";
+		// FIXME add max rows to config
+		$this->XPORT = " -m 2000";
+		$this->XPORT .= " --start=".$this->TIMERANGE['start'];
+		$this->XPORT .= " --end=".$this->TIMERANGE['end'];
 		$this->readXML($host,$service);
 		$count = 0;
 		$RRAs = array('MIN','MAX','AVERAGE');
 		foreach($this->DS as $key=>$value){
 			foreach($RRAs as $RRA){ 
-				$this->XPORT .= sprintf("DEF:%d%s=%s:%d:%s ",$count,$RRA,$value['RRDFILE'],$value['DS'],$RRA);
-				$this->XPORT .= sprintf("XPORT:%d%s:%s_%s "    ,$count,$RRA,$value['NAME'],$RRA);
+				$this->XPORT .= sprintf(" DEF:%d%s=%s:%d:%s ",$count,$RRA,$value['RRDFILE'],$value['DS'],$RRA);
+				$this->XPORT .= sprintf(" XPORT:%d%s:%s_%s "    ,$count,$RRA,$value['NAME'],$RRA);
 			}
 			$count++;
 		}
+	}
+	/*
+	*
+	*/
+	public function xml2csv($string){
+		$xml = simplexml_load_string($string);
+		$csv = "timestamp";
+		foreach($xml->meta->legend->entry as $key=>$value){
+			$csv .= ";" . $value ;
+		}
+		$csv .= "\n";
+		foreach($xml->data->row as $key=>$value){
+			$csv .= (string) $value->t ;
+			foreach($value->v as $item){
+				$csv .= ";".floatval((string) $item);
+			}
+			$csv .= "\n";
+		}
+		return $csv;	
 	}
 }
