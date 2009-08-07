@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/@PKG_NAME@/media/css/jquery.cluetip.css" type="text/css" />
 <script type="text/javascript">
 $(document).ready(function() {
-  $('a.tips').cluetip({width: "310px", ajaxCache: false, dropShadow: true,showTitle: false });
+  $('a.tips').cluetip({width: "310px", ajaxCache: false, dropShadow: false,showTitle: false });
 });
 </script>
 

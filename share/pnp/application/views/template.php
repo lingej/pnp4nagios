@@ -14,7 +14,14 @@
 		<?php echo html::script('media/js/jquery-ui.min.js')?>
 		<?php echo html::script('media/js/jquery.autocomplete.min.js')?>
 		<?php echo html::script('media/js/basket.js')?>
-        <script type="text/javascript">
+		<script src="/pnp4nagios/media/js/jquery.cluetip.js" type="text/javascript"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+		  $('a.tips').cluetip({width: '600px',dropShadow: false,showTitle: false});
+		  });
+        </script>
+
+		<script type="text/javascript">
         function Gzoom (url) {
           GzoomWindow = window.open(url, "PNP", "width=640,height=300,resizable=yes,scrollbars=yes,location=no,menubar=no,status=no");
           GzoomWindow.focus();
