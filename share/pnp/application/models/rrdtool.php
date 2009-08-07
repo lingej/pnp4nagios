@@ -81,7 +81,7 @@ class Rrdtool_Model extends Model
 	public function doXport($RRD_CMD){
 		$conf = $this->config->conf;
         if(isset($conf['RRD_DAEMON_OPTS']) && $conf['RRD_DAEMON_OPTS'] != '' ){
-            $command = " xport --daemon=" . $conf['RRD_DAEMON_OPTS'] . " - ";
+            $command = " xport --daemon=" . $conf['RRD_DAEMON_OPTS'];
         }else{
             $command = " xport ";
         }
