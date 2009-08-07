@@ -13,8 +13,8 @@ class Popup_Controller extends System_Controller  {
 	{
 		parent::__construct();
 		$this->template          = $this->add_view('popup');
-		$this->host              = $this->input->get('host');
-		$this->service           = $this->input->get('srv');
+		$this->host              = pnp::clean($this->input->get('host'));
+		$this->service           = pnp::clean($this->input->get('srv'));
 	}
 
 	public function index()
