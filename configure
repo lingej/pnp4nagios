@@ -5887,7 +5887,7 @@ fi
 RRDS=0
 { echo "$as_me:$LINENO: checking for optional Perl Module RRDs" >&5
 echo $ECHO_N "checking for optional Perl Module RRDs... $ECHO_C" >&6; }
-$PERL -MRRDs -e exit >/dev/null 2>&1
+$PERL -I${PERL_LIB_PATH} -MRRDs -e exit >/dev/null 2>&1
 if test $? -ne 0; then
     { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }

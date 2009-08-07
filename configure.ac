@@ -272,7 +272,7 @@ fi
 
 RRDS=0
 AC_MSG_CHECKING(for optional Perl Module RRDs)
-$PERL -MRRDs -e exit >/dev/null 2>&1
+$PERL -I${PERL_LIB_PATH} -MRRDs -e exit >/dev/null 2>&1
 if test $? -ne 0; then
     AC_MSG_RESULT(no)
     AC_MSG_WARN(Perl Module RRDs not available)
