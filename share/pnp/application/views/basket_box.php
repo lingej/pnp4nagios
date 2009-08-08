@@ -8,7 +8,7 @@ echo "<div class=\"p4 ui-widget-content ui-corner-bottom\">\n";
 echo '<div id="basket_items">';
 if(is_array($basket) && sizeof($basket) > 0 ){
 	foreach($basket as $key=>$item){
-		echo "<span id=\"basket_action_remove\"><a title=\"Remove Item\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".$item."</span><br>\n";
+		echo "<span id=\"basket_action_remove\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</span><br>\n";
 	}
 }
 if(is_array($basket) && sizeof($basket) > 0 ){
