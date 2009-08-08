@@ -64,7 +64,7 @@ class Data_Model extends Model
 			# Add $data as the last parameter, to sort by the common key
 			array_multisort($sort, SORT_ASC, $hosts);
         }else{
-			throw new Kohana_Exception('common.perfdata-dir-empty', $conf['rrdbase'] );
+			throw new Kohana_Exception('error.perfdata-dir-empty', $conf['rrdbase'] );
 		}
         return $hosts;
     }
@@ -124,7 +124,7 @@ class Data_Model extends Model
                 closedir($dh);
             }
         } else {
-	    	throw new Kohana_Exception('common.perfdata-dir-for-host', $path, $hostname);
+	    	throw new Kohana_Exception('error.perfdata-dir-for-host', $path, $hostname);
         }
         if( is_array($services) && sizeof($services) > 0){
 			# Obtain a list of columns
@@ -135,7 +135,7 @@ class Data_Model extends Model
 			# Add $data as the last parameter, to sort by the common key
 			array_multisort($sort, SORT_STRING, $services);
         //}else{
-		//	throw new Kohana_Exception('common.host-perfdata-dir-empty', $path );
+		//	throw new Kohana_Exception('error.host-perfdata-dir-empty', $path );
 		}		
 		#print Kohana::debug($services);
 		if(is_array($host) && sizeof($host) > 0 ){
@@ -157,7 +157,7 @@ class Data_Model extends Model
             }
         }
 		if(sizeof($srv) == 0){
-			throw new Kohana_Exception('common.get-first-service', $hostname );
+			throw new Kohana_Exception('error.get-first-service', $hostname );
 		}
         return $srv['name'];
     }
@@ -175,7 +175,7 @@ class Data_Model extends Model
             }
         }
 		if(sizeof($host) == 0){
-			throw new Kohana_Exception('common.get-first-host');
+			throw new Kohana_Exception('error.get-first-host');
 		}
         return $host['name'];
     }
@@ -211,11 +211,11 @@ class Data_Model extends Model
 	    	}
 			// Throw Examption without a salid Structure Version
 			if(!isset($xml->XML->VERSION)){
-				throw new Kohana_User_Exception("XML Structure","XML Structure looks like PNP-0.4.x");
+				throw new Kohana_Exception('error.xml-structure-without-version-tag',$xmlfile);
 			}
 			return $xml;
 		}else{
-			throw new Kohana_Exception('common.xml-not-found', $xmlfile);
+			throw new Kohana_Exception('error.xml-not-found', $xmlfile);
 		}
 	}
 
