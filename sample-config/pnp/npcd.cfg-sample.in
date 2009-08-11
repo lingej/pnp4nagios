@@ -168,25 +168,25 @@ pid_file=/var/run/npcd.pid
 perfdata_file = @localstatedir@/perfdata.dump
 
 
-# perfdata_spool_file - declare the destination
+# perfdata_spool_filename - declare the destination
 # filename for the spooled files
 #
 # This option allows you a customized filename.
 # Usefull if you own different nagios servers 
 # which write their data to a shared storage.
 #
-# perfdata_spool_file = <filename>
+# perfdata_spool_filename = <filename>
 #
 # Hint: 
 # The final files will be moved to 
-#  'perfdata_spool_dir/perfdata_spool_file-TIMESTAMP'
+#  'perfdata_spool_dir/perfdata_spool_filename-TIMESTAMP'
 #
 # Example:
 #
-# perfdata_spool_file = perfdata-NY
-# perfdata_spool_file = perfdata-LA
+# perfdata_spool_filename = perfdata-NY
+# perfdata_spool_filename = perfdata-LA
 
-perfdata_spool_file = perfdata
+perfdata_spool_filename = perfdata
 
 # We have to end with a newline
 
