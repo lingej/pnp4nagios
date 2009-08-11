@@ -249,7 +249,7 @@ void process_configfile(char *config_file) {
 			else if (!strcmp(variable, "perfdata_file"))
 				;
 
-			else if (!strcmp(variable, "perfdata_spool_file"))
+			else if (!strcmp(variable, "perfdata_spool_filename"))
 				;
 
 			else if (!strcmp(variable, "user")) {
