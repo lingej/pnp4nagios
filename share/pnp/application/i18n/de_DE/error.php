@@ -12,4 +12,7 @@ $lang = array
     'xml-structure-mismatch' => 'XML Structure mismatch. Found Version "%d" but should be "%d". <a href="http://pnp4nagios.org/pnp/faq/9">Read FAQ online</a>',
     'save-rrd-image' => 'php fopen("%s") failed. <a href="http://pnp4nagios.org/pnp/faq/10">Read FAQ online</a>',
 	'xml-structure-without-version-tag' => 'XML Structure mismatch. Version Tag not found. <a href="http://pnp4nagios.org/pnp/faq/11">Read FAQ online</a>',
+    'template-without-opt' => 'Template %s does not provide array $opt[]. <a href="http://pnp4nagios.org/pnp/faq/12">Read FAQ online</a>',
+	'template-without-def' => 'Template %s does not provide array $def[]. <a href="http://pnp4nagios.org/pnp/faq/13">Read FAQ online</a>',
+
 );

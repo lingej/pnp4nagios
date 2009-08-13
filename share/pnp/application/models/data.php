@@ -336,17 +336,30 @@ class Data_Model extends Model
 		ob_start();
 		include($template_file);
 		ob_end_clean();
-		if( $def != FALSE ){
-	    	$this->RRD['def'] = $def;
-        }else{
-			// FIXME i18n
-            throw new Kohana_User_Exception('Template Error', "Template $template_file does not provide the array \$def");
+		// Compatibility for very old Templates
+		if(!is_array($def) && $def != FALSE){
+			$tmp[1] = $def;
+			$def = $tmp;
+		}	
+		if(!is_array($opt) && $opt != FALSE){
+			$tmp[1] = $opt;
+			$opt = $tmp;
 		}
-		if( $opt != FALSE ){
+		if(!is_array($ds_name) && $ds_name != FALSE){
+			$tmp[1] = $ds_name;
+			$ds_name = $tmp;
+		}
+		//
+
+		if($def != FALSE){
+	    	$this->RRD['def'] = $def;
+		}else{
+            throw new Kohana_Exception('error.template-without-def', $template_file);
+		}
+		if($opt != FALSE ){
 	    	$this->RRD['opt'] = $opt;
         }else{
-			// FIXME i18n
-            throw new Kohana_User_Exception('Template Error', "Template $template_file does not provide the array \$def");
+            throw new Kohana_Exception('error.template-without-opt', $template_file);
 		}
 		if( $ds_name != FALSE ){
 	    	$this->RRD['ds_name'] = $ds_name;
