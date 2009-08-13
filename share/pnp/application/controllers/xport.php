@@ -40,6 +40,22 @@ class Xport_Controller extends System_Controller  {
 			header('Content-Type: application/xml');
 			print $data; 
 		}else{
+			//FIXME
+		    print "ERROR";
+		}
+	}
+
+	public function json(){
+		if(isset($this->host) && isset($this->service)){
+		    $this->service = pnp::clean($this->service);
+		    $this->host    = pnp::clean($this->host);
+			$this->data->buildXport($this->host,$this->service);
+		    $data    = $this->rrdtool->doXport($this->data->XPORT);
+			$json    = json_encode(simplexml_load_string($data));
+			header('Content-type: application/json');
+			print $json; 
+		}else{
+			//FIXME
 		    print "ERROR";
 		}
 	}
@@ -54,6 +70,7 @@ class Xport_Controller extends System_Controller  {
 			header("Content-Type: text/plain; charset=UTF-8");
 			print $csv;
 		}else{
+			//FIXME
 		    print "ERROR";
 		}
 	}
