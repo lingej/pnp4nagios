@@ -143,7 +143,7 @@ sub parse_env {
     if ($opt_i) {
         my @input = <STDIN>;
         foreach my $key (@input) {
-            $key =~ s/([&])/sprintf("%%%02x",ord($1))/eg;        # URLencode
+            $key = urlencode($key);        # URLencode
             $key =~ /<(NAGIOS_[A-Z 0-9_]+)>(.*)<\/NAGIOS_.*>/;
             $ENV{$1} = $2 if ($2);
         }
@@ -323,7 +323,7 @@ sub data2rrd {
 			
             #
             $rrd_storage_type = "MULTIPLE";
-            $rrdfile          = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . "_" . $data[$i]{label} . ".rrd";
+            $rrdfile          = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . "_" . $data[$i]{name} . ".rrd";
 
             # DS is set to 1
             @ds_create = "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}";
@@ -350,7 +350,8 @@ sub data2rrd {
         write_to_template( "RRD_STORAGE_TYPE", $data[$i]{rrd_storage_type} );
         write_to_template( "IS_MULTI",         $data[0]{multi} );
         write_to_template( "DS",               $DS );
-        write_to_template( "NAME",             $data[$i]{label} );
+        write_to_template( "NAME",             $data[$i]{name} );
+        write_to_template( "LABEL",            $data[$i]{label} );
         write_to_template( "UNIT",             $data[$i]{uom} );
         write_to_template( "ACT",              $data[$i]{value} );
         write_to_template( "WARN",             $data[$i]{warning} );
@@ -515,7 +516,7 @@ sub write_state_to_template {
 #
 sub write_env_to_template {
     foreach my $key ( sort keys %NAGIOS ) {
-        $NAGIOS{$key} =~ s/([&><])/sprintf("%%%02x",ord($1))/eg;    # URLencode
+        $NAGIOS{$key} = urlencode($NAGIOS{$key});
         printf( XML "  <NAGIOS_%s>%s</NAGIOS_%s>\n", $key, $NAGIOS{$key}, $key );
     }
 }
@@ -689,14 +690,14 @@ sub parse_rra_config {
 # Function adapted from Nagios::Plugin::Performance
 # Thanks to Gavin Carr and Ton Voon
 #
-sub _parse {
 
+sub _parse {
     # Nagios::Plugin::Performance
     my $string     = shift;
     my $tmp_string = $string;
     $string =~ s/^([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*//;
 
-    if ( $tmp_string eq $string ) {
+	if ( $tmp_string eq $string ) {
         print_log( "No pattern match in function _parse($string)", 2 );
         return undef;
     }
@@ -707,6 +708,7 @@ sub _parse {
 
     my %p = (
         "label"    => $1,
+        "name"     => $1,
         "value"    => $2,
         "uom"      => $3,
         "warning"  => $4,
@@ -714,8 +716,9 @@ sub _parse {
         "min"      => $6,
         "max"      => $7
     );
-
-    $p{label} =~ s/['\/\\]//g;    # cleanup
+	
+    $p{name}  =~ s/[']//g;         # cleanup
+    $p{label} =~ s/['\/\\]/_/g;    # cleanup
 
     if ( $p{uom} eq "%" ) {
         $p{uom} = "%%";
@@ -767,6 +770,17 @@ sub cleanup {
 }
 
 #
+# Urlencode 
+#
+sub urlencode {
+    my $string = shift;
+    if ($string) {
+        $string =~ s/([<>&])/sprintf("%%%02x",ord($1))/eg;        # URLencode;
+    }
+    return $string;
+}
+
+#
 # Trim leading whitespaces
 #
 sub trim {
@@ -787,8 +801,8 @@ sub parse_perfstring {
     my %CTPL = ();
     $dstype = "GAUGE";
     my $perfstring = shift;
-    $perfstring =~ s/\\/\//g;
-    $perfstring =~ s/\//_/g;
+    #$perfstring =~ s/\\/\//g;
+    #$perfstring =~ s/\//_/g;
     my $is_multi = "0";
     my @perfs;
     my @multi;
@@ -853,6 +867,7 @@ sub parse_perfstring {
                 $p{dstype}           = $CTPL{'DSTYPE'};
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
                 $p{label}            = cleanup( $multi[2] );           # store the original label from check_multi header
+                $p{name}             = cleanup( $multi[2] );           # store the original label from check_multi header
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
                 push @perfs, {%p};
@@ -891,7 +906,8 @@ sub parse_perfstring {
                 }
                 $p{multi}        = $is_multi;
                 $p{multi_parent} = $multi_parent;
-                $p{label}        = cleanup( $p{label} );
+                #$p{name}         = $p{label};
+                #$p{label}        = cleanup( $p{label} );
                 push @perfs, {%p};
             }
         }
@@ -937,7 +953,8 @@ sub parse_perfstring {
             $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
             $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
             $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
-            $p{label}            = cleanup( $p{label} );
+            #$p{name}             = $p{label};
+            #$p{label}            = cleanup( $p{label} );
 
             push @perfs, {%p};
             $count++;
