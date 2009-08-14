@@ -12,6 +12,6 @@ $lang = array
     'xml-structure-mismatch' => 'Error en la Estructura XML. Versión Encontrada "%d" pero debería ser "%d". <a href="http://docs.pnp4nagios.org/faq/9">Read FAQ online</a>',
     'save-rrd-image' => 'fallo en php fopen("%s"). <a href="http://docs.pnp4nagios.org/es/faq/10">Leer FAQ en línea</a>',
 	'xml-structure-without-version-tag' => 'Error en la estructura XML. Etiqueta de Versión no encontrada. <a href="http://docs.pnp4nagios.org/faq/11">Leer FAQ en línea</a>',
-	'template-without-opt' => 'Template %s does not provide array $opt[]. <a href="http://docs.pnp4nagios.org/faq/12">Read FAQ online</a>',
-	'template-without-def' => 'Template %s does not provide array $def[]. <a href="http://docs.pnp4nagios.org/faq/13">Read FAQ online</a>',
+	'template-without-opt' => 'La plantilla %s no tiene el array $opt[]. <a href="http://docs.pnp4nagios.org/faq/12">Leer FAQ en línea</a>',
+	'template-without-def' => 'La plantilla %s no tiene el array $def[]. <a href="http://docs.pnp4nagios.org/faq/13">Leer FAQ en línea</a>',
 );
