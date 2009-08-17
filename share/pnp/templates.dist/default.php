@@ -48,9 +48,9 @@ foreach ($this->DS as $KEY=>$VAL) {
 	}
 
 	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $this->MACRO['DISP_HOSTNAME'] . ' / ' . $this->MACRO['DISP_SERVICEDESC'] . '"' . $lower;
-	$dsname[$KEY] = $VAL['LABEL'];
+	$ds_name[$KEY] = $VAL['LABEL'];
 	$def[$KEY]  = "DEF:var1=".$VAL['RRDFILE'].":".$VAL['DS'].":AVERAGE ";
-	$def[$KEY] .= "AREA:var1" . $_AREA . ":\"".$VAL['LABEL']." \" ";
+	$def[$KEY] .= "AREA:var1" . $_AREA . ":\"".$VAL['NAME']."\" ";
 	$def[$KEY] .= "LINE1:var1" . $_LINE . ":\"\" ";
 	$def[$KEY] .= "GPRINT:var1:LAST:\"%3.4lf ".$VAL['UNIT']." LAST \" ";
 	$def[$KEY] .= "GPRINT:var1:MAX:\"%3.4lf ".$VAL['UNIT']." MAX \" ";

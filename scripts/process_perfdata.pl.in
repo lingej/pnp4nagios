@@ -717,8 +717,9 @@ sub _parse {
         "max"      => $7
     );
 	
-    $p{name}  =~ s/[']//g;         # cleanup
-    $p{label} =~ s/['\/\\]/_/g;    # cleanup
+    $p{label}  =~ s/[']//g;         # cleanup
+    $p{name}   =~ s/['\/\\]/_/g;    # cleanup
+    $p{name}   = cleanup($p{name});
 
     if ( $p{uom} eq "%" ) {
         $p{uom} = "%%";
@@ -906,8 +907,6 @@ sub parse_perfstring {
                 }
                 $p{multi}        = $is_multi;
                 $p{multi_parent} = $multi_parent;
-                #$p{name}         = $p{label};
-                #$p{label}        = cleanup( $p{label} );
                 push @perfs, {%p};
             }
         }
@@ -930,8 +929,6 @@ sub parse_perfstring {
             }
             %CTPL = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
 
-            #( $p{template}, $dstype, $use_min_on_create, $use_max_on_create ) = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
-
             if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                 $p{rrd_max} = $p{max};
             }
@@ -953,8 +950,6 @@ sub parse_perfstring {
             $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
             $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
             $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
-            #$p{name}             = $p{label};
-            #$p{label}            = cleanup( $p{label} );
 
             push @perfs, {%p};
             $count++;
