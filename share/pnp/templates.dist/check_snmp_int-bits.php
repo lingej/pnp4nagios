@@ -20,10 +20,10 @@ $def[1] .= "LINE1:out_bits#00ff00:\"out \" " ;
 $def[1] .= "GPRINT:out_bits:LAST:\"%7.2lf %Sbit/s last\" " ;
 $def[1] .= "GPRINT:out_bits:AVERAGE:\"%7.2lf %Sbit/s avg\" " ;
 $def[1] .= "GPRINT:out_bits:MAX:\"%7.2lf %Sbit/s max\\n\" ";
-if($NAGIOS_TIMET != ""){
-    $def[1] .= "VRULE:".$NAGIOS_TIMET."#000000:\"Last Service Check \\n\" ";
+if($this->MACRO['TIMET'] != ""){
+    $def[1] .= "VRULE:".$this->MACRO['TIMET']."#000000:\"Last Service Check \\n\" ";
 }
-if($NAGIOS_LASTHOSTDOWN != ""){
-    $def[1] .= "VRULE:".$NAGIOS_LASTHOSTDOWN."#FF0000:\"Last Host Down\\n\" ";
+if($this->MACRO['LASTHOSTDOWN'] != ""){
+    $def[1] .= "VRULE:".$this->MACRO['LASTHOSTDOWN']."#FF0000:\"Last Host Down\\n\" ";
 }
 ?>

@@ -85,16 +85,16 @@ $conf['allowed_for_pages'] = "EVERYONE";
 #
 $conf['overview-range'] = 1 ;
 #
-# Scale the prefiew images used in /popup 
+# Scale the preview images used in /popup 
 #
 $conf['popup-width'] = "300px";
 #
 # jQuery UI Theme
 # http://jqueryui.com/themeroller/
-# Posuble Valies are: lightness, smoothness, redmond
+# Possible Values are: lightness, smoothness, redmond
 $conf['ui-theme'] = 'lightness';
 
-# Language Defintions to use.
+# Language Definitions to use.
 # Valid Options are en_US, de_DE, es_ES 
 #
 $conf['lang'] = "en_US";

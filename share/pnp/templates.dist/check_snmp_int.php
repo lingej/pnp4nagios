@@ -16,10 +16,10 @@ $def[1] .= "LINE1:var2#00ff00:\"out \" " ;
 $def[1] .= "GPRINT:var2:LAST:\"%7.2lf %Sb/s last\" " ;
 $def[1] .= "GPRINT:var2:AVERAGE:\"%7.2lf %Sb/s avg\" " ;
 $def[1] .= "GPRINT:var2:MAX:\"%7.2lf %Sb/s max\\n\" ";
-if($NAGIOS_TIMET != ""){
-    $def[1] .= "VRULE:".$NAGIOS_TIMET."#000000:\"Last Service Check \\n\" ";
+if($this->MACRO['TIMET'] != ""){
+    $def[1] .= "VRULE:".$this->MACRO['TIMET']."#000000:\"Last Service Check \\n\" ";
 }
-if($NAGIOS_LASTHOSTDOWN != ""){
-    $def[1] .= "VRULE:".$NAGIOS_LASTHOSTDOWN."#FF0000:\"Last Host Down\\n\" ";
+if($this->MACRO['LASTHOSTDOWN'] != ""){
+    $def[1] .= "VRULE:".$this->MACRO['LASTHOSTDOWN']."#FF0000:\"Last Host Down\\n\" ";
 }
 ?>
