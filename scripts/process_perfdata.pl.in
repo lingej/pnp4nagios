@@ -275,7 +275,7 @@ sub data2rrd {
     $NAGIOS{SERVICEDESC}      = $data[0]{servicedesc};
     $NAGIOS{DISP_SERVICEDESC} = $data[0]{disp_servicedesc};
     $NAGIOS{MULTI_PARENT}     = "";
-    $NAGIOS{MULTI_PARENT}     = $data[0]{multi_parent};
+    $NAGIOS{MULTI_PARENT}     = $data[0]{multi_parent} || "";
     $TEMPLATE                 = $data[0]{template};
 
     unless ( -d "$conf{RRDPATH}" ) {
