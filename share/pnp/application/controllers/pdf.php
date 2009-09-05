@@ -152,10 +152,10 @@ class Pdf_Controller extends System_Controller  {
 		$this->start     = $this->input->get('start');
 		$this->end       = $this->input->get('end');
 		$this->view      = "";
-		$this->data->getTimeRange($this->start,$this->end,$this->view);
         if(isset($_GET['view']) && $_GET['view'] != "" ){
             $this->view = pnp::clean($_GET['view']);
         }
+		$this->data->getTimeRange($this->start,$this->end,$this->view);
 		$basket = $this->session->get("basket");
 		if(is_array($basket) && sizeof($basket) > 0){
 			foreach($basket as $item){
@@ -221,10 +221,6 @@ class PDF extends FPDI {
             $this->SetFont('Arial', 'B', 10);
             //Move to the right
             $this->Cell(80);
-            //Title
-            $this->Cell(30, 10, "Title", 0, 1, 'C');
-            //Line break
-            #$this->Ln(20);
         }
 
         //Page footer
@@ -234,7 +230,7 @@ class PDF extends FPDI {
             //Arial italic 8
             $this->SetFont('Arial', 'I', 8);
             //Page number
-            $this->Cell(0, 10, "Footer" . $this->PageNo() . '/{nb}', 0, 0, 'C');
+            $this->Cell(0, 10, $this->PageNo() . '/{nb}', 0, 0, 'C');
     }
 }
 
