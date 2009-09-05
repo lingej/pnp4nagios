@@ -28,7 +28,11 @@ if($this->config->conf['use_fpdf'] == 1 && $position == "page"){
 }
 if($this->config->conf['show_xml_icon'] == 1 && $position == "graph"){
 	echo "<a title=\"XML View\" href=\"".url::base()."xml".$this->url."\"><img src=\"".url::base()."media/images/XML_32.png\"></a>\n";
-}?>
+}
+if($this->data->getFirstPage()){
+	echo "<a title=\"Goto Pages\" href=\"".url::base()."page\"><img src=\"".url::base()."media/images/pages.png\"></a>\n";
+}
+?>
 </div>
 </div><p>
 <!-- Icon Box End -->
