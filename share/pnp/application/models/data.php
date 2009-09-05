@@ -332,6 +332,9 @@ class Data_Model extends Model
 	        	${$tag}[$key] = $val[$tag];
             }
         }
+		foreach($this->MACRO as $key=>$val ){
+	        ${"NAGIOS_".$key} = $val;
+        }
 		$rrdfile = $RRDFILE[1];
 		ob_start();
 		include($template_file);
