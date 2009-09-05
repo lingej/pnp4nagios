@@ -489,8 +489,7 @@ class Data_Model extends Model
 				$this->buildDataStruct($s['host'],$s['service'],$view);
 			}
 		}else{
-			// FIXME Add Kohana Error
-			throw new Kohana_User_Exception('Page Config', "No data for $page.cfg");
+			throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
 		}
 	}
 
@@ -500,8 +499,7 @@ class Data_Model extends Model
         if(is_readable($page_cfg)){
             $data = file($page_cfg);
         }else{
-			// FIXME Add Kohana Error
-        	throw new Kohana_User_Exception('Page Config', "Can not open $page_cfg");
+			throw new Kohana_Exception('error.page-not-readable', $page.".cfg" );
         }
         $l = 0;
         $line = "";
