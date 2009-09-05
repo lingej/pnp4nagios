@@ -6,7 +6,7 @@
 # Required-Stop:     
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: PNP4Nagios NPCD Daemon
+# Short-Description: @PKG_NAME@ NPCD Daemon Version @PKG_VERSION@
 # Description: 	     Nagios Performance Data C Daemon
 ### END INIT INFO
 
@@ -82,7 +82,8 @@ NpcdVarDir=@localstatedir@
 NpcdRunFile=/var/run/npcd.pid
 NpcdLockDir=/var/lock/subsys
 NpcdLockFile=@npcd_name@
-
+NpcdUser=@nagios_user@
+NpcdGroup=@nagios_grp@
 
 # Check that npcd exists.
 if [ ! -f $NpcdBin ]; then
