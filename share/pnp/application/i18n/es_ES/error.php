@@ -14,6 +14,6 @@ $lang = array
 	'xml-structure-without-version-tag' => 'Error en la estructura XML. Etiqueta de Versión no encontrada. <a href="http://docs.pnp4nagios.org/faq/11">Leer FAQ en línea</a>',
 	'template-without-opt' => 'La plantilla %s no tiene el array $opt[]. <a href="http://docs.pnp4nagios.org/faq/12">Leer FAQ en línea</a>',
 	'template-without-def' => 'La plantilla %s no tiene el array $def[]. <a href="http://docs.pnp4nagios.org/faq/13">Leer FAQ en línea</a>',
-    'no-data-for-page' => 'Sorry, but we can´t find any data using config file "%s", <a href="http://docs.pnp4nagios.org/faq/14">Read FAQ online</a>',
-	'page-not-readable' => 'Config file "%s" is not readable or does not exist. <a href="http://docs.pnp4nagios.org/faq/15">Read FAQ online</a>',
+    'no-data-for-page' => 'Lo siento, no puedo encontrar ningún dato usando el fichero de configuración "%s", <a href="http://docs.pnp4nagios.org/faq/14">Leer FAQ en línea</a>',
+	'page-not-readable' => 'El fichero de configuración "%s" no es legible o no existe. <a href="http://docs.pnp4nagios.org/faq/15">Leer FAQ en línea</a>',
 );
