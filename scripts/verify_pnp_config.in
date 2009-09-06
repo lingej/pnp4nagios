@@ -2,7 +2,7 @@
 #
 # (C) 2008-2009 pnp4nagios.org / Wolfgang Nieder
 #
-# $Id: verify_pnp_config.in 655 2009-08-30 12:49:07Z le_loup $ 
+# $Id: verify_pnp_config.in 657 2009-09-06 14:27:49Z le_loup $ 
 #
 # check Nagios/PNP integration settings
 # 2008.09.21: 0.1    initial version
@@ -22,7 +22,7 @@
 # 2009.08.05: 0.1.14 bugfixes (Icinga support / non-standard paths)
 # 2009.08.11: 0.1.15 changed Doc-paths
 # 2009.08.18: 0.1.16 added layout option / template option / package detection
-#                    config.php option
+# 2009.09.06:        config.php option / PNP root dir option
 
 use strict;
 use Getopt::Long;
@@ -58,9 +58,10 @@ $rrdtool = "/usr/bin/rrdtool" unless ((-f "$rrdtool") and (-x "$rrdtool"));
 my $PreCheck = 0;
 my $LogFile = "";	# PNP config.log
 my %LogFile = ();
-my $NPCDcfg = "";	# NPCD.cfg
+my $PNPdir = "/usr/local/pnp4nagios";	# PNP root directory
+my $NPCDcfg = "";	# NPCD.cfg 
 my %NPCDcfg = ();
-my $PPcfg = "";	# process_perfdata.cfg
+my $PPcfg = "";	# process_perfdata.cfg;
 my %PPcfg = ();
 my $CPcfg = "";	# config.php
 my %CPcfg = ();
@@ -73,7 +74,7 @@ my $cfg_call = "";
 my $StatusLog = "";
 my %StatusLog = ();
 my $Object = "";
-my $RRDpath = "";
+my $RRDpath = ""; # path to RRD files
 my $RRDdir = 0;
 my $RRDfile = 0;
 my $uid = "";
@@ -83,10 +84,10 @@ my $group = "";
 my $layout = "";
 my $TemplPath = "";
 my $pkg_mgr = "";
-my $language = "en";
+my $language = "";
 my $english = "";
 if (exists $ENV{LANG}) {
-	$language = "de" if ($ENV{LANG} =~ /de/i);
+	$language = "/de" if ($ENV{LANG} =~ /de/i);
 }
 my %msg = ();
 
@@ -100,6 +101,7 @@ GetOptions(
 	"B|binary=s" => \$NagiosBin,
 	"m|mode=s" => \$mode,
 	"c|config=s" => \$NagiosCfg,
+	"D|pnpdir=s" => \$PNPdir,
 	"N|npcdcfg=s" => \$NPCDcfg,
 	"P|ppcfg=s" => \$PPcfg,
 	"C|cpcfg=s" => \$CPcfg,
@@ -126,7 +128,7 @@ $prod_name = ucfirst($product);
 info ("\n\n$program, v$version\n");
 if ($english) {
 	info ("[I] option -e");
-	$language = "en";
+	$language = "";
 }
 message();
 
@@ -172,7 +174,7 @@ if ($mode) {
 		}
 	}
 	info ("install_opts","$install_opts") unless ($install_opts =~ /INSTALL_OPTS/i);
-	info ("PNP-version","$pnp_version") unless ($pnp_version =~ /PKG_VERSION/i);
+	info ("info","PNP-version","$pnp_version") unless ($pnp_version =~ /PKG_VERSION/i);
 }	
 	
 set_layout_values () if ($layout);
@@ -368,6 +370,9 @@ chk_param ("host_perfdata_file_processing_interval", "Bulk|NPCD", '\d+');
 chk_param ("host_perfdata_file_processing_command", "Bulk|NPCD");
 chk_param ("broker_module=.../npcdmod.o ...", "Module", 'npcdmod','npcdmod.o');
 
+if ($PNPdir ne "/usr/local/pnp4nagios" ) {
+	info ("[I] option -D: $PNPdir");
+}
 chk_npcdcfg ();
 chk_ppcfg ();
 chk_cpcfg ();
@@ -379,7 +384,7 @@ if (exists ($PPcfg{rrdpath})) {
 if (($pnp_version =~ /^0\.4\.|PKG_VERSION/)) {
 	$RRDpath = "$NagiosBase/share/perfdata" unless ($RRDpath);
 } else {	
-	$RRDpath = '@PERFDATA_DIR@' unless ($RRDpath);
+	$RRDpath = "$PNPdir/var/perfdata" unless ($RRDpath);
 }
 if ("$RRDpath" eq "no") {
 	info ("noRRDchk");
@@ -450,6 +455,7 @@ $0 [-h]
 	[ -B <binary> ]
 	[ -c <config file> ]
 	[ -N <npcd config file> ]
+	[ -D <PNP base directory> ]
 	[ -P <process_perfdata config file> ]
 	[ -C <PNP config file> ]
 	[ -r <rrdtool binary> ]
@@ -469,8 +475,9 @@ parameters:
 	-b, --basedir=s   $prod_name Base directory (default: $basedir)
 	-B, --binary=s    $prod_name binary (default: $product)
 	-c, --config=s    $prod_name main config file (default: $basedir/etc/product.cfg)
-	-m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD"$module)
+	-m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD", "module")
 	-l, --logfile=s   check configure log file 
+	-D, --pnpdir=s    PNP root directory (PNP >= 0.6)
 	-N, --npcdcfg=s   PNP config file for NPCD mode (default: $basedir/etc/pnp/npcd.cfg)
 	-P, --ppcfg=s     process_perfdata config file (default: $basedir/etc/pnp/process_perfdata.cfg)
 	-C, --cpcfg=s     PNP config file (config.php)
@@ -975,6 +982,12 @@ sub chk_npcdcfg {
 		if (-f "$NagiosBase/etc/pnp/npcd.cfg") {
 			$NPCDcfg = "$NagiosBase/etc/pnp/npcd.cfg";
 		}
+		if (-f "$PNPdir/etc/npcd.cfg-sample") {
+			$NPCDcfg = "$PNPdir/etc/npcd.cfg-sample";
+		}
+		if (-f "$PNPdir/etc/npcd.cfg") {
+			$NPCDcfg = "$PNPdir/etc/npcd.cfg";
+		}
 	}
 
 # config file name set?
@@ -1025,6 +1038,12 @@ sub chk_ppcfg {
 		}
 		if (-f "$NagiosBase/etc/pnp/process_perfdata.cfg") {
 			$PPcfg = "$NagiosBase/etc/pnp/process_perfdata.cfg";
+		}
+		if (-f "$PNPdir/etc/pnp/process_perfdata.cfg-sample") {
+			$PPcfg = "$PNPdir/etc/process_perfdata.cfg-sample";
+		}
+		if (-f "$PNPdir/etc/pnp/process_perfdata.cfg") {
+			$PPcfg = "$PNPdir/etc/process_perfdata.cfg";
 		}
 	}
 # config file name set?
@@ -1088,8 +1107,8 @@ sub chk_cpcfg {
 		if (-f "$NagiosBase/etc/pnp/config.php") {
 			$CPcfg = "$NagiosBase/etc/pnp/config.php";
 		}
-		if (-f "/usr/local/pnp4nagios/etc/config.php") {
-			$CPcfg = "/usr/local/pnp4nagios/etc/config.php";
+		if (-f "$PNPdir/etc/config.php") {
+			$CPcfg = "$PNPdir/etc/config.php";
 		}
 	}
 
@@ -1498,21 +1517,24 @@ sub message {
 	$msg{"errOpen"} = "[E] open of %s failed, RC=%s";
 
 	$msg{"LinkNagiosChk"} = "[H] http://nagios.sourceforge.net/docs/3_0/verify_config.html";
-	$msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/about#required_software";
+	$msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#required_software";
 	$msg{"LinkRRDtool"} = "[H] http://www.rrdtool.org";
-	$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/about#requirements";
-	$msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/config#default_mode";
-	$msg{"LinkPNPbulk"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/config#bulk_mode";
-	$msg{"LinkPNPnpcd"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/config#npcd";
-	$msg{"LinkPNPmodule"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/config#module";
+	$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#system_requirements";
+	$msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#default_mode";
+	if ($doc_version =~ /^0\.6/) {
+		$msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#sync_mode";
+	}
+	$msg{"LinkPNPbulk"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#bulk_mode";
+	$msg{"LinkPNPnpcd"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#npcd";
+	$msg{"LinkPNPmodule"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#module";
 	$msg{"NPCDcfgReq"} = "[E] NPCD config file required";
 	$msg{"noNPCDreq"} = "[H] NPCD config file is not required";
 	$msg{"LinkEnaEnv"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#enable_environment_macros";
 	$msg{"LinkEnaPerf"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data";
 	$msg{"LinkDevInfo"} = "[H] http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203";
-	$msg{"LinkPNPconfig"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/config";
-	$msg{"LinkPPcfg"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/config";
-	$msg{"LinkCPcfg"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/webfe";
+	$msg{"LinkPNPconfig"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config";
+	$msg{"LinkPPcfg"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config";
+	$msg{"LinkCPcfg"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/webfe";
 	$msg{"LinkNagiosCfg"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#%s";
 	$msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (and following options)";
 	
@@ -1604,8 +1626,11 @@ sub message {
 		$msg{"errOpen"} = "[E] oeffnen von %s fehlgeschlagen, RC=%s";
 
 		$msg{"LinkNagiosChk"} = "[H] http://www.nagios-wiki.de/nagios/doku3/verify_config";
-		$msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/about#benoetigte_software";
-		$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org/$language/pnp-${doc_version}/about#anforderungen_an_plugins";
+		$msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#benoetigte_software";
+		$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#anforderungen_an_plugins";
+		if ($doc_version =~ /^0\.6/) {
+			$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#anforderungen";
+		}
 		$msg{"LinkEnaEnv"} = "[H] http://www.nagios-wiki.de/nagios/doku3/#enable_environment_macros";
 		$msg{"LinkEnaPerf"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data";
 		$msg{"LinkNagiosCfg"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#%s";
