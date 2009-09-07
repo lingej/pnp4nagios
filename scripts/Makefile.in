@@ -19,7 +19,7 @@ all html:
 clean:
 
 distclean: clean
-	-rm -f process_perfdata.pl check_pnp_rrds.pl net2pnp.pl rc.npcd
+	-rm -f process_perfdata.pl check_pnp_rrds.pl net2pnp.pl verify_pnp_config.pl rc.npcd
 	-rm -f Makefile
 
 devclean: distclean
@@ -34,9 +34,13 @@ install-processperfdata:
 install-plugins: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) check_pnp_rrds.pl $(DESTDIR)$(LIBEXECDIR)
 
+install-verifyconfig: 
+	$(INSTALL) -m 755 $(INSTALL_OPTS) verify_pnp_config.pl $(DESTDIR)$(LIBEXECDIR)
+
 install: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATADIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBEXECDIR)
 	$(MAKE) install-processperfdata
 	$(MAKE) install-plugins
+	$(MAKE) install-verifyconfig
 	

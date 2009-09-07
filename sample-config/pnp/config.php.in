@@ -25,10 +25,15 @@
 #
 $conf['rrdtool'] = "@RRDTOOL@";
 #
-# RRDTool graph Image Size
+# RRDTool Image Size of graphs
 #
 $conf['graph_width'] = "500";
 $conf['graph_height'] = "100";
+#
+# RRDTool Image Size of PDFs
+#
+# $conf['pdf_width'] = "500";
+# $conf['pdf_height'] = "100";
 #
 # Additional Options for RRDTool
 #

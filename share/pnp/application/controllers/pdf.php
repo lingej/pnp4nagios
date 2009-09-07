@@ -83,7 +83,7 @@ class Pdf_Controller extends System_Controller  {
 				$pdf->SetFont('Arial', '', 8);
 				$pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
 			}
-			$image = $this->rrdtool->doImage($data['RRD_CALL']);
+			$image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
 			$img = $this->rrdtool->saveImage($image);
         	$Y = $pdf->GetY();
         	$cell_height = ($img['height'] * 0.23);
@@ -136,7 +136,7 @@ class Pdf_Controller extends System_Controller  {
 				$pdf->SetFont('Arial', '', 8);
 				$pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
 			}
-			$image = $this->rrdtool->doImage($data['RRD_CALL']);
+			$image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
 			$img = $this->rrdtool->saveImage($image);
         	$Y = $pdf->GetY();
         	$cell_height = ($img['height'] * 0.23);
@@ -193,7 +193,7 @@ class Pdf_Controller extends System_Controller  {
 				$pdf->SetFont('Arial', '', 8);
 				$pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
 			}
-			$image = $this->rrdtool->doImage($data['RRD_CALL']);
+			$image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
 			$img = $this->rrdtool->saveImage($image);
         	$Y = $pdf->GetY();
         	$cell_height = ($img['height'] * 0.23);

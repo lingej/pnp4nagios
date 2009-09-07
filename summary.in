@@ -56,8 +56,8 @@ printf ("  type 'make all' to compile.\n");
 
 if($conf{USE_RRDs} == 0){
     print "\n\n";
-    print "  WARNING: The RRDs Perl Modules are not found on your System\n";
-    print "           Using RRDs will speedup things in larger Installtions.\n";
+    print "  WARNING: The RRDs Perl Modules are not found on your system\n";
+    print "           Using RRDs will speedup things in larger installations.\n";
 }
 
 if($ENV{DESTDIR}){

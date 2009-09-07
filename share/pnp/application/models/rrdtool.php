@@ -56,14 +56,28 @@ class Rrdtool_Model extends Model
         if($conf['graph_opt']){
             $command .= $conf['graph_opt'];
         }
+	$width = 0;
         if(is_numeric($conf['graph_width'])){
-            $conf['graph_width'] = abs($conf['graph_width']);
-            $command .= " --width=".$conf['graph_width'];
+            $width = abs($conf['graph_width']);
         }
+	$height = 0;
         if(is_numeric($conf['graph_height'])){
-            $conf['graph_height'] = abs($conf['graph_height']);
-            $command .= " --height=".$conf['graph_height'];
+            $height = abs($conf['graph_height']);
         }
+	if ($out == 'PDF'){
+		if (isset($conf['pdf_width']) && is_numeric($conf['pdf_width'])){
+			$width = abs($conf['pdf_width']);
+		}
+		if (isset($conf['pdf_height']) && is_numeric($conf['pdf_height'])){
+			$height = abs($conf['pdf_height']);
+		}
+	}
+	if ($width > 0){
+		$command .= " --width=$width";
+	}
+	if ($height > 0){
+		$command .= " --height=$height";
+	}
 
         $command .= $RRD_CMD;
 		$this->RRD_CMD = $command;
