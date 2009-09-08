@@ -38,8 +38,8 @@ class Pdf_Controller extends System_Controller  {
 		// Host Overview
 		}elseif($this->host != ""){
 		    $this->host    = pnp::clean($this->host);
-			if($this->view == ""){
-				$this->view = $this->config->conf['overview-range'];
+			if($view == FALSE){
+				$view = $this->config->conf['overview-range'];
 			}
 		    $services = $this->data->getServices($this->host);
 		    foreach($services as $service){
