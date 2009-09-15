@@ -591,7 +591,7 @@ class Data_Model extends Model
 				$hosts_to_search_for = explode(",", $g['host_name']);
 				$services_to_search_for = explode(",", $g['service_desc']);
 				if(isset($g['host_name']) && in_array($host ,$hosts_to_search_for) ){
-					if(isset($g['service_desc']) && in_array($service ,$services_to_search_for) ){
+					if(isset($g['service_desc']) && in_array($service['name'] ,$services_to_search_for) ){
 						return $service['name'];
 					}
 				}
