@@ -21,3 +21,4 @@ share/pnp/install.php
 sample-config/httpd.conf
 share/pnp/application/logs/*
 contrib/ssi/status-header.ssi
+scripts/verify_pnp_config.pl
