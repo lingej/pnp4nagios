@@ -124,7 +124,7 @@ sub main {
         process_perfdata_file();
     }
     else {
-        print_log( "process_perfdata.pl-$const{VERSION} starting in DEFAULT Mode", 1 );
+        print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
         process_perfdata();
     }
@@ -149,7 +149,7 @@ sub parse_env {
         }
     }
 
-    if ( !$ENV{NAGIOS_HOSTNAME} ) {
+    if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
         print_log( "Cant find Nagios Environment. Exiting ....", 1 );
         exit 2;
     }
