@@ -3,7 +3,7 @@
 ## Program: PNP , Performance Data Addon for Nagios(r)
 ## Version: $Id: config.php.in 607 2009-03-12 18:39:20Z pitchfork $
 ## License: GPL
-## Copyright (c) 2005-2008 Joerg Linge (http://www.pnp4nagios.org)
+## Copyright (c) 2005-2009 Joerg Linge (http://www.pnp4nagios.org)
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License
@@ -21,21 +21,21 @@
 ##
 # Credit:  Tobi Oetiker, http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
 #
-# Path to rrdtool
+# Location of rrdtool binary
 #
 $conf['rrdtool'] = "@RRDTOOL@";
 #
-# RRDTool Image Size of graphs
+# RRDTool image size of graphs
 #
 $conf['graph_width'] = "500";
 $conf['graph_height'] = "100";
 #
-# RRDTool Image Size of PDFs
+# RRDTool image size of PDFs
 #
 $conf['pdf_width'] = "675";
 $conf['pdf_height'] = "100";
 #
-# Additional Options for RRDTool
+# Additional options for RRDTool
 #
 $conf['graph_opt'] = ""; 
 #
@@ -43,19 +43,19 @@ $conf['graph_opt'] = "";
 #
 $conf['rrdbase'] = "@PERFDATA_DIR@/";
 #
-# Page Config Location
+# Location of "page" configs
 #
 $conf['page_dir'] = "@sysconfdir@/pages/";
 #
-# Site Refresh Time in Seconds
+# Site refresh time in seconds
 #
 $conf['refresh'] = "90";
 #
-# Max Age for RRD Files in Seconds
+# Max age for RRD files in seconds
 # 
 $conf['max_age'] = 60*60*6;   
 #
-# Directory for Temporary Files used for PDF creation 
+# Directory for temporary files used for PDF creation 
 #
 $conf['temp'] = "/var/tmp";
 #
@@ -63,18 +63,18 @@ $conf['temp'] = "/var/tmp";
 #
 $conf['nagios_base'] = "/nagios/cgi-bin";
 #
-# Which User is allowed to see additional Service Links ?
+# Which user is allowed to see additional service links ?
 # Keywords: EVERYONE NONE <USERNAME>
 # Example: conf['allowed_for_service_links'] = "nagiosadmin,operator";
 # 
 $conf['allowed_for_service_links'] = "EVERYONE";
 #
-# Who can use the Host Search Function ?
+# Who can use the host search function ?
 # Keywords: EVERYONE NONE <USERNAME>
 #
 $conf['allowed_for_host_search'] = "EVERYONE";
 #
-# Who can use the Host Overview ?
+# Who can use the host overview ?
 # This function is called if no Service Description is given.  
 #
 $conf['allowed_for_host_overview'] = "EVERYONE";
@@ -85,8 +85,8 @@ $conf['allowed_for_host_overview'] = "EVERYONE";
 #
 $conf['allowed_for_pages'] = "EVERYONE";
 #
-# Which Time Range should be used for the Host Overview Site ? 
-# Use a Key from Array $views[]
+# Which timerange should be used for the host overview site ? 
+# use a key from array $views[]
 #
 $conf['overview-range'] = 1 ;
 #
@@ -96,19 +96,19 @@ $conf['popup-width'] = "300px";
 #
 # jQuery UI Theme
 # http://jqueryui.com/themeroller/
-# Possible Values are: lightness, smoothness, redmond
+# Possible values are: lightness, smoothness, redmond
 $conf['ui-theme'] = 'lightness';
 
-# Language Definitions to use.
-# Valid Options are en_US, de_DE, es_ES 
+# Language definitions to use.
+# valid options are en_US, de_DE, es_ES 
 #
 $conf['lang'] = "en_US";
 #
-# Date Format
+# Date format
 #
 $conf['date_fmt'] = "d.m.y G:i";
 #
-# This option breaks down the template name based on _ and then start to 
+# This option breaks down the template name based on _ and then starts to 
 # build it up and check the different template directories for a suitable template.
 #
 # Example:
@@ -123,11 +123,11 @@ $conf['enable_recursive_template_search'] = 0;
 #
 $conf['show_xml_icon'] = 1;
 #
-# Use FPDF Lib for PDF Creation ?
+# Use FPDF Lib for PDF creation ?
 #
 $conf['use_fpdf'] = 1;	
 #
-# Use this file as PDF Background.
+# Use this file as PDF background.
 #
 $conf['background_pdf'] = '@sysconfdir@/background.pdf' ;
 #
@@ -135,7 +135,7 @@ $conf['background_pdf'] = '@sysconfdir@/background.pdf' ;
 #
 $conf['use_calendar'] = 1;
 #
-# Define default views with Title and start Timerange in seconds 
+# Define default views with title and start timerange in seconds 
 #
 # remarks: required escape on " with backslash
 #
