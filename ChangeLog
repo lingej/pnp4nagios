@@ -1,0 +1,17 @@
+*Current GIT Head
+  
+  * Webfrontend based on [[http://www.kohanaphp.com|Kohana]]
+  * Webfrontend based on [[http://jqueryui.com/themeroller/|jQuery Themes]]
+  * Javascript-functions using [[http://jquery.com/|jQuery]] plugins  
+  * process_perfdata.pl will be able to use one RRD database per datasource
+  * improved installer. Specification of directory layouts using --with-layout
+  * RRDtool errors are now displayed as images. no more missing images
+  * PNP templates cannot overwrite internal variables anymore
+  * PNP templates of version 0.4.x can still be used
+  * PDF functions recoded
+  * Template default.php optimized
+  * Export from RRD databases into XML, CSV and JSON format using the RRDtool "xport" function
+  * Page functions recoded
+  * Error pages links to online FAQ
+  * Mouseover Popup in Nagios frontend via jQuery.clueTip plugin
+  * Full support of rrdcached
