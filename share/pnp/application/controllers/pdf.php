@@ -60,17 +60,23 @@ class Pdf_Controller extends System_Controller  {
 		$pdf = new PDF;
 		$pdf->AliasNbPages();
 		$pdf->SetAutoPageBreak('off');
-		$pdf->SetMargins(12.5,25,10);
+		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
-
+        if(file_exists($this->config->conf['background_pdf'])){
+			$use_bg=1;
+		}
+        if($use_bg){
+                $pdf->setSourceFile($this->config->conf['background_pdf']);
+                $tplIdx = $pdf->importPage(1,'/MediaBox');
+                $pdf->useTemplate($tplIdx);
+        }
 		$pdf->SetCreator('Created with PNP');
 		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(120, 4, '', 0, 1, 'L');
 		// Title
 		foreach($this->data->STRUCT as $data){
-			if ($pdf->GetY() > 220) {
+			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
-				//if($use_bg){$pdf->useTemplate($tplIdx);}
+				if($use_bg){$pdf->useTemplate($tplIdx);}
     		}
 			if($data['SOURCE'] == 1){
 				$pdf->SetFont('Arial', '', 12);
@@ -88,7 +94,7 @@ class Pdf_Controller extends System_Controller  {
         	$Y = $pdf->GetY();
         	$cell_height = ($img['height'] * 0.23);
         	$cell_width = ($img['width'] * 0.23);
-        	$pdf->Image($img['file'], 12.5, $Y, $cell_width, $cell_height, 'PNG');
+        	$pdf->Image($img['file'], 17.5, $Y, $cell_width, $cell_height, 'PNG');
         	$pdf->CELL(120, $cell_height, '', 0, 1);
         	unlink($img['file']);
 		}
@@ -113,15 +119,22 @@ class Pdf_Controller extends System_Controller  {
 		$pdf = new PDF;
 		$pdf->AliasNbPages();
 		$pdf->SetAutoPageBreak('off');
-		$pdf->SetMargins(12.5,25,10);
+		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
+        if(file_exists($this->config->conf['background_pdf'])){
+			$use_bg=1;
+		}
+        if($use_bg){
+                $pdf->setSourceFile($this->config->conf['background_pdf']);
+                $tplIdx = $pdf->importPage(1,'/MediaBox');
+                $pdf->useTemplate($tplIdx);
+        }
 
 		$pdf->SetCreator('Created with PNP');
 		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(120, 4, '', 0, 1, 'L');
 		// Title
 		foreach($this->data->STRUCT as $data){
-			if ($pdf->GetY() > 220) {
+			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
 				//if($use_bg){$pdf->useTemplate($tplIdx);}
     		}
@@ -141,7 +154,7 @@ class Pdf_Controller extends System_Controller  {
         	$Y = $pdf->GetY();
         	$cell_height = ($img['height'] * 0.23);
         	$cell_width = ($img['width'] * 0.23);
-        	$pdf->Image($img['file'], 12.5, $Y, $cell_width, $cell_height, 'PNG');
+        	$pdf->Image($img['file'], 17.5, $Y, $cell_width, $cell_height, 'PNG');
         	$pdf->CELL(120, $cell_height, '', 0, 1);
         	unlink($img['file']);
 		}
@@ -170,15 +183,22 @@ class Pdf_Controller extends System_Controller  {
 		$pdf = new PDF;
 		$pdf->AliasNbPages();
 		$pdf->SetAutoPageBreak('off');
-		$pdf->SetMargins(12.5,25,10);
+		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
+        if(file_exists($this->config->conf['background_pdf'])){
+			$use_bg=1;
+		}
+        if($use_bg){
+                $pdf->setSourceFile($this->config->conf['background_pdf']);
+                $tplIdx = $pdf->importPage(1,'/MediaBox');
+                $pdf->useTemplate($tplIdx);
+        }
 
 		$pdf->SetCreator('Created with PNP');
 		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(120, 4, '', 0, 1, 'L');
 		// Title
 		foreach($this->data->STRUCT as $data){
-			if ($pdf->GetY() > 220) {
+			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
 				//if($use_bg){$pdf->useTemplate($tplIdx);}
     		}
@@ -198,7 +218,7 @@ class Pdf_Controller extends System_Controller  {
         	$Y = $pdf->GetY();
         	$cell_height = ($img['height'] * 0.23);
         	$cell_width = ($img['width'] * 0.23);
-        	$pdf->Image($img['file'], 12.5, $Y, $cell_width, $cell_height, 'PNG');
+        	$pdf->Image($img['file'], 17.5, $Y, $cell_width, $cell_height, 'PNG');
         	$pdf->CELL(120, $cell_height, '', 0, 1);
         	unlink($img['file']);
 		}
@@ -219,8 +239,6 @@ class PDF extends FPDI {
         function Header() {
             //Arial bold 10 
             $this->SetFont('Arial', 'B', 10);
-            //Move to the right
-            $this->Cell(80);
         }
 
         //Page footer
