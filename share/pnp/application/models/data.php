@@ -512,7 +512,7 @@ class Data_Model extends Model
         $this->PAGE_GRAPH = array();
         $allowed_tags = array("page", "graph");
         foreach($data as $line){
-	        if(ereg('(^#|^;)',$line)) {
+	        if(preg_match('/(^#|^;)/',$line)) {
 				continue;
 			}
 
