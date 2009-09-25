@@ -231,7 +231,37 @@ class Data_Model extends Model
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
 		$this->includeTemplate($this->DS[0]['TEMPLATE']);
-		if( $view == "" ){
+		if(isset($this->TIMERANGE[255])){
+	    	$view = intval($view);
+	    	$i=0;
+	    	foreach( $this->RRD['def'] as $key=>$val){
+				if( $source != "" && $source != $key ){
+		    		continue;
+				}
+	        	$tmp_struct = array();
+				$tmp_struct['LEVEL']         = $i;
+				$tmp_struct['VIEW']          = $view;
+				$tmp_struct['SOURCE']        = $key;
+	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE[255]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[255];
+				if(array_key_exists('ds_name',$this->RRD) ){
+	     	    	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
+				}else{
+	     	    	$tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
+				}
+	        	$tmp_struct['DS']      = $this->DS[$i];
+	        	$tmp_struct['MACRO']   = $this->MACRO;
+				if(isset($xml->XML->VERSION)){
+	            	$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+				}else{
+					$tmp_struct['VERSION']   = pnp::xml_version_check("0");
+				}
+	        	$this->addToDataStruct($tmp_struct);
+	        	$i++;
+            }
+		return;
+		}
+		if( $view == ""){
 			$v = 0;
 	    	foreach($this->config->views as $view_key=>$view_val){
 				$i=0;
@@ -240,8 +270,6 @@ class Data_Model extends Model
 						continue;
 					}
 	            	$tmp_struct = array();
-	            	#$tmp_struct['def']           = $this->RRD['def'][$key];
-	            	#$tmp_struct['opt']           = $this->RRD['opt'][$key];
 		    		$tmp_struct['LEVEL']         = $i;
 		    		$tmp_struct['VIEW']          = $view_key;
 		   	 		$tmp_struct['SOURCE']        = $key;
@@ -275,26 +303,24 @@ class Data_Model extends Model
 				$tmp_struct['LEVEL']         = $i;
 				$tmp_struct['VIEW']          = $view;
 				$tmp_struct['SOURCE']        = $key;
-	        	#$tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-	        	if(array_key_exists('ds_name',$this->RRD) ){
+	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
+				if(array_key_exists('ds_name',$this->RRD) ){
 	     	    	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
 				}else{
 	     	    	$tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
 				}
-	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
 	        	$tmp_struct['DS']      = $this->DS[$i];
-	        	$tmp_struct['MACRO']   = $this->MACRO;
+	           	$tmp_struct['MACRO']         = $this->MACRO;
 				if(isset($xml->XML->VERSION)){
-	            	$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+	           		$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
 				}else{
 					$tmp_struct['VERSION']   = pnp::xml_version_check("0");
 				}
-	        	$this->addToDataStruct($tmp_struct);
-	        	$i++;
-            }
+	           	$this->addToDataStruct($tmp_struct);
+	           	$i++;
+			}
 		}
-	#print Kohana::debug($this->STRUCT);
     }
 
     /*
@@ -422,56 +448,96 @@ class Data_Model extends Model
     }
 
     public function getTimeRange($start=FALSE ,$end=FALSE ,$view="") {
-        $view=intval( pnp::clean($view) );
-        if($view >= sizeof($this->config->views)){
-            $view = 1;
-        }
+		if($end != FALSE){
+			// we are in a custom timerange
+        	if(!is_numeric($end)){
+            	$timestamp = strtotime($end);
+            	if(!$timestamp){
+					throw new Kohana_User_Exception('Wrong Format', "$end");
+                	#$debug->doCheck('print_r',"wrong fmt $timestamp");
+            	}else{
+                	$end = $timestamp;
+            	}
+			}
+		}else{
+			$end = time();
+		}
+		if($start != FALSE ){
+			// we are in a custom timerange
+        	if(!is_numeric($start)){
+            	$timestamp = strtotime($start);
+            	if(!$timestamp){
+					throw new Kohana_User_Exception('Wrong Format', "Start -> $start");
+                	#$debug->doCheck('print_r',"wrong fmt $timestamp");
+            	}else{
+                	$start = $timestamp;
+            	}
+        	}
+		}
+		if($start && $end){
+			//Fixme i18n
+    		$timerange[255]['title']   = "Custom Timerange";
+    		$timerange[255]['start']   = $start;
+    		$timerange[255]['f_start'] = date($this->config->conf['date_fmt'],$start);
+    		$timerange[255]['end']     = $end;
+    		$timerange[255]['f_end']   = date($this->config->conf['date_fmt'],$end);
+    		$timerange[255]['cmd']     = " --start $start --end $end ";
+    		$this->TIMERANGE = $timerange;
+			return;
+		}
+		
+       	$view=intval( pnp::clean($view) );
+       	if($view >= sizeof($this->config->views)){
+           	$view = 1;
+       	}
 
-        if(!$end){
-            $end = time();
-        }elseif(!is_numeric($end)){
-            $timestamp = strtotime($end);
-            if(!$timestamp){
-                #$debug->doCheck('print_r',"wrong fmt $timestamp");
-            }else{
-                $end = $timestamp;
-            }
-        }else{
-            $end = $end;
-        }
+       	if(!$end){
+       		$end = time();
+       	}elseif(!is_numeric($end)){
+           	$timestamp = strtotime($end);
+           	if(!$timestamp){
+				throw new Kohana_User_Exception('Wrong Format', "$end");
+               	#$debug->doCheck('print_r',"wrong fmt $timestamp");
+           	}else{
+               	$end = $timestamp;
+           	}
+       	}else{
+           	$end = $end;
+       	}
 
-        if(!$start){
-            $start=( $end - $this->config->views[$view]['start']);
-        }elseif(!is_numeric($start)){
-            $timestamp = strtotime($start);
-            if(!$timestamp){
-                #$debug->doCheck('print_r',"wrong fmt $timestamp");
-            }else{
-                $start = $timestamp;
-            }
-        }else{
+       	if(!$start){
+           	$start=( $end - $this->config->views[$view]['start']);
+       	}elseif(!is_numeric($start)){
+           	$timestamp = strtotime($start);
+           	if(!$timestamp){
+				throw new Kohana_User_Exception('Wrong Format', "$start");
+           	}else{
+               	$start = $timestamp;
+           	}
+       	}else{
             $start = pnp::clean($start);
-        }
+       	}
 
-    	if($start >= $end){
+   		if($start >= $end){
+			//Fixme i18n
 			throw new Kohana_User_Exception('Wrong Timerange', "start >= end");
-    	}
-    	$timerange['title']   = $this->config->views[$view]['title'];
-    	$timerange['start']   = $start;
-    	$timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
-    	$timerange['end']     = $end;
-    	$timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
-    	$timerange['cmd']     = " --start $start --end $end ";
-    	for ($i = 0; $i < sizeof($this->config->views); $i++) {
-    		$timerange[$i]['title']   = $this->config->views[$i]['title'];
-        	$timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
-        	$timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
-        	$timerange[$i]['end']     = $end;
-        	$timerange[$i]['f_end']   = date($this->config->conf['date_fmt'],$end);
-        	$timerange[$i]['cmd']     = " --start " . ($end - $this->config->views[$i]['start']) . " --end  $end" ;
-    	}
-    	$this->TIMERANGE = $timerange;
-    	#print Kohana::debug($timerange);
+   		}
+
+   		$timerange['title']   = $this->config->views[$view]['title'];
+   		$timerange['start']   = $start;
+   		$timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
+   		$timerange['end']     = $end;
+   		$timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
+   		$timerange['cmd']     = " --start $start --end $end ";
+   		for ($i = 0; $i < sizeof($this->config->views); $i++) {
+   			$timerange[$i]['title']   = $this->config->views[$i]['title'];
+       		$timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
+       		$timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
+       		$timerange[$i]['end']     = $end;
+       		$timerange[$i]['f_end']   = date($this->config->conf['date_fmt'],$end);
+       		$timerange[$i]['cmd']     = " --start " . ($end - $this->config->views[$i]['start']) . " --end  $end" ;
+   		}
+   		$this->TIMERANGE = $timerange;
 	}
 
 	public function buildPageStruct($page,$view){
