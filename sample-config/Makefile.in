@@ -18,8 +18,8 @@ clean:
 	-rm -f pnp/config.php
 	-rm -f pnp/process_perfdata.cfg-sample
 	-rm -f pnp/npcd.cfg-sample
-	-rm -f misccommands.sample 
-	-rm -f xinetd.pnp.sample
+	-rm -f misccommands.cfg-sample 
+	-rm -f nagios.cfg-sample 
 	-rm -f httpd.conf 
 	-rm -f pnp/pnp4nagios_release
 

@@ -1,0 +1,44 @@
+#
+# definitions for PNP processing commands
+#
+# please uncomment the appropriate definitions and make sure
+# that there aren't duplicate entries in your config
+#
+# Synchronous mode
+#
+
+#define command {
+#       command_name    process-service-perfdata
+#       command_line    @PERL@ @prefix@/libexec/process_perfdata.pl
+#}
+#
+#define command {
+#       command_name    process-host-perfdata
+#       command_line    @PERL@ @prefix@/libexec/process_perfdata.pl -d HOSTPERFDATA
+#}
+
+#
+# Bulk mode
+#
+#define command{
+#       command_name    process-service-perfdata-file
+#       command_line    $USER1$/process_perfdata.pl --bulk=@prefix@/var/service-perfdata
+#}
+
+#define command{
+#       command_name    process-host-perfdata-file
+#       command_line    $USER1$/process_perfdata.pl --bulk=@prefix@/var/host-perfdata
+#}
+
+#
+# Bulk with NPCD mode
+#
+#define command{
+#       command_name    process-service-perfdata-file
+#       command_line    /bin/mv @prefix@/var/service-perfdata @prefix@/var/spool/perfdata/service-perfdata.$TIMET$
+#}
+
+#define command{
+#       command_name    process-host-perfdata-file
+#       command_line    /bin/mv @prefix@/var/host-perfdata @prefix@/var/spool/perfdata/host-perfdata.$TIMET$
+#}

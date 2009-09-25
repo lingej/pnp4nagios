@@ -1,0 +1,35 @@
+#
+# definitions for PNP in nagios.cfg (icinga.cfg)
+# please make sure that you don't have duplicate entries
+# 
+# Default mode
+# 
+process_performance_data=1
+
+enable_environment_macros=1	# available since Nagios 3.x
+
+service_perfdata_command=process-service-perfdata
+
+host_perfdata_command=process-host-perfdata	# NOT advisable prior to Nagios 3.0
+
+#
+# Bulk / NPCD mode
+# 
+
+process_performance_data=1
+
+# *** the template definition differs from the one in the original nagios.cfg
+#
+service_perfdata_file=@prefix@/var/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+# *** the template definition differs from the one in the original nagios.cfg
+#
+host_perfdata_file=@prefix@/var/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
