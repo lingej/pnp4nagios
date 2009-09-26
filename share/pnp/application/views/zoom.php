@@ -9,7 +9,7 @@
 <?php echo Kohana::lang('common.zoom-header') ?>
 </div>
 <div class="p4 ui-widget-content ui-corner-bottom">
-<h3> <?php echo $this->data->TIMERANGE['f_start']?> --- <?php echo $this->data->TIMERANGE['f_end']?> </h3>
+<h3> <?php echo $this->data->TIMERANGE[255]['f_start']?> --- <?php echo $this->data->TIMERANGE[255]['f_end']?> </h3>
 <div id='zoomBox' style='position:absolute; overflow:none; left:0px; top:0px; width:0px; height:0px; visibility:visible; background:red; filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity:0.5; opacity:0.5'></div>
 <div id='zoomSensitiveZone' style='position:absolute; overflow:none; left:0px; top:0px; width:0px; height:0px; visibility:visible; cursor:crosshair; background:blue; filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity:0' oncontextmenu='return false'></div>
 <STYLE MEDIA="print">

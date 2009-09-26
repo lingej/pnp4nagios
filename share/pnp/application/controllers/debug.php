@@ -21,33 +21,49 @@ class Debug_Controller extends System_Controller  {
 	public function index()
 	{
 
-		$start   = $this->input->get('start');
-		$end     = $this->input->get('end');
-		$view    = "";
+		$this->start   = $this->input->get('start');
+		$this->end     = $this->input->get('end');
+		$this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
-			$view = pnp::clean($_GET['view']);
+			$this->view = pnp::clean($_GET['view']);
 
-		$this->data->getTimeRange($start,$end,$view);
+		$this->data->getTimeRange($this->start,$this->end,$this->view);
 
 		if(isset($this->host) && isset($this->service)){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
 			$this->url      = "?host=".$this->host."&srv=".$this->service;
-		    $services      = $this->data->getServices($this->host);
-		    $this->data->buildDataStruct($this->host,$this->service,$view);
+            if($this->start){
+                $this->url .= "&start=".$this->start;
+                $this->session->set("start", $this->start);
+            }
+            if($this->end){
+                $this->url .= "&end=".$this->end;
+                $this->session->set("end", $this->end);
+            }
+			$services      = $this->data->getServices($this->host);
+		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 		}elseif(isset($this->host)){
 		    $this->host    = pnp::clean($this->host);
-           	if($view == ""){
-		    	$view = $this->config->conf['overview-range'];
+           	if($this->view == ""){
+		    	$this->view = $this->config->conf['overview-range'];
 			}
+            if($this->start){
+                $this->url .= "&start=".$this->start;
+                $this->session->set("start", $this->start);
+            }
+            if($this->end){
+                $this->url .= "&end=".$this->end;
+                $this->session->set("end", $this->end);
+            }
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
 		    $this->title = "Service Overview for $this->host";
 		    foreach($services as $service){
 			if($service['state'] == 'active')
-		   	    $this->data->buildDataStruct($this->host,$service['name'],$view);
+		   	    $this->data->buildDataStruct($this->host,$service['name'],$this->view);
 		    }
 		}else{
 		    if(isset($this->host)){

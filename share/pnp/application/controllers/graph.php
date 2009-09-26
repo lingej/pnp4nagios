@@ -42,7 +42,15 @@ class Graph_Controller extends System_Controller  {
 		if($this->host != "" && $this->service != ""){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
-			$this->url      = "?host=".$this->host."&srv=".$this->service;
+			$this->url     = "?host=".$this->host."&srv=".$this->service;
+			if($this->start){
+				$this->url .= "&start=".$this->start;
+				$this->session->set("start", $this->start);
+			}
+			if($this->end){
+				$this->url .= "&end=".$this->end;
+				$this->session->set("end", $this->end);
+			}
 		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
 		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
@@ -66,6 +74,14 @@ class Graph_Controller extends System_Controller  {
 				$this->view = $this->config->conf['overview-range'];
 			}
 			$this->url     = "?host=".$this->host;
+			if($this->start){
+				$this->url .= "&start=".$this->start;
+				$this->session->set("start", $this->start);
+			}
+			if($this->end){
+				$this->url .= "&end=".$this->end;
+				$this->session->set("end", $this->end);
+			}
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
 			// Status Box Vars
