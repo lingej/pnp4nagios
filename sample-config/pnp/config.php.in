@@ -97,7 +97,7 @@ $conf['popup-width'] = "300px";
 # jQuery UI Theme
 # http://jqueryui.com/themeroller/
 # Possible values are: lightness, smoothness, redmond
-$conf['ui-theme'] = 'lightness';
+$conf['ui-theme'] = 'smoothness';
 
 # Language definitions to use.
 # valid options are en_US, de_DE, es_ES 
@@ -131,7 +131,7 @@ $conf['use_fpdf'] = 1;
 #
 $conf['background_pdf'] = '@sysconfdir@/background.pdf' ;
 #
-# Enable JSCalendar
+# Enable Calendar
 #
 $conf['use_calendar'] = 1;
 #
