@@ -77,6 +77,9 @@ class Page_Controller extends System_Controller  {
 			// Icon Box	
 			$this->template->page->icon_box      = $this->add_view('icon_box');
 			$this->template->page->icon_box->position = "basket";
-        }
+        }else{
+			// FIXME i18n 
+			throw new Kohana_User_Exception('Basket Session', "Session is empty");
+		}
 	}
 }
