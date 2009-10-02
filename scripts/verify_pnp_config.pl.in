@@ -22,7 +22,7 @@
 # 2009.08.05: 0.1.14 bugfixes (Icinga support / non-standard paths)
 # 2009.08.11: 0.1.15 changed Doc-paths
 # 2009.08.18: 0.1.16 added layout option / template option / package detection
-# 2009.09.06:        config.php option / PNP root dir option
+# 2009.09.06:        config.php option / PNP root dir option / PDF sizes
 
 use strict;
 use Getopt::Long;
@@ -1065,6 +1065,8 @@ sub chk_cpcfg {
 	$CPcfg{'$conf[\'rrdtool\']'} = "x;$rrdtool;";
 	$CPcfg{'$conf[\'graph_width\']'} = 'n;^\d+$;243';
 	$CPcfg{'$conf[\'graph_height\']'} = 'n;^\d+$;243';
+	$CPcfg{'$conf[\'pdf_width\']'} = 'n;^\d+$;657';
+	$CPcfg{'$conf[\'pdf_height\']'} = 'n;^\d+$;657';
 	$CPcfg{'$conf[\'graph_opt\']'} = 'S;.*;'; 
 	$CPcfg{'$conf[\'rrdbase\']'} = 'd;;';
 	$CPcfg{'$conf[\'page_dir\']'} = 'd;;279';
