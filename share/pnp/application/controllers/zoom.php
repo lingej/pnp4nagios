@@ -40,8 +40,8 @@ class Zoom_Controller extends System_Controller  {
 			$this->template->source  = $source;
 			$this->template->end     = $end;
 			$this->template->start   = $start;
-			$this->template->graph_height = 100;
-			$this->template->graph_width  = 500;
+			$this->template->graph_height = $this->config->conf['graph_height'];
+			$this->template->graph_width  = $this->config->conf['graph_width'];
 		}else{
 		    url::redirect("/graph");
 		}

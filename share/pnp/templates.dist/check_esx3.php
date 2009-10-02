@@ -3,7 +3,7 @@
 License: GPL
 Copyright (c) 2009 op5 AB
 Author: Mattias Ryrlen <dev@op5.com>
-Contributor(s):
+Contributor(s): Joerg Linge <joerg.linge@pnp4nagios.org>
 
 For direct contact with any of the op5 developers send a mail to dev@op5.com
 Discussions are directed to the mailing list op5-users@op5.com,
@@ -38,9 +38,10 @@ $color_list = array(
 				);
 
 $opt[1] = '';
+$def[1] = '';
 $filled = 0;
-$base = "1024";
-$cdef = "";
+$base   = "1024";
+$cdef   = "";
 $vlabel = "";
 
 // Specific settings based on first DataSource, if we want to customize it.
@@ -74,7 +75,7 @@ for ($i = 1; $i <= count($DS); $i++) {
 	$def[1] .= "DEF:ds$i=$rrdfile:$DS[$i]:AVERAGE " ;
 	$def[1] .= "CDEF:var$i=ds$i ";
 
-	if ($color) {
+	if (isset($color)) {
 		$color_list = $color;
 	}
 
@@ -83,10 +84,10 @@ for ($i = 1; $i <= count($DS); $i++) {
 	if ($filled || count($DS) <= 3) {
 		$def[1] .= "AREA:var$i". $color_list[$i] . "32 ";
 	}
-	$def[1] .= "LINE1:var$i" . $color_list[$i] . "FF:\"$NAME[$i]\" ";
-	$def[1] .= "GPRINT:var$i:LAST:\"Current\\:%8.2lf $UNIT[$i]\" ";
-	$def[1] .= "GPRINT:var$i:AVERAGE:\"Average\\:%8.2lf $UNIT[$i]\" ";
-	$def[1] .= "GPRINT:var$i:MAX:\"Maximum\\:%8.2lf $UNIT[$i]\\n\" ";
+	$def[1] .= "LINE1:var$i" . $color_list[$i] . "FF:\"$NAME[$i]\t\" ";
+	$def[1] .= "GPRINT:var$i:LAST:\"Cur\\:%8.2lf $UNIT[$i]\" ";
+	$def[1] .= "GPRINT:var$i:AVERAGE:\"Avg\\:%8.2lf $UNIT[$i]\" ";
+	$def[1] .= "GPRINT:var$i:MAX:\"Max\\:%8.2lf $UNIT[$i]\\n\" ";
 }
 
 for ($i = 1; $i <= count($DS); $i++) {

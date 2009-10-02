@@ -77,6 +77,8 @@ class Page_Controller extends System_Controller  {
 			// Icon Box	
 			$this->template->page->icon_box      = $this->add_view('icon_box');
 			$this->template->page->icon_box->position = "basket";
-        }
+        }else{
+			url::redirect("start", 302);
+		}
 	}
 }

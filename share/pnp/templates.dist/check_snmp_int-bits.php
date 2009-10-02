@@ -23,7 +23,4 @@ $def[1] .= "GPRINT:out_bits:MAX:\"%7.2lf %Sbit/s max\\n\" ";
 if($this->MACRO['TIMET'] != ""){
     $def[1] .= "VRULE:".$this->MACRO['TIMET']."#000000:\"Last Service Check \\n\" ";
 }
-if($this->MACRO['LASTHOSTDOWN'] != ""){
-    $def[1] .= "VRULE:".$this->MACRO['LASTHOSTDOWN']."#FF0000:\"Last Host Down\\n\" ";
-}
 ?>
