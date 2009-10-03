@@ -756,6 +756,9 @@ sub _parse {
             $p{critical_range_type} = "outside";
         }
     }
+	# Strip Range indicators
+    $p{warning}  =~ s/[~@]//;
+    $p{critical} =~ s/[~@]//;
 
     return ( $string, %p );
 }
