@@ -136,7 +136,7 @@ class Pdf_Controller extends System_Controller  {
 		foreach($this->data->STRUCT as $data){
 			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
-				//if($use_bg){$pdf->useTemplate($tplIdx);}
+				if($use_bg){$pdf->useTemplate($tplIdx);}
     		}
 			if($data['SOURCE'] == 1){
 				$pdf->SetFont('Arial', '', 12);
@@ -200,7 +200,7 @@ class Pdf_Controller extends System_Controller  {
 		foreach($this->data->STRUCT as $data){
 			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
-				//if($use_bg){$pdf->useTemplate($tplIdx);}
+				if($use_bg){$pdf->useTemplate($tplIdx);}
     		}
 			if($data['SOURCE'] == 1){
 				$pdf->SetFont('Arial', '', 12);
