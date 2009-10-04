@@ -14,4 +14,8 @@ $lang = array
 	'pages-box-header' => 'Páginas',
     'nagios-summary-link-title' => 'Alertas Recientes en el Intervalo de Tiempo',
 	'nagios-avail-link-title'   => 'Informe de Disponibilidad en el Intervalo de Tiempo',
+    'timerange-selector-legend' => 'Select a custom time range',
+	'timerange-selector-title'  => 'Select a custom time range',
+	'timerange-selector-submit-button'  => 'submit',
+
 );

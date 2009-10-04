@@ -22,6 +22,7 @@ class Graph_Controller extends System_Controller  {
 	public function index()
 	{
 		$this->template->graph->graph_content = $this->add_view('graph_content');
+		$this->template->graph->graph_content->timerange_select = $this->add_view('timerange_select');
 		$this->template->graph->header        = $this->add_view('header');
 		$this->template->graph->search_box    = $this->add_view('search_box');
 		$this->template->graph->service_box   = $this->add_view('service_box');
@@ -44,11 +45,11 @@ class Graph_Controller extends System_Controller  {
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host."&srv=".$this->service;
 			if($this->start){
-				$this->url .= "&start=".$this->start;
+				#$this->url .= "&start=".$this->start;
 				$this->session->set("start", $this->start);
 			}
 			if($this->end){
-				$this->url .= "&end=".$this->end;
+				#$this->url .= "&end=".$this->end;
 				$this->session->set("end", $this->end);
 			}
 		    $services      = $this->data->getServices($this->host);
@@ -75,11 +76,11 @@ class Graph_Controller extends System_Controller  {
 			}
 			$this->url     = "?host=".$this->host;
 			if($this->start){
-				$this->url .= "&start=".$this->start;
+				#$this->url .= "&start=".$this->start;
 				$this->session->set("start", $this->start);
 			}
 			if($this->end){
-				$this->url .= "&end=".$this->end;
+				#$this->url .= "&end=".$this->end;
 				$this->session->set("end", $this->end);
 			}
 		    $this->title   = "Start $this->host";

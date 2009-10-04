@@ -1,5 +1,8 @@
 <!-- Graph Content Start-->
 <?php
+if (!empty($timerange_select)) {
+	echo $timerange_select;
+}
 echo "<div class=\"gw ui-widget\">\n";
 $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 
