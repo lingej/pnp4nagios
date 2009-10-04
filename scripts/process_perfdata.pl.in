@@ -757,8 +757,8 @@ sub _parse {
         }
     }
 	# Strip Range indicators
-    $p{warning}  =~ s/[~@]//;
-    $p{critical} =~ s/[~@]//;
+    $p{warning}  =~ s/[~@]// if($p{warning});
+    $p{critical} =~ s/[~@]// if($p{critical});
 
     return ( $string, %p );
 }
