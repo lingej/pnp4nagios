@@ -14,4 +14,8 @@ $lang = array
 	'pages-box-header' => 'Pages',
 	'nagios-summary-link-title' => 'aktuellste Alarme für diesen Zeitbereich',
 	'nagios-avail-link-title'   => 'Nagios-Verfügbarkeitsbericht für diesen Zeitbereich',
+    'timerange-selector-legend' => 'Auswahl eines Zeitbereichs',
+	'timerange-selector-title'  => 'Auswahl eines Zeitbereichs',
+	'timerange-selector-submit-button'  => 'absenden',
+
 );

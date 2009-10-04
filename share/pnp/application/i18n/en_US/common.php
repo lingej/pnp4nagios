@@ -14,4 +14,7 @@ $lang = array
     'pages-box-header' => 'Pages',
     'nagios-summary-link-title' => 'Most recent alerts for this time range',
     'nagios-avail-link-title'   => 'Nagios availability report for this time range',
+    'timerange-selector-legend' => 'Select a custom time range',
+    'timerange-selector-title'  => 'Select a custom time range',
+    'timerange-selector-submit-button'  => 'submit',
 );
