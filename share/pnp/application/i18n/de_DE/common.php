@@ -17,5 +17,7 @@ $lang = array
     'timerange-selector-legend' => 'Auswahl eines Zeitbereichs',
 	'timerange-selector-title'  => 'Auswahl eines Zeitbereichs',
 	'timerange-selector-submit-button'  => 'absenden',
+    'start' => 'Start',
+	'end' => 'Ende',
 
 );

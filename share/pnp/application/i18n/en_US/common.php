@@ -17,4 +17,6 @@ $lang = array
     'timerange-selector-legend' => 'Select a custom time range',
     'timerange-selector-title'  => 'Select a custom time range',
     'timerange-selector-submit-button'  => 'submit',
+	'start' => 'Start',
+	'end' => 'End',
 );

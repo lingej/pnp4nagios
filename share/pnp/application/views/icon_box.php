@@ -5,7 +5,7 @@
 </div>
 <div class="p4 ui-widget-content ui-corner-bottom" >
 <?php
-if($position == "graph"){
+if($this->config->conf['use_calendar']){
 	echo "<a href=\"#\" id=\"button\"><img src=\"".url::base()."media/images/calendar.png\"></a>"; 
 }
 if($this->config->conf['use_fpdf'] == 1 && $position == "graph"){
