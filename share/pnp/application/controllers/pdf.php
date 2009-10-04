@@ -14,6 +14,22 @@ class Pdf_Controller extends System_Controller  {
 	public function __construct(){
 		parent::__construct();
 
+		$this->use_bg = 0;
+		$this->bg = $this->config->conf['background_pdf'];
+
+		// Define PDF background per url option 
+		if(isset($this->bg) && $this->bg != ""){
+			if( is_readable( Kohana::config( 'core.pnp_etc_path')."/".$this->bg ) ){
+				$this->bg = Kohana::config('core.pnp_etc_path')."/".$this->bg;
+			}else{
+				$this->bg = $this->config->conf['background_pdf'];
+			}
+		}
+		// Use PDF background if readable
+        if(is_readable($this->bg)){
+			$this->use_bg = 1;
+		}
+
 	}
 
 	public function index(){
@@ -22,11 +38,13 @@ class Pdf_Controller extends System_Controller  {
 		$this->service   = $this->input->get('srv');
 		$this->start     = $this->input->get('start');
 		$this->end       = $this->input->get('end');
+		$this->bg        = $this->input->get('bg');
 		$this->view      = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
             $this->view = pnp::clean($_GET['view']);
         }
+
 
 		$this->data->getTimeRange($this->start,$this->end,$this->view);
 
@@ -62,11 +80,8 @@ class Pdf_Controller extends System_Controller  {
 		$pdf->SetAutoPageBreak('off');
 		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
-        if(file_exists($this->config->conf['background_pdf'])){
-			$use_bg=1;
-		}
-        if($use_bg){
-                $pdf->setSourceFile($this->config->conf['background_pdf']);
+        if($this->use_bg){
+                $pdf->setSourceFile($this->bg);
                 $tplIdx = $pdf->importPage(1,'/MediaBox');
                 $pdf->useTemplate($tplIdx);
         }
@@ -76,7 +91,7 @@ class Pdf_Controller extends System_Controller  {
 		foreach($this->data->STRUCT as $data){
 			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
-				if($use_bg){$pdf->useTemplate($tplIdx);}
+				if($this->use_bg){$pdf->useTemplate($tplIdx);}
     		}
 			if($data['SOURCE'] == 1){
 				$pdf->SetFont('Arial', '', 12);
@@ -121,10 +136,7 @@ class Pdf_Controller extends System_Controller  {
 		$pdf->SetAutoPageBreak('off');
 		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
-        if(file_exists($this->config->conf['background_pdf'])){
-			$use_bg=1;
-		}
-        if($use_bg){
+        if($this->use_bg){
                 $pdf->setSourceFile($this->config->conf['background_pdf']);
                 $tplIdx = $pdf->importPage(1,'/MediaBox');
                 $pdf->useTemplate($tplIdx);
@@ -136,7 +148,7 @@ class Pdf_Controller extends System_Controller  {
 		foreach($this->data->STRUCT as $data){
 			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
-				//if($use_bg){$pdf->useTemplate($tplIdx);}
+				if($this->use_bg){$pdf->useTemplate($tplIdx);}
     		}
 			if($data['SOURCE'] == 1){
 				$pdf->SetFont('Arial', '', 12);
@@ -185,10 +197,7 @@ class Pdf_Controller extends System_Controller  {
 		$pdf->SetAutoPageBreak('off');
 		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
-        if(file_exists($this->config->conf['background_pdf'])){
-			$use_bg=1;
-		}
-        if($use_bg){
+        if($this->use_bg){
                 $pdf->setSourceFile($this->config->conf['background_pdf']);
                 $tplIdx = $pdf->importPage(1,'/MediaBox');
                 $pdf->useTemplate($tplIdx);
@@ -200,7 +209,7 @@ class Pdf_Controller extends System_Controller  {
 		foreach($this->data->STRUCT as $data){
 			if ($pdf->GetY() > 200) {
 				$pdf->AddPage();
-				//if($use_bg){$pdf->useTemplate($tplIdx);}
+				if($this->use_bg){$pdf->useTemplate($tplIdx);}
     		}
 			if($data['SOURCE'] == 1){
 				$pdf->SetFont('Arial', '', 12);
