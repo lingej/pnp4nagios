@@ -4,22 +4,22 @@ $(function() {
         $("#toggle-timerange").toggle("blind",500); 
         return false;
     });
-	$("#dpstart").datepicker({ constrainInput: false });
-	$("#dpend").datepicker({ constrainInput: false });
+	$("#dpstart").datepicker({ showOn: 'button', buttonImage: 'media/images/calendar.gif', buttonImageOnly: true, constrainInput: false });
+	$("#dpend").datepicker({ showOn: 'button', buttonImage: 'media/images/calendar.gif', buttonImageOnly: true, constrainInput: false });
 });
 </script>
 
 <div id="toggle-timerange" class="ui-widget" style="Display: none;">
-    <div class="p4 ui-widget-header ui-corner-top">Select custom timerange</div>
-    <div class="ui-widget-content ui-corner-bottom">
+    <div class="p4 ui-widget-header ui-corner-top"><?php echo Kohana::lang('common.timerange-selector-title') ?></div>
+    <div class="p4 ui-widget-content ui-corner-bottom">
     <form method="GET" action="<?php echo url::base() ?>graph">
         <fieldset>
-            <legend>Define a Custom Timerange</legend>
+            <legend><?php echo Kohana::lang('common.timerange-selector-legend') ?></legend>
 			<input type="hidden" name="host" value="<?php echo $this->host ?>">
 			<input type="hidden" name="srv" value="<?php echo $this->service ?>">
-            <label for=start">Start: </label><input id="dpstart" type="text" size="10" maxlength="40" name="start" value="<?php echo $this->start?>">
-            <label for=end">End: </label><input id="dpend" type="text" size="10" maxlength="40" name="end" value="<?php echo $this->end?>">
-            <input type="submit" value=" Absenden ">
+            <label for=start"> Start: </label><input id="dpstart" type="text" size="16" maxlength="40" name="start" value="<?php echo $this->start?>">
+			<label for=end"> End: </label><input id="dpend" type="text" size="16" maxlength="40" name="end" value="<?php echo $this->end?>">
+			<button id="submit" class="ui-button ui-state-default ui-corner-all"><?php echo Kohana::lang('common.timerange-selector-submit-button') ?></button>
         </fieldset>
     </form><p>
     </div>
