@@ -19,7 +19,7 @@ $(function() {
 			<input type="hidden" name="srv" value="<?php echo $this->service ?>">
             <label for=start"> Start: </label><input id="dpstart" type="text" size="16" maxlength="40" name="start" value="<?php echo $this->start?>">
 			<label for=end"> End: </label><input id="dpend" type="text" size="16" maxlength="40" name="end" value="<?php echo $this->end?>">
-			<button id="submit" class="ui-button ui-state-default ui-corner-all"><?php echo Kohana::lang('common.timerange-selector-submit-button') ?></button>
+			<input type="submit" id="submit" class="ui-button ui-state-default ui-corner-all" value="<?php echo Kohana::lang('common.timerange-selector-submit-button') ?>"></input>
         </fieldset>
     </form><p>
     </div>
