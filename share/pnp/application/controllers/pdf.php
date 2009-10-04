@@ -38,7 +38,6 @@ class Pdf_Controller extends System_Controller  {
 		$this->service   = $this->input->get('srv');
 		$this->start     = $this->input->get('start');
 		$this->end       = $this->input->get('end');
-		$this->bg        = $this->input->get('bg');
 		$this->view      = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
