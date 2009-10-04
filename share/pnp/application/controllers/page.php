@@ -12,6 +12,7 @@ class Page_Controller extends System_Controller  {
 		parent::__construct();
 		$this->template->page    = $this->add_view('page');
 		$this->template->page->graph_content  = $this->add_view('graph_content');
+		$this->template->page->graph_content->timerange_select = $this->add_view('timerange_select');
 		$this->template->page->header         = $this->add_view('header');
 		$this->template->page->logo_box       = $this->add_view('logo_box');
 		
