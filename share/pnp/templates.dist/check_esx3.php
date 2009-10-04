@@ -55,8 +55,6 @@ switch ($NAME[1]) {
 		$opt[1] .= "--lower-limit=0 --upper-limit=105 ";
 		break;
 	case "net_receive":
-		$color[1] = "#56a901";
-		$color[2] = "#007dd0";
 		$vlabel = "Kb/sec";
 		break;
 	case "cpu_usagemhz":
