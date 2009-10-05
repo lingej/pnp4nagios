@@ -43,5 +43,15 @@ $(document).ready(function(){
       		}
     	});
   	});
+	$("#remove_timerange_session").click(function(){
+		$.ajax({
+      		type: "GET",
+      		url: path + "ajax/remove/timerange",
+			success: function(){
+				location.reload();
+			}
+    	});
+  	});
+
 });
 
