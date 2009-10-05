@@ -1,4 +1,7 @@
-<?php if($this->config->conf['use_calendar']){ ?>
+<?php if($this->config->conf['use_calendar']){ 
+$start = $this->session->get('start','');
+$end   = $this->session->get('end','');
+?>
 <script type="text/javascript">
 $(function() {
     $("#button").click(function() {
@@ -23,9 +26,10 @@ $(function() {
 					continue;
 				echo "<input type=\"hidden\" name=\"".$key."\" value=\"".$val."\">\n";
 			}?>
-            <label for=start"><?php echo Kohana::lang('common.start') ?>: </label><input id="dpstart" type="text" size="16" maxlength="40" name="start" value="<?php echo $this->start?>">
-			<label for=end"><?php echo Kohana::lang('common.end') ?>: </label><input id="dpend" type="text" size="16" maxlength="40" name="end" value="<?php echo $this->end?>">
+            <label for=start"><?php echo Kohana::lang('common.start') ?>: </label><input id="dpstart" type="text" size="16" maxlength="40" name="start" value="<?php echo $start?>">
+			<label for=end"><?php echo Kohana::lang('common.end') ?>: </label><input id="dpend" type="text" size="16" maxlength="40" name="end" value="<?php echo $end?>">
 			<input type="submit" id="submit" class="ui-button ui-state-default ui-corner-all" value="<?php echo Kohana::lang('common.timerange-selector-submit-button') ?>"></input>
+			<input type="button" id="remove_timerange_session" class="ui-button ui-state-default ui-corner-all" value="Clear"></input>
         </fieldset>
     </form><p>
     </div>

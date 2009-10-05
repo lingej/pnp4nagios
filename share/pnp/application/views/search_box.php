@@ -1,3 +1,4 @@
+<?php if( $this->isAuthorizedFor('host_search') ){ ?>
 <!-- Search Box Start -->
 <div class="ui-widget">
  <div class="p2 ui-widget-header ui-corner-top">
@@ -35,4 +36,4 @@
 //]]>
 </script>
 <!-- Search Box End -->
-
+<?php } ?>

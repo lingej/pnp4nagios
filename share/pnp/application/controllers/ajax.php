@@ -35,6 +35,13 @@ class Ajax_Controller extends System_Controller  {
 		}
 	}
 
+	public function remove($what){
+		if($what == 'timerange'){
+			$this->session->delete('start');
+			$this->session->delete('end');
+		}
+	}
+
 	public function basket($action=FALSE){
 		// Disable auto-rendering
         $this->auto_render = FALSE;
