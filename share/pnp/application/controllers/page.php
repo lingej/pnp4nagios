@@ -10,6 +10,10 @@ class Page_Controller extends System_Controller  {
 
 	public function __construct(){
 		parent::__construct();
+		if( !$this->isAuthorizedFor('pages') ){
+			// FIXME i18n 
+			throw new Kohana_User_Exception('Not Authorized', "Sorry your are not authorized to view 'pages'");	
+		}
 		$this->template->page    = $this->add_view('page');
 		$this->template->page->graph_content  = $this->add_view('graph_content');
 		$this->template->page->graph_content->timerange_select = $this->add_view('timerange_select');
