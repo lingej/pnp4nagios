@@ -54,5 +54,21 @@ class pnp_Core {
 		print "<span id=\"basket_action_add\"><a title=\"Add This Item\" id=\"".$host."::".$service."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span><br>\n";
 }
 
+	public static function addToUri($fields){
+		if(!is_array($fields)){
+			return false;
+		}
+		$get = $_GET;
+		$uri  = url::base();
+		$uri .= Router::$current_uri;
+		$uri .= '?';
+		foreach($fields as $key=>$value){
+			$get[$key] = $value;
+		}
+		foreach($get as $key=>$value){
+			$uri .= $key."=".urlencode($value)."&";
+		}
+		return rtrim($uri,"&");
+	}
 
 } 
