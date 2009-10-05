@@ -1,3 +1,4 @@
+<?php if($this->config->conf['use_calendar']){ ?>
 <script type="text/javascript">
 $(function() {
     $("#button").click(function() {
@@ -29,3 +30,4 @@ $(function() {
     </form><p>
     </div>
 </div>
+<?php } ?>

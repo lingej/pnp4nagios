@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Base controller.
+ * system controller.
  *
  * @package pnp4nagios 
  * @author  Joerg Linge
@@ -48,34 +48,6 @@ class System_Controller extends Template_Controller {
 		#return new View($this->theme_path.$view);
 		return new View($view);
 	}
-
-	/**
-	 * Set correct image path considering
-	 * the path to current theme.
-	 */
-#	public function img_path($rel_path='')
-#	{
-#		return $this->add_path($rel_path);
-#	}
-
-	/**
-	 * Set correct image path considering
-	 * the path to current theme.
-	 */
-#	public function add_path($rel_path)
-#	{
-#		$rel_path = trim($rel_path);
-#		if (empty($rel_path)) {
-#			return false;
-#		}
-#
-#		$path = false;
-#		# assume rel_path is relative from current theme
-#		$path = 'application/views/'.$this->theme_path.$rel_path;
-#		# make sure we didn't mix up start/end slashes
-#		$path = str_replace('//', '/', $path);
-#		return $path;
-#	}
 
 	public function check_mod_rewrite(){
 		if(!in_array('mod_rewrite', apache_get_modules())){
