@@ -44,13 +44,20 @@ class Graph_Controller extends System_Controller  {
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host."&srv=".$this->service;
-			if($this->start){
-				#$this->url .= "&start=".$this->start;
+			if($this->start && $this->end){
+				$this->url .= "&start=".$this->start."&end=".$this->end;
 				$this->session->set("start", $this->start);
-			}
-			if($this->end){
-				#$this->url .= "&end=".$this->end;
 				$this->session->set("end", $this->end);
+			}
+			if($this->start && !$this->end){
+				$this->url .= "&start=".$this->start;
+				$this->session->set("start", $this->start);
+				$this->session->set("end", "");
+			}
+			if($this->end && !$this->start){
+				$this->url .= "&end=".$this->end;
+				$this->session->set("end", $this->end);
+				$this->session->set("start", "");
 			}
 		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
@@ -75,13 +82,20 @@ class Graph_Controller extends System_Controller  {
 				$this->view = $this->config->conf['overview-range'];
 			}
 			$this->url     = "?host=".$this->host;
-			if($this->start){
-				#$this->url .= "&start=".$this->start;
+			if($this->start && $this->end){
+				$this->url .= "&start=".$this->start."&end=".$this->end;
 				$this->session->set("start", $this->start);
-			}
-			if($this->end){
-				#$this->url .= "&end=".$this->end;
 				$this->session->set("end", $this->end);
+			}
+			if($this->start && !$this->end){
+				$this->url .= "&start=".$this->start;
+				$this->session->set("start", $this->start);
+				$this->session->set("end", "");
+			}
+			if($this->end && !$this->start){
+				$this->url .= "&end=".$this->end;
+				$this->session->set("end", $this->end);
+				$this->session->set("start", "");
 			}
 		    $this->title   = "Start $this->host";
 		    $services = $this->data->getServices($this->host);
