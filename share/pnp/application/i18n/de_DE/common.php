@@ -16,8 +16,9 @@ $lang = array
 	'nagios-avail-link-title'   => 'Nagios-Verfügbarkeitsbericht für diesen Zeitbereich',
     'timerange-selector-legend' => 'Auswahl eines Zeitbereichs',
 	'timerange-selector-title'  => 'Auswahl eines Zeitbereichs',
-	'timerange-selector-submit-button'  => 'absenden',
-    'start' => 'Start',
+	'timerange-selector-submit-button' => 'absenden',
+	'timerange-selector-clear-button'  => 'löschen',
+	'timerange-selector-link'          => 'Spezieller Zeitbereich',
+	'start' => 'Start',
 	'end' => 'Ende',
-
 );

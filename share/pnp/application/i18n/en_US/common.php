@@ -16,7 +16,9 @@ $lang = array
     'nagios-avail-link-title'   => 'Nagios availability report for this time range',
     'timerange-selector-legend' => 'Select a custom time range',
     'timerange-selector-title'  => 'Select a custom time range',
-    'timerange-selector-submit-button'  => 'submit',
+    'timerange-selector-submit-button' => 'submit',
+    'timerange-selector-clear-button'  => 'clear',
+    'timerange-selector-link'          => 'Custom time range',
 	'start' => 'Start',
 	'end' => 'End',
 );

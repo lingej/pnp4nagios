@@ -16,7 +16,9 @@ $lang = array
 	'nagios-avail-link-title'   => 'Informe de Disponibilidad en el Intervalo de Tiempo',
     'timerange-selector-legend' => 'Seleccione un intervalo de tiempo personalizado',
 	'timerange-selector-title'  => 'Seleccione un intervalo de tiempo personalizado',
-	'timerange-selector-submit-button'  => 'enviar',
-    'start' => 'Comienzo',
+	'timerange-selector-submit-button' => 'enviar',
+	'timerange-selector-clear-button'  => 'clear',
+	'timerange-selector-link'          => 'Custom time range',
+	'start' => 'Comienzo',
 	'end' => 'Fin',
 );
