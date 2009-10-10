@@ -16,7 +16,7 @@ $lang = array
 	'template-without-def' => 'La plantilla %s no tiene el array $def[]. <a href="http://docs.pnp4nagios.org/faq/13">Leer FAQ en línea</a>',
     'no-data-for-page' => 'Lo siento, no puedo encontrar ningún dato usando el fichero de configuración "%s", <a href="http://docs.pnp4nagios.org/faq/14">Leer FAQ en línea</a>',
 	'page-not-readable' => 'El fichero de configuración "%s" no es legible o no existe. <a href="http://docs.pnp4nagios.org/faq/15">Leer FAQ en línea</a>',
-    'auth-pages' => 'You are not authorized to view "pages" <a href="http://docs.pnp4nagios.org/faq/16">Read FAQ online</a>',
-    'page-config-dir' => 'No page config file found in "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
-    'xport-host-service' => 'Xport controller needs "host" and "srv" URL Parameters. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
+    'auth-pages' => 'No está autorizado a ver "páginas" <a href="http://docs.pnp4nagios.org/faq/16">Leer FAQ en línea</a>',
+    'page-config-dir' => 'No hay fichero de configuración de página en "%s" <a href="http://docs.pnp4nagios.org/faq/17">Leer FAQ en línea</a>',
+    'xport-host-service' => 'El controlador Xport necesita los parámetros de URL "host" y "srv". <a href="http://docs.pnp4nagios.org/faq/18">Leer FAQ en línea</a>',
 );
