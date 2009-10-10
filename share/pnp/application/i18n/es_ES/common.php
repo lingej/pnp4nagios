@@ -4,6 +4,8 @@ $lang = array
     'datasource' => 'Fuente de Datos: %s',
     'host' => 'Equipo: %s',
 	'service' => 'Servicio: %s',
+    'page' => 'Page: %s',
+    'page-basket' => 'Page: Basket',
 	'zoom-header' => 'Zoom',
 	'status-box-header' => 'Estado',
     'search-box-header' => 'Buscar',
@@ -21,4 +23,6 @@ $lang = array
 	'timerange-selector-link'          => 'Custom time range',
 	'start' => 'Comienzo',
 	'end' => 'Fin',
+    'service-details' => 'Service details',
+    'service-overview' => 'Service overview for "%s"',
 );

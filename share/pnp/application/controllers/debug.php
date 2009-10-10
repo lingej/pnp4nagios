@@ -15,7 +15,6 @@ class Debug_Controller extends System_Controller  {
 		$this->template->debug   = $this->add_view('debug');
 		$this->host              = $this->input->get('host');
 		$this->service           = $this->input->get('srv');
-		#$this->session->set("debug", "Test");
 	}
 
 	public function index()
@@ -69,9 +68,8 @@ class Debug_Controller extends System_Controller  {
 		    if(isset($this->host)){
 		    	url::redirect("/graph");
 		    }else{
-				// FIXME
-				throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
-		    }			
+				throw new Kohana_Exception('error.get-first-host');
+			}			
 		}
 	}
 }

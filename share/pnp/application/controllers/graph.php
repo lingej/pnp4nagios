@@ -8,9 +8,6 @@
  */
 class Graph_Controller extends System_Controller  {
 
-	#public $csrf_config = false;
-	#public $route_config = false;
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -73,7 +70,7 @@ class Graph_Controller extends System_Controller  {
 			}
 		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
-		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
+		    $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 			// Status Box Vars
 		    $this->template->graph->status_box->host     = $this->host;
 		    $this->template->graph->status_box->lhost    = $this->host;
@@ -121,7 +118,7 @@ class Graph_Controller extends System_Controller  {
 					$this->session->set('timerange-reset', 0);
 				}
 			}
-		    $this->title   = "Start $this->host";
+		    $this->title   = Kohana::lang('common.start'). " ". $this->host;
 		    $services = $this->data->getServices($this->host);
 			// Status Box Vars
 		    $this->template->graph->status_box->host    = $this->host;
@@ -135,7 +132,7 @@ class Graph_Controller extends System_Controller  {
 			$this->template->graph->timerange_box = $this->add_view('timerange_box');
 		    $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
 
-			$this->title = "Service Overview for $this->host";
+			$this->title = Kohana::lang('common.service-overview', $this->host);
 		    foreach($services as $service){
 				if($service['state'] == 'active')
 		   	    	$this->data->buildDataStruct($this->host,$service['name'],$this->view);
@@ -145,8 +142,7 @@ class Graph_Controller extends System_Controller  {
 		    if(isset($this->host)){
 		    	url::redirect("/graph?host=$this->host");
 		    }else{
-				// FIXME 
-				throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
+				throw new Kohana_Exception('error.get-first-host');
 		    }			
 		}
 		$this->template->graph->icon_box      = $this->add_view('icon_box');

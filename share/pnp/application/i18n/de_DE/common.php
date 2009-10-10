@@ -3,6 +3,8 @@ $lang = array
 (
 	'host' => 'Host: %s',
 	'service' => 'Service: %s',
+    'page' => 'Page: %s',
+    'page-basket' => 'Page: Basket',
 	'datasource' => 'Datasource: %s',
 	'zoom-header' => 'Zoom',
 	'status-box-header' => 'Status',
@@ -21,4 +23,6 @@ $lang = array
 	'timerange-selector-link'          => 'Spezieller Zeitbereich',
 	'start' => 'Start',
 	'end' => 'Ende',
+    'service-details' => 'Service Details',
+    'service-overview' => 'Service Übersicht für "%s"',
 );

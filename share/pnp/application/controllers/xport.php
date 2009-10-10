@@ -40,8 +40,7 @@ class Xport_Controller extends System_Controller  {
 			header('Content-Type: application/xml');
 			print $data; 
 		}else{
-			//FIXME
-		    print "ERROR";
+			throw new Kohana_Exception('error.xport-host-service');
 		}
 	}
 
@@ -55,8 +54,7 @@ class Xport_Controller extends System_Controller  {
 			header('Content-type: application/json');
 			print $json; 
 		}else{
-			//FIXME
-		    print "ERROR";
+			throw new Kohana_Exception('error.xport-host-service');
 		}
 	}
 
@@ -70,8 +68,7 @@ class Xport_Controller extends System_Controller  {
 			header("Content-Type: text/plain; charset=UTF-8");
 			print $csv;
 		}else{
-			//FIXME
-		    print "ERROR";
+			throw new Kohana_Exception('error.xport-host-service');
 		}
 	}
 
