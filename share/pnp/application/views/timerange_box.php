@@ -10,6 +10,9 @@ $path  = pnp::addToUri(array('start' => $start,'end' => $end));
 if($start && $end){
 	echo "<a class=\"multi0\" href=\"".$path."\">Custom Time range</a><br>\n"; 
 }
+if($start && !$end){
+	echo "<a class=\"multi0\" href=\"".$path."\">Custom Time range</a><br>\n"; 
+}
 foreach($this->config->views as $key=>$view){
 	$path = pnp::addToUri(array('view' => $key, 'start' => '', 'end' => ''));
 	echo "<a class=\"multi0\" href=\"".$path."\">".$view['title']."</a><br>\n"; 
