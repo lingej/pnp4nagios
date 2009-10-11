@@ -3,6 +3,8 @@ $lang = array
 (
 	'host' => 'Host: %s',
 	'service' => 'Service: %s',
+    'page' => 'Page: %s',
+    'page-basket' => 'Page: Basket',
 	'datasource' => 'Datasource: %s',
 	'zoom-header' => 'Zoom',
 	'status-box-header' => 'Status',
@@ -16,8 +18,11 @@ $lang = array
 	'nagios-avail-link-title'   => 'Nagios-Verfügbarkeitsbericht für diesen Zeitbereich',
     'timerange-selector-legend' => 'Auswahl eines Zeitbereichs',
 	'timerange-selector-title'  => 'Auswahl eines Zeitbereichs',
-	'timerange-selector-submit-button'  => 'absenden',
-    'start' => 'Start',
+	'timerange-selector-submit-button' => 'absenden',
+	'timerange-selector-clear-button'  => 'löschen',
+	'timerange-selector-link'          => 'Spezieller Zeitbereich',
+	'start' => 'Start',
 	'end' => 'Ende',
-
+    'service-details' => 'Service Details',
+    'service-overview' => 'Service Übersicht für "%s"',
 );

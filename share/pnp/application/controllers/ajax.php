@@ -39,6 +39,7 @@ class Ajax_Controller extends System_Controller  {
 		if($what == 'timerange'){
 			$this->session->delete('start');
 			$this->session->delete('end');
+			$this->session->set('timerange-reset', 1);
 		}
 	}
 

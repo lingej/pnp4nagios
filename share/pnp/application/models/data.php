@@ -22,7 +22,6 @@ class Data_Model extends Model
     public function __construct(){
 		$this->config = new Config_Model();	
 		$this->config->read_config();
-    	#print Kohana::debug($this->config->views);
     }
 
 
@@ -475,8 +474,7 @@ class Data_Model extends Model
         	}
 		}
 		if($start && $end){
-			//Fixme i18n
-    		$timerange[255]['title']   = "Custom Timerange";
+    		$timerange[255]['title']   = Kohana::lang('common.timerange-selector-link');
     		$timerange[255]['start']   = $start;
     		$timerange[255]['f_start'] = date($this->config->conf['date_fmt'],$start);
     		$timerange[255]['end']     = $end;
@@ -497,7 +495,6 @@ class Data_Model extends Model
            	$timestamp = strtotime($end);
            	if(!$timestamp){
 				throw new Kohana_User_Exception('Wrong Format', "$end");
-               	#$debug->doCheck('print_r',"wrong fmt $timestamp");
            	}else{
                	$end = $timestamp;
            	}
@@ -506,7 +503,7 @@ class Data_Model extends Model
        	}
 
        	if(!$start){
-           	$start=( $end - $this->config->views[$view]['start']);
+           	$start = ( $end - $this->config->views[$view]['start']);
        	}elseif(!is_numeric($start)){
            	$timestamp = strtotime($start);
            	if(!$timestamp){

@@ -16,4 +16,7 @@ $lang = array
     'template-without-def' => 'Template %s übergibt Array $def[] nicht. <a href="http://docs.pnp4nagios.org/faq/13">FAQ online lesen</a>',
     'no-data-for-page' => 'Keine Daten für die Page "%s", <a href="http://docs.pnp4nagios.org/faq/14">FAQ online lesen</a>',
     'page-not-readable' => 'Config file "%s" is not readable or does not exist. <a href="http://docs.pnp4nagios.org/faq/15">FAQ online lesen</a>',
+    'auth-pages' => 'You are not authorized to view "pages" <a href="http://docs.pnp4nagios.org/faq/16">Read FAQ online</a>',
+    'page-config-dir' => 'No page config file found in "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
+    'xport-host-service' => 'Xport controller needs "host" and "srv" URL Parameters. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
 );

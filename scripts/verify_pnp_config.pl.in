@@ -2,7 +2,7 @@
 #
 # (C) 2008-2009 pnp4nagios.org / Wolfgang Nieder
 #
-# $Id: verify_pnp_config.in 658 2009-09-14 21:36:49Z le_loup $ 
+# $Id: verify_pnp_config.in 663 2009-10-08 16:59:39Z le_loup $ 
 #
 # check Nagios/PNP integration settings
 # 2008.09.21: 0.1    initial version
@@ -23,6 +23,7 @@
 # 2009.08.11: 0.1.15 changed Doc-paths
 # 2009.08.18: 0.1.16 added layout option / template option / package detection
 # 2009.09.06:        config.php option / PNP root dir option / PDF sizes
+# 2009.10.07:        added config_local.php / file checks
 
 use strict;
 use Getopt::Long;
@@ -46,10 +47,17 @@ my $doc_version = '0.4';
 # please remove the hash sign (#) on the following line if you're using Icinga
 # or specify "-M icinga"
 # $product = lc("icinga");
-my $prod_name = ucfirst($product);
-my $basedir = '@prefix@';
+my $basedir = "/usr/local/nagios";
 my $NagiosBase = "";
 my $NagiosBin = "$product" if (-f "$basedir/bin/$product");
+if (! defined $NagiosBin) {
+	if (-d "/usr/local/icinga") {;
+		$basedir = "/usr/local/icinga";
+		$NagiosBin = "icinga" if (-f "$basedir/bin/icinga");
+		$product = "icinga";
+	}
+}
+my $prod_name = ucfirst($product);
 my $mode = "";
 my $NagiosCfg = "";
 my %NagiosCfg = ();
@@ -326,6 +334,19 @@ if ($PreCheck) {
 	info ("useCache","$NagiosCfg{\"object_cache_file\"}");
 	process_file($NagiosCfg{"object_cache_file"});
 }		
+for my $key (sort keys %commands) {
+	info ("keyValue","$key","$commands{$key}") if (($key =~ /process-/) and ($debug));
+	if ($key =~ /perfdata-file/) {
+		my @par = split(/\s+/,$commands{$key});
+		examine ("x;","pgm",$par[0]);
+		($par[1]) =~ s#.*?=?(/.*/).*#$1#;
+		examine ("d;","src",$par[1]);
+		if (defined $par[2]) {
+			($par[2]) =~ s#.*?=?(/.*/).*#$1#;
+			examine ("d;","tgt",$par[2]);
+		}
+	}
+}
 
 # check common settings in nagios.cfg
 if (exists $NagiosCfg{"process_performance_data"}) {
@@ -784,6 +805,8 @@ sub process_file {
 	my ($file) = @_;
 	my $cmd = "";
 	my $line = "";
+	info ("procFile",$file) if ($debug);
+	chk_usrgrp ($file);
 	open (CFILE, "$file") || abort (24, "errOpen", $file, $!);
 	while (<CFILE>) {
 		s/#.*//;
@@ -812,11 +835,6 @@ sub process_file {
 		}
 	}
 	close (CFILE);
-	if ($debug) {
-		for my $key (sort keys %commands) {
-			info ("keyValue","$key","$commands{$key}") if ($key =~ /process/);
-		}
-	}
 }
 
 # resolve config dir/file entries
@@ -1029,6 +1047,9 @@ sub chk_ppcfg {
 	$PPcfg{log_level} = 'v;0|1|2;';
 	$PPcfg{xml_enc} = 'v;UTF-8|ISO-8859-1|US-ASCII;414';
 	$PPcfg{rrd_daemon_opts} = 'S;.*;520'; 
+	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
+		$PPcfg{rrd_storage_type} = 'v;SINGLE|MULTIPLE;';
+	}
 	$err = 0;
 
 # try to set a file name if variable is unset
@@ -1039,10 +1060,10 @@ sub chk_ppcfg {
 		if (-f "$NagiosBase/etc/pnp/process_perfdata.cfg") {
 			$PPcfg = "$NagiosBase/etc/pnp/process_perfdata.cfg";
 		}
-		if (-f "$PNPdir/etc/pnp/process_perfdata.cfg-sample") {
+		if (-f "$PNPdir/etc/process_perfdata.cfg-sample") {
 			$PPcfg = "$PNPdir/etc/process_perfdata.cfg-sample";
 		}
-		if (-f "$PNPdir/etc/pnp/process_perfdata.cfg") {
+		if (-f "$PNPdir/etc/process_perfdata.cfg") {
 			$PPcfg = "$PNPdir/etc/process_perfdata.cfg";
 		}
 	}
@@ -1112,8 +1133,14 @@ sub chk_cpcfg {
 		if (-f "$NagiosBase/etc/pnp/config.php") {
 			$CPcfg = "$NagiosBase/etc/pnp/config.php";
 		}
+		if (-f "$NagiosBase/etc/pnp/config_local.php") {
+			$CPcfg = "$NagiosBase/etc/pnp/config_local.php";
+		}
 		if (-f "$PNPdir/etc/config.php") {
 			$CPcfg = "$PNPdir/etc/config.php";
+		}
+		if (-f "$PNPdir/etc/config_local.php") {
+			$CPcfg = "$PNPdir/etc/config_local.php";
 		}
 	}
 
@@ -1270,16 +1297,7 @@ sub chk_perfdata {
 	-d && $_ ne "." && info ("procFile", "$_") if ($debug);
 	my $f = "$File::Find::name";
 	return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
-	if ($uid) {
-		my $fuid = (stat("$f"))[4];
-		my $fname = getpwuid($fuid);
-		info ("RRDuser","$f", "$fname", "$user") if ($fuid != $uid);
-	}
-	if ($gid) {
-		my $fgid = (stat("$f"))[5];
-		my $fgroup = getpwuid($fgid);
-		info ("RRDgroup","$f", "$fgroup", "$group") if ($fgid != $gid);
-	}
+	chk_usrgrp ($f);
 	-d && return;
 	$RRDfile++ if ($f =~ /rrd$/);
 	return unless ($f =~ /xml$/);
@@ -1311,6 +1329,20 @@ sub chk_perfdata {
 	info ("RRDrc","$f",$rc, "$txt") if ($rc);
 }
 	
+sub chk_usrgrp {
+	my $file = shift;
+	if ($uid) {
+		my $fuid = (stat("$file"))[4];
+		my $fname = getpwuid($fuid);
+		info ("fileUser","$file", "$fname", "$user") if ($fuid != $uid);
+	}
+	if ($gid) {
+		my $fgid = (stat("$file"))[5];
+		my $fgroup = getpwuid($fgid);
+		info ("fileGroup","$file", "$fgroup", "$group") if ($fgid != $gid);
+	}
+}
+
 sub chk_pkg {
 	my ($pkg_names,$req,$exactly) = @_;
 	my @pkg_names = split (/,/,$pkg_names);
@@ -1478,8 +1510,8 @@ sub message {
 	$msg{"noPerf"} = "[E] There is NO performance data for \"%s\" !";
 	$msg{"noRRDchk"} = "[I] perfdata directory will NOT be checked";
 	$msg{"chkPath"} = "[A] checking of %s \"%s\"";
-	$msg{"RRDuser"} = "[E] \"%s\": owner is \"%s\" instead of %s";
-	$msg{"RRDgroup"} = "[E] \"%s\": group is \"%s\" instead of %s";
+	$msg{"fileUser"} = "[E] \"%s\": owner is \"%s\" instead of \"%s\"";
+	$msg{"fileGroup"} = "[E] \"%s\": group is \"%s\" instead of \"%s\"";
 	$msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
 	$msg{"RRDold"} = "[W] \"%s\" is older than %s seconds";
 	$msg{"RRDcount"} = "[I] %s dir(s) with a total of %s rrd file(s)";
@@ -1588,8 +1620,8 @@ sub message {
 		$msg{"noPerf"} = "[E] es gibt KEINE Performance-Daten fuer \"%s\"";
 		$msg{"noRRDchk"} = "[I] perfdata-Verzeichnis wird NICHT geprueft";
 		$msg{"chkPath"} = "[A] pruefen von %s \"%s\"";
-		$msg{"RRDuser"} = "[E] \"%s\": Owner ist \"%s\" anstatt %s";
-		$msg{"RRDgroup"} = "[E] \"%s\": Group ist \"%s\" anstatt %s";
+		$msg{"fileUser"} = "[E] \"%s\": Owner ist \"%s\" anstatt \"%s\"";
+		$msg{"fileGroup"} = "[E] \"%s\": Group ist \"%s\" anstatt \"%s\"";
 		$msg{"RRDold"} = "[W] \"%s\" ist aelter als %s Sekunden";
 		$msg{"RRDcount"} = "[I] %s Verzeichnis(se) mit insgesamt %s rrd-Datei(en)";
 		$msg{"noRRDfiles"} = "[E] %s Verzeichnis(se) aber KEINE rrd-Dateien => KEINE Graphen!";

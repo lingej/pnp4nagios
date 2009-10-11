@@ -8,7 +8,10 @@ $start = $this->session->get('start','');
 $end   = $this->session->get('end','');
 $path  = pnp::addToUri(array('start' => $start,'end' => $end));
 if($start && $end){
-	echo "<a class=\"multi0\" href=\"".$path."\">Custom Time range</a><br>\n"; 
+	echo "<a class=\"multi0\" href=\"".$path."\">".Kohana::lang('common.timerange-selector-link')."</a><br>\n"; 
+}
+if($start && !$end){
+	echo "<a class=\"multi0\" href=\"".$path."\">".Kohana::lang('common.timerange-selector-link')."</a><br>\n"; 
 }
 foreach($this->config->views as $key=>$view){
 	$path = pnp::addToUri(array('view' => $key, 'start' => '', 'end' => ''));

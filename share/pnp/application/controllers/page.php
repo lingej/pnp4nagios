@@ -11,8 +11,7 @@ class Page_Controller extends System_Controller  {
 	public function __construct(){
 		parent::__construct();
 		if( !$this->isAuthorizedFor('pages') ){
-			// FIXME i18n 
-			throw new Kohana_User_Exception('Not Authorized', "Sorry your are not authorized to view 'pages'");	
+			throw new Kohana_Exception('error.auth-pages');
 		}
 		$this->template->page    = $this->add_view('page');
 		$this->template->page->graph_content  = $this->add_view('graph_content');
@@ -39,12 +38,9 @@ class Page_Controller extends System_Controller  {
 			$this->page = $this->data->getFirstPage();
 		}
 		if($this->page == ""){
-			// FIXME i18n 
-			throw new Kohana_User_Exception('Page Confg Dir', "No Page Config found in.");	
-		}
+			throw new Kohana_Exception('error.page-config-dir', $this->config->conf['page_dir']);}
 		$this->data->buildPageStruct($this->page,$this->view);
-		// FIXME i18n
-		$this->template->page->header->title = "Page: ".$this->data->PAGE_DEF['page_name'];
+		$this->template->page->header->title = Kohana::lang('common.page',$this->data->PAGE_DEF['page_name']);
 		$this->url = "?page&page=$this->page";
        	// Timerange Box Vars
        	$this->template->page->timerange_box = $this->add_view('timerange_box');
@@ -68,9 +64,8 @@ class Page_Controller extends System_Controller  {
 				list($host,$service) = explode("::",$item);
 				$this->data->buildDataStruct($host, $service, $this->view);
 			}
-			// FIXME i18n
 			$this->template->page->basket_box      = $this->add_view('basket_box');
-			$this->template->page->header->title = "Page: Basket";
+			$this->template->page->header->title = Kohana::lang('common.page-basket');
 			$this->url = "basket?";
    	    	// Timerange Box Vars
    	    	$this->template->page->timerange_box = $this->add_view('timerange_box');

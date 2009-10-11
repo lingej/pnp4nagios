@@ -9,12 +9,12 @@
 
 #define command {
 #       command_name    process-service-perfdata
-#       command_line    @PERL@ @prefix@/libexec/process_perfdata.pl
+#       command_line    @PERL@ @libexecdir@/process_perfdata.pl
 #}
 #
 #define command {
 #       command_name    process-host-perfdata
-#       command_line    @PERL@ @prefix@/libexec/process_perfdata.pl -d HOSTPERFDATA
+#       command_line    @PERL@ @libexecdir@/process_perfdata.pl -d HOSTPERFDATA
 #}
 
 #
@@ -22,12 +22,12 @@
 #
 #define command{
 #       command_name    process-service-perfdata-file
-#       command_line    $USER1$/process_perfdata.pl --bulk=@prefix@/var/service-perfdata
+#       command_line    @libexecdir@/process_perfdata.pl --bulk=@PERFDATA_DIR@/service-perfdata
 #}
 
 #define command{
 #       command_name    process-host-perfdata-file
-#       command_line    $USER1$/process_perfdata.pl --bulk=@prefix@/var/host-perfdata
+#       command_line    @libexecdir@/process_perfdata.pl --bulk=@PERFDATA_DIR@/host-perfdata
 #}
 
 #
@@ -35,10 +35,10 @@
 #
 #define command{
 #       command_name    process-service-perfdata-file
-#       command_line    /bin/mv @prefix@/var/service-perfdata @prefix@/var/spool/perfdata/service-perfdata.$TIMET$
+#       command_line    /bin/mv @PERFDATA_DIR@/service-perfdata @PERFDATA_SPOOL_DIR@/service-perfdata.$TIMET$
 #}
 
 #define command{
 #       command_name    process-host-perfdata-file
-#       command_line    /bin/mv @prefix@/var/host-perfdata @prefix@/var/spool/perfdata/host-perfdata.$TIMET$
+#       command_line    /bin/mv @PERFDATA_DIR@/host-perfdata @PERFDATA_SPOOL_DIR@/host-perfdata.$TIMET$
 #}
