@@ -16,4 +16,7 @@ $lang = array
 	'template-without-def' => 'Шаблон %s не предоставляет массив $def[]. <a href="http://docs.pnp4nagios.org/faq/13">Read FAQ online</a>',
 	'no-data-for-page' => 'Извините, не удалось обнаружить никаких данных используя конфигурационный файл "%s", <a href="http://docs.pnp4nagios.org/faq/14">Read FAQ online</a>',
 	'page-not-readable' => 'Конфигурационный файл "%s" не может быть прочитан или не существует. <a href="http://docs.pnp4nagios.org/faq/15">Read FAQ online</a>',
+	'auth-pages' => 'Вы не авторизованы для просмотра "страниц" <a href="http://docs.pnp4nagios.org/faq/16">Read FAQ online</a>',
+	'page-config-dir' => 'Файл конфигурации "страниц" не найден в "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
+	'xport-host-service' => 'Контроллер Xport требует параметры "host" и "srv" в URL. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
 );
