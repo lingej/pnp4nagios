@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 $lang = array
 (
-    'rrdtool-not-found' => 'RRDTool no se encuentra en %s. <a href="http://docs.pnp4nagios.org/faq/1">Leer FAQ en línea</a>',
+    'rrdtool-not-found' => 'RRDTool no se encuentra en %s. <a href="http://docs.pnp4nagios.org/es/faq/1">Leer FAQ en línea</a>',
     'config-not-found' => 'El fichero de configuración %s no se ha encontrado. <a href="http://docs.pnp4nagios.org/faq/2">Leer FAQ en línea</a>',
 	'perfdata-dir-empty' => 'El directorio de Perfdata "%s" está vacío. Compruebe la configuración de Nagios. <a href="http://docs.pnp4nagios.org/faq/3">Leer FAQ en línea</a>',
     'host-perfdata-dir-empty' => 'El directorio de Perfdata "%s" está vacío. Compruebe la configuración de Nagios. <a href="http://docs.pnp4nagios.org/faq/4">Leer FAQ en línea</a>',
