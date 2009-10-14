@@ -104,7 +104,7 @@ foreach ($DS as $i) {
 		if(isset($def[$count])){
 		    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
 		}else{
-		    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+		    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
 		}
 		$def[$count] .= "LINE:var$i#".$colors[$f++].":\"$NAME[$i]\" " ;
 		$def[$count] .= "GPRINT:var$i:LAST:\"%6.0lf RPM last \" ";
@@ -137,7 +137,7 @@ foreach ($DS as $i) {
 		if(isset($def[$count])){
 		    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
 		}else{
-		    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+		    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
 		}
 		$def[$count] .= "LINE:var$i#".$colors[$t++].":\"$NAME[$i]\" " ;
 		
@@ -174,7 +174,7 @@ foreach ($DS as $i) {
 		if(isset($def[$count])){
 		    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
 		}else{
-		    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+		    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
 		}
 		$def[$count] .= "LINE:var$i#".$colors[$e++].":\"$NAME[$i]\" " ;
 		
