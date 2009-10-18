@@ -23,6 +23,6 @@ $lang = array
 	'timerange-selector-link'          => 'Spezieller Zeitbereich',
 	'start' => 'Start',
 	'end' => 'Ende',
-    'service-details' => 'Service Details',
-    'service-overview' => 'Service Übersicht für "%s"',
+    'service-details' => 'Service-Details',
+    'service-overview' => 'Service-Übersicht für "%s"',
 );

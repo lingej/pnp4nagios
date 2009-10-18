@@ -2,7 +2,7 @@
 #
 # (C) 2008-2009 pnp4nagios.org / Wolfgang Nieder
 #
-# $Id: verify_pnp_config.in 663 2009-10-08 16:59:39Z le_loup $ 
+# $Id: verify_pnp_config.in 664 2009-10-18 11:35:06Z le_loup $ 
 #
 # check Nagios/PNP integration settings
 # 2008.09.21: 0.1    initial version
@@ -24,13 +24,14 @@
 # 2009.08.18: 0.1.16 added layout option / template option / package detection
 # 2009.09.06:        config.php option / PNP root dir option / PDF sizes
 # 2009.10.07:        added config_local.php / file checks
+# 2009.10.16: 0.1.17 added native option / fixed broker check
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.16";
+my $version = "0.1.17";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -94,8 +95,9 @@ my $TemplPath = "";
 my $pkg_mgr = "";
 my $language = "";
 my $english = "";
+my $valLang = '^en$|^de$|^es$';
 if (exists $ENV{LANG}) {
-	$language = "/de" if ($ENV{LANG} =~ /de/i);
+	($language) = ($ENV{LANG} =~ /^(..)/);
 }
 my %msg = ();
 
@@ -122,6 +124,7 @@ GetOptions(
 	"g|group=s" => \$group,
 	"l|logfile=s" => \$LogFile,
 	"o|object=s" => \$Object,
+	"n|native=s" => \$language,
 	"M|monitor=s" => \$product,
 	"L|layout=s" => \$layout,
 	"T|template=s" => \$TemplPath,
@@ -137,6 +140,10 @@ info ("\n\n$program, v$version\n");
 if ($english) {
 	info ("[I] option -e");
 	$language = "";
+}
+if ($language) {
+	info ("[E] Language \"$language\" is not valid / not supported") unless ($language =~ /$valLang/i);
+	$language = lc("/$language") unless ($language =~ m#^/..#);
 }
 message();
 
@@ -389,7 +396,7 @@ chk_param ("host_perfdata_file_template", "Bulk|NPCD");
 chk_param ("host_perfdata_file_mode", "Bulk|NPCD");
 chk_param ("host_perfdata_file_processing_interval", "Bulk|NPCD", '\d+');
 chk_param ("host_perfdata_file_processing_command", "Bulk|NPCD");
-chk_param ("broker_module=.../npcdmod.o ...", "Module", 'npcdmod','npcdmod.o');
+chk_param ("broker_module", "Module", 'npcdmod','npcdmod.o');
 
 if ($PNPdir ne "/usr/local/pnp4nagios" ) {
 	info ("[I] option -D: $PNPdir");
@@ -453,6 +460,21 @@ Die Ausgaben beginnen mit einem Buchstaben mit folgender Bedeutung:
 [H] Hinweis: es ist ratsam, die angegebene Dokumentation zu lesen
 [D] Debugging-Meldung, die hoffentlich zur Fehlerbehebung fuehrt
 EOF1
+} elsif ($language =~ /es/i) {
+	print <<EOF1;
+Este script chequeará ciertos valores de su entorno $prod_name/PNP para darle
+asistencia en la resolución de problemas al usar PNP.
+Puede usarse antes y durante el funcionamiento de PNP.
+
+Cada línea de información comienza con una letra que identifica el tipo de
+información mostrada:
+[I] mensaje de información sobre los valores de configuración, cosas a ser realizadas, …
+[A] acciones que deben ser realizadas
+[W] mensaje de aviso
+[E] mensaje de error: PNP no funcionará si no se resuelve el(los) problema(s)
+[H] sugerencia: valdría la pena leer la documentación apropiada
+[D] mensaje de depuración, esperamos que se muestre el origen de su problema
+EOF1
 } else {
 print <<EOF2;
 This script will check certain settings/entries of your $prod_name/PNP environ-
@@ -488,7 +510,7 @@ $0 [-h]
 	[ -L <layout> ]
 	[ -T <templates directory> ]
 	[ -t ]
-	[ -e ]
+	[ -e | -n <language> ]
 	[ -d | -q ]
 	   
 parameters:
@@ -496,7 +518,7 @@ parameters:
 	-b, --basedir=s   $prod_name Base directory (default: $basedir)
 	-B, --binary=s    $prod_name binary (default: $product)
 	-c, --config=s    $prod_name main config file (default: $basedir/etc/product.cfg)
-	-m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD", "module")
+	-m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD"$module)
 	-l, --logfile=s   check configure log file 
 	-D, --pnpdir=s    PNP root directory (PNP >= 0.6)
 	-N, --npcdcfg=s   PNP config file for NPCD mode (default: $basedir/etc/pnp/npcd.cfg)
@@ -517,6 +539,7 @@ parameters:
 	                  "Name;": search for matching host name
 	                  ";Name": search for service description
 	-t, --time        show warnings if RRDfiles are too old
+	-n, --native      show messages in native language (so far "es" or "de")
 	-e, --english     show english messages/links
 	-d, --debug       some debugging output
 EOF3
@@ -769,7 +792,7 @@ sub chk_param {
 				info ("invFile","$module");
 			}
 			if ($config) {
-				examine ("x;","Broker-Config","$config");
+				examine ("f;","Broker-Config","$config");
 			} else {
 				info ("invFile","$config");
 			}
@@ -1466,6 +1489,8 @@ sub chk_templates_dir {
 
 # set different messages according to the language
 sub message {
+	$language = "" if (($pnp_version =~ /^0\.4\.|PKG_VERSION/) and ($language =~ /es/i));
+	my $module = ($pnp_version =~ /^0\.4|VERSION/) ? "" : ", Module";
 	$msg{"qd"} = "[E] --quiet and --debug are mutually exclusive";
 	$msg{"noBase"} = "[E] $prod_name basedir not found/not specified";
 	$msg{"noBaseDir"} = "[E] $prod_name basedir \"%s\" does not exist";
@@ -1477,7 +1502,7 @@ sub message {
 	$msg{"useCfg"} = "[I] using $prod_name config \"%s\"";
 	$msg{"binExec"} = "[E] File \"%s\" is not executable";
 	$msg{"verifyCfg"} = "[A] verifying $prod_name config";
-	$msg{"invPNPmode"} = "[E] no valid mode specified (sync, Bulk, NPCD, default)";
+	$msg{"invPNPmode"} = "[E] no valid mode specified (sync, Bulk, NPCD, default$module)";
 	$msg{"PNPmode"} = "[I] PNP mode: \"%s\"";
 	$msg{"Package"} = "[I] Package: \"%s\"";
 	$msg{"noPkg"} = "[E] Package \"%s\" not found";
@@ -1587,7 +1612,7 @@ sub message {
 		$msg{"useCfg"} = "[I] benutze ${prod_name}-config \"%s\"";
 		$msg{"binExec"} = "[E] Datei \"%s\" ist nicht ausfuehrbar";
 		$msg{"verifyCfg"} = "[A] verifiziere ${prod_name}-Konfiguration";
-		$msg{"invPNPmode"} = "[E] kein gueltiger PNP-Modus angegeben (sync, Bulk, NPCD, default)";
+		$msg{"invPNPmode"} = "[E] kein gueltiger PNP-Modus angegeben (sync, Bulk, NPCD, default$module)";
 		$msg{"PNPmode"} = "[I] PNP-Modus: \"%s\"";
 		$msg{"Package"} = "[I] Paket: \"%s\"";
 		$msg{"noPkg"} = "[E] Paket \"%s\" nicht gefunden";
@@ -1672,5 +1697,95 @@ sub message {
 		$msg{"LinkEnaPerf"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data";
 		$msg{"LinkNagiosCfg"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#%s";
 		$msg{"LinkNagiosCfg2"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data\n    (und folgende Optionen)";
+	}
+	if ($language =~ /es/i) {
+		$msg{"qd"} = "[E] --quiet y --debug son mutuamente exclusivos";
+		$msg{"noBase"} = "[E] directorio base $prod_name no encontrado/no especificado";
+		$msg{"noBaseDir"} = "[E] directorio base $prod_name \"%s\" no existe";
+		$msg{"useBase"} = "[I] usando directorio base $prod_name \"%s\"";
+		$msg{"noBinary"} = "[E] binario \"%s\" no encontrado/definido";
+		$msg{"useBinary"} = "[I] usando binario $prod_name \"%s\"";
+		$msg{"noCfg"} = "[E] $product.cfg no especificado";
+		$msg{"noCfgFile"} = "[E] fichero de configuración \"%s\" no encontrado";
+		$msg{"useCfg"} = "[I] usando configuración $prod_name \"%s\"";
+		$msg{"binExec"} = "[E] Fichero \"%s\" no es ejecutable";
+		$msg{"verifyCfg"} = "[A] verificando $prod_name config";
+		$msg{"invPNPmode"} = "[E] no se ha especificado un modo valido (sync, Bulk, NPCD, default$module)";
+		$msg{"PNPmode"} = "[I] modo PNP: \"%s\"";
+		$msg{"Package"} = "[I] Paquete: \"%s\"";
+		$msg{"noPkg"} = "[E] Paquete \"%s\" no encontrado";
+		$msg{"useLog"} = "[I] Fichero de Log \"%s\" especificado";
+		$msg{"NagiosChkErr"} = "[E] $prod_name check ha encontrado errores";
+		$msg{"NagiosCfgErr"} = "[E] $prod_name config contiene errores";
+		$msg{"verifyRRD"} = "[A] comprobando RRDtool (%s)";
+		$msg{"invFile"} = "[E] \"%s\" no es un fichero (regular)";
+		$msg{"invDir"} = "[E] (%s) directorio \"%s\" no existe";
+		$msg{"useEntry"} = "[I] usando cfg_dir/cfg_file entradas";
+		$msg{"useCache"} = "[I] usando \"%s\" entradas";
+		$msg{"dupEntry"} = "[E] directiva \"%s\" duplicada";
+		$msg{"noPerfEna"} = "[E] procesado de datos de rendimiento no habilitado (process_performance_data=1 en $product.cfg)";
+		$msg{"envMacrosDis"} = "[E] macros de entorno deshabilitadas (enable_environment_macros=0)";
+		$msg{"noErrors"} = "\nNo se han encontrado errores (obvios). Disfrute de sus gráficos con PNP";
+		$msg{"Warnings"} = "\nAlertas encontradas. Compruebe los valores de configuración.";
+		$msg{"Errors"} = "\nErrores encontrados. Compruebe los valores de configuración y eche un vistazo a la documentación.";
+		$msg{"procFile"} = "[A] procesando \"%s\"";
+		$msg{"searchObj"} = "[A] buscando \"%s\"";
+		$msg{"noLabel"} = "[E] no se ha definido etiqueta";
+		$msg{"invValue"} = "[E] no hay valor válido";
+		$msg{"invOption"} = "[E] \"%s\" no es un opción válida";
+		$msg{"invUOM"} = "[E] \"%s\" no parece existir un UOM válido";
+		$msg{"minRev"} = "[W] opción \"%s\" válida comenzando con revisión %s";
+		$msg{"maxRev"} = "[W] opción \"%s\" sólo es válida hasta su revisión %s";
+		$msg{"noUser"} = "[E] (%s) usuario \"%s\" no existe";
+		$msg{"noGroup"} = "[E] (%s) grupo \"%s\" no existe";
+		$msg{"noPerf"} = "[E] NO hay datos de rendimiento para \"%s\" !";
+		$msg{"noRRDchk"} = "[I] directorio de perfdata NO se chequeará";
+		$msg{"chkPath"} = "[A] chequeo de %s \"%s\"";
+		$msg{"fileUser"} = "[E] \"%s\": propietario es \"%s\" en lugar de \"%s\"";
+		$msg{"fileGroup"} = "[E] \"%s\": grupo es \"%s\" en lugar de \"%s\"";
+		$msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
+		$msg{"RRDold"} = "[W] \"%s\" es más antiguo de %s seconds";
+		$msg{"RRDcount"} = "[I] %s dir(s) con un total de %s fihcero(s) rrd";
+		$msg{"noRRDfiles"} = "[E] %s dir(s) pero NO ficheros rrd => ¡NO gráficos!";
+		$msg{"useRRDs"} = "[I] módulos perl de RRD instalados";
+		$msg{"noRRDs"} = "[I] módulos perl de RRD no instalados";
+		$msg{"noHiRes"} = "[E] módulos perl Time::HiRes no instalados";
+		$msg{"chkPar"} = "[D] comprobando parámetro \"%s\"";
+		$msg{"ParValue"} = "[I] parámetro valor \"%s\"";
+		$msg{"parModeInv"} = "[E] \"%s\" no válido en modo \"%s\"";
+		$msg{"invValue2"} = "[E] valor \"%s\" para \"%s\" inválido";
+		$msg{"chkTemplate"} = "[A] comprobando plantila \"%s\"";
+		$msg{"invTemplate"} = "[E] sintaxis de plantilla no válida";
+		$msg{"invDelim"} = "[E] delimitador inválido (%s) en plantilla";
+		$msg{"missDelim"} = "[E] falta delimitador en plantilla";
+		$msg{"invDatatype"} = "[E] datatype \"%s\" en plantilla es inválido";
+		$msg{"invTempVar"} = "[E] variable \"%s\" en plantilla es (probablemente) inválido";
+		$msg{"invTempVal"} = "[E] valor \"%s\" en plantilla inválido, debería ser \"%s\"";
+		$msg{"invEOL"} = "[E] \"%s\" debería finalizar con punto y coma";
+		$msg{"invQuote"} = "[E] \"%s\" no hay correspondencia en el cierre de comillas";
+		$msg{"missTempVar"} = "[E] variable \"%s\" en plantilla no existe";
+		$msg{"missinvTempVal"} = "[E] valor \"%s\" en plantilla no existe";
+		$msg{"noCmd"} = "[E] command_name \"%s\" no encontrado";
+		$msg{"noParCfg"} = "[E] \"%s\" no encontrado en $product.cfg";
+		$msg{"noParCfgH"} = "[H] \"%s\" no encontrado en $product.cfg";
+		$msg{"notAdv"} = "[H] \"%s\" no aconsejable en Nagios < 3.x";
+		$msg{"invChar"} = "[E] \"%s\" (\"%s\") tiene un formato o contiene carácteres no válidos";
+		$msg{"undefVal"} = "[E] no hay valor (válido) definido para \"%s\"";
+		$msg{"noNumber"} = "[E] %s no es un número válido";
+		$msg{"startEnd"} = "[E] el comienzo (%s) es más grande que el final (%s)";
+		$msg{"noFile"} = "[E] (%s) fichero \"%s\" no existe";
+		$msg{"noRes"} = "[E] recurso \"%s\" no está definido";
+		$msg{"noFileYet"} = "[I] (%s) fichero \"%s\" no existe (todavía)";
+		$msg{"noDir"} = "[E] (%s) directorio \"%s\" no existe";
+		$msg{"noSock"} = "[E] \"%s\" no es un socket";
+		$msg{"noWrite"} = "[E] \"%s\": sin permisos de escritura para \"%s\"";
+		$msg{"key"} = "[D] key:\"%s\"";
+		$msg{"keyValue"} = "[D] directiva:\"%s\", valor:\"%s\"";
+		$msg{"oddLine"} = "[W] \"%s\" parece extraño";
+		$msg{"errOpen"} = "[E] ha fallado la apertura de %s , RC=%s";
+
+		$msg{"NPCDcfgReq"} = "[E] Se requiere fichero de configuración NPCD";
+		$msg{"noNPCDreq"} = "[H] No se requiere fichero de configuración NPCD";
+		$msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (y las opciones que siguen)";
 	}
 }

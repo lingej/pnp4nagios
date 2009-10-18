@@ -15,8 +15,8 @@ $lang = array
     'template-without-opt' => 'Template %s übergibt Array $opt[] nicht. <a href="http://docs.pnp4nagios.org/faq/12">FAQ online lesen</a>',
     'template-without-def' => 'Template %s übergibt Array $def[] nicht. <a href="http://docs.pnp4nagios.org/faq/13">FAQ online lesen</a>',
     'no-data-for-page' => 'Keine Daten für die Page "%s", <a href="http://docs.pnp4nagios.org/faq/14">FAQ online lesen</a>',
-    'page-not-readable' => 'Config file "%s" is not readable or does not exist. <a href="http://docs.pnp4nagios.org/faq/15">FAQ online lesen</a>',
-    'auth-pages' => 'You are not authorized to view "pages" <a href="http://docs.pnp4nagios.org/faq/16">Read FAQ online</a>',
-    'page-config-dir' => 'No page config file found in "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
-    'xport-host-service' => 'Xport controller needs "host" and "srv" URL Parameters. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
+    'page-not-readable' => 'Konfigurationsdatei "%s" ist nicht lesbar oder existiert nicht. <a href="http://docs.pnp4nagios.org/faq/15">FAQ online lesen</a>',
+    'auth-pages' => 'Sie sind nicht berechtigt, "Pages" anzusehen <a href="http://docs.pnp4nagios.org/faq/16">FAQ online lesen</a>',
+    'page-config-dir' => 'Keine page-Konfigurationsdatei in "%s" gefunden <a href="http://docs.pnp4nagios.org/faq/17">FAQ online lesen</a>',
+    'xport-host-service' => 'Xport-Controller benötigt "host"- und "srv"-URL-Parameter. <a href="http://docs.pnp4nagios.org/faq/18">FAQ online lesen</a>',
 );
