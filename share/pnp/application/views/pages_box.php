@@ -1,4 +1,4 @@
-<?php if (!empty($pages)) { ?>
+<?php if (!empty($pages) && $this->isAuthorizedFor('pages') ) { ?>
 <div class="ui-widget">
  <div class="p2 ui-widget-header ui-corner-top">
  <?php echo Kohana::lang('common.pages-box-header') ?>
