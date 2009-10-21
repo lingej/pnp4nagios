@@ -33,3 +33,11 @@ host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$H
 host_perfdata_file_mode=a
 host_perfdata_file_processing_interval=15
 host_perfdata_file_processing_command=process-host-perfdata-file
+
+#
+# Module mode
+# 
+
+process_performance_data=1
+
+broker_module=@bindir@/npcdmod.o config_file=@sysconfdir@/npcd.cfg
