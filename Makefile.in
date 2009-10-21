@@ -128,6 +128,9 @@ install-basic:
 	@echo ""
 	@echo "*** Main program, Scripts and HTML files installed ***"
 	@echo ""
+	@echo "Please run 'make install-webconf' to install the"
+	@echo "web configuration file"
+	@echo ""
 	@echo "Please run 'make install-config' to install sample"
 	@echo "configuration files"
 	@echo ""
@@ -137,5 +140,5 @@ install-basic:
 	@echo ""
 	@echo ""
 
-fullinstall: install install-init install-config
+fullinstall: install install-webconf install-init install-config
 

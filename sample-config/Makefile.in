@@ -54,9 +54,15 @@ install-config:
 
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)
 
+	@echo ""
+	@echo "*** PNP4Nagios sample config files installed ***"
+	@echo ""
+
+install-webconf: 
+
 	$(INSTALL) -m 644 httpd.conf $(DESTDIR)$(HTTPD_CONF)/$(PKG_NAME).conf
 
 	@echo ""
-	@echo "*** PNP4Nagios/Apache conf file installed ***"
+	@echo "*** Apache config file installed ***"
 	@echo ""
 	
