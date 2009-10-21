@@ -14,7 +14,7 @@
  *
  * @see http://docs.kohanaphp.com/installation/deployment
  */
-define('IN_PRODUCTION', FALSE);
+define('IN_PRODUCTION', TRUE);
 
 /**
 * The current XML Structure Tag for this PNP Version
@@ -109,3 +109,5 @@ else
 	// Initialize Kohana
 	require SYSPATH.'core/Bootstrap'.EXT;
 }
+
+
