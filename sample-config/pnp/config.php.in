@@ -37,6 +37,9 @@ $conf['pdf_height'] = "100";
 #
 # Additional options for RRDTool
 #
+# Example: White background and no border
+# "--watermark 'Copyright by example.com' --slope-mode --color BACK#FFF --color SHADEA#FFF --color SHADEB#FFF"
+#
 $conf['graph_opt'] = ""; 
 #
 # Directory where the RRD Files will be stored
