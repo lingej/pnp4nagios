@@ -32,7 +32,7 @@ class pnp_Core {
 		if( $string == XML_STRUCTURE_VERSION ){
 			$string = "valid";
 		}else{
-			$string = Kohana::lang('common.xml-structure-mismatch', $string, XML_STRUCTURE_VERSION);
+			$string = Kohana::lang('error.xml-structure-mismatch', $string, XML_STRUCTURE_VERSION);
 		}
 		return $string;
 	}
