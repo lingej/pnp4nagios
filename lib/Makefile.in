@@ -20,14 +20,15 @@ devclean: distclean
 
 install:
 
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana
+    $(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)      
+    $(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/controllers
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/de_DE
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/nl_NL
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/fr_FR
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n/it_IT
@@ -96,6 +97,22 @@ install:
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/event.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/errors.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/es_ES/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/es_ES/swift.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/validation.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/core.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/core.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/pagination.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/captcha.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/captcha.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/encrypt.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/encrypt.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/orm.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/orm.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/image.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/image.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/session.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/session.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/database.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/database.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/calendar.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/calendar.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/profiler.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/profiler.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/cache.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/cache.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/upload.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/upload.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/event.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/event.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/errors.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/errors.php
+	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/ru_RU/swift.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/ru_RU/swift.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/en_US/validation.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US/validation.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/en_US/core.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US/core.php
 	$(INSTALL) -m 644 $(INSTALL_OPTS) kohana/system/i18n/en_US/pagination.php $(DESTDIR)$(LIBDIR)/kohana/system/i18n/en_US/pagination.php
