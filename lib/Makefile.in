@@ -20,8 +20,8 @@ devclean: distclean
 
 install:
 
-    $(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)      
-    $(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)      
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/controllers
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)/kohana/system/i18n
