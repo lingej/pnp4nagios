@@ -19,4 +19,5 @@ $lang = array
 	'auth-pages' => 'Вы не авторизованы для просмотра "страниц" <a href="http://docs.pnp4nagios.org/faq/16">Read FAQ online</a>',
 	'page-config-dir' => 'Файл конфигурации "страниц" не найден в "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
 	'xport-host-service' => 'Контроллер Xport требует параметры "host" и "srv" в URL. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
+	'mod-rewrite' => 'Apache Rewrite Module is not enabled. <a href="http://docs.pnp4nagios.org/faq/19">Read FAQ online</a>',
 );
