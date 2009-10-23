@@ -41,6 +41,8 @@ my $nagios_user="@nagios_user@";
 my $nagios_grp="@nagios_grp@";
 my $libexecdir="@libexecdir@"; # put all --with-vars before directories
 my $localstatedir="@localstatedir@";
+my $KOHANA="@KOHANA@";
+my $KOHANA_SYSTEM="@KOHANA_SYSTEM@";
 my $libdir="@libdir@";
 my $sysconfdir="@sysconfdir@";
 my $host_os="@host_os@";
@@ -99,6 +101,8 @@ while ($f = shift @ARGV) {
 		s|\@nagios_grp\@|$nagios_grp|g;
 		s|\@libexecdir\@|$libexecdir|g; # put all --with-vars before directories
 		s|\@localstatedir\@|$localstatedir|g;
+		s|\@KOHANA\@|$KOHANA|g;
+		s|\@KOHANA_SYSTEM\@|$KOHANA_SYSTEM|g;
 		s|\@libdir\@|$libdir|g;
 		s|\@init_dir\@|$init_dir|g;
 		s|\@sysconfdir\@|$sysconfdir|g;

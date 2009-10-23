@@ -25,6 +25,7 @@ CFGDIR=@sysconfdir@
 BINDIR=@bindir@
 LIBEXECDIR=@libexecdir@
 LIBDIR=@libdir@
+KOHANA=@KOHANA@
 CGIDIR=@sbindir@
 INSTALL=@INSTALL@
 INSTALL_OPTS=@INSTALL_OPTS@
@@ -43,7 +44,9 @@ none:
 all:
 	cd $(SRC_BASE) && $(MAKE)
 	cd $(SRC_SHARE) && $(MAKE)
+ifeq "$(KOHANA)" "yes"	
 	cd $(SRC_LIB) && $(MAKE)
+endif
 	cd $(SRC_SCRIPTS) && $(MAKE)
 
 	@echo ""
@@ -112,7 +115,9 @@ install-plugins:
 install:
 	cd $(SRC_BASE) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
-	cd $(SRC_LIB) && $(MAKE) $@
+ifeq "$(KOHANA)" "yes"	
+	cd $(SRC_LIB) && $(MAKE)
+endif
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
 	$(MAKE) install-basic
