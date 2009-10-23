@@ -81,6 +81,12 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <?php else: $failed = TRUE ?>
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i7">magic_quotes_gpc</a> is deprecated</td>
 <?php endif ?></tr>
+<th>Apache Rewrite Module</th>
+<?php if(in_array('mod_rewrite', apache_get_modules())) : ?>
+<td class="pass">Pass</td>
+<?php else: $failed = TRUE ?>
+<td class="fail"><a href="http://docs.pnp4nagios.org/faq/19">Apache mod_rewrite</a> is not enabled</td>
+<?php endif ?></tr>
 </table>
 </div>
 
