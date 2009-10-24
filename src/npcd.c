@@ -81,7 +81,7 @@ static void start_daemon(const char *log_name, int facility) {
 	chdir("/");
 
 	/* change umask to defined value - be independet from parent umask */
-	umask(0);
+	umask(022);
 
 	/* close all possible file handles */
 	for (i = sysconf(_SC_OPEN_MAX); i > 0; i--)
