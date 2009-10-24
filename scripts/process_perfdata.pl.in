@@ -30,7 +30,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $rrd_error_count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
 my %conf = (
     TIMEOUT           => "5",
@@ -87,6 +87,7 @@ GetOptions(
 
 parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
+$rrd_error_count = 0;       # Count RRD errors used for internal statistics
 
 #
 # RRDs Perl Module Detection
@@ -110,26 +111,28 @@ main();
 # Main function to switch to the right mode.
 sub main {
     my $t0 = [gettimeofday];
+    my $lines = 0;
     if ($opt_i) {
         print_log( "process_perfdata.pl-$const{VERSION} starting in INETD Mode", 1 );
         %NAGIOS = parse_env();
-        process_perfdata();
+        $lines = process_perfdata();
     }
     elsif ( $opt_b && !$opt_n ) {
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
-        process_perfdata_file();
+        $lines = process_perfdata_file();
     }
     elsif ( $opt_b && $opt_n ) {
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
-        process_perfdata_file();
+        $lines = process_perfdata_file();
     }
     else {
         print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
-        process_perfdata();
+        $lines = process_perfdata();
     }
     my $t1 = [gettimeofday];
     my $rt = tv_interval $t0, $t1;
+    store_internals($rt,$lines);
     print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
     exit 0;
 }
@@ -206,6 +209,7 @@ sub process_perfdata {
     $NAGIOS{PERFDATA} =~ s/=\s+/=/g;
     $NAGIOS{PERFDATA} .= " ";
     parse_perfstring( $NAGIOS{PERFDATA} );
+    return 1;
 }
 
 #
@@ -250,11 +254,10 @@ sub process_perfdata_file {
 
         if ( unlink("$pdfile") == 1 ) {
             print_log( "$pdfile deleted", 1 );
-        }
-        else {
+        }else {
             print_log( "Could not delete $pdfile:$!", 1 );
         }
-
+	return $count;
     }
     else {
         print_log( "ERROR: File $opt_b not found", 1 );
@@ -394,6 +397,7 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::create ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
+				$rrd_error_count++;
             }
             else {
                 print_log( "$rrdfile created", 2 );
@@ -407,6 +411,7 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( $?, "create failed" );
+				$rrd_error_count++;
             }
             else {
                 print_log( "rrdtool create returns $?", 1 );
@@ -428,6 +433,7 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::update ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
+				$rrd_error_count++;
             }
             else {
                 print_log( "$rrdfile updated", 2 );
@@ -447,6 +453,7 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "update failed" );
+				$rrd_error_count++;
             }
             else {
                 print_log( "rrdtool update returns $?", 1 );
@@ -1037,7 +1044,25 @@ sub handle_signal {
     print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
     exit 1;
 }
-
+#
+# Store some internal runtime infos
+#
+sub store_internals {
+    my $runtime = shift;
+    my $lines   = shift;
+    $conf{'RRD_STORAGE_TYPE'} = "MULTIPLE";
+    %NAGIOS = ( 
+		HOSTNAME => '.pnp-internal',
+		DISP_HOSTNAME => 'pnp-internal',
+		SERVICEDESC => 'runtime',
+		DISP_SERVICEDESC => 'runtime',
+		TIMET => time,
+		DATATYPE => 'SERVICEPERFDATA',
+		CHECK_COMMAND => 'pnp-runtime',
+		PERFDATA => "runtime=".$runtime."s lines=".$lines." errors=".$rrd_error_count
+    );
+    parse_perfstring(  $NAGIOS{PERFDATA} );
+}
 #
 #
 #
