@@ -72,8 +72,8 @@ class Graph_Controller extends System_Controller  {
 		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
 		    $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 			// Status Box Vars
-		    $this->template->graph->status_box->host     = $this->host;
-		    $this->template->graph->status_box->lhost    = $this->host;
+		    $this->template->graph->status_box->host     = $this->data->MACRO['DISP_HOSTNAME'];
+		    $this->template->graph->status_box->lhost    = $this->data->MACRO['HOSTNAME'];
 		    $this->template->graph->status_box->service  = $this->data->MACRO['DISP_SERVICEDESC'];
 		    $this->template->graph->status_box->lservice = $this->data->MACRO['SERVICEDESC'];
 		    $this->template->graph->status_box->timet    = date($this->config->conf['date_fmt'],$this->data->MACRO['TIMET']);
@@ -121,9 +121,9 @@ class Graph_Controller extends System_Controller  {
 		    $this->title   = Kohana::lang('common.start'). " ". $this->host;
 		    $services = $this->data->getServices($this->host);
 			// Status Box Vars
-		    $this->template->graph->status_box->host    = $this->host;
-		    $this->template->graph->status_box->lhost   = $this->host;
-		    $this->template->graph->status_box->shost   = pnp::shorten($this->host);
+		    $this->template->graph->status_box->host    = $this->data->MACRO['DISP_HOSTNAME'];
+		    $this->template->graph->status_box->lhost   = $this->data->MACRO['HOSTNAME'];
+		    $this->template->graph->status_box->shost   = pnp::shorten($this->data->MACRO['DISP_HOSTNAME']);
 		    $this->template->graph->status_box->timet   = date($this->config->conf['date_fmt'],$this->data->MACRO['TIMET']);
 			// Service Box Vars
 			$this->template->graph->service_box->services = $services;
