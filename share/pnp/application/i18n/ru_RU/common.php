@@ -25,4 +25,9 @@ $lang = array
 	'end' => 'Окончание',
     'service-details' => 'Подробности о службе',
     'service-overview' => 'Обзор служб для "%s"',
+    'title-pages-link' => 'View pages',
+    'title-pdf-link' => 'View PDF',
+    'title-xml-link' => 'View XML',
+    'title-statistics-link' => 'View PNP internal statistics',
+    'title-calendar-link' => 'Define a custom time range',
 );

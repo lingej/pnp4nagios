@@ -25,4 +25,9 @@ $lang = array
 	'end' => 'Ende',
     'service-details' => 'Service-Details',
     'service-overview' => 'Service-Übersicht für "%s"',
+    'title-pages-link' => 'Pages anzeigen',
+    'title-pdf-link' => 'PDF anzeigen',
+    'title-xml-link' => 'XML anzeigen',
+    'title-statistics-link' => 'Interne PNP Statistiken',
+    'title-calendar-link' => 'Einen Zeitbereich definieren',
 );
