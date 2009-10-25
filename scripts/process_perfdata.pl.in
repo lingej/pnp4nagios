@@ -30,7 +30,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $rrd_error_count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
 my %conf = (
     TIMEOUT           => "5",
@@ -87,7 +87,13 @@ GetOptions(
 
 parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
-$rrd_error_count = 0;       # Count RRD errors used for internal statistics
+my %stats = (
+	rrd_error_count => 0,
+	invalid         => 0,
+	skipped         => 0,
+	runtime         => 0,
+	lines           => 0,
+	);
 
 #
 # RRDs Perl Module Detection
@@ -132,7 +138,9 @@ sub main {
     }
     my $t1 = [gettimeofday];
     my $rt = tv_interval $t0, $t1;
-    store_internals($rt,$lines);
+	$stats{runtime} = $rt;
+	$stats{lines} = $lines;
+    store_internals();
     print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
     exit 0;
 }
@@ -189,7 +197,7 @@ sub parse_env {
 sub process_perfdata {
     if ( !$NAGIOS{PERFDATA} ) {
         print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
-        if ( !$opt_b ) {
+		if ( !$opt_b ) {
             print_log( "PNP exiting ...", 1 );
             exit 1;
         }
@@ -247,6 +255,7 @@ sub process_perfdata_file {
             }
             else {
                 print_log( "No Perfdata. Skipping line $count", 2 );
+				$stats{skipped}++;
             }
         }
 
@@ -397,7 +406,7 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::create ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
-				$rrd_error_count++;
+				$stats{rrd_error_count}++;
             }
             else {
                 print_log( "$rrdfile created", 2 );
@@ -411,7 +420,7 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( $?, "create failed" );
-				$rrd_error_count++;
+				$stats{rd_error_count}++;
             }
             else {
                 print_log( "rrdtool create returns $?", 1 );
@@ -433,7 +442,7 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::update ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
-				$rrd_error_count++;
+				$stats{rrd_error_count}++;
             }
             else {
                 print_log( "$rrdfile updated", 2 );
@@ -453,7 +462,7 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "update failed" );
-				$rrd_error_count++;
+				$stats{rrd_error_count}++;
             }
             else {
                 print_log( "rrdtool update returns $?", 1 );
@@ -835,6 +844,7 @@ sub parse_perfstring {
             ( $perfstring, %p ) = _parse($perfstring);
             if ( !$p{label} ) {
                 print_log( "Invalid Perfdata detected ", 1 );
+				$stats{invalid}++;
                 @perfs = ();
                 last;
             }
@@ -1048,8 +1058,6 @@ sub handle_signal {
 # Store some internal runtime infos
 #
 sub store_internals {
-    my $runtime = shift;
-    my $lines   = shift;
     $conf{'RRD_STORAGE_TYPE'} = "MULTIPLE";
     %NAGIOS = ( 
 		HOSTNAME => '.pnp-internal',
@@ -1059,7 +1067,7 @@ sub store_internals {
 		TIMET => time,
 		DATATYPE => 'SERVICEPERFDATA',
 		CHECK_COMMAND => 'pnp-runtime',
-		PERFDATA => "runtime=".$runtime."s lines=".$lines." errors=".$rrd_error_count
+		PERFDATA => "runtime=".$stats{runtime}."s lines=".$stats{lines}." errors=".$stats{rrd_error_count}." invalid=".$stats{invalid}." skipped=".$stats{skipped} 
     );
     parse_perfstring(  $NAGIOS{PERFDATA} );
 }
