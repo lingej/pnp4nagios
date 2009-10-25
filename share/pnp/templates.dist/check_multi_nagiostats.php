@@ -6,6 +6,8 @@
 #
 # http://www.my-plugin.de/wiki/projects/check_multi/examples/nagiostats
 #
+$ds_name[1] = "Host and Service Latency";
+
 $opt[1]  = "--vertical-label \"Time in ms\" -l0 --title \"Host and Service Latency in ms - $hostname\" ";
 $def[1]  = "DEF:var9=$RRDFILE[9]:$DS[9]:AVERAGE " ;
 $def[1] .= "DEF:var10=$RRDFILE[10]:$DS[10]:AVERAGE " ;
@@ -37,6 +39,7 @@ $def[1] .= "GPRINT:var10:MAX:\"%6.0lf ms max\" " ;
 $def[1] .= "GPRINT:var10:MIN:\"%6.0lf ms min\\n\" " ;
  
  
+$ds_name[2] = "Service checks during last 5 minutes";
 $opt[2]  = "--vertical-label \"Checks\" -l0 --title \"Service checks during last 5 minutes - $hostname\" ";
 $def[2]  = "DEF:var5=$RRDFILE[7]:$DS[7]:AVERAGE " ;
 $def[2] .= "DEF:var6=$RRDFILE[8]:$DS[8]:AVERAGE " ;
@@ -67,7 +70,7 @@ $def[2] .= "GPRINT:var8:AVERAGE:\"%6.0lf avg\" " ;
 $def[2] .= "GPRINT:var8:MAX:\"%6.0lf max\" ";
 $def[2] .= "GPRINT:var8:MIN:\"%6.0lf min\\n\" " ;
  
- 
+$ds_name[3] = "Host checks during last 5 minutes";
 $opt[3]  = "--vertical-label \"Checks\" -l0 --title \"Host checks during last 5 minutes - $hostname\" ";
 $def[3]  = "DEF:var1=$RRDFILE[3]:$DS[3]:AVERAGE " ;
 $def[3] .= "DEF:var2=$RRDFILE[4]:$DS[4]:AVERAGE " ;
