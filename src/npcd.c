@@ -1,20 +1,20 @@
-// Copyright (C) 2007-2009 Hendrik Baecker <andurin@process-zero.de>
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License version 2 as
-// published by the Free Software Foundation;
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-//
-// $Id: npcd.c 637 2009-06-09 10:32:39Z hendrikb $
-//
+/* Copyright (C) 2007-2009 Hendrik Baecker <andurin@process-zero.de>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License version 2 as
+* published by the Free Software Foundation;
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*
+* $Id: npcd.c 637 2009-06-09 10:32:39Z hendrikb $
+*/
 
 #include "../include/config.h"
 #include "../include/pnp.h"
@@ -397,10 +397,8 @@ int process_arguments(int argc, char **argv) {
 	while (1) {
 
 #ifdef HAVE_GETOPT_H
-		//c=getopt_long(argc,argv,"+hVc:m:a:s:du:g:f:",long_options,&option_index);
 		c = getopt_long(argc, argv, "+hVdf:", long_options, &option_index);
 #else
-		//c=getopt(argc,argv,"+hVc:m:a:s:du:g:f:");
 		c = getopt(argc, argv, "+hVdf:");
 #endif
 
@@ -480,9 +478,9 @@ int process_arguments(int argc, char **argv) {
 }
 
 /********************************************************************
- *																    *
- * processfile - this is the function for each thread			    *
- *								    								*
+ *								    *
+ * processfile - this is the function for each thread		    *
+ *								    *
  ********************************************************************/
 
 void * processfile(void *filename) {
