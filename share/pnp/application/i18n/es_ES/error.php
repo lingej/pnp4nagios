@@ -19,5 +19,5 @@ $lang = array
     'auth-pages' => 'No está autorizado a ver "páginas" <a href="http://docs.pnp4nagios.org/es/faq/16">Leer FAQ en línea</a>',
     'page-config-dir' => 'No hay fichero de configuración de página en "%s" <a href="http://docs.pnp4nagios.org/es/faq/17">Leer FAQ en línea</a>',
     'xport-host-service' => 'El controlador Xport necesita los parámetros de URL "host" y "srv". <a href="http://docs.pnp4nagios.org/es/faq/18">Leer FAQ en línea</a>',
-	'mod-rewrite' => 'Apache Rewrite Module is not enabled. <a href="http://docs.pnp4nagios.org/faq/19">Read FAQ online</a>',
+	'mod-rewrite' => 'El módulo Apache Rewrite no está habilitado. <a href="http://docs.pnp4nagios.org/es/faq/19">Leer FAQ en línea</a>',
 );
