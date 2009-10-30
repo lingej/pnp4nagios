@@ -1,6 +1,6 @@
 #!@PERL@
 # nagios: -epn
-## process_perfdata - PNP.
+## @PKG_NAME@–@PKG_VERSION@
 ## Copyright (c) 2006-2009 Joerg Linge (http://www.pnp4nagios.org)
 ##
 ## This program is free software; you can redistribute it and/or

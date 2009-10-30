@@ -1,4 +1,4 @@
-#
+# @PKG_NAME@–@PKG_VERSION@
 # Config File for process_perfdata.pl
 #
 # More info on RRDtool can be found at www.rrdtool.org
