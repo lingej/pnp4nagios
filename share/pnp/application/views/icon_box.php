@@ -23,7 +23,7 @@ if($this->config->conf['show_xml_icon'] == 1 && $position == "graph"){
 if($this->data->getFirstPage() && $this->isAuthorizedFor('pages') ){
 	echo "<a title=\"".Kohana::lang('common.title-pages-link')."\" href=\"".url::base()."page\"><img src=\"".url::base()."media/images/pages.png\"></a>\n";
 }
-echo "<a title=\"".Kohana::lang('common.title-statistics-link')."\" href=\"".url::base()."graph?host=.pnp-internal&srv=runtime\"><img src=\"".url::base()."media/images/stats.png\"></a>\n";
+//echo "<a title=\"".Kohana::lang('common.title-statistics-link')."\" href=\"".url::base()."graph?host=.pnp-internal&srv=runtime\"><img src=\"".url::base()."media/images/stats.png\"></a>\n";
 ?>
 </div>
 </div><p>

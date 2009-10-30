@@ -36,7 +36,7 @@ class Data_Model extends Model
        	if (is_dir($conf['rrdbase'])) {
            	if ($dh = opendir($conf['rrdbase'])) {
                	while (($file = readdir($dh)) !== false) {
-                   	if ($file == "." || $file == "..")
+                   	if ($file == "." || $file == ".." || $file == ".pnp-internal")
                        	continue;
                    	$stat = stat($conf['rrdbase'] . "/" . $file);
                    	$age = (time() - $stat['mtime']);
