@@ -1289,7 +1289,7 @@ if test -n "$ac_init_help"; then
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-layout=\default,default-0.4,debian,suse\ sets directory layout
+  --with-layout=\default,debian\ sets directory layout
   --without-kohana does not install the kohana framework
   --with-kohana_system=<existing kohana system dir> Points to an already installed kohana framework
   --with-nagios-user=<user> sets user name to run nagios

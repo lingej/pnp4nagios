@@ -70,7 +70,7 @@ AC_C_CONST
 
 dnl Layout Methods
 layout="default"
-AC_ARG_WITH(layout,[  --with-layout=\[default,default-0.4,debian,suse\] sets directory layout],layout=$withval)
+AC_ARG_WITH(layout,[  --with-layout=\[default,debian\] sets directory layout],layout=$withval)
 
 case $layout in
 	debian)
