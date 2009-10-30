@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_pnp_rrds.pl
-# $Id: check_pnp_rrds.php 466 2008-06-21 14:58:25Z pitchfork $
 #
 $opt[1] = "--slope-mode --watermark \"Created by PNP4Nagios\" --title \"PNP4Nagios XML Statistics\" ";
 #

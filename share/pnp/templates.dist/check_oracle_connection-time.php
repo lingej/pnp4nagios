@@ -1,7 +1,6 @@
 <?php
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
-# $Id: response.php 367 2008-01-23 18:10:31Z pitchfork $
 #
 
 $opt[1] = "--vertical-label \"Connection Time\"  --watermark=\"created by PNP4Nagios\" --title \"Connection Time $hostname / $servicedesc\" ";

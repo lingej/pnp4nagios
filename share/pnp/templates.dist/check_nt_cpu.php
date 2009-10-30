@@ -2,8 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_nt -v CPULOAD
-# $Id: check_nt_cpu.php 631 2009-05-01 12:20:53Z Le_Loup $
-#
 #
 $opt[1] = "--vertical-label \"$UNIT[1]\" -u $MAX[1] -l $MIN[1]  --title \"CPU Load for $hostname / $servicedesc\" ";
 #

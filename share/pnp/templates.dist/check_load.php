@@ -2,8 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_load
-# $Id: check_load.php 627 2009-04-23 11:14:06Z pitchfork $
-#
 #
 $opt[1] = "--vertical-label Load -l0  --title \"CPU Load for $hostname / $servicedesc\" ";
 #

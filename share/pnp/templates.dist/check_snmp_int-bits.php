@@ -3,8 +3,6 @@
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_iftraffic.pl (COUNTER)
 # Output based on Bits/s
-# 
-# $Id: check_snmp_int-bits.php 523 2008-09-26 17:10:20Z pitchfork $
 #
 #
 $opt[1] = " --vertical-label \"Traffic\" -b 1000 --title \"Interface Traffic for $hostname / $servicedesc\" ";

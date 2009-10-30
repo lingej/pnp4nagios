@@ -18,8 +18,6 @@
  *
  * Last Modified: 07-12-2009
  *
- * $Id: npcdmod.c 636 2009-05-23 18:17:38Z hendrikb $
- *
  *****************************************************************************/
 
 /* include (minimum required) event broker header files */

@@ -2,8 +2,6 @@
 #
 # Template for check_swap
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
-# $Id: check_swap.php 631 2009-05-01 12:20:53Z Le_Loup $
-#
 #
 # RRDtool Options
 $opt[1] = "-X 0 --vertical-label MB -l 0 -u $MAX[1] --title \"Swap usage $hostname / $servicedesc\" ";

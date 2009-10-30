@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_iftraffic.pl (%)
-# $Id: check_iftraffic_pct.php 380 2008-02-06 09:58:14Z pitchfork $
 #
 $opt[1] = "--vertical-label \"Traffic %\" --title \"Traffic % ($servicedesc)\" ";
 

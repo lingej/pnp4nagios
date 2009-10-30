@@ -1,8 +1,6 @@
 #
 # Config File for process_perfdata.pl
 #
-# $Id: process_perfdata.cfg-sample.in 520 2008-09-16 12:50:10Z pitchfork $
-#
 # More info on RRDtool can be found at www.rrdtool.org
 
 #

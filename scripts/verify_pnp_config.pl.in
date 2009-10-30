@@ -2,8 +2,6 @@
 #
 # (C) 2008-2009 pnp4nagios.org / Wolfgang Nieder
 #
-# $Id: verify_pnp_config.in 664 2009-10-18 11:35:06Z le_loup $ 
-#
 # check Nagios/PNP integration settings
 # 2008.09.21: 0.1    initial version
 # 2008.09.23: 0.1.1  precheck / logfile

@@ -1,7 +1,6 @@
 <?php
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
-# $Id: check_oracle_health_pga-in-memory-sort-ratio.php 523 2008-09-26 17:10:20Z pitchfork $
 #
 
 $opt[1] = "--vertical-label \"% memory sorts\" -u102 -l0 --title \"in memory sorts $hostname / $servicedesc\" ";

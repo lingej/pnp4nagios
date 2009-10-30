@@ -2,8 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_nt -v MEMUSE
-# $Id: check_nt_mem.php 631 2009-05-01 12:20:53Z Le_Loup $
-#
 #
 $opt[1] = "-X0 --vertical-label \"Megabyte\" -u $MAX[1] -l 0  --title \"Windows Memory\" ";
 

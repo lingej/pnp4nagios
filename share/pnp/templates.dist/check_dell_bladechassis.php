@@ -3,8 +3,6 @@
 # PNP4Nagios template for check_dell_bladechassis
 # http://folk.uio.no/trondham/software/check_dell_bladechassis.html
 #
-# $Id: check_dell_bladechassis.php 15250 2009-10-01 14:25:59Z trondham $
-#
 
 # Array with different colors
 $colors = array("0022ff", "22ff22", "ff0000", "00aaaa", "ff00ff",

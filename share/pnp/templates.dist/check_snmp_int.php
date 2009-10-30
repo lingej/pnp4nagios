@@ -2,8 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_snmp_int.pl (COUNTER)
-# $Id: check_snmp_int.php 378 2008-02-04 19:12:20Z pitchfork $
-#
 #
 $opt[1] = " --vertical-label \"Traffic\" -b 1000 --title \"Interface Traffic for $hostname / $servicedesc\" ";
 $def[1] = "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;

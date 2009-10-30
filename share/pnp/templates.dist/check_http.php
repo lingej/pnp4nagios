@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_http
-# $Id: check_http.php 367 2008-01-23 18:10:31Z pitchfork $
 #
 # Response Time
 #

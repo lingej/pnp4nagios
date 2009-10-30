@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Template for check_users
-# $Id: check_users.php 588 2009-02-04 17:13:36Z pitchfork $
 #
 
 $opt[1] = "--lower=$MIN[1] --vertical-label \"Users\"  --title \"Users\" ";

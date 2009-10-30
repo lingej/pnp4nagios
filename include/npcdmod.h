@@ -18,8 +18,6 @@
  *
  * Last Modified: 11-18-2008
  *
- * $Id: npcdmod.h 559 2008-11-18 20:31:15Z hendrikb $
- *
  *****************************************************************************/
 
 /* MMAPFILE structure - used for reading files via mmap() */

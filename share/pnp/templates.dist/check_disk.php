@@ -2,8 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Template for check_disk
-# $Id: check_disk.php 631 2009-05-01 12:20:53Z Le_Loup $
-#
 #
 # RRDtool Options
 

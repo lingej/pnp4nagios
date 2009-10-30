@@ -3,8 +3,6 @@
 # PNP4Nagios template for check_hp_bladechassis
 # http://folk.uio.no/trondham/software/check_hp_bladechassis.html
 #
-# $Id: check_hp_bladechassis.php 15252 2009-10-01 14:27:58Z trondham $
-#
 
 # Color for power usage in watts
 $PWRcolor = "66FF00";

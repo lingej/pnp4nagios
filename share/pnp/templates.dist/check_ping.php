@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_icmp [Multigraph]
-# $Id: check_ping.php 553 2008-11-07 21:33:50Z Le_Loup $
 #
 # RTA
 #

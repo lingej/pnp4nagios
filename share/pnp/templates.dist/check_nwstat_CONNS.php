@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_nwstat
-# $Id: check_nwstat_CONNS.php 367 2008-01-23 18:10:31Z pitchfork $
 #
 # User Connections
 #

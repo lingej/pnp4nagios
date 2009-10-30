@@ -1,7 +1,6 @@
 <?php
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
-# $Id: response.php 553 2008-11-07 21:33:50Z Le_Loup $
 #
 
 $opt[1] = "--vertical-label \"Response Time\"  --title \"Response Time For $hostname / $servicedesc\" ";

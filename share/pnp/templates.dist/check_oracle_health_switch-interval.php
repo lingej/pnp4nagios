@@ -1,7 +1,6 @@
 <?php
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
-# $Id: check_oracle_health_switch-interval.php 523 2008-09-26 17:10:20Z pitchfork $
 #
 
 $opt[1] = "--vertical-label \"Interval\" -X0 -l0  --title \"Redolog Switch Interval $hostname / $servicedesc\" ";

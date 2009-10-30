@@ -3,8 +3,6 @@
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Default Template used if no other template is found.
 # Don`t delete this file ! 
-# $Id: default.php 555 2008-11-16 16:35:59Z pitchfork $
-#
 #
 # Define some colors ..
 #

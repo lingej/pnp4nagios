@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_fping [Multigraph]
-# $Id: check_fping.php 634 2009-05-04 04:47:13Z pitchfork $
 #
 # RTA
 #

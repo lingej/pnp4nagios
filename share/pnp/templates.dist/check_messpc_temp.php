@@ -2,7 +2,6 @@
 #
 # Fuer check_pcmeasure.pl von Wolfgang Barth
 # Erstellt von Joerg Peter Geissler <lairdofglencairn AT nagios-wiki.de>  
-# $Id: check_messpc_temp.php 553 2008-11-07 21:33:50Z Le_Loup $
 #
 if ($WARN[1] == "") {
 	$WARN[1] = 0;

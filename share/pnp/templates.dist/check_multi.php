@@ -3,8 +3,6 @@
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Template for check_multi
 # 
-# $Id: check_multi.php 367 2008-01-23 18:10:31Z pitchfork $
-#
 
 $opt[1] = "--lower=$MIN[1] --vertical-label num  --title \"Number of Checks\" ";
 $ds_name[1] = "Executed Plugins";

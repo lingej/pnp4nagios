@@ -2,9 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Template für check_nt -v USEDDISKSPACE -l 
-# $Id: check_nt_disk.php 631 2009-05-01 12:20:53Z Le_Loup $
-#
-#
 #
 # RRDtool Options
 $opt[1] = "--vertical-label GB -u $MAX[1] -l 0 --title \"Used Diskspace for $hostname / $servicedesc\" ";

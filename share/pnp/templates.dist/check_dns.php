@@ -2,8 +2,6 @@
 #
 # Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
 # Template for check_dns
-# 
-# $Id: check_dns.php 367 2008-01-23 18:10:31Z pitchfork $
 #
 
 $opt[1] = "--lower=$MIN[1] --vertical-label $UNIT[1]  --title \"DNS Response Time\" ";
