@@ -40,6 +40,7 @@ my %conf = (
     RRD_HEARTBEAT     => 8640,
     RRA_STEP          => 60,
     RRA_CFG           => "@sysconfdir@/rra.cfg",
+    STATS_DIR         => "@localstatedir@/stats",
     LOG_FILE          => "@PERFDATA_LOG@",
     LOG_FILE_MAX_SIZE => "10485760",               #Truncate after 10MB
     LOG_LEVEL         => @DEBUG@,
@@ -86,11 +87,14 @@ GetOptions(
 parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 my %stats = (
-	rrd_error_count => 0,
-	invalid         => 0,
-	skipped         => 0,
-	runtime         => 0,
-	lines           => 0,
+	timet       => 0,
+	error       => 0,
+	invalid     => 0,
+	skipped     => 0,
+	runtime     => 0,
+	rows        => 0,
+	create      => 0,
+	update      => 0,
 	);
 
 #
@@ -136,9 +140,10 @@ sub main {
     }
     my $t1 = [gettimeofday];
     my $rt = tv_interval $t0, $t1;
+	$stats{timet} = time;
 	$stats{runtime} = $rt;
-	$stats{lines} = $lines;
-    #store_internals();
+	$stats{rows} = $lines;
+    store_internals();
     print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
     exit 0;
 }
@@ -404,11 +409,12 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::create ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
-				$stats{rrd_error_count}++;
+				$stats{error}++;
             }
             else {
                 print_log( "$rrdfile created", 2 );
                 @rrd_state = ( 0, "just created" );
+				$stats{create}++;
             }
         }
         else {
@@ -418,11 +424,12 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( $?, "create failed" );
-				$stats{rd_error_count}++;
+				$stats{error}++;
             }
             else {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( 0, "just created" );
+				$stats{create}++;
             }
         }
     }
@@ -440,11 +447,12 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::update ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
-				$stats{rrd_error_count}++;
+				$stats{error}++;
             }
             else {
                 print_log( "$rrdfile updated", 2 );
                 @rrd_state = ( 0, "successful updated" );
+				$stats{update}++;
             }
         }
         else {
@@ -460,11 +468,12 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "update failed" );
-				$stats{rrd_error_count}++;
+				$stats{error}++;
             }
             else {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "successful updated" );
+				$stats{update}++;
             }
         }
     }
@@ -1054,22 +1063,84 @@ sub handle_signal {
 }
 #
 # Store some internal runtime infos
-# FIXME: Needs redesign.
 # 
 sub store_internals {
+	my $statsfile = $conf{'STATS_DIR'}."/".(int $stats{timet} / 60);
+	open( STAT, ">> $statsfile" ) or die "Cant create statistic file ", $!;
+	printf(STAT "%d %f %d %d %d %d %d %d\n", $stats{timet},$stats{runtime},$stats{rows},$stats{update},$stats{create},$stats{error},$stats{invalid},$stats{skipped}); 
+	close(STAT);
+	check_internals();
+}
+
+#
+# Search for statistic files
+#
+sub check_internals {
+	my $file;
+	my @files;
+	opendir(STATS, $conf{'STATS_DIR'});
+	while ( defined ( my $file = readdir STATS) ){
+		next if $file =~ /^\.\.?$/; # skip . and ..
+		next if $file =~ /-PID-/;   # skip temporary files 
+		next if $file == (int $stats{timet} / 60); # skip our current file
+		push @files, $file;
+	}
+	read_internals(@files);
+}
+
+#
+# Read and aggregate files found by check_internals() 
+#
+sub read_internals {
+	my @files = @_;
+	my @chunks;
+	foreach my $file (sort { $a <=> $b} @files){
+		rename($conf{'STATS_DIR'}."/".$file, $conf{'STATS_DIR'}."/".$file."-PID-".$$);
+		open( STAT, "< ".$conf{'STATS_DIR'}."/".$file."-PID-".$$ );
+		%stats = (
+    		timet       => 0,
+    		error       => 0,
+    		invalid     => 0,
+    		skipped     => 0,
+    		runtime     => 0,
+    		rows        => 0,
+    		create      => 0,
+    		update      => 0,
+    	);
+		while(<STAT>){
+			@chunks = split();
+			$stats{timet}    = $chunks[0];
+			$stats{runtime} += $chunks[1];
+			$stats{rows}    += $chunks[2]; 
+			$stats{update}  += $chunks[3];
+			$stats{create}  += $chunks[4];
+			$stats{error}   += $chunks[5];
+			$stats{invalid} += $chunks[6];
+			$stats{skipped} += $chunks[7];
+		}
+		close(STAT);
+		unlink($conf{'STATS_DIR'}."/".$file."-PID-".$$);
+		process_internals();
+	}
+}
+#
+# 
+#
+sub process_internals {
     $conf{'RRD_STORAGE_TYPE'} = "MULTIPLE";
     %NAGIOS = ( 
 		HOSTNAME => '.pnp-internal',
 		DISP_HOSTNAME => 'pnp-internal',
 		SERVICEDESC => 'runtime',
 		DISP_SERVICEDESC => 'runtime',
-		TIMET => time,
+		TIMET => $stats{timet},
 		DATATYPE => 'SERVICEPERFDATA',
 		CHECK_COMMAND => 'pnp-runtime',
-		PERFDATA => "runtime=".$stats{runtime}."s lines=".$stats{lines}." errors=".$stats{rrd_error_count}." invalid=".$stats{invalid}." skipped=".$stats{skipped} 
+		PERFDATA => "runtime=".$stats{runtime}."s rows=".$stats{rows}." errors=".$stats{error}." invalid=".$stats{invalid}." skipped=".$stats{skipped} ." update=".$stats{update}. " create=".$stats{create} 
     );
     parse_perfstring(  $NAGIOS{PERFDATA} );
 }
+
 #
 #
 #

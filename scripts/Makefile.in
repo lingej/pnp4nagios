@@ -40,6 +40,7 @@ install-verifyconfig:
 install: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATADIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBEXECDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LOGDIR)/stats
 	$(MAKE) install-processperfdata
 	$(MAKE) install-plugins
 	$(MAKE) install-verifyconfig
