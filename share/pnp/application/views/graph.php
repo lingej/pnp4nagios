@@ -28,6 +28,10 @@
      		echo $status_box;
 	} ?>
 
+	<?php if (!empty($widget_menu)) {
+     		echo $widget_menu;
+	} ?>
+
 	<?php if (!empty($timerange_box)) {
      		echo $timerange_box;
 	} ?>

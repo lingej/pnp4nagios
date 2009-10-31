@@ -3,6 +3,9 @@
 if (!empty($timerange_select)) {
 	echo $timerange_select;
 }
+if (!empty($widget_graph)) {
+	echo $widget_graph;
+}
 echo "<div class=\"gw ui-widget\">\n";
 $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 

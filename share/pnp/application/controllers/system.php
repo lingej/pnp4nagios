@@ -45,6 +45,9 @@ class System_Controller extends Template_Controller {
 		if (empty($view)) {
 			return false;
 		}
+		if (!file_exists(APPPATH."/views/".$view.".php")) {
+			return false;
+		}
 		#return new View($this->theme_path.$view);
 		return new View($view);
 	}
