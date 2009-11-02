@@ -1095,7 +1095,10 @@ sub read_internals {
 	my @files = @_;
 	my @chunks;
 	foreach my $file (sort { $a <=> $b} @files){
-		rename($conf{'STATS_DIR'}."/".$file, $conf{'STATS_DIR'}."/".$file."-PID-".$$);
+		unless ( rename($conf{'STATS_DIR'}."/".$file, $conf{'STATS_DIR'}."/".$file."-PID-".$$) ){
+			print_log( "ERROR: renaming stats file " . $conf{'STATS_DIR'}."/".$file . " to " . $conf{'STATS_DIR'}."/".$file."-PID-".$$ . " failed", 1 );
+			next;
+		}
 		open( STAT, "< ".$conf{'STATS_DIR'}."/".$file."-PID-".$$ );
 		%stats = (
     		timet       => 0,
