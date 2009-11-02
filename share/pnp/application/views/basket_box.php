@@ -17,6 +17,7 @@ if(is_array($basket) && sizeof($basket) > 0 ){
 	echo "<div>Basket is empty</div>\n";
 }
 echo "</div>\n";
+echo "</div>\n";
 echo "</div><br>\n";
 ?>
 <div id="basket_box"></div>
