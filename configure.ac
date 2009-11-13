@@ -98,11 +98,6 @@ case $layout in
 		PERFDATA_SPOOL_DIR="\${prefix}/var/spool/perfdata"
 	;;
 	default)
-		sysconfdir="\${prefix}/etc"
-		localstatedir="\${prefix}/var"
-		libexecdir="\${prefix}/libexec"
-		datarootdir="\${prefix}/share"
-		libdir="\${prefix}/lib"
 		PERFDATA_LOG="${localstatedir}/perfdata.log"
 		PERFDATA_DIR="${localstatedir}/perfdata"
 		PERFDATA_SPOOL_DIR="${localstatedir}/spool"

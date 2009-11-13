@@ -1,5 +1,6 @@
 **Current GIT Head**
 
+  * Bugfix: ./configure ignores --sysconfdir
   * Store internal runtime statistics on a per minute base 
   * Added two widgets views/widget_menu.php and views/widget_graph.php 
 
