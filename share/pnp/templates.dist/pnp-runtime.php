@@ -57,19 +57,19 @@ $def[2] .= "GPRINT:var3:AVERAGE:\"%.0lf$UNIT[4] avg\\t\" " ;
 $def[2] .= "GPRINT:var3:MAX:\"%.0lf$UNIT[4] max\\n\" ";
 
 $def[2] .= "DEF:var4=$RRDFILE[5]:$DS[5]:AVERAGE " ;
-$def[2] .= "LINE1:var4#66ff33:\"".ucfirst($LABEL[5])."\\t\" " ;
+$def[2] .= "LINE1:var4#99cc66:\"".ucfirst($LABEL[5])."\\t\" " ;
 $def[2] .= "GPRINT:var4:LAST:\"%.0lf$UNIT[5] last\\t\" " ;
 $def[2] .= "GPRINT:var4:AVERAGE:\"%.0lf$UNIT[5] avg\\t\" " ;
 $def[2] .= "GPRINT:var4:MAX:\"%.0lf$UNIT[5] max\\n\" ";
 
 $def[2] .= "DEF:var5=$RRDFILE[6]:$DS[6]:AVERAGE " ;
-$def[2] .= "LINE1:var5#66ff33:\"".ucfirst($LABEL[6])."\\t\" " ;
+$def[2] .= "LINE1:var5#ccff99:\"".ucfirst($LABEL[6])."\\t\" " ;
 $def[2] .= "GPRINT:var5:LAST:\"%.0lf$UNIT[6] last\\t\" " ;
 $def[2] .= "GPRINT:var5:AVERAGE:\"%.0lf$UNIT[6] avg\\t\" " ;
 $def[2] .= "GPRINT:var5:MAX:\"%.0lf$UNIT[6] max\\n\" ";
 
 $def[2] .= "DEF:var6=$RRDFILE[7]:$DS[7]:AVERAGE " ;
-$def[2] .= "LINE1:var6#66ff33:\"".ucfirst($LABEL[7])."\\t\" " ;
+$def[2] .= "LINE1:var6#669933:\"".ucfirst($LABEL[7])."\\t\" " ;
 $def[2] .= "GPRINT:var6:LAST:\"%.0lf$UNIT[7] last\\t\" " ;
 $def[2] .= "GPRINT:var6:AVERAGE:\"%.0lf$UNIT[7] avg\\t\" " ;
 $def[2] .= "GPRINT:var6:MAX:\"%.0lf$UNIT[7] max\\n\" ";
