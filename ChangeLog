@@ -1,6 +1,7 @@
 **Current GIT Head**
 
-  * Bugfix: ./configure ignores --sysconfdir
+  * Feature: Array $TIMERANGE now available for templates
+  * Bugfix: ./configure --sysconfdir no longer ignored
   * Store internal runtime statistics on a per minute base 
   * Added two widgets views/widget_menu.php and views/widget_graph.php 
 

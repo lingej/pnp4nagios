@@ -230,7 +230,7 @@ class Data_Model extends Model
 		$conf        = $this->config->conf;
 		$xml         = $this->readXML($host,$service);
 		$this->includeTemplate($this->DS[0]['TEMPLATE']);
-		if(isset($this->TIMERANGE[255])){
+		if(isset($this->TIMERANGE['type']) && $this->TIMERANGE['type'] == "start-end"){
 	    	$view = intval($view);
 	    	$i=0;
 	    	foreach( $this->RRD['def'] as $key=>$val){
@@ -241,8 +241,8 @@ class Data_Model extends Model
 				$tmp_struct['LEVEL']         = $i;
 				$tmp_struct['VIEW']          = $view;
 				$tmp_struct['SOURCE']        = $key;
-	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE[255]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[255];
+	        	$tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+	        	$tmp_struct['TIMERANGE']     = $this->TIMERANGE;
 				if(array_key_exists('ds_name',$this->RRD) ){
 	     	    	$tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
 				}else{
@@ -345,6 +345,7 @@ class Data_Model extends Model
 		$template_file = $this->findTemplate( $template );
 		$hostname      = $this->MACRO['HOSTNAME'];
 		$servicedesc   = $this->MACRO['SERVICEDESC'];
+		$TIMERANGE     = $this->TIMERANGE;
 		$def     = FALSE;
 		$opt     = FALSE;
 		$ds_name = FALSE;
@@ -474,12 +475,13 @@ class Data_Model extends Model
         	}
 		}
 		if($start && $end){
-    		$timerange[255]['title']   = Kohana::lang('common.timerange-selector-link');
-    		$timerange[255]['start']   = $start;
-    		$timerange[255]['f_start'] = date($this->config->conf['date_fmt'],$start);
-    		$timerange[255]['end']     = $end;
-    		$timerange[255]['f_end']   = date($this->config->conf['date_fmt'],$end);
-    		$timerange[255]['cmd']     = " --start $start --end $end ";
+    		$timerange['title']   = Kohana::lang('common.timerange-selector-link');
+    		$timerange['start']   = $start;
+    		$timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
+    		$timerange['end']     = $end;
+    		$timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
+    		$timerange['cmd']     = " --start $start --end $end ";
+    		$timerange['type']    = "start-end";
     		$this->TIMERANGE = $timerange;
 			return;
 		}
@@ -526,6 +528,7 @@ class Data_Model extends Model
    		$timerange['end']     = $end;
    		$timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
    		$timerange['cmd']     = " --start $start --end $end ";
+   		$timerange['type']    = "views";
    		for ($i = 0; $i < sizeof($this->config->views); $i++) {
    			$timerange[$i]['title']   = $this->config->views[$i]['title'];
        		$timerange[$i]['start']   = $end - $this->config->views[$i]['start'];
