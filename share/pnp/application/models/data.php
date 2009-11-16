@@ -589,7 +589,7 @@ class Data_Model extends Model
 				$l++;
 				continue;
 			}
-			if(preg_match('/\s?(\w+)\s+(.*$)/',$line, $key) && $inside == 1){
+			if(preg_match('/\s?(\w+)\s+([^#]+)(#.*)?$/',$line, $key) && $inside == 1){
 				$k=$key[1];
 				$v=$key[2];
 				if($t=='page'){
