@@ -547,15 +547,17 @@ class Data_Model extends Model
 		foreach($hosts as $host){
 			$services = $this->getServices($host);
 			foreach($services as $service) {
-				if($this->filterServiceByPage($host,$service)){
-					$servicelist[] = array( 'host' => $host, 'service' => $service['name']);
+				// search for definition
+				$data = $this->filterServiceByPage($host,$service);
+				if($data){
+					$servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
 				}
 			}
 		}
 		#print Kohana::debug(sizeof($servicelist));
 		if(sizeof($servicelist) > 0 ){
 			foreach($servicelist as $s){
-				$this->buildDataStruct($s['host'],$s['service'],$view);
+				$this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
 			}
 		}else{
 			throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
@@ -643,12 +645,25 @@ class Data_Model extends Model
 	}
 
 	private function filterServiceByPage($host,$service){
+		$data = array();
 		if(isset($this->PAGE_DEF['use_regex']) && $this->PAGE_DEF['use_regex'] == 1){
 			// Search Host by regex
 			foreach( $this->PAGE_GRAPH as $g ){
 				if(isset($g['host_name']) && preg_match('/'.$g['host_name'].'/',$host)){
 					if(isset($g['service_desc']) && preg_match('/'.$g['service_desc'].'/',$service['name'])){
-						return $service['name'];
+						$data['service_desc'] = $g['service_desc'];
+						$data['host_name'] = $g['host_name'];
+						$data['source'] = "";
+						// if we only want a single image 
+						if(isset($g['source'])){
+							$this->readXML($host,$service['name']);
+							$this->includeTemplate($this->DS[0]['TEMPLATE']);
+							$source = intval($g['source']);
+							if(array_key_exists($source,$this->RRD['def'])){
+								$data['source'] = $source;
+							}
+						}
+						return $data;
 					}
 				}
 			}
@@ -658,7 +673,19 @@ class Data_Model extends Model
 				$services_to_search_for = explode(",", $g['service_desc']);
 				if(isset($g['host_name']) && in_array($host ,$hosts_to_search_for) ){
 					if(isset($g['service_desc']) && in_array($service['name'] ,$services_to_search_for) ){
-						return $service['name'];
+						$data['service_desc'] = $g['service_desc'];
+						$data['host_name'] = $g['host_name'];
+						$data['source'] = "";
+						// if we only want a single image 
+						if(isset($g['source'])){
+							$this->readXML($host,$service['name']);
+							$this->includeTemplate($this->DS[0]['TEMPLATE']);
+							$source = intval($g['source']);
+							if(array_key_exists($source,$this->RRD['def'])){
+								$data['source'] = $source;
+							}
+						}
+						return $data;
 					}
 				}
 			}

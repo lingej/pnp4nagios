@@ -1,6 +1,7 @@
 **Current GIT Head**
 
-  * Feature: Array $TIMERANGE now available for templates
+  * Feature: Recognize the 'source' option in page definitions [[pages]]
+  * Feature: Array $TIMERANGE now available for templates [[timeranges]]
   * Bugfix: ./configure --sysconfdir no longer ignored
   * Store internal runtime statistics on a per minute base 
   * Added two widgets views/widget_menu.php and views/widget_graph.php 

@@ -15,8 +15,9 @@ define  page  {
 # Define the first Graph
 #
 define graph {
-        host_name       ^hna0
-        service_desc    ^traffic  
+        host_name       ^websrv		# Every host starting with 'websrv'
+        service_desc    ^traffic    # Every service starting with 'traffic'
+		source			1			# Show only the first image
 }
 
 
