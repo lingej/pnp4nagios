@@ -1,5 +1,6 @@
 **Current GIT Head**
 
+  * Feature: New config.php option pdf_graph_opt 
   * Feature: Recognize the 'background_pdf' option in page definitions -> [[pages]]
   * Feature: Recognize the 'source' option in page definitions -> [[pages]]
   * Feature: Array $TIMERANGE now available for templates -> [[timeranges]]

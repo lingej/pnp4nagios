@@ -41,6 +41,10 @@ $conf['pdf_height'] = "100";
 #
 $conf['graph_opt'] = ""; 
 #
+# Additional options for RRDTool used while creating PDFs
+#
+$conf['pdf_graph_opt'] = ""; 
+#
 # Directory where the RRD Files will be stored
 #
 $conf['rrdbase'] = "@PERFDATA_DIR@/";

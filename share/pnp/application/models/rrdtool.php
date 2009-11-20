@@ -53,31 +53,36 @@ class Rrdtool_Model extends Model
             $command = " graph - ";
         }
 
-        if($conf['graph_opt']){
-            $command .= $conf['graph_opt'];
-        }
-	$width = 0;
-        if(is_numeric($conf['graph_width'])){
-            $width = abs($conf['graph_width']);
-        }
-	$height = 0;
-        if(is_numeric($conf['graph_height'])){
-            $height = abs($conf['graph_height']);
-        }
-	if ($out == 'PDF'){
-		if (isset($conf['pdf_width']) && is_numeric($conf['pdf_width'])){
-			$width = abs($conf['pdf_width']);
+		$width = 0;
+		$height = 0;
+		if ($out == 'PDF'){
+        	if($conf['pdf_graph_opt']){
+            	$command .= $conf['pdf_graph_opt'];
+        	}
+			if (isset($conf['pdf_width']) && is_numeric($conf['pdf_width'])){
+				$width = abs($conf['pdf_width']);
+			}
+			if (isset($conf['pdf_height']) && is_numeric($conf['pdf_height'])){
+				$height = abs($conf['pdf_height']);
+			}
+		}else{
+        	if($conf['graph_opt']){
+            	$command .= $conf['graph_opt'];
+        	}
+        	if(is_numeric($conf['graph_width'])){
+            	$width = abs($conf['graph_width']);
+        	}
+        	if(is_numeric($conf['graph_height'])){
+            	$height = abs($conf['graph_height']);
+        	}
 		}
-		if (isset($conf['pdf_height']) && is_numeric($conf['pdf_height'])){
-			$height = abs($conf['pdf_height']);
+
+		if ($width > 0){
+			$command .= " --width=$width";
 		}
-	}
-	if ($width > 0){
-		$command .= " --width=$width";
-	}
-	if ($height > 0){
-		$command .= " --height=$height";
-	}
+		if ($height > 0){
+			$command .= " --height=$height";
+		}
 
         $command .= $RRD_CMD;
 		$this->RRD_CMD = $command;
