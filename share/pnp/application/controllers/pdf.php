@@ -127,6 +127,12 @@ class Pdf_Controller extends System_Controller  {
 
 		$this->data->getTimeRange($this->start,$this->end,$this->view);
 		$this->data->buildPageStruct($page,$this->view);
+		// Define PDF background per url option
+		if(isset($this->data->PAGE_DEF['background_pdf'])){
+			if( is_readable( Kohana::config( 'core.pnp_etc_path')."/".$this->data->PAGE_DEF['background_pdf'] ) ){
+				$this->bg = Kohana::config('core.pnp_etc_path')."/".$this->data->PAGE_DEF['background_pdf'];
+			}
+		}
 		/*
 		* PDF Output
 		*/
@@ -136,7 +142,7 @@ class Pdf_Controller extends System_Controller  {
 		$pdf->SetMargins(17.5,30,10);
 		$pdf->AddPage();
         if($this->use_bg){
-                $pdf->setSourceFile($this->config->conf['background_pdf']);
+                $pdf->setSourceFile($this->bg);
                 $tplIdx = $pdf->importPage(1,'/MediaBox');
                 $pdf->useTemplate($tplIdx);
         }

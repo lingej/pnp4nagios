@@ -1,10 +1,11 @@
 **Current GIT Head**
 
-  * Feature: Recognize the 'source' option in page definitions [[pages]]
-  * Feature: Array $TIMERANGE now available for templates [[timeranges]]
-  * Bugfix: ./configure --sysconfdir no longer ignored
-  * Store internal runtime statistics on a per minute base 
-  * Added two widgets views/widget_menu.php and views/widget_graph.php 
+  * Feature: Recognize the 'background_pdf' option in page definitions -> [[pages]]
+  * Feature: Recognize the 'source' option in page definitions -> [[pages]]
+  * Feature: Array $TIMERANGE now available for templates -> [[timeranges]]
+  * Bugfix:  ./configure --sysconfdir no longer ignored
+  * Feature: Store internal runtime statistics on a per minute base 
+  * Feature: Added two widgets views/widget_menu.php and views/widget_graph.php 
 
 **pnp-0.6.0 10/30/2009**
 
