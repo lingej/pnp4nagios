@@ -25,6 +25,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 </head>
 <body>
 
+<?php $failed = 0 ?>
 <h1>PNP4Nagios Environment Tests</h1>
 
 <p>The following options are determined by "configure". If any of the tests have failed, consult the <a href="http://docs.pnp4nagios.org/pnp-0.6/installer-pnp">documentation</a> for more information on how to correct the problem.</p>
@@ -43,7 +44,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>RRD Storage</th>
 <?php if (is_readable('@PERFDATA_DIR@')): ?>
 <td class="pass">@PERFDATA_DIR@ is readable.</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">@PERFDATA_DIR@ is not readable.</td>
 <?php endif ?>
 </tr>
@@ -55,7 +56,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>PHP GD extension</th>
 <?php if (function_exists('imagecreatefrompng')): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">PHP GD extension not available</td>
 <?php endif ?>
 </tr>
@@ -63,7 +64,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>PHP zlib extension</th>
 <?php if (function_exists('gzfile')): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">PHP zlib extension not available</td>
 <?php endif ?>
 </tr>
@@ -71,20 +72,20 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>PHP session extension</th>
 <?php if (function_exists('session_start')): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">PHP session extension not available</td>
 <?php endif ?>
 </tr>
 <th>PHP magic_quotes_gpc</th>
 <?php if (get_magic_quotes_gpc() == FALSE): ?>
 <td class="pass">Off</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i7">magic_quotes_gpc</a> is deprecated</td>
 <?php endif ?></tr>
 <th>Apache Rewrite Module</th>
 <?php if(in_array('mod_rewrite', apache_get_modules())) : ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail"><a href="http://docs.pnp4nagios.org/faq/19">Apache mod_rewrite</a> is not enabled</td>
 <?php endif ?></tr>
 </table>
@@ -95,13 +96,12 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <p>The following tests have been run to determine if Kohana will work in your environment. If any of the tests have failed, consult the <a href="http://docs.pnp4nagios.org/pnp-0.6">documentation</a> for more information on how to correct the problem.</p>
 
 <div id="tests">
-<?php $failed = FALSE ?>
 <table cellspacing="0">
 <tr>
 <th>PHP Version</th>
 <?php if (version_compare(PHP_VERSION, '5.2', '>=')): ?>
 <td class="pass"><?php echo PHP_VERSION ?></td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">Kohana requires PHP 5.2 or newer, this version is <?php echo PHP_VERSION ?>.</td>
 <?php endif ?>
 </tr>
@@ -109,7 +109,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>System Directory</th>
 <?php if (is_dir(SYSPATH) AND is_file(SYSPATH.'core/Bootstrap'.EXT)): ?>
 <td class="pass"><?php echo SYSPATH ?></td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">The configured <code>system</code> directory does not exist or does not contain required files.</td>
 <?php endif ?>
 </tr>
@@ -117,15 +117,15 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>Application Directory</th>
 <?php if (is_dir(APPPATH) AND is_file(APPPATH.'config/config'.EXT)): ?>
 <td class="pass"><?php echo APPPATH ?></td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">The configured <code>application</code> directory does not exist or does not contain required files.</td>
 <?php endif ?>
 </tr>
 <tr>
 <th>PCRE UTF-8</th>
-<?php if ( ! @preg_match('/^.$/u', 'ñ')): $failed = TRUE ?>
+<?php if ( ! @preg_match('/^.$/u', 'ñ')): $failed++ ?>
 <td class="fail"><a href="http://docs.pnp4nagios.org/faq/i1">PCRE</a> has not been compiled with UTF-8 support.</td>
-<?php elseif ( ! @preg_match('/^\pL$/u', 'ñ')): $failed = TRUE ?>
+<?php elseif ( ! @preg_match('/^\pL$/u', 'ñ')): $failed++ ?>
 <td class="fail"><a href="http://docs.pnp4nagios.org/faq/i2">PCRE</a> has not been compiled with Unicode property support.</td>
 <?php else: ?>
 <td class="pass">Pass</td>
@@ -135,7 +135,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>Reflection Enabled</th>
 <?php if (class_exists('ReflectionClass')): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i3">reflection</a> is either not loaded or not compiled in.</td>
 <?php endif ?>
 </tr>
@@ -143,7 +143,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>Filters Enabled</th>
 <?php if (function_exists('filter_list')): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">The <a href="http://docs.pnp4nagios.org/faq/i4">filter</a> extension is either not loaded or not compiled in.</td>
 <?php endif ?>
 </tr>
@@ -151,13 +151,13 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>Iconv Extension Loaded</th>
 <?php if (extension_loaded('iconv')): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">The <a href="http://docs.pnp4nagios.org/faq/i5">iconv</a> extension is not loaded.</td>
 <?php endif ?>
 <tr>
 <?php if (extension_loaded('mbstring')): ?>
 <th>Mbstring Not Overloaded</th>
-<?php if (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING): $failed = TRUE ?>
+<?php if (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING): $failed++ ?>
 <td class="fail">The <a href="http://docs.pnp4nagios.org/faq/i6">mbstring</a> extension is overloading PHP's native string functions.</td>
 <?php else: ?>
 <td class="pass">Pass</td>
@@ -169,15 +169,15 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>URI Determination</th>
 <?php if (isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF'])): ?>
 <td class="pass">Pass</td>
-<?php else: $failed = TRUE ?>
+<?php else: $failed++ ?>
 <td class="fail">Neither <code>$_SERVER['REQUEST_URI']</code> or <code>$_SERVER['PHP_SELF']</code> is available.</td>
 <?php endif ?>
 </tr>
 </table>
 
 <div id="results">
-<?php if ($failed === TRUE): ?>
-<p class="fail">Kohana may not work correctly with your environment.</p>
+<?php if ($failed > 0): ?>
+<p class="fail">@PKG_NAME@ may not work correctly with your environment.</p>
 <?php else: ?>
 <p class="pass">Your environment passed all requirements. Remove or rename the <code>install<?php echo EXT ?></code> file now.</p>
 <?php endif ?>
