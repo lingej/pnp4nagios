@@ -26,6 +26,8 @@ CUSTOM_TEMPLATE = 1
 # USE_MAX_ON_CREATE = 1
 
 # Use a single RRD Database per Service 
+# This Option is only used while creating new RRD Databases
+#
 # RRD_STORAGE_TYPE = SINGLE
 #
 # Use multiple RRD Databases per Service
@@ -33,3 +35,12 @@ CUSTOM_TEMPLATE = 1
 # RRD_STORAGE_TYPE = MULTIPLE
 #
 # RRD_STORAGE_TYPE = SINGLE
+
+# RRD Heartbeat in seconds
+# This Option is only used while creating new RRD Databases
+# Existing RRDs can be changed by "rrdtool tune"
+# More on http://oss.oetiker.ch/rrdtool/doc/rrdtune.en.html
+#
+# This value defaults to 8640
+# RRD_HEARTBEAT = 305
+

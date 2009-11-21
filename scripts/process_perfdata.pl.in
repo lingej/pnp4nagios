@@ -341,7 +341,7 @@ sub data2rrd {
             $rrdfile          = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . "_" . $data[$i]{name} . ".rrd";
 
             # DS is set to 1
-            @ds_create = "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}";
+            @ds_create = "DS:$DS:$data[$i]{dstype}:$data[$i]{rrd_heartbeat}:$data[$i]{rrd_min}:$data[$i]{rrd_max}";
             $ds_update = ":$data[$i]{value}";
             @rrd_state = write_rrd();
             @ds_create = ();
@@ -356,13 +356,14 @@ sub data2rrd {
             #
             $rrd_storage_type = "SINGLE";
             $rrdfile          = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . ".rrd";
-            push( @ds_create, "DS:$DS:$data[$i]{dstype}:$conf{RRD_HEARTBEAT}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" );
+            push( @ds_create, "DS:$DS:$data[$i]{dstype}:$data[$i]{rrd_heartbeat}:$data[$i]{rrd_min}:$data[$i]{rrd_max}" );
             $ds_update = "$ds_update:$data[$i]{value}";
         }
 
         write_to_template( "TEMPLATE",         $data[0]{template} );
         write_to_template( "RRDFILE",          $rrdfile );
         write_to_template( "RRD_STORAGE_TYPE", $data[$i]{rrd_storage_type} );
+        write_to_template( "RRD_HEARTBEAT",    $data[$i]{rrd_heartbeat} );
         write_to_template( "IS_MULTI",         $data[0]{multi} );
         write_to_template( "DS",               $DS );
         write_to_template( "NAME",             $data[$i]{name} );
@@ -555,6 +556,7 @@ sub adjust_template {
     my $use_min_on_create = 0;
     my $use_max_on_create = 0;
     my $rrd_storage_type  = $conf{'RRD_STORAGE_TYPE'};
+    my $rrd_heartbeat     = $conf{'RRD_HEARTBEAT'};
 
     if ( $uom eq "c" ) {
         $dstype = "COUNTER";
@@ -621,6 +623,9 @@ sub adjust_template {
                 if ( $1 eq "RRD_STORAGE_TYPE" && uc($2) eq "MULTIPLE" ) {
                     $rrd_storage_type = uc($2);
                 }
+                if ( $1 eq "RRD_HEARTBEAT" ) {
+                    $rrd_heartbeat = $2;
+                }
             }
         }
         close FH;
@@ -634,6 +639,7 @@ sub adjust_template {
         TEMPLATE          => $template,
         DSTYPE            => $dstype,
         RRD_STORAGE_TYPE  => $rrd_storage_type,
+        RRD_HEARTBEAT     => $rrd_heartbeat,
         USE_MIN_ON_CREATE => $use_min_on_create,
         USE_MAX_ON_CREATE => $use_max_on_create,
     );
@@ -895,6 +901,7 @@ sub parse_perfstring {
                 $p{template}         = $CTPL{'TEMPLATE'};
                 $p{dstype}           = $CTPL{'DSTYPE'};
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
+                $p{rrd_heartbeat}    = $CTPL{'RRD_HEARTBEAT'};
                 $p{label}            = cleanup( $multi[2] );           # store the original label from check_multi header
                 $p{name}             = cleanup( $multi[2] );           # store the original label from check_multi header
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
@@ -923,6 +930,7 @@ sub parse_perfstring {
                 $p{template}         = $CTPL{'TEMPLATE'};
                 $p{dstype}           = $CTPL{'DSTYPE'};
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
+                $p{rrd_heartbeat}    = $CTPL{'RRD_HEARTBEAT'};
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
                 if ( $count == 1 ) {
@@ -973,6 +981,7 @@ sub parse_perfstring {
             $p{template}         = $CTPL{'TEMPLATE'};
             $p{dstype}           = $CTPL{'DSTYPE'};
             $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
+            $p{rrd_heartbeat}    = $CTPL{'RRD_HEARTBEAT'};
             $p{multi}            = $is_multi;
             $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
             $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
