@@ -2,7 +2,7 @@
 # definitions for PNP in nagios.cfg (icinga.cfg)
 # please make sure that you don't have duplicate entries
 # 
-# Default mode
+# Synchronous mode
 # 
 process_performance_data=1
 

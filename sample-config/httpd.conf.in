@@ -7,7 +7,7 @@ Alias /@PKG_NAME@ "@datarootdir@"
    	Order allow,deny
    	Allow from all
    	#
-   	# Use the same Value as defined in nagios.conf
+   	# Use the same value as defined in nagios.conf
    	#
    	AuthName "Nagios Access"
    	AuthType Basic
