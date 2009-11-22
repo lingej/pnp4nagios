@@ -186,7 +186,7 @@ if ($mode) {
 			exit 30;
 		}
 	}
-	info ("install_opts","$install_opts") unless ($install_opts =~ /INSTALL_OPTS/i);
+	info ("info","install_opts","$install_opts") unless ($install_opts =~ /INSTALL_OPTS/i);
 	info ("info","PNP-version","$pnp_version") unless ($pnp_version =~ /PKG_VERSION/i);
 }	
 	
@@ -1109,6 +1109,7 @@ sub chk_cpcfg {
 	$CPcfg{'$conf[\'graph_height\']'} = 'n;^\d+$;243';
 	$CPcfg{'$conf[\'pdf_width\']'} = 'n;^\d+$;657';
 	$CPcfg{'$conf[\'pdf_height\']'} = 'n;^\d+$;657';
+	$CPcfg{'$conf[\'pdf_graph_opt\']'} = 'S;.*;'; 
 	$CPcfg{'$conf[\'graph_opt\']'} = 'S;.*;'; 
 	$CPcfg{'$conf[\'rrdbase\']'} = 'd;;';
 	$CPcfg{'$conf[\'page_dir\']'} = 'd;;279';
