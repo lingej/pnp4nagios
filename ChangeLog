@@ -1,6 +1,8 @@
 **Current GIT Head**
 
-  * Feature: Define the RRD heartbeat per check_command -> [[tpl_custom]] 
+**pnp-0.6.1 11/22/2009**
+
+  * Feature: RRD heartbeat per check_command -> [[tpl_custom]] 
   * Feature: New config.php option pdf_graph_opt 
   * Feature: Recognize the 'background_pdf' option in page definitions -> [[pages]]
   * Feature: Recognize the 'source' option in page definitions -> [[pages]]
