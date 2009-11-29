@@ -16,7 +16,7 @@ $(function() {
 <div id="toggle-timerange" class="ui-widget" style="Display: none;">
     <div class="p4 ui-widget-header ui-corner-top"><?php echo Kohana::lang('common.timerange-selector-title') ?></div>
     <div class="p4 ui-widget-content ui-corner-bottom">
-	<form method="GET" action="<?php echo url::base().Router::$current_uri?>">
+	<form method="GET" action="<?php echo url::base(TRUE).Router::$current_uri?>">
         <fieldset>
             <legend><?php echo Kohana::lang('common.timerange-selector-legend') ?></legend>
 			<?php foreach($_GET as $key=>$val){

@@ -40,7 +40,7 @@ class pnp_Core {
 	*
 	*/
 	public static function zoom_icon($host,$service,$start,$end,$source,$view){
-		print "<a href=\"javascript:Gzoom('".url::base()."zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"".url::base()."media/images/zoom.png\"></a>\n";
+		print "<a href=\"javascript:Gzoom('".url::base(TRUE)."zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"".url::base()."media/images/zoom.png\"></a>\n";
 	}
 
 	/*
@@ -56,7 +56,7 @@ class pnp_Core {
 		}
 		$get = $_GET;
 		if($base === True){
-			$uri  = url::base();
+			$uri  = url::base(TRUE);
 			$uri .= Router::$current_uri;
 		}else{
 			$uri  = "";

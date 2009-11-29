@@ -1,5 +1,6 @@
 **pnp-0.6.2 ??/??/2009**
 
+  * Feature: PNP will now work without mod_rewrite -> [[webfe]] 
   * Bugfix: Wrong pdf link used on site 'pages' and 'basket'
   * Bugfix: Incorrect group permissions on spool directory
 

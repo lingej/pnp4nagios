@@ -78,7 +78,7 @@ class Graph_Controller extends System_Controller  {
 		}else{
 		    $this->host = $this->data->getFirstHost();
 		    if(isset($this->host)){
-		    	url::redirect("/graph?host=$this->host");
+		    	url::redirect(url::base()."?host=".$this->host);
 		    }else{
 				throw new Kohana_Exception('error.get-first-host');
 		    }			

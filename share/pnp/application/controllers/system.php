@@ -11,13 +11,16 @@ class System_Controller extends Template_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
+		
 		$this->data       = new Data_Model();
 		$this->config     = new Config_Model();
 		$this->rrdtool    = new Rrdtool_Model();
 
 		$this->config->read_config();
 		Kohana::config_set('locale.language',$this->config->conf['lang']);
+		// Check for mod_rewrite
+		$this->check_mod_rewrite();
+
 
         $this->start   = $this->input->get('start',FALSE);
         $this->end     = $this->input->get('end',FALSE);
@@ -88,7 +91,8 @@ class System_Controller extends Template_Controller {
 
 	public function check_mod_rewrite(){
 		if(!in_array('mod_rewrite', apache_get_modules())){
-			throw new Kohana_Exception('error.mod-rewrite');		
+			// Add index.php to every URL while mod_rewrite is not available
+			Kohana::config_set('core.index_page','index.php');
 		}
 	}
 
