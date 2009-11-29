@@ -12,7 +12,7 @@ if(is_array($basket) && sizeof($basket) > 0 ){
 	}
 }
 if(is_array($basket) && sizeof($basket) > 0 ){
-	echo "<div><a class=\"multi0\" href=\"".url::base()."page/basket\">show basket</a></div>\n";
+	echo "<div><a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">show basket</a></div>\n";
 }else{
 	echo "<div>Basket is empty</div>\n";
 }

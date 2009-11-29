@@ -6,9 +6,7 @@
 
 
 $(document).ready(function(){ 
-
-	var path = location.pathname.split("/");
-	path = "/" + path[1] + "/";
+	var path = "./";
 	$("img").fadeIn(1500);
 
 	$("#basket_action_add a").click(function(){
