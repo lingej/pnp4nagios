@@ -1,6 +1,7 @@
-**Current GIT Head**
+**pnp-0.6.2 ??/??/2009**
 
   * Bugfix: Wrong pdf link used on site 'pages' and 'basket'
+  * Bugfix: Incorrect group permissions on spool directory
 
 **pnp-0.6.1 11/22/2009**
 
