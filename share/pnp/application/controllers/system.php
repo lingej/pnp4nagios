@@ -12,16 +12,50 @@ class System_Controller extends Template_Controller {
 	{
 		parent::__construct();
 
-		$this->session = Session::instance();
-
-		$this->template = $this->add_view('template');
-
 		$this->data       = new Data_Model();
 		$this->config     = new Config_Model();
 		$this->rrdtool    = new Rrdtool_Model();
-		$this->config->read_config();
 
+		$this->config->read_config();
 		Kohana::config_set('locale.language',$this->config->conf['lang']);
+
+        $this->start   = $this->input->get('start',FALSE);
+        $this->end     = $this->input->get('end',FALSE);
+        $this->view    = "";
+
+        if(isset($_GET['view']) && $_GET['view'] != "" )
+            $this->view = pnp::clean($_GET['view']);
+
+        $this->data->getTimeRange($this->start,$this->end,$this->view);
+		if(Router::$controller != "image"){
+			$this->session = Session::instance();
+
+    	    if($this->start && $this->end ){
+	            if($this->session->get('timerange-reset',0) == 0){
+	                $this->session->set("start", $this->start);
+	                $this->session->set("end", $this->end);
+	            }else{
+	                $this->session->set('timerange-reset', 0);
+	            }
+	        }
+	        if($this->start && !$this->end){
+	            if($this->session->get('timerange-reset',0) == 0){
+	                $this->session->set("start", $this->start);
+	                $this->session->set("end", "");
+	            }else{
+	                $this->session->set('timerange-reset', 0);
+	            }
+	        }
+	        if($this->end && !$this->start){
+	            if($this->session->get('timerange-reset',0) == 0){
+	                $this->session->set("end", $this->end);
+	                $this->session->set("start", "");
+	            }else{
+    	            $this->session->set('timerange-reset', 0);
+	            }
+	        }
+		}
+		$this->template = $this->add_view('template');
 	}
 
 	public function __call($method, $arguments)
