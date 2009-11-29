@@ -28,48 +28,11 @@ class Graph_Controller extends System_Controller  {
 		$this->template->graph->widget_menu   = $this->add_view('widget_menu');
 		$this->template->graph->graph_content->widget_graph  = $this->add_view('widget_graph');
 
-		$this->start   = $this->input->get('start');
-		$this->end     = $this->input->get('end');
-		$this->view    = "";
-
-		if(isset($_GET['view']) && $_GET['view'] != "" )
-			$this->view = pnp::clean($_GET['view']);
-
-		$this->data->getTimeRange($this->start,$this->end,$this->view);
-
-
 		// Service Details
 		if($this->host != "" && $this->service != ""){
 		    $this->service = pnp::clean($this->service);
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host."&srv=".$this->service;
-			if($this->start && $this->end ){
-				if($this->session->get('timerange-reset',0) == 0){
-					$this->url .= "&start=".$this->start."&end=".$this->end;
-					$this->session->set("start", $this->start);
-					$this->session->set("end", $this->end);
-				}else{
-					$this->session->set('timerange-reset', 0);
-				}
-			}
-			if($this->start && !$this->end){
-				if($this->session->get('timerange-reset',0) == 0){
-					$this->url .= "&start=".$this->start;
-					$this->session->set("start", $this->start);
-					$this->session->set("end", "");
-				}else{
-					$this->session->set('timerange-reset', 0);
-				}
-			}
-			if($this->end && !$this->start){
-				if($this->session->get('timerange-reset',0) == 0){
-					$this->url .= "&end=".$this->end;
-					$this->session->set("end", $this->end);
-					$this->session->set("start", "");
-				}else{
-					$this->session->set('timerange-reset', 0);
-				}
-			}
 		    $services      = $this->data->getServices($this->host);
 		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
 		    $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
@@ -93,33 +56,6 @@ class Graph_Controller extends System_Controller  {
 				$this->view = $this->config->conf['overview-range'];
 			}
 			$this->url     = "?host=".$this->host;
-			if($this->start && $this->end ){
-				if($this->session->get('timerange-reset',0) == 0){
-					$this->url .= "&start=".$this->start."&end=".$this->end;
-					$this->session->set("start", $this->start);
-					$this->session->set("end", $this->end);
-				}else{
-					$this->session->set('timerange-reset', 0);
-				}
-			}
-			if($this->start && !$this->end){
-				if($this->session->get('timerange-reset',0) == 0){
-					$this->url .= "&start=".$this->start;
-					$this->session->set("start", $this->start);
-					$this->session->set("end", "");
-				}else{
-					$this->session->set('timerange-reset', 0);
-				}
-			}
-			if($this->end && !$this->start){
-				if($this->session->get('timerange-reset',0) == 0){
-					$this->url .= "&end=".$this->end;
-					$this->session->set("end", $this->end);
-					$this->session->set("start", "");
-				}else{
-					$this->session->set('timerange-reset', 0);
-				}
-			}
 		    $this->title   = Kohana::lang('common.start'). " ". $this->host;
 		    $services = $this->data->getServices($this->host);
 			// Status Box Vars
@@ -142,7 +78,7 @@ class Graph_Controller extends System_Controller  {
 		}else{
 		    $this->host = $this->data->getFirstHost();
 		    if(isset($this->host)){
-		    	url::redirect("/graph?host=$this->host");
+		    	url::redirect(url::base()."?host=".$this->host);
 		    }else{
 				throw new Kohana_Exception('error.get-first-host');
 		    }			

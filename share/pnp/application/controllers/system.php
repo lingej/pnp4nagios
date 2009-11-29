@@ -11,17 +11,54 @@ class System_Controller extends Template_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->session = Session::instance();
-
-		$this->template = $this->add_view('template');
-
+		
 		$this->data       = new Data_Model();
 		$this->config     = new Config_Model();
 		$this->rrdtool    = new Rrdtool_Model();
-		$this->config->read_config();
 
+		$this->config->read_config();
 		Kohana::config_set('locale.language',$this->config->conf['lang']);
+		// Check for mod_rewrite
+		$this->check_mod_rewrite();
+
+
+        $this->start   = $this->input->get('start',FALSE);
+        $this->end     = $this->input->get('end',FALSE);
+        $this->view    = "";
+
+        if(isset($_GET['view']) && $_GET['view'] != "" )
+            $this->view = pnp::clean($_GET['view']);
+
+        $this->data->getTimeRange($this->start,$this->end,$this->view);
+		if(Router::$controller != "image"){
+			$this->session = Session::instance();
+
+    	    if($this->start && $this->end ){
+	            if($this->session->get('timerange-reset',0) == 0){
+	                $this->session->set("start", $this->start);
+	                $this->session->set("end", $this->end);
+	            }else{
+	                $this->session->set('timerange-reset', 0);
+	            }
+	        }
+	        if($this->start && !$this->end){
+	            if($this->session->get('timerange-reset',0) == 0){
+	                $this->session->set("start", $this->start);
+	                $this->session->set("end", "");
+	            }else{
+	                $this->session->set('timerange-reset', 0);
+	            }
+	        }
+	        if($this->end && !$this->start){
+	            if($this->session->get('timerange-reset',0) == 0){
+	                $this->session->set("end", $this->end);
+	                $this->session->set("start", "");
+	            }else{
+    	            $this->session->set('timerange-reset', 0);
+	            }
+	        }
+		}
+		$this->template = $this->add_view('template');
 	}
 
 	public function __call($method, $arguments)
@@ -54,7 +91,11 @@ class System_Controller extends Template_Controller {
 
 	public function check_mod_rewrite(){
 		if(!in_array('mod_rewrite', apache_get_modules())){
-			throw new Kohana_Exception('error.mod-rewrite');		
+			// Add index.php to every URL while mod_rewrite is not available
+			Kohana::config_set('core.index_page','index.php');
+		}
+		if ( $this->config->conf['use_url_rewriting'] == 0 ){
+			Kohana::config_set('core.index_page','index.php');
 		}
 	}
 

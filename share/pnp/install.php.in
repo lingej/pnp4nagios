@@ -16,10 +16,12 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 	#tests table tr:nth-child(odd) { background: #eee; }
 	#tests table td.pass { color: #191; }
 	#tests table td.fail { color: #911; }
+	#tests table td.warn { background: #ff3; }
 	#tests #results { color: #fff; }
 	#tests #results p { padding: 0.8em 0.4em; }
 	#tests #results p.pass { background: #191; }
 	#tests #results p.fail { background: #911; }
+	#tests #results p.warn { background: #ff3; }
 </style>
 
 </head>
@@ -85,8 +87,8 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <th>Apache Rewrite Module</th>
 <?php if(in_array('mod_rewrite', apache_get_modules())) : ?>
 <td class="pass">Pass</td>
-<?php else: $failed++ ?>
-<td class="fail"><a href="http://docs.pnp4nagios.org/faq/19">Apache mod_rewrite</a> is not enabled</td>
+<?php else: ?>
+<td class="warn"><a href="http://docs.pnp4nagios.org/faq/19">Apache mod_rewrite</a> is not enabled</td>
 <?php endif ?></tr>
 </table>
 </div>

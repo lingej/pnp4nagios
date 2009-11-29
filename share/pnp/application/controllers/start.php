@@ -10,7 +10,6 @@ class Start_Controller extends System_Controller  {
 
 	public function __construct()
 	{
-		$this->check_mod_rewrite();		
 		parent::__construct();
 	}
 

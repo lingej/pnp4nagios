@@ -15,18 +15,6 @@ class Page_Controller extends System_Controller  {
 		$this->template->page->graph_content->timerange_select = $this->add_view('timerange_select');
 		$this->template->page->header         = $this->add_view('header');
 		$this->template->page->logo_box       = $this->add_view('logo_box');
-		
-		$this->start   = $this->input->get('start');
-		$this->end     = $this->input->get('end');
-        $this->view    = "";
-
-        if(isset($_GET['view']) && $_GET['view'] != "" ){
-            $this->view = pnp::clean($_GET['view']);
-		}else{
-			$this->view = $this->config->conf['overview-range'];
-		}
-        $this->data->getTimeRange($this->start,$this->end,$this->view);
-
 	}
 
 	public function index(){

@@ -20,6 +20,11 @@
 ##
 # Credit:  Tobi Oetiker, http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
 #
+# URL rewriting is used iby default to create fiendly URLs. 
+# Set this value to '0' if URL rewriting is not available on your system.
+#
+$conf['use_url_rewriting'] = 1;
+#
 # Location of rrdtool binary
 #
 $conf['rrdtool'] = "@RRDTOOL@";

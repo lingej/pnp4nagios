@@ -40,7 +40,7 @@ class pnp_Core {
 	*
 	*/
 	public static function zoom_icon($host,$service,$start,$end,$source,$view){
-		print "<a href=\"javascript:Gzoom('".url::base()."zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"".url::base()."media/images/zoom.png\"></a>\n";
+		print "<a href=\"javascript:Gzoom('".url::base(TRUE)."zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start');\" title=\"Zoom into the Graph\"><img src=\"".url::base()."media/images/zoom.png\"></a>\n";
 	}
 
 	/*
@@ -50,13 +50,17 @@ class pnp_Core {
 		print "<span id=\"basket_action_add\"><a title=\"Add This Item\" id=\"".$host."::".$service."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span><br>\n";
 }
 
-	public static function addToUri($fields){
+	public static function addToUri($fields,$base = True){
 		if(!is_array($fields)){
 			return false;
 		}
 		$get = $_GET;
-		$uri  = url::base();
-		$uri .= Router::$current_uri;
+		if($base === True){
+			$uri  = url::base(TRUE);
+			$uri .= Router::$current_uri;
+		}else{
+			$uri  = "";
+		}
 		$uri .= '?';
 		foreach($fields as $key=>$value){
 			$get[$key] = $value;

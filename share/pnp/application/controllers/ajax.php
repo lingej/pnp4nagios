@@ -95,7 +95,7 @@ class Ajax_Controller extends System_Controller  {
 		if(is_array($basket) && sizeof($basket) == 0){
 			echo "basket is empty";
 		}else{
-			echo "<a class=\"multi0\" href=\"".url::base()."page/basket\">show basket</a>";
+			echo "<a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">show basket</a>";
 		}
 	}
 
