@@ -1009,7 +1009,7 @@ sub chk_npcdcfg {
 	$NPCDcfg{pid_file} = "f;[H];386";
 	$NPCDcfg{sleep_time} = 'n;^\d+$;439';	# new since 0.4.8
 	$NPCDcfg{identify_npcd} = "v;0|1;497";	# new since 0.4.11
-	$NPCDcfg{perfdata_file} = "d;;558";
+	$NPCDcfg{perfdata_file} = "f;;558";
 	$NPCDcfg{perfdata_spool_filename} = "f;;643";
 	$err = 0;
 
