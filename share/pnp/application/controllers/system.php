@@ -94,6 +94,9 @@ class System_Controller extends Template_Controller {
 			// Add index.php to every URL while mod_rewrite is not available
 			Kohana::config_set('core.index_page','index.php');
 		}
+		if ( $this->config->conf['use_url_rewriting'] == 0 ){
+			Kohana::config_set('core.index_page','index.php');
+		}
 	}
 
     public function isAuthorizedFor($auth) {
