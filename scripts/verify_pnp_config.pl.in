@@ -23,6 +23,7 @@
 # 2009.09.06:        config.php option / PNP root dir option / PDF sizes
 # 2009.10.07:        added config_local.php / file checks
 # 2009.10.16: 0.1.17 added native option / fixed broker check
+# 2009.12.02:        use_url_rewriting / bugfix
 
 use strict;
 use Getopt::Long;
@@ -1134,6 +1135,7 @@ sub chk_cpcfg {
 	$CPcfg{'$conf[\'use_fpdf\']'} = 'v;0|1;';	
 	$CPcfg{'$conf[\'background_pdf\']'} = 'f;;321';
 	$CPcfg{'$conf[\'use_calendar\']'} = 'v;0|1;';
+	$CPcfg{'$conf[\'use_url_rewriting\']'} = 'v;0|1;';	
 	$CPcfg{'$conf[\'show_xml_icon\']'} = 'v;0|1;607';
 	$CPcfg{'$conf[\'template_dir\']'} = 'd;;607';
 	$CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';	
