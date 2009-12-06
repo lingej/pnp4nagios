@@ -1026,15 +1026,12 @@ sub init_signals {
     $SIG{'FPE'}  = \&handle_signal;
     $SIG{'SEGV'} = \&handle_signal;
     $SIG{'TERM'} = \&handle_signal;
-
     $SIG{'BUS'}  = \&handle_signal;
     $SIG{'SYS'}  = \&handle_signal;
     $SIG{'XCPU'} = \&handle_signal;
     $SIG{'XFSZ'} = \&handle_signal;
-
-    $SIG{'IOT'} = \&handle_signal;
-
-    $SIG{'PIPE'} = "IGNORE";
+    $SIG{'IOT'}  = \&handle_signal;
+    $SIG{'PIPE'} = \&handle_signal;
     $SIG{'HUP'}  = \&handle_signal;
 }
 
