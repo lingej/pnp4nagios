@@ -293,6 +293,7 @@ $PERL subst scripts/check_pnp_rrds.pl
 $PERL subst share/pnp/index.php 
 $PERL subst share/pnp/install.php 
 $PERL subst share/pnp/application/config/config.php 
+$PERL subst share/pnp/media/js/basket.js 
 $PERL subst sample-config/httpd.conf
 $PERL subst sample-config/lighttpd.pnp4nagios.conf
 $PERL subst sample-config/nagios.cfg-sample

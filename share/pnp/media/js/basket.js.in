@@ -6,7 +6,7 @@
 
 
 $(document).ready(function(){ 
-	var path = "./";
+	var path = "/@PKG_NAME@/index.php/";
 	$("img").fadeIn(1500);
 
 	$("#basket_action_add a").click(function(){
