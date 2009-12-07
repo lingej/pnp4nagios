@@ -37,6 +37,8 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/views
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/vendor
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/vendor/fpdf
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/vendor/fpdf/filters
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/vendor/fpdf/font
 
 	for file in pnp/application/models/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/models; done
@@ -46,6 +48,12 @@ install:
 
 	for file in pnp/application/vendor/fpdf/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/vendor/fpdf; done
+
+	for file in pnp/application/vendor/fpdf/font/*.php; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/vendor/fpdf/font; done
+
+	for file in pnp/application/vendor/fpdf/filters/*.php; \
+		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/vendor/fpdf/filters; done
 
 	for file in pnp/application/controllers/*.php; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/application/controllers; done

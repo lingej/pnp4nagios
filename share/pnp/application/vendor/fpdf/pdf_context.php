@@ -1,8 +1,8 @@
 <?php
 //
-//  FPDI - Version 1.2
+//  FPDI - Version 1.3.1
 //
-//    Copyright 2004-2007 Setasign - Jan Slabon
+//    Copyright 2004-2009 Setasign - Jan Slabon
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -19,6 +19,13 @@
 
 class pdf_context {
 
+    /**
+     * Modi
+     *
+     * @var integer 0 = file | 1 = string
+     */
+    var $_mode = 0;
+    
 	var $file;
 	var $buffer;
 	var $offset;
@@ -28,8 +35,10 @@ class pdf_context {
 
 	// Constructor
 
-	function pdf_context($f) {
-		$this->file = $f;
+	function pdf_context(&$f) {
+		$this->file =& $f;
+		if (is_string($this->file))
+		    $this->_mode = 1;
 		$this->reset();
 	}
 
@@ -38,13 +47,20 @@ class pdf_context {
 	// and reset the buffered data
 
 	function reset($pos = null, $l = 100) {
-		if (!is_null ($pos)) {
-			fseek ($this->file, $pos);
-		}
-
-		$this->buffer = $l > 0 ? fread($this->file, $l) : '';
+	    if ($this->_mode == 0) {
+        	if (!is_null ($pos)) {
+    			fseek ($this->file, $pos);
+    		}
+    
+    		$this->buffer = $l > 0 ? fread($this->file, $l) : '';
+    		$this->length = strlen($this->buffer);
+    		if ($this->length < $l)
+                $this->increase_length($l - $this->length);
+	    } else {
+	        $this->buffer = $this->file;
+	        $this->length = strlen($this->buffer);
+	    }
 		$this->offset = 0;
-		$this->length = strlen($this->buffer);
 		$this->stack = array();
 	}
 
@@ -65,14 +81,17 @@ class pdf_context {
 	// Forcefully read more data into the buffer
 
 	function increase_length($l=100) {
-		if (feof($this->file)) {
+		if ($this->_mode == 0 && feof($this->file)) {
 			return false;
-		} else {
-			$this->buffer .= fread($this->file, $l);
-			$this->length = strlen($this->buffer);
+		} else if ($this->_mode == 0) {
+		    $totalLength = $this->length + $l;
+		    do {
+                $this->buffer .= fread($this->file, $totalLength-$this->length);
+            } while ((($this->length = strlen($this->buffer)) != $totalLength) && !feof($this->file));
+			
 			return true;
+		} else {
+	        return false;
 		}
 	}
-
 }
-?>
