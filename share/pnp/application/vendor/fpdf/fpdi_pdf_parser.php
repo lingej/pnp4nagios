@@ -236,12 +236,12 @@ class fpdi_pdf_parser extends pdf_parser {
                 break;
                 case '/LZWDecode':
                     include_once('filters/FilterLZW_FPDI.php');
-                    $decoder =& new FilterLZW_FPDI($this->fpdi);
+                    $decoder = new FilterLZW_FPDI($this->fpdi);
                     $stream = $decoder->decode($stream);
                     break;
                 case '/ASCII85Decode':
                     include_once('filters/FilterASCII85_FPDI.php');
-                    $decoder =& new FilterASCII85_FPDI($this->fpdi);
+                    $decoder = new FilterASCII85_FPDI($this->fpdi);
                     $stream = $decoder->decode($stream);
                     break;
                 case null:
