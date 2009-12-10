@@ -36,10 +36,13 @@ class Rrdtool_Model extends Model
             fclose($pipes[0]);
 
             $data  = stream_get_contents($pipes[1]);
-            $error = stream_get_contents($pipes[2]);
+            $stderr = stream_get_contents($pipes[2]);
             fclose($pipes[1]);
             fclose($pipes[2]);
             proc_close($process);
+			if($stderr){
+				$data = "ERROR: ".$stderr;
+			}
 	    	return $data;
         }
     }
@@ -117,17 +120,53 @@ class Rrdtool_Model extends Model
 
     public function streamImage($data = FALSE){
 		if (preg_match('/^ERROR/', $data)) {
-	    	$debug['msg'] = trim($data);
-	    	$debug['cmd'] = $this->format_rrd_debug( $this->config->conf['rrdtool'] . $this->RRD_CMD) ;
-	    	#throw new Kohana_User_Exception('RRDtool Error', "<pre>".$debug['cmd']."</pre>");
-	    	$im = @imagecreate(597, 150)
-                 or die("Cannot Initialize new GD image stream");
-            $background_color = imagecolorallocate($im, 255, 255, 255);
-            $text_color = imagecolorallocate($im, 255, 0, 0);
-            imagestring($im, 1, 8, 8,  $debug['msg'], $text_color);
+	    	$data .= $this->format_rrd_debug( $this->config->conf['rrdtool'] . $this->RRD_CMD) ;
+            // Set font size
+            $font_size = 1.5;
+
+            $ts=explode("\n",$data);
+            $width=0;
+            foreach ($ts as $k=>$string) {
+                $width=max($width,strlen($string));
+            }
+
+  			$width  = imagefontwidth($font_size)*$width;
+			if($width <= $this->config->conf['graph_width']+100){
+				$width = $this->config->conf['graph_width']+100;
+			}
+  			$height = imagefontheight($font_size)*count($ts);
+			if($height <= $this->config->conf['graph_height']+60){
+				$height = $this->config->conf['graph_height']+60;
+			}
+  			$el=imagefontheight($font_size);
+  			$em=imagefontwidth($font_size);
+  			// Create the image pallette
+  			$img = imagecreatetruecolor($width,$height);
+  			// Dark red background
+  			$bg = imagecolorallocate($img, 0xAA, 0x00, 0x00);
+  			imagefilledrectangle($img, 0, 0,$width ,$height , $bg);
+  			// White font color
+  			$color = imagecolorallocate($img, 255, 255, 255);
+
+  			foreach ($ts as $k=>$string) {
+    			// Length of the string
+    			$len = strlen($string);
+    			// Y-coordinate of character, X changes, Y is static
+    			$ypos = 0;
+    			// Loop through the string
+    			for($i=0;$i<$len;$i++){
+      				// Position of the character horizontally
+      				$xpos = $i * $em;
+      				$ypos = $k * $el;
+      				// Draw character
+     		 		imagechar($img, $font_size, $xpos, $ypos, $string, $color);
+      				// Remove character from string
+      				$string = substr($string, 1);     
+    			}
+			}
 	    	header("Content-type: image/png");	   
-            imagepng($im);
-            imagedestroy($im);
+            imagepng($img);
+            imagedestroy($img);
         }else{
 	    	header("Content-type: image/png");	   
 	    	echo $data;
@@ -152,7 +191,7 @@ class Rrdtool_Model extends Model
 
 
     private function format_rrd_debug($data) {
-        $data = preg_replace('/(HRULE|VDEF|DEF|CDEF|GPRINT|LINE|AREA|COMMENT)/','\<br>${1}', $data);
+        $data = preg_replace('/(HRULE|VDEF|DEF|CDEF|GPRINT|LINE|AREA|COMMENT)/',"\n\${1}", $data);
         return $data;
     }   
 }
