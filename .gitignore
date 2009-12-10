@@ -27,3 +27,4 @@ share/pnp/application/logs/*
 contrib/ssi/status-header.ssi
 scripts/verify_pnp_config.pl
 sample-config/lighttpd.pnp4nagios.conf
+share/pnp/media/js/basket.js
