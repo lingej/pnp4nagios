@@ -63,6 +63,14 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <?php endif ?>
 </tr>
 <tr>
+<th>PHP function proc_open()</th>
+<?php if (function_exists('proc_open')): ?>
+<td class="pass">Pass</td>
+<?php else: $failed++ ?>
+<td class="fail">PHP function <a href="http://docs.pnp4nagios.org/faq/i10">proc_open</a> not available/enabled</td>
+<?php endif ?>
+</tr>
+<tr>
 <th>PHP zlib extension</th>
 <?php if (function_exists('gzfile')): ?>
 <td class="pass">Pass</td>
@@ -89,7 +97,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <?php if(in_array('mod_rewrite', apache_get_modules())) : ?>
 <td class="pass">Pass</td>
 <?php else: ?>
-<td class="warn"><a href="http://docs.pnp4nagios.org/faq/19">Apache mod_rewrite</a> is not enabled</td>
+<td class="warn"><a href="http://docs.pnp4nagios.org/faq/i9">Apache mod_rewrite</a> is not enabled</td>
 <?php endif ?></tr>
 <?php else: ?>
 <th>Apache Rewrite Module</th>
