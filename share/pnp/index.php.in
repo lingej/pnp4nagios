@@ -79,6 +79,11 @@ define('EXT', '.php');
 // ----------------------------------------------------------------------------
 //
 
+// Force default timezone
+if(function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get")){
+	@date_default_timezone_set(@date_default_timezone_get());
+}
+
 $kohana_pathinfo = pathinfo(__FILE__);
 // Define the front controller name and docroot
 define('DOCROOT', $kohana_pathinfo['dirname'].DIRECTORY_SEPARATOR);
