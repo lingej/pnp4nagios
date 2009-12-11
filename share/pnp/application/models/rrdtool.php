@@ -43,8 +43,11 @@ class Rrdtool_Model extends Model
 			if($stderr){
 				$data = "ERROR: ".$stderr;
 			}
-	    	return $data;
-        }
+        }else{
+			$data =  "ERROR: proc_open(".$rrdtool." ... failed";
+		}
+	    return $data;
+
     }
 
     public function doImage($RRD_CMD, $out='STDOUT') {
