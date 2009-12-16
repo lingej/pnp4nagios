@@ -28,7 +28,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $delayed_write $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
 my %conf = (
     TIMEOUT           => "5",
@@ -45,7 +45,8 @@ my %conf = (
     LOG_FILE_MAX_SIZE => "10485760",               #Truncate after 10MB
     LOG_LEVEL         => @DEBUG@,
     XML_ENC           => "UTF-8",
-    RRD_DAEMON_OPTS => ""
+    XML_UPDATE_DELAY  => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
+    RRD_DAEMON_OPTS   => ""
 );
 
 my %const = (
@@ -486,8 +487,18 @@ sub write_rrd {
 #
 sub open_template {
     my $xmlfile = shift;
+	$delayed_write = 0;
+	my $mtime = (stat($xmlfile))[9];
+	my $t = time();
+	my $age = ($t - $mtime);
+	if ( $age < $conf{'XML_UPDATE_DELAY'} ){
+		print_log( "DEBUG: XML File is $age seconds old. No update needed", 3 );
+		$delayed_write = 1;
+		return;
+	}
+	print_log( "DEBUG: XML File is $age Seconds old. UPDATE!", 3 );
     open( XML, "> $xmlfile.$$" ) or die "Cant create temporary XML file ", $!;
-    print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
+	print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
     print XML "<NAGIOS>\n";
 }
 
@@ -495,6 +506,7 @@ sub open_template {
 # Close Template FH
 #
 sub close_template {
+	return if $delayed_write == 1;
     my $xmlfile = shift;
     printf( XML "  <XML>\n" );
     printf( XML "   <VERSION>%d</VERSION>\n", $const{'XML_STRUCTURE_VERSION'} );
@@ -509,6 +521,7 @@ sub close_template {
 # Add Lines
 #
 sub write_to_template {
+	return if $delayed_write == 1;
     my $tag  = shift;
     my $data = shift;
     if ( !defined $data ) {
@@ -528,6 +541,7 @@ sub write_to_template {
 }
 
 sub write_state_to_template {
+	return if $delayed_write == 1;
     my @rrd_state = @_;
     printf( XML "  <RRD>\n" );
     printf( XML "    <RC>%s</RC>\n",   $rrd_state[0] );
@@ -539,6 +553,7 @@ sub write_state_to_template {
 # Store the complete Nagios ENV
 #
 sub write_env_to_template {
+	return if $delayed_write == 1;
     foreach my $key ( sort keys %NAGIOS ) {
         $NAGIOS{$key} = urlencode($NAGIOS{$key});
         printf( XML "  <NAGIOS_%s>%s</NAGIOS_%s>\n", $key, $NAGIOS{$key}, $key );

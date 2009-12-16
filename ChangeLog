@@ -1,5 +1,6 @@
 **pnp-0.6.2 ??/??/2009**
 
+  * Feature: XML_WRITE_DELAY option added to process_perfdata.cfg as suggested by Mathias Kettner
   * Feature: New template integer.php 
   * Update: FPDI update to 1.3.1
   * Feature: PNP will now work with [[http://http://www.lighttpd.net|lighttpd]] and php-cgi

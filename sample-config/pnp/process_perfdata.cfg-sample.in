@@ -72,6 +72,14 @@ LOG_LEVEL = @DEBUG@
 XML_ENC = UTF-8
 
 #
+# XML update delay in seconds
+# 0 = Update XML Files everytime new data arrives
+#
+# Use this option to reduce disk I/O
+#   
+XML_UPDATE_DELAY = 0
+
+#
 # EXPERIMENTAL rrdcached Support
 # Use only with rrdtool svn revision 1511+
 #
