@@ -92,7 +92,7 @@ class Pdf_Controller extends System_Controller  {
 				$pdf->AddPage();
 				if($this->use_bg){$pdf->useTemplate($tplIdx);}
     		}
-			if($data['SOURCE'] == 1){
+			if($data['LEVEL'] == 1){
 				$pdf->SetFont('Arial', '', 12);
 				$pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
 				$pdf->SetFont('Arial', '', 10);
@@ -155,7 +155,7 @@ class Pdf_Controller extends System_Controller  {
 				$pdf->AddPage();
 				if($this->use_bg){$pdf->useTemplate($tplIdx);}
     		}
-			if($data['SOURCE'] == 1){
+			if($data['LEVEL'] == 1){
 				$pdf->SetFont('Arial', '', 12);
 				$pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
 				$pdf->SetFont('Arial', '', 10);
@@ -216,7 +216,7 @@ class Pdf_Controller extends System_Controller  {
 				$pdf->AddPage();
 				if($this->use_bg){$pdf->useTemplate($tplIdx);}
     		}
-			if($data['SOURCE'] == 1){
+			if($data['LEVEL'] == 1){
 				$pdf->SetFont('Arial', '', 12);
 				$pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
 				$pdf->SetFont('Arial', '', 10);
