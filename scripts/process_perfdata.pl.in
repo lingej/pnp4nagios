@@ -488,15 +488,17 @@ sub write_rrd {
 sub open_template {
     my $xmlfile = shift;
 	$delayed_write = 0;
-	my $mtime = (stat($xmlfile))[9];
-	my $t = time();
-	my $age = ($t - $mtime);
-	if ( $age < $conf{'XML_UPDATE_DELAY'} ){
-		print_log( "DEBUG: XML File is $age seconds old. No update needed", 3 );
-		$delayed_write = 1;
-		return;
+	if( -e $xmlfile ){
+		my $mtime = (stat($xmlfile))[9];
+		my $t = time();
+		my $age = ($t - $mtime);
+		if ( $age < $conf{'XML_UPDATE_DELAY'} ){
+			print_log( "DEBUG: XML File is $age seconds old. No update needed", 3 );
+			$delayed_write = 1;
+			return;
+		}
+		print_log( "DEBUG: XML File is $age Seconds old. UPDATE!", 3 );
 	}
-	print_log( "DEBUG: XML File is $age Seconds old. UPDATE!", 3 );
     open( XML, "> $xmlfile.$$" ) or die "Cant create temporary XML file ", $!;
 	print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
     print XML "<NAGIOS>\n";
