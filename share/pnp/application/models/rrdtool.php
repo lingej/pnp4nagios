@@ -40,7 +40,7 @@ class Rrdtool_Model extends Model
             fclose($pipes[1]);
             fclose($pipes[2]);
             proc_close($process);
-			if($stderr){
+			if($stderr && sizeof($data) >= 10 ){
 				$data = "ERROR: ".$stderr;
 			}
         }else{
