@@ -1,4 +1,6 @@
-**pnp-0.6.2 ??/??/2009**
+**pnp-0.6.3 ??/??/2010**
+
+**pnp-0.6.2 12/23/2009**
 
   * Feature: XML_WRITE_DELAY option added to process_perfdata.cfg as suggested by Mathias Kettner
   * Feature: New template integer.php 
