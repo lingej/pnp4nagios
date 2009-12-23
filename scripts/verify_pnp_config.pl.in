@@ -24,13 +24,14 @@
 # 2009.10.07:        added config_local.php / file checks
 # 2009.10.16: 0.1.17 added native option / fixed broker check
 # 2009.12.02:        use_url_rewriting / bugfix
+# 2009.12.22: 0.1.18 option -s / xml_update_delay / bugfix (language)
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.17";
+my $version = "0.1.18";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -92,10 +93,11 @@ my $group = "";
 my $layout = "";
 my $TemplPath = "";
 my $pkg_mgr = "";
+my $skip = 0;
 my $language = "";
 my $english = "";
 my $valLang = '^en$|^de$|^es$';
-if (exists $ENV{LANG}) {
+if ((exists $ENV{LANG}) and ($ENV{LANG} ne "POSIX")) {
 	($language) = ($ENV{LANG} =~ /^(..)/);
 }
 my %msg = ();
@@ -128,6 +130,7 @@ GetOptions(
 	"L|layout=s" => \$layout,
 	"T|template=s" => \$TemplPath,
 	"t|time" => \$time,
+	"s|skip" => \$skip,
 );
 
 if ($pnp_version =~ /^(\d+\.\d+)/) {
@@ -165,7 +168,7 @@ if (-f "/etc/issue") {
 	info ("info","OS","$line");
 }
 info ("info","Perl","$]");
-if ($mode) {
+if (($mode) and (! $skip)) {
 	$pkg_mgr = eval "`whereis yum`";
 	if ($pkg_mgr =~/:\s+$/) {
 		$pkg_mgr = eval "`whereis dpkg`";
@@ -509,6 +512,7 @@ $0 [-h]
 	[ -L <layout> ]
 	[ -T <templates directory> ]
 	[ -t ]
+	[ -s ]
 	[ -e | -n <language> ]
 	[ -d | -q ]
 	   
@@ -538,6 +542,7 @@ parameters:
 	                  "Name;": search for matching host name
 	                  ";Name": search for service description
 	-t, --time        show warnings if RRDfiles are too old
+	-s, --skip        skip check of installed packages
 	-n, --native      show messages in native language (so far "es" or "de")
 	-e, --english     show english messages/links
 	-d, --debug       some debugging output
@@ -1071,6 +1076,7 @@ sub chk_ppcfg {
 	$PPcfg{rrd_daemon_opts} = 'S;.*;520'; 
 	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
 		$PPcfg{rrd_storage_type} = 'v;SINGLE|MULTIPLE;';
+		$PPcfg{xml_update_delay} = 'n;^\d+$;';
 	}
 	$err = 0;
 
@@ -1275,7 +1281,7 @@ sub examine {
 	} elsif (($act eq "s") and (! -s $val)) {
 		info ("noSock",$val);
 	} elsif (($act eq "n") and ($val !~ /$patt/)) {
-		info ("noNumber",$val);
+		info ("noNumber",$par, $val);
 	} elsif (($act eq "v") and ($val !~ /$patt/)) {
 		info ("invValue2",$val,$par);
 	} elsif (($act eq "S") and ($val !~ /$patt/)) {
@@ -1566,7 +1572,7 @@ sub message {
 	$msg{"notAdv"} = "[H] \"%s\" not advisable in Nagios < 3.x";
 	$msg{"invChar"} = "[E] \"%s\" (\"%s\") has invalid format/contains invalid characters";
 	$msg{"undefVal"} = "[E] no (valid) value for \"%s\" defined";
-	$msg{"noNumber"} = "[E] %s not a valid number";
+	$msg{"noNumber"} = "[E] %s: \"%s\" not a valid number";
 	$msg{"startEnd"} = "[E] start (%s) is greater than end (%s)";
 	$msg{"noFile"} = "[E] (%s) file \"%s\" is missing";
 	$msg{"noRes"} = "[E] resource \"%s\" is not defined";
@@ -1675,7 +1681,7 @@ sub message {
 		$msg{"notAdv"} = "[H] \"%s\" wird fuer Nagios < 3.x nicht empfohlen";
 		$msg{"invChar"} = "[E] \"%s\" (%s) hat ein ungueltiges Format/enthaelt ungueltige Zeichen";
 		$msg{"undefVal"} = "[E] kein (gueltiger) Wert fuer \"%s\" definiert";
-		$msg{"noNumber"} = "[E] %s ist keine gueltige Zahl";
+		$msg{"noNumber"} = "[E] %s: \"%s\" ist keine gueltige Zahl";
 		$msg{"startEnd"} = "[E] Startwert (%s) ist groesser als Endwert (%s)";
 		$msg{"noFile"} = "[E] (%s) Datei \"%s\" fehlt";
 		$msg{"noRes"} = "[E] Ressource \"%s\" ist nicht definiert";
@@ -1746,7 +1752,7 @@ sub message {
 		$msg{"fileGroup"} = "[E] \"%s\": grupo es \"%s\" en lugar de \"%s\"";
 		$msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
 		$msg{"RRDold"} = "[W] \"%s\" es más antiguo de %s seconds";
-		$msg{"RRDcount"} = "[I] %s dir(s) con un total de %s fihcero(s) rrd";
+		$msg{"RRDcount"} = "[I] %s dir(s) con un total de %s fichero(s) rrd";
 		$msg{"noRRDfiles"} = "[E] %s dir(s) pero NO ficheros rrd => ¡NO gráficos!";
 		$msg{"useRRDs"} = "[I] módulos perl de RRD instalados";
 		$msg{"noRRDs"} = "[I] módulos perl de RRD no instalados";
@@ -1772,7 +1778,7 @@ sub message {
 		$msg{"notAdv"} = "[H] \"%s\" no aconsejable en Nagios < 3.x";
 		$msg{"invChar"} = "[E] \"%s\" (\"%s\") tiene un formato o contiene carácteres no válidos";
 		$msg{"undefVal"} = "[E] no hay valor (válido) definido para \"%s\"";
-		$msg{"noNumber"} = "[E] %s no es un número válido";
+		$msg{"noNumber"} = "[E] %s: \"%s\" no es un número válido";
 		$msg{"startEnd"} = "[E] el comienzo (%s) es más grande que el final (%s)";
 		$msg{"noFile"} = "[E] (%s) fichero \"%s\" no existe";
 		$msg{"noRes"} = "[E] recurso \"%s\" no está definido";
