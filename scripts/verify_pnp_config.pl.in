@@ -25,6 +25,7 @@
 # 2009.10.16: 0.1.17 added native option / fixed broker check
 # 2009.12.02:        use_url_rewriting / bugfix
 # 2009.12.22: 0.1.18 option -s / xml_update_delay / bugfix (language)
+# 2009.12.27:        bugfix (mod-php detection)
 
 use strict;
 use Getopt::Long;
@@ -182,7 +183,7 @@ if (($mode) and (! $skip)) {
 		chk_pkg ("nagios",0,1);
 		chk_pkg ("icinga",0,1);
 		chk_pkg ("pnp4nagios",0,1);
-		chk_pkg ("mod-php5,mod_php5",1,0);
+		chk_pkg ("mod-php5,mod_php5,php5_module",1,0);
 		chk_pkg ("php,php5,php5-common",1,1);
 		chk_pkg ("dejavu",1,0);
 		if ($crit) {
@@ -1382,6 +1383,7 @@ sub chk_pkg {
 	for my $idx (0..$#pkg_names) {
 		next if ($pkg);
 		$pkg_name = $pkg_names[$idx];
+		info ("key", $pkg_name) if ($debug);
 		if ($pkg_mgr =~ /yum/) {
 			if ($exactly) {
 				$pkg = `yum list installed $pkg_name 2>/dev/null | grep "installed"`;
@@ -1411,6 +1413,14 @@ sub chk_pkg {
 	if ($pkg) {
 		info ("Package","$pkg");
 		return 1
+	}
+	if (-x "/usr/sbin/httpd") {
+		$pkg = `/usr/sbin/httpd -t -D DUMP_MODULES 2>&1 | grep "$pkg_name"`;
+		$pkg =~ s/\s (shared)//;
+		$pkg =~ s/\s$//gs;
+	}
+	if ($pkg ne "") {
+		info ("keyVal","HTTPD","$pkg");
 	} else {
 		info ("noPkg","$pkg_names") if ($req);
 		return 0
@@ -1581,6 +1591,7 @@ sub message {
 	$msg{"noSock"} = "[E] \"%s\" is not a socket";
 	$msg{"noWrite"} = "[E] \"%s\": no write permissions for \"%s\"";
 	$msg{"key"} = "[D] key:\"%s\"";
+	$msg{"keyVal"} = "[I] %s:\"%s\"";
 	$msg{"keyValue"} = "[D] directive:\"%s\", value:\"%s\"";
 	$msg{"oddLine"} = "[W] \"%s\" looks odd";
 	$msg{"errOpen"} = "[E] open of %s failed, RC=%s";
@@ -1690,6 +1701,7 @@ sub message {
 		$msg{"noSock"} = "[E] \"%s\" ist kein Socket";
 		$msg{"noWrite"} = "[E] \"%s\": keine Schreibberechtigung fuer \"%s\"";
 		$msg{"key"} = "[D] key:\"%s\"";
+		$msg{"keyVal"} = "[I] %s:\"%s\"";
 		$msg{"keyValue"} = "[D] Direktive:\"%s\", Wert:\"%s\"";
 		$msg{"oddLine"} = "[W] \"%s\" sieht komisch aus";
 		$msg{"errOpen"} = "[E] oeffnen von %s fehlgeschlagen, RC=%s";
@@ -1787,6 +1799,7 @@ sub message {
 		$msg{"noSock"} = "[E] \"%s\" no es un socket";
 		$msg{"noWrite"} = "[E] \"%s\": sin permisos de escritura para \"%s\"";
 		$msg{"key"} = "[D] key:\"%s\"";
+		$msg{"keyVal"} = "[I] %s:\"%s\"";
 		$msg{"keyValue"} = "[D] directiva:\"%s\", valor:\"%s\"";
 		$msg{"oddLine"} = "[W] \"%s\" parece extraño";
 		$msg{"errOpen"} = "[E] ha fallado la apertura de %s , RC=%s";
