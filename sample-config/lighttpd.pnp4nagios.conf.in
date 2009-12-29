@@ -1,6 +1,6 @@
 #
 # Sample Lighttpd Config spippet.
-# Testen on Debian.
+# Tested on Debian.
 #
 server.modules   += ( "mod_auth" )
 

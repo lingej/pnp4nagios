@@ -22,12 +22,12 @@
 #
 #define command{
 #       command_name    process-service-perfdata-file
-#       command_line    @libexecdir@/process_perfdata.pl --bulk=@PERFDATA_DIR@/service-perfdata
+#       command_line    @libexecdir@/process_perfdata.pl --bulk=@localstatedir@/service-perfdata
 #}
 
 #define command{
 #       command_name    process-host-perfdata-file
-#       command_line    @libexecdir@/process_perfdata.pl --bulk=@PERFDATA_DIR@/host-perfdata
+#       command_line    @libexecdir@/process_perfdata.pl --bulk=@localstatedir@/host-perfdata
 #}
 
 #
@@ -35,10 +35,10 @@
 #
 #define command{
 #       command_name    process-service-perfdata-file
-#       command_line    /bin/mv @PERFDATA_DIR@/service-perfdata @PERFDATA_SPOOL_DIR@/service-perfdata.$TIMET$
+#       command_line    /bin/mv @localstatedir@/service-perfdata @PERFDATA_SPOOL_DIR@/service-perfdata.$TIMET$
 #}
 
 #define command{
 #       command_name    process-host-perfdata-file
-#       command_line    /bin/mv @PERFDATA_DIR@/host-perfdata @PERFDATA_SPOOL_DIR@/host-perfdata.$TIMET$
+#       command_line    /bin/mv @localstatedir@/host-perfdata @PERFDATA_SPOOL_DIR@/host-perfdata.$TIMET$
 #}
