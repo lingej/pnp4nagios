@@ -20,7 +20,7 @@ process_performance_data=1
 
 # *** the template definition differs from the one in the original nagios.cfg
 #
-service_perfdata_file=@PERFDATA_DIR@/service-perfdata
+service_perfdata_file=@localstatedir@/service-perfdata
 service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
 service_perfdata_file_mode=a
 service_perfdata_file_processing_interval=15
@@ -28,7 +28,7 @@ service_perfdata_file_processing_command=process-service-perfdata-file
 
 # *** the template definition differs from the one in the original nagios.cfg
 #
-host_perfdata_file=@PERFDATA_DIR@/host-perfdata
+host_perfdata_file=@localstatedir@/host-perfdata
 host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
 host_perfdata_file_mode=a
 host_perfdata_file_processing_interval=15
