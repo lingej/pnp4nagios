@@ -183,7 +183,7 @@ if (($mode) and (! $skip)) {
 		chk_pkg ("nagios",0,1);
 		chk_pkg ("icinga",0,1);
 		chk_pkg ("pnp4nagios",0,1);
-		chk_pkg ("mod-php5,mod_php5,php5_module",1,0);
+#		chk_pkg ("mod-php5,mod_php5,php5_module",1,0);
 		chk_pkg ("php,php5,php5-common",1,1);
 		chk_pkg ("dejavu",1,0);
 		if ($crit) {
