@@ -1,0 +1,406 @@
+#!@PERL@
+use strict;
+use warnings;
+use Getopt::Long;
+use Time::HiRes qw(gettimeofday tv_interval);
+use RRDs;
+use Data::Dumper;
+use File::Find;
+use Term::UI;
+use Term::ReadLine;
+
+@PERL_LIB_PATH_CODE@
+
+if( $< == 0 ){
+    print "dont try this as root \n"; 
+    exit 1;
+}
+
+#
+# Some global Vars
+#
+
+my %conf = (
+    CFG_DIR           => "@sysconfdir@/", 
+    USE_RRDs          => 1,
+    RRDPATH           => "@PERFDATA_DIR@",
+    RRDTOOL           => "@RRDTOOL@",
+    LOG_LEVEL         => 0,
+    DRY_RUN           => 1,
+    TMP_DIR           => '/tmp/rrd_convert',
+    RRD_DAEMON_OPTS   => ""
+);
+
+Getopt::Long::Configure('bundling');
+my ( $opt_V, $opt_h, $opt_c, $opt_l );
+GetOptions(
+    "V|version"         => \$opt_V,
+    "h|help"            => \$opt_h,
+    "check_command=s"   => \$opt_c,
+    "list_commands"     => \$opt_l,
+);
+
+print_help()    if $opt_h;
+print_help()    if !$opt_c;
+print_version() if $opt_V;
+
+#
+# RRDs Perl Module Detection
+#
+if ( $conf{USE_RRDs} == 1 ) {
+    unless ( eval "use RRDs;1" ) {
+        $conf{USE_RRDs} = 0;
+    }
+}
+
+if($conf{RRD_DAEMON_OPTS}){
+	$conf{RRD_DAEMON_OPTS} = "--daemon=".$conf{RRD_DAEMON_OPTS};
+}
+
+my @STRUCT; 
+my %FILEHANDLE; 
+
+my @commands;
+my @worklist;
+
+my %ds_list;
+my %original_ds_list;
+
+my %stats = (
+	'rrd_in'  => 0,
+	'rrd_out' => 0,
+);
+
+main();
+
+sub main{
+	print "\n\n!!WARNING!! !!WARNING!! !!WARNING!!\n\n";
+	print "This is an early devel version of rrd_convert.pl\n\n";
+	parse_config($conf{CFG_DIR}."/process_perfdata.cfg");
+	find(\&wanted_xml_files, $conf{RRDPATH});
+	if($opt_l){  # List commands and exit
+		summary();
+		summary_command_list();
+		exit;
+	}
+	summary();
+	if($#worklist+1 > 0 ){
+		my $term = Term::ReadLine->new('brand');
+		my $bool = $term->ask_yn( prompt => 'do your want to convert these '.($#worklist+1).' files?',
+		 	default => 'n',
+ 		 	print_me => 'Start rrd_convert?' );
+		exit if $bool != 1;
+	}else{
+		print "Check Command '".$opt_c."' not found in any XML File\n";
+		exit;
+	}
+
+	my $i = 1;
+	foreach my $xmlfile ( @worklist ) {
+		undef %ds_list;
+		undef %original_ds_list;
+		my($host,$service) = parse_xml_filename($xmlfile);
+		#print "H: $host S: $service\n";
+		#parse_pnp_xml($xmlfile);
+		#print "Storage Type = ".$STRUCT[1]{RRD_STORAGE_TYPE}."\n";
+		my $rrdfile = sprintf("%s/%s/%s.rrd",$conf{RRDPATH},$host,$service);
+		if(-r $rrdfile){
+			#print $rrdfile."\n";
+			create_dir($conf{TMP_DIR});
+			my $dumpfile = sprintf("%s/%s-%s.dump",$conf{TMP_DIR},$host,$service);
+			print "File ".$i."/".($#worklist+1)."\n";
+			rrdtool_dump($rrdfile,$dumpfile);
+			build_ds_list($rrdfile);
+			parse_pnp_xml($xmlfile);
+			open_files($host,$service);
+			manipulate_rrd_dump($dumpfile);
+			close_files();
+			restore_files($host,$service);
+			$i++;
+		}
+	}
+	print "DONE\n";
+	stats();
+}
+
+
+sub build_ds_list{
+	my $rrdfile = shift;
+	my $info = RRDs::info ("$rrdfile","$conf{RRD_DAEMON_OPTS}");
+	my $err = RRDs::error;
+	if($err){
+		print $err;
+		exit;
+	}
+	foreach my $key (sort keys %$info){
+		#print "$key = $$info{$key}\n";
+		if ( $key =~ /ds\[(.*)\]\.type/ ) {
+			$ds_list{$1} = $1;
+		}
+		%original_ds_list = %ds_list;
+	}
+}
+
+sub wanted_xml_files{
+        if(m/.xml/){
+                #printf("File: %s\n",$File::Find::name);
+                my $xmlfile = $File::Find::name;
+                open(XML, $xmlfile);
+                while (<XML>) {
+                        if(/CHECKCOMMAND>(.*)</){
+                                my ($t) = split("!",$1);
+                                push(@commands,$t);
+                                if($t =~ /^$opt_c$/){
+                                        #print "Found: ".$t." in ".$xmlfile."\n";
+                                        push(@worklist,$xmlfile);
+                                }
+                        }
+                }
+                close(XML);
+        }
+}
+
+sub parse_xml_filename{
+	my $xmlfile = shift;
+	my $_ = $xmlfile;
+	if( m/([A-Za-z\-_]+)\/([A-Za-z\-_]+)\.xml$/ ){
+		return ($1, $2);
+	}
+}
+sub summary{
+	my %seen;
+	my @uniqed = grep !$seen{$_}++, @commands;
+	print "\n";
+	printf "%-40s %s\n"  ,"Search pattern",$opt_c;
+	printf "%-40s %s\n"  ,"XML Files analyzed",$#commands+1;
+	printf "%-40s %s\n"  ,"XML Files found",$#worklist+1;
+	printf "%-40s %s\n"  ,"Number of uniq check_commands",$#uniqed+1;
+	if($conf{DRY_RUN} == 1){
+		printf "%-40s %s\n"  ,"Dry run?","[YES]";
+		printf "%-40s %s\n"  ,"Temp Directory",$conf{TMP_DIR};
+		print "\n\n";
+		print "This is only a 'dry run'. The new RRD Files are stored in '$conf{TMP_DIR}'\n";
+		print "\n";
+	}
+}
+
+sub summary_command_list{
+	my %seen;
+	my @uniqed = grep !$seen{$_}++, @commands;
+	printf "\\ List of Check Commands\n";
+	foreach my $key (sort { $seen{$b} cmp $seen{$a} } keys %seen ) {
+	     printf " |- %-36s %5s\n",$key,$seen{$key};
+	}   
+}
+
+sub stats{
+	print "\n\n \\Statsistics:\n";
+	foreach my $key (sort { $stats{$b} cmp $stats{$a} } keys %stats ) {
+	     printf " |- %-15s %5s\n",$key,$stats{$key};
+	}   
+}
+
+sub create_dir{
+	my $dir = shift;
+	unless ( -d "$dir" ) {
+        	unless ( mkdir "$dir" ) {
+			print "ERROR: $dir is not writable\n";
+            		exit 1;
+        	}
+    	}
+}
+
+sub open_files(){
+	my $host = shift;
+	my $service = shift;
+	foreach my $ds (keys %ds_list){
+		create_dir($conf{TMP_DIR}."/".$host);
+		my $file = sprintf("%s/%s-%s-%s.restore",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
+		#print "Open Filehandle ".$file."\n";
+		open($FILEHANDLE{$ds}, ">", $file);
+	}
+}
+
+sub close_files(){
+	foreach my $ds (keys %ds_list){
+		#$ds--;
+		#print "Close Filehandle ".$STRUCT[$ds]{NAME}."\n";
+		close($FILEHANDLE{$ds});
+	}
+}
+
+sub write_to_files{
+	my $data = shift;
+	foreach my $ds (keys %ds_list){
+		#$ds--;
+		print { $FILEHANDLE{$ds} } $data;
+		#print "DS: $ds $data";
+	}
+}
+
+sub restore_files(){
+	my $host = shift;
+	my $service = shift;
+	$| = 1;
+	print "Restoring File\n";
+	foreach my $ds (keys %ds_list){
+		#$ds--;
+		my $restorefile = sprintf("%s/%s-%s-%s.restore",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
+		my $rrdfile     = sprintf("%s/%s/%s_%s.rrd",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
+		print "$rrdfile\n";
+		RRDs::restore($restorefile, $rrdfile, "--force-overwrite");
+		my $err = RRDs::error;
+		if($err){
+			print $err;
+			exit;
+		}
+		unlink($restorefile);
+		$stats{rrd_out}++;
+	}
+	print "... done\n";
+	$| = 0;
+}
+
+sub parse_pnp_xml{
+	my $xmlfile = shift;
+	#print "reading $xmlfile\n";
+	open(XML, $xmlfile);
+	my $DATASOURCE = 0;
+	while (<XML>) {
+		if(/<DATASOURCE>/){
+			$DATASOURCE++;
+		}
+		if(/<RRD>/){
+			$DATASOURCE = 0;
+		}
+		if(/<([A-Z_]+)>(.*)<\/[A-Z_]+>/ && $DATASOURCE != -1){
+			$STRUCT[$DATASOURCE]{$1} = $2;
+		}
+	}	
+	close(XML);
+	return @STRUCT;
+}
+
+sub rrdtool_dump{
+	my $rrdfile = shift;
+	my $dumpfile = shift;
+	print "RRDtool dump to $dumpfile\n";
+	RRDs::dump($rrdfile,$dumpfile);
+	my $err = RRDs::error;
+	if($err){
+		print $err;
+		exit;
+	}
+	$stats{rrd_in}++;
+	return $dumpfile;
+}
+ 
+sub manipulate_rrd_dump{
+	my $tmpfile = shift;
+	my $i = 0;
+	open (XML,$tmpfile);
+	my @ROW = ();
+	my $tmpds = 1;
+	my $inside_ds_block = 0;
+	print "Manipulating $tmpfile\n";
+	while (<XML>){
+		$i++;
+		my $c = ($i/5000);
+		if ( $c =~ m/^\d$/ ){
+			$| = 1; print "."; $| = 0;
+		}
+		my $d = $_;
+		#
+		# A Data Row
+		if(m/<row>/){
+			m/(.*<row>)/;
+			my $rowstart = $1;
+			@ROW = m{<v>[^<](.*?)<\/v>}gc;
+			my $fh = 1;
+			foreach my $VAL (@ROW){
+				undef %ds_list;
+				$ds_list{$fh} = $fh;
+				write_to_files($rowstart."<v> ".$VAL." </v></row>\n");
+				$fh++;
+			}
+			next;
+		}
+		if(m/<ds>/){
+			$inside_ds_block = 1;
+			undef %ds_list;
+			$ds_list{$tmpds} = $tmpds;
+			write_to_files($d);
+			$tmpds++;
+			next;
+		}
+		if(m/<cdp_prep>/){
+			write_to_files($d);
+			$inside_ds_block = 0;
+			$tmpds = 1;
+			%ds_list = %original_ds_list;
+			next;
+		}
+		if(m/<\/ds>/){
+			write_to_files($d);
+			$inside_ds_block = 0;
+			# write to all files alter </ds>
+			%ds_list = %original_ds_list;
+			next;
+		}
+		if(m/<\/database>/){
+			# write to all files alter </database>
+			%ds_list = %original_ds_list;
+			write_to_files($d);
+			next;
+		}
+		if($inside_ds_block == 1){
+			# rename DS
+			$d =~ s/<name>\s(\d)\s<\/name>/<name> 1 <\/name>/;
+		}
+		write_to_files($d);
+	}
+	close(XML);
+	print "... done $i lines\n";
+	unlink($tmpfile);
+}
+
+#
+# Parse process_perfdata.cfg
+#
+sub parse_config {
+    my $config_file = shift;
+    my $line        = 0;
+    if ( -e $config_file ) {
+        open CFG, '<', "$config_file";
+        while (<CFG>) {
+            $line++;
+            chomp;
+            s/ //g;
+            next if /^#/;
+            next if /^$/;
+            s/#.*//;
+
+            if (/^(.*)=(.*)$/) {
+                if ( defined $conf{$1} ) {
+                    $conf{$1} = $2;
+                }
+            }
+        }
+        close CFG;
+        #print_log( "Using Config File $config_file parameters", 2 );
+    }
+    else {
+        #print_log( "Config File $config_file not found, using defaults", 2 );
+    }
+}
+
+sub print_help{
+	print "Usage: $0 --check_command=<nagios_check_command> [ --dry-run ] [ --list_commands ] \n";
+	print "\n";
+	exit;
+}
+
+sub print_version{
+	print "Version!\n";
+	exit;
+}

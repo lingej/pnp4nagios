@@ -287,6 +287,7 @@ AC_OUTPUT()
 
 $PERL subst summary
 $PERL subst scripts/process_perfdata.pl 
+$PERL subst scripts/rrd_convert.pl 
 $PERL subst scripts/verify_pnp_config.pl 
 $PERL subst scripts/rc.npcd 
 $PERL subst scripts/check_pnp_rrds.pl 
