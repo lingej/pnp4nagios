@@ -1,15 +1,16 @@
 #!@PERL@
+#
+#
+#
+#
+@PERL_LIB_PATH_CODE@
 use strict;
 use warnings;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use RRDs;
-use Data::Dumper;
+#use RRDs;
 use File::Find;
-use Term::UI;
-use Term::ReadLine;
 
-@PERL_LIB_PATH_CODE@
 
 if( $< == 0 ){
     print "dont try this as root \n"; 
@@ -28,8 +29,19 @@ my %conf = (
     LOG_LEVEL         => 0,
     DRY_RUN           => 1,
     TMP_DIR           => '/tmp/rrd_convert',
-    RRD_DAEMON_OPTS   => ""
+    RRD_DAEMON_OPTS   => "",
+    XML_MAX_AGE       => 3600,
 );
+
+#
+# RRDs Perl Module Detection
+#
+if ( $conf{USE_RRDs} == 1 ) {
+    unless ( eval "use RRDs;1" ) {
+        print "ERROR: The RRDs Perl Modules are needed to run $0\n";
+	exit 1; 
+    }
+}
 
 Getopt::Long::Configure('bundling');
 my ( $opt_V, $opt_h, $opt_c, $opt_l );
@@ -44,14 +56,7 @@ print_help()    if $opt_h;
 print_help()    if !$opt_c;
 print_version() if $opt_V;
 
-#
-# RRDs Perl Module Detection
-#
-if ( $conf{USE_RRDs} == 1 ) {
-    unless ( eval "use RRDs;1" ) {
-        $conf{USE_RRDs} = 0;
-    }
-}
+
 
 if($conf{RRD_DAEMON_OPTS}){
 	$conf{RRD_DAEMON_OPTS} = "--daemon=".$conf{RRD_DAEMON_OPTS};
@@ -60,8 +65,9 @@ if($conf{RRD_DAEMON_OPTS}){
 my @STRUCT; 
 my %FILEHANDLE; 
 
-my @commands;
-my @worklist;
+my @commands; # list of commands
+my @worklist; # list of found xml files
+my @oldfiles; # list of old xml files
 
 my %ds_list;
 my %original_ds_list;
@@ -69,6 +75,7 @@ my %original_ds_list;
 my %stats = (
 	'rrd_in'  => 0,
 	'rrd_out' => 0,
+	'old_xml' => 0,
 );
 
 main();
@@ -85,12 +92,13 @@ sub main{
 	}
 	summary();
 	if($#worklist+1 > 0 ){
-		my $term = Term::ReadLine->new('brand');
-		my $bool = $term->ask_yn( prompt => 'do your want to convert these '.($#worklist+1).' files?',
-		 	default => 'n',
- 		 	print_me => 'Start rrd_convert?' );
-		exit if $bool != 1;
+		my $answer = read_choice("Start Coverter [n|Y]?");
+                unless ( $answer =~ m/^y$/i ){
+			print "Exit...\n";
+                        exit;
+                }
 	}else{
+
 		print "Check Command '".$opt_c."' not found in any XML File\n";
 		exit;
 	}
@@ -100,9 +108,6 @@ sub main{
 		undef %ds_list;
 		undef %original_ds_list;
 		my($host,$service) = parse_xml_filename($xmlfile);
-		#print "H: $host S: $service\n";
-		#parse_pnp_xml($xmlfile);
-		#print "Storage Type = ".$STRUCT[1]{RRD_STORAGE_TYPE}."\n";
 		my $rrdfile = sprintf("%s/%s/%s.rrd",$conf{RRDPATH},$host,$service);
 		if(-r $rrdfile){
 			#print $rrdfile."\n";
@@ -110,8 +115,9 @@ sub main{
 			my $dumpfile = sprintf("%s/%s-%s.dump",$conf{TMP_DIR},$host,$service);
 			print "File ".$i."/".($#worklist+1)."\n";
 			rrdtool_dump($rrdfile,$dumpfile);
-			build_ds_list($rrdfile);
 			parse_pnp_xml($xmlfile);
+			build_ds_list($rrdfile);
+			next if check_ds_list();
 			open_files($host,$service);
 			manipulate_rrd_dump($dumpfile);
 			close_files();
@@ -127,7 +133,7 @@ sub main{
 sub build_ds_list{
 	my $rrdfile = shift;
 	my $info = RRDs::info ("$rrdfile","$conf{RRD_DAEMON_OPTS}");
-	my $err = RRDs::error;
+	my $err = RRDs::error();
 	if($err){
 		print $err;
 		exit;
@@ -141,10 +147,29 @@ sub build_ds_list{
 	}
 }
 
+sub check_ds_list{
+	my $rrd_ds_count = keys %ds_list;
+	my $xml_ds_count = $#STRUCT;
+	if($rrd_ds_count == $xml_ds_count){
+		return 0;
+	}else{
+		printf ("ERROR: RRD Structure mismatch. DS Count is '%s' but should be '%s'\n",$rrd_ds_count,$xml_ds_count);
+		return 1;
+	}
+}
+
 sub wanted_xml_files{
         if(m/.xml/){
                 #printf("File: %s\n",$File::Find::name);
                 my $xmlfile = $File::Find::name;
+		my $mtime = (stat($xmlfile))[9];
+                my $t = time();
+                my $age = ($t - $mtime);
+		if ( $age > $conf{'XML_MAX_AGE'} ){
+			push(@oldfiles, $xmlfile);
+			$stats{old_xml}++;
+			return;
+		} 
                 open(XML, $xmlfile);
                 while (<XML>) {
                         if(/CHECKCOMMAND>(.*)</){
@@ -162,7 +187,7 @@ sub wanted_xml_files{
 
 sub parse_xml_filename{
 	my $xmlfile = shift;
-	my $_ = $xmlfile;
+	$_ = $xmlfile;
 	if( m/([A-Za-z\-_]+)\/([A-Za-z\-_]+)\.xml$/ ){
 		return ($1, $2);
 	}
@@ -174,6 +199,7 @@ sub summary{
 	printf "%-40s %s\n"  ,"Search pattern",$opt_c;
 	printf "%-40s %s\n"  ,"XML Files analyzed",$#commands+1;
 	printf "%-40s %s\n"  ,"XML Files found",$#worklist+1;
+	printf "%-40s %s\n"  ,"Old XML Files ignored",$#oldfiles+1;
 	printf "%-40s %s\n"  ,"Number of uniq check_commands",$#uniqed+1;
 	if($conf{DRY_RUN} == 1){
 		printf "%-40s %s\n"  ,"Dry run?","[YES]";
@@ -249,7 +275,7 @@ sub restore_files(){
 		my $rrdfile     = sprintf("%s/%s/%s_%s.rrd",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
 		print "$rrdfile\n";
 		RRDs::restore($restorefile, $rrdfile, "--force-overwrite");
-		my $err = RRDs::error;
+		my $err = RRDs::error();
 		if($err){
 			print $err;
 			exit;
@@ -263,6 +289,7 @@ sub restore_files(){
 
 sub parse_pnp_xml{
 	my $xmlfile = shift;
+	undef @STRUCT;
 	#print "reading $xmlfile\n";
 	open(XML, $xmlfile);
 	my $DATASOURCE = 0;
@@ -286,7 +313,7 @@ sub rrdtool_dump{
 	my $dumpfile = shift;
 	print "RRDtool dump to $dumpfile\n";
 	RRDs::dump($rrdfile,$dumpfile);
-	my $err = RRDs::error;
+	my $err = RRDs::error();
 	if($err){
 		print $err;
 		exit;
@@ -393,6 +420,15 @@ sub parse_config {
         #print_log( "Config File $config_file not found, using defaults", 2 );
     }
 }
+
+sub read_choice{
+        my $question = shift;
+        print $question.":";
+        my $answer = <STDIN>;
+        chomp $answer;
+        return $answer;
+}
+
 
 sub print_help{
 	print "Usage: $0 --check_command=<nagios_check_command> [ --dry-run ] [ --list_commands ] \n";
