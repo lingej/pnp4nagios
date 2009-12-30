@@ -26,7 +26,11 @@ class Page_Controller extends System_Controller  {
 			$this->page = $this->data->getFirstPage();
 		}
 		if($this->page == ""){
-			throw new Kohana_Exception('error.page-config-dir', $this->config->conf['page_dir']);}
+			throw new Kohana_Exception('error.page-config-dir', $this->config->conf['page_dir']);
+		}
+		if($this->view == ""){
+			$this->view = $this->config->conf['overview-range'];
+		}
 		$this->data->buildPageStruct($this->page,$this->view);
 		$this->template->page->header->title = Kohana::lang('common.page',$this->data->PAGE_DEF['page_name']);
 		$this->url = "?page&page=$this->page";
@@ -47,6 +51,9 @@ class Page_Controller extends System_Controller  {
 
 	public function basket(){
 		$basket = $this->session->get("basket");
+		if($this->view == ""){
+			$this->view = $this->config->conf['overview-range'];
+		}
         if(is_array($basket) && sizeof($basket) > 0){
 			foreach($basket as $item){
 				list($host,$service) = explode("::",$item);
