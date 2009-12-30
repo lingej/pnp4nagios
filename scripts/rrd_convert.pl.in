@@ -56,8 +56,7 @@ print_help()    if $opt_h;
 print_help()    if !$opt_c;
 print_version() if $opt_V;
 
-
-
+parse_config($conf{CFG_DIR}."/process_perfdata.cfg");
 if($conf{RRD_DAEMON_OPTS}){
 	$conf{RRD_DAEMON_OPTS} = "--daemon=".$conf{RRD_DAEMON_OPTS};
 }
@@ -83,7 +82,6 @@ main();
 sub main{
 	print "\n\n!!WARNING!! !!WARNING!! !!WARNING!!\n\n";
 	print "This is an early devel version of rrd_convert.pl\n\n";
-	parse_config($conf{CFG_DIR}."/process_perfdata.cfg");
 	find(\&wanted_xml_files, $conf{RRDPATH});
 	if($opt_l){  # List commands and exit
 		summary();
@@ -103,8 +101,9 @@ sub main{
 		exit;
 	}
 
-	my $i = 1;
+	my $i = 0;
 	foreach my $xmlfile ( @worklist ) {
+		$i++;
 		undef %ds_list;
 		undef %original_ds_list;
 		my($host,$service) = parse_xml_filename($xmlfile);
@@ -122,7 +121,6 @@ sub main{
 			manipulate_rrd_dump($dumpfile);
 			close_files();
 			restore_files($host,$service);
-			$i++;
 		}
 	}
 	print "DONE\n";
@@ -132,7 +130,7 @@ sub main{
 
 sub build_ds_list{
 	my $rrdfile = shift;
-	my $info = RRDs::info ("$rrdfile","$conf{RRD_DAEMON_OPTS}");
+	my $info = RRDs::info ("$rrdfile", $conf{RRD_DAEMON_OPTS});
 	my $err = RRDs::error();
 	if($err){
 		print $err;
@@ -188,7 +186,7 @@ sub wanted_xml_files{
 sub parse_xml_filename{
 	my $xmlfile = shift;
 	$_ = $xmlfile;
-	if( m/([A-Za-z\-_]+)\/([A-Za-z\-_]+)\.xml$/ ){
+	if( m/([0-9a-z\-_]+)\/([0-9a-z\-_]+)\.xml$/i ){
 		return ($1, $2);
 	}
 }
@@ -312,7 +310,7 @@ sub rrdtool_dump{
 	my $rrdfile = shift;
 	my $dumpfile = shift;
 	print "RRDtool dump to $dumpfile\n";
-	RRDs::dump($rrdfile,$dumpfile);
+	RRDs::dump($rrdfile, $dumpfile, $conf{RRD_DAEMON_OPTS});
 	my $err = RRDs::error();
 	if($err){
 		print $err;
