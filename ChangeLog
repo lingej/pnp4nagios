@@ -1,5 +1,7 @@
 **pnp-0.6.3 ??/??/2010**
 
+  * Feature: New helper script libexec/rrd_convert.pl -> [[rrd_convert]]
+  * Bugfix: Ignore old XML files while building the service list
   * Template: New template check_hpasm.php
 
 **pnp-0.6.2 12/23/2009**

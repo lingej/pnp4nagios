@@ -7,7 +7,10 @@
 <?php
 foreach($services as $service){
 	$path = pnp::addToUri( array('host' => $host, 'srv' => $service['name']) );
-	echo "<a href=\"".$path."\" class=\"multi".$service['is_multi']."\" title=\"".$service['servicedesc']."\">".pnp::shorten($service['servicedesc'])."</a><br>\n";
+	echo "<a href=\"".$path."\" class=\"multi".$service['is_multi']. " " . $service['state'].
+		 "\" title=\"".$service['servicedesc']. 
+		 "\">".pnp::shorten($service['servicedesc']).
+		 "</a><br>\n";
 }
 ?>
 </div>

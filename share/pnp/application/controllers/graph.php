@@ -34,7 +34,8 @@ class Graph_Controller extends System_Controller  {
 		    $this->host    = pnp::clean($this->host);
 			$this->url     = "?host=".$this->host."&srv=".$this->service;
 		    $services      = $this->data->getServices($this->host);
-		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
+		    #print Kohana::debug($services);
+			$this->data->buildDataStruct($this->host,$this->service,$this->view);
 		    $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
 			// Status Box Vars
 		    $this->template->graph->status_box->host     = $this->data->MACRO['DISP_HOSTNAME'];

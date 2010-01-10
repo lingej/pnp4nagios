@@ -90,7 +90,9 @@ class Data_Model extends Model
                     $fullpath = $path . "/" . $file;
                     $stat = stat("$fullpath");
                     $age = (time() - $stat['mtime']);
-		    		$xml = $this->readXML($hostname, $servicedesc[1]);
+		    		if(!$this->readXML($hostname, $servicedesc[1], FALSE)){
+						continue;
+					}
 	
 		    		$state = "active";	
                     if ($age > $conf['max_age']) { # 6Stunden
@@ -99,24 +101,24 @@ class Data_Model extends Model
 		
                     if($servicedesc[1] == "_HOST_"){
                         $host[0]['name']             = "_HOST_";
-                        $host[0]['hostname']         = (string) $xml->NAGIOS_HOSTNAME;
+                        $host[0]['hostname']         = (string) $this->XML->NAGIOS_HOSTNAME;
                         $host[0]['state']            = $state;
                         $host[0]['servicedesc']      = "Host Perfdata";
-                        $host[0]['is_multi']         = (string) $xml->DATASOURCE[0]->IS_MULTI[0];
+                        $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
                     }else{
                         $services[$i]['name']        = $servicedesc[1];
 						// Sorting check_multi
-                 		if( (string) $xml->NAGIOS_MULTI_PARENT == ""){
+                 		if( (string) $this->XML->NAGIOS_MULTI_PARENT == ""){
 				 			$services[$i]['sort']        = strtoupper($servicedesc[1]);
 						}else{
-                        	$services[$i]['sort']       = strtoupper((string) $xml->NAGIOS_MULTI_PARENT);
-							$services[$i]['sort']       .= (string) $xml->DATASOURCE[0]->IS_MULTI[0];
+                        	$services[$i]['sort']       = strtoupper((string) $this->XML->NAGIOS_MULTI_PARENT);
+							$services[$i]['sort']       .= (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
 				 			$services[$i]['sort']       .= strtoupper($servicedesc[1]);
 						}
 						$services[$i]['state']       = $state;
-                        $services[$i]['hostname']    = (string) $xml->NAGIOS_DISP_HOSTNAME;
-                        $services[$i]['servicedesc'] = (string) $xml->NAGIOS_DISP_SERVICEDESC;
-						$services[$i]['is_multi']    = (string) $xml->DATASOURCE[0]->IS_MULTI[0];
+                        $services[$i]['hostname']    = (string) $this->XML->NAGIOS_DISP_HOSTNAME;
+                        $services[$i]['servicedesc'] = (string) $this->XML->NAGIOS_DISP_SERVICEDESC;
+						$services[$i]['is_multi']    = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
                     }
 				$i++;
                 }
@@ -183,7 +185,7 @@ class Data_Model extends Model
     * 
     *
     */
-    public function readXML ($hostname, $servicedesc){
+    public function readXML ($hostname, $servicedesc, $throw_exception=TRUE){
 		$conf        = $this->config->conf;
 		$this->XML   = array();
 		$this->MACRO = array();
@@ -192,6 +194,13 @@ class Data_Model extends Model
 		$xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
 		if (file_exists($xmlfile)) {
     		$xml = simplexml_load_file($xmlfile);
+			// Throw excaption without a valid structure version
+			if(!isset($xml->XML->VERSION) && $throw_exception == TRUE){
+				throw new Kohana_Exception('error.xml-structure-without-version-tag',$xmlfile);
+			}
+			if(!isset($xml->XML->VERSION) && $throw_exception == FALSE){
+				return FALSE;
+			}
 	    	foreach ( $xml as $key=>$val ){
 				if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
 		    		#print $match[1]." => ".$val."\n";
@@ -208,11 +217,8 @@ class Data_Model extends Model
 	        	}
 	        	$i++; 
 	    	}
-			// Throw Examption without a salid Structure Version
-			if(!isset($xml->XML->VERSION)){
-				throw new Kohana_Exception('error.xml-structure-without-version-tag',$xmlfile);
-			}
-			return $xml;
+			$this->XML = $xml;
+			return TRUE;
 		}else{
 			throw new Kohana_Exception('error.xml-not-found', $xmlfile);
 		}
@@ -227,8 +233,11 @@ class Data_Model extends Model
 	    	return false;
 		}
 
-		$conf        = $this->config->conf;
-		$xml         = $this->readXML($host,$service);
+		$conf = $this->config->conf;
+		if( $this->readXML($host,$service) == FALSE ){
+			throw new Kohana_Exception('error.xml-not-found', "WARUM ist das FALSE?");
+			return false;
+		}
 		$this->includeTemplate($this->DS[0]['TEMPLATE']);
 		if(isset($this->TIMERANGE['type']) && $this->TIMERANGE['type'] == "start-end"){
 	    	$view = intval($view);
@@ -250,8 +259,8 @@ class Data_Model extends Model
 				}
 	        	$tmp_struct['DS']      = $this->DS[$i];
 	        	$tmp_struct['MACRO']   = $this->MACRO;
-				if(isset($xml->XML->VERSION)){
-	            	$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+				if(isset($this->XML->XML->VERSION)){
+	            	$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
 				}else{
 					$tmp_struct['VERSION']   = pnp::xml_version_check("0");
 				}
@@ -281,8 +290,8 @@ class Data_Model extends Model
 	            	$tmp_struct['TIMERANGE']     = $this->TIMERANGE[$v];
 	            	$tmp_struct['DS']            = $this->DS[$i];
 	            	$tmp_struct['MACRO']         = $this->MACRO;
-					if(isset($xml->XML->VERSION)){
-	            		$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+					if(isset($this->XML->XML->VERSION)){
+	            		$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
 					}else{
 						$tmp_struct['VERSION']   = pnp::xml_version_check("0");
 					}
@@ -311,8 +320,8 @@ class Data_Model extends Model
 				}
 	        	$tmp_struct['DS']      = $this->DS[$i];
 	           	$tmp_struct['MACRO']         = $this->MACRO;
-				if(isset($xml->XML->VERSION)){
-	           		$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $xml->XML->VERSION);
+				if(isset($this->XML->XML->VERSION)){
+	           		$tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
 				}else{
 					$tmp_struct['VERSION']   = pnp::xml_version_check("0");
 				}
