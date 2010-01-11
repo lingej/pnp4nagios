@@ -1,9 +1,23 @@
 #!@PERL@
-#
-#
-#
-#
+## @PKG_NAME@–@PKG_VERSION@ rrd_convert.pl
+## Copyright (c) 2006-2010 Joerg Linge (http://www.pnp4nagios.org)
+##
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 @PERL_LIB_PATH_CODE@
+
 use strict;
 use warnings;
 use Getopt::Long;
@@ -28,6 +42,7 @@ my %conf = (
     RRDTOOL           => "@RRDTOOL@",
     LOG_LEVEL         => 0,
     DRY_RUN           => 0,
+    FORCE             => 0,
     TMP_DIR           => '/tmp/rrd_convert',
     RRD_DAEMON_OPTS   => "",
     XML_MAX_AGE       => 3600,
@@ -48,9 +63,10 @@ my ( $opt_V, $opt_h, $opt_c, $opt_l );
 GetOptions(
     "V|version"         => \$opt_V,
     "h|help"            => \$opt_h,
-    "check-command=s"   => \$opt_c,
-    "list-commands"     => \$opt_l,
+    "check_command=s"   => \$opt_c,
+    "list_commands"     => \$opt_l,
     "dry-run"           => \$conf{DRY_RUN},
+    "force"             => \$conf{FORCE},
 );
 
 print_help()    if $opt_h;
@@ -60,7 +76,6 @@ print_version() if $opt_V;
 parse_config($conf{CFG_DIR}."/process_perfdata.cfg");
 if ( $conf{RRD_DAEMON_OPTS} ){
 	$conf{RRD_DAEMON_OPTS} = "--daemon=".$conf{RRD_DAEMON_OPTS};
-	print "AAAAAA ".$conf{RRD_DAEMON_OPTS}."\n";
 }
 
 my @STRUCT; 
@@ -94,12 +109,15 @@ sub main{
 	summary();
 	if($#worklist+1 > 0 ){
 		my $answer = read_choice("Start Coverter [n|Y]?");
-                unless ( $answer =~ m/^y$/i ){
+        unless ( $answer =~ m/^y$/i ){
 			print "Exit...\n";
-                        exit;
-                }
+        	exit;
+        }
 	}else{
 		print "Check Command '".$opt_c."' not found in any XML File\n";
+		print "\n";
+		print "\n";
+		summary_command_list();
 		exit;
 	}
 	check_custom_template();
@@ -237,11 +255,11 @@ sub stats{
 sub create_dir{
 	my $dir = shift;
 	unless ( -d "$dir" ) {
-        	unless ( mkdir "$dir" ) {
+       	unless ( mkdir "$dir" ) {
 			print "ERROR: $dir is not writable\n";
-            		exit 1;
-        	}
-    	}
+       		exit 1;
+       	}
+   	}
 }
 
 sub open_files(){
@@ -266,9 +284,7 @@ sub close_files(){
 sub write_to_files{
 	my $data = shift;
 	foreach my $ds (keys %ds_list){
-		#$ds--;
 		print { $FILEHANDLE{$ds} } $data;
-		#print "DS: $ds $data";
 	}
 }
 
@@ -278,9 +294,13 @@ sub restore_files(){
 	$| = 1;
 	print "Restoring File\n";
 	foreach my $ds (keys %ds_list){
-		#$ds--;
+		my $rrdfile = '';
 		my $restorefile = sprintf("%s/%s-%s-%s.restore",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
-		my $rrdfile     = sprintf("%s/%s/%s_%s.rrd",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
+		if( $conf{'DRY_RUN'} == 1 ){
+			$rrdfile = sprintf("%s/%s/%s_%s.rrd",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
+		}else{
+			$rrdfile = sprintf("%s/%s/%s_%s.rrd",$conf{RRDPATH},$host,$service,$STRUCT[$ds]{NAME});
+		}
 		print "$rrdfile\n";
 		RRDs::restore($restorefile, $rrdfile, "--force-overwrite");
 		my $err = RRDs::error();
@@ -433,13 +453,12 @@ sub check_custom_template {
  	my $command = $opt_c;
 	if ( $conf{DRY_RUN} == 1 ){
 		print "No config check while DRY_RUN = 1\n";
-		exit;
 		return;
 	}
 	my $config_file = $conf{'CFG_DIR'}."/check_commands/".$command.".cfg";
 	my $storage_type = "MULTIPLE";
-    	if ( -e $config_file ) {
-		print "Config for command $command does already exist ($config_file)\n";
+    if ( -e $config_file && $conf{'FORCE'} == 0 ) {
+		print "\nConfig for command $command does already exist ($config_file)\n\n";
 		exit 0;
 	}else{
 		open(CFG, ">", $config_file);
@@ -461,6 +480,8 @@ sub read_choice{
 sub print_help{
 	print "Usage: $0 --check_command=<nagios_check_command> [ --dry-run ] [ --list_commands ] \n";
 	print "\n";
+	print "This script is used to switch to RRD_STORAGE_TYPE = MULTIPLE for a given Nagios Check Command\n";
+	print "More info online http://docs.pnp4nagios.org/pnp-0.6/rrd_convert\n";
 	exit;
 }
 
