@@ -19,6 +19,7 @@ class Graph_Controller extends System_Controller  {
 	public function index()
 	{
 		$this->template->graph->graph_content = $this->add_view('graph_content');
+		$this->template->graph->graph_content->graph_width = ($this->config->conf['graph_width'] + 85);
 		$this->template->graph->graph_content->timerange_select = $this->add_view('timerange_select');
 		$this->template->graph->header        = $this->add_view('header');
 		$this->template->graph->search_box    = $this->add_view('search_box');

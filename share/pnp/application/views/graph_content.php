@@ -6,7 +6,7 @@ if (!empty($timerange_select)) {
 if (!empty($widget_graph)) {
 	echo $widget_graph;
 }
-echo "<div class=\"gw ui-widget\">\n";
+echo "<div class=\"ui-widget\" style=\"min-width:".$graph_width."px\">\n";
 $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 
     if($value['LEVEL'] == 0){

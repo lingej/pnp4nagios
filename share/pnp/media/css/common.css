@@ -21,10 +21,6 @@ a:hover, a:visited, a:active {
 
 a.active { color: #88cc00; }
 
-.gw {
-	min-width: 600px;
-}
-
 .gh {
 	min-height: 150px;
 }
