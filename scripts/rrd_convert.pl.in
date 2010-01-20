@@ -414,7 +414,7 @@ sub manipulate_rrd_dump{
 		}
 		if($inside_ds_block == 1){
 			# rename DS
-			$d =~ s/<name>\s(\d)\s<\/name>/<name> 1 <\/name>/;
+			$d =~ s/<name>(.*)<\/name>/<name> 1 <\/name>/;
 		}
 		write_to_files($d);
 	}
