@@ -80,8 +80,12 @@ XML_ENC = UTF-8
 XML_UPDATE_DELAY = 0
 
 #
-# EXPERIMENTAL rrdcached Support
 # Use only with rrdtool svn revision 1511+
 #
 # RRD_DAEMON_OPTS = unix:/tmp/rrdcached.sock
-RRD_DAEMON_OPTS = 
+RRD_DAEMON_OPTS =
+
+#
+# Spool Directory used for internal statistic 
+#
+STATS_DIR = @localstatedir@/stats

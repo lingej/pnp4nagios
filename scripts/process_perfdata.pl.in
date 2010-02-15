@@ -1088,6 +1088,10 @@ sub handle_signal {
 # Store some internal runtime infos
 # 
 sub store_internals {
+	if( ! -w $conf{'STATS_DIR'}){
+		print_log("*** ERROR: ".$conf{'STATS_DIR'}." is not writable or does not exist",0);
+		return;
+	}
 	my $statsfile = $conf{'STATS_DIR'}."/".(int $stats{timet} / 60);
 	open( STAT, ">> $statsfile" ) or die "Cant create statistic file ", $!;
 	printf(STAT "%d %f %d %d %d %d %d %d\n", $stats{timet},$stats{runtime},$stats{rows},$stats{update},$stats{create},$stats{error},$stats{invalid},$stats{skipped}); 
