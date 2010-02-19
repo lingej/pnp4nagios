@@ -50,6 +50,8 @@ install-config:
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  misccommands.cfg-sample $(DESTDIR)$(SYSCONFDIR)
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  nagios.cfg-sample $(DESTDIR)$(SYSCONFDIR)
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/check_commands/check_nwstat.cfg-sample $(DESTDIR)$(SYSCONFDIR)/check_commands
+	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/check_commands/check_nrpe.cfg-sample $(DESTDIR)$(SYSCONFDIR)/check_commands
+	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/check_commands/check_all_local_disks.cfg-sample $(DESTDIR)$(SYSCONFDIR)/check_commands
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/pages/web_traffic.cfg-sample $(DESTDIR)$(SYSCONFDIR)/pages
 
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)

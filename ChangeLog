@@ -3,7 +3,7 @@
   * Feature: New helper script libexec/rrd_convert.pl -> [[rrd_convert]]
   * Bugfix: Ignore old XML files while building the service list
   * Template: New template check_hpasm.php
-  * BUGFIX: Installer now checks for json_decode()
+  * Bugfix: Installer now checks for json_decode()
 
 **pnp-0.6.2 12/23/2009**
 

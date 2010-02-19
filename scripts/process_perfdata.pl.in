@@ -563,9 +563,28 @@ sub write_env_to_template {
 }
 
 #
-# Analyse check_command to find PNP Template .
+# Recursive Template search 
 #
 sub adjust_template {
+    my $command           = shift;
+    my $uom               = shift;
+    my $count             = shift;
+    my @temp_template = split /\!/, $command;
+    my $initial_template = cleanup( $temp_template[0] );
+    my $template = cleanup( $temp_template[0] );
+    my %CTPL = read_custom_template ( $command, $uom, $count );
+	# 
+    if ( $CTPL{'TEMPLATE'} ne $initial_template ){
+		%CTPL = read_custom_template ( $CTPL{'TEMPLATE'}, $uom, $count );
+    }
+	return %CTPL;
+}
+
+
+#
+# Analyse check_command to find PNP Template .
+#
+sub read_custom_template {
     my $command           = shift;
     my $uom               = shift;
     my $count             = shift;
@@ -619,11 +638,10 @@ sub adjust_template {
                     my $i = 1;
                     my @keys = split /,/, $2;
                     foreach my $keys (@keys) {
-                        if ( $i == 1 ) {
+                        if ( $i == 1 && exists $temp_template[$keys] ) {
                             $template = trim( $temp_template[$keys] );
                             print_log( "Adapting Template to $template.php (added ARG$keys)", 2 );
-                        }
-                        else {
+                        }elsif( exists $temp_template[$keys] ){
                             $template .= "_" . trim( $temp_template[$keys] );
                             print_log( "Adapting Template to $template.php (added ARG$keys)", 2 );
                         }
@@ -649,7 +667,7 @@ sub adjust_template {
     }
     else {
         print_log( "No Custom Template found for $template ($template_cfg) ", 2 );
-        print_log( "RRD Datatype is $dstype",                                 2 );
+        print_log( "RRD Datatype is $dstype",                                 3 );
     }
     print_log( "Template is $template.php", 2 );
     my %CTPL = (
