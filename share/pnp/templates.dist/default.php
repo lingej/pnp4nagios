@@ -35,17 +35,18 @@ foreach ($this->DS as $KEY=>$VAL) {
 		$minimum = $VAL['MIN'];
 	}
 	if ($VAL['MAX'] != "") {
-		$upper = " --upper=" . $VAL['MAX'];
 		$maximum = $VAL['MAX'];
 	}
 	if ($VAL['UNIT'] == "%%") {
 		$vlabel = "%";
+		$upper = " --upper=101 ";
+		$lower = "0";
 	}
 	else {
 		$vlabel = $VAL['UNIT'];
 	}
 
-	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $this->MACRO['DISP_HOSTNAME'] . ' / ' . $this->MACRO['DISP_SERVICEDESC'] . '"' . $lower;
+	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $this->MACRO['DISP_HOSTNAME'] . ' / ' . $this->MACRO['DISP_SERVICEDESC'] . '"' . $upper . $lower;
 	$ds_name[$KEY] = $VAL['LABEL'];
 	$def[$KEY]  = "DEF:var1=".$VAL['RRDFILE'].":".$VAL['DS'].":AVERAGE ";
 	$def[$KEY] .= "AREA:var1" . $_AREA . ":\"".$VAL['NAME']."\" ";
