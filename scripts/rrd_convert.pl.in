@@ -22,9 +22,7 @@ use strict;
 use warnings;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-#use RRDs;
 use File::Find;
-
 
 if( $< == 0 ){
     print "dont try this as root \n"; 
@@ -37,7 +35,6 @@ if( $< == 0 ){
 
 my %conf = (
     CFG_DIR           => "@sysconfdir@/", 
-    USE_RRDs          => 1,
     RRDPATH           => "@PERFDATA_DIR@",
     RRDTOOL           => "@RRDTOOL@",
     LOG_LEVEL         => 0,
@@ -47,16 +44,6 @@ my %conf = (
     RRD_DAEMON_OPTS   => "",
     XML_MAX_AGE       => 3600,
 );
-
-#
-# RRDs Perl Module Detection
-#
-if ( $conf{USE_RRDs} == 1 ) {
-    unless ( eval "use RRDs;1" ) {
-        print "ERROR: The RRDs Perl Modules are needed to run $0\n";
-	exit 1; 
-    }
-}
 
 Getopt::Long::Configure('bundling');
 my ( $opt_V, $opt_h, $opt_c, $opt_l );
@@ -98,8 +85,6 @@ my %stats = (
 main();
 
 sub main{
-	print "\n\n!!WARNING!! !!WARNING!! !!WARNING!!\n\n";
-	print "This is an early devel version of rrd_convert.pl\n\n";
 	find(\&wanted_xml_files, $conf{RRDPATH});
 	if($opt_l){  # List commands and exit
 		summary();
@@ -130,7 +115,6 @@ sub main{
 		my($host,$service) = parse_xml_filename($xmlfile);
 		my $rrdfile = sprintf("%s/%s/%s.rrd",$conf{RRDPATH},$host,$service);
 		if(-r $rrdfile){
-			#print $rrdfile."\n";
 			create_dir($conf{TMP_DIR});
 			my $dumpfile = sprintf("%s/%s-%s.dump",$conf{TMP_DIR},$host,$service);
 			print "File ".$i."/".($#worklist+1)."\n";
@@ -153,24 +137,19 @@ sub main{
 
 sub build_ds_list{
 	my $rrdfile = shift;
-	my $info;
-	if ( $conf{RRD_DAEMON_OPTS} ){
-		$info = RRDs::info ("$rrdfile", $conf{RRD_DAEMON_OPTS});
-	}else{
-		$info = RRDs::info ("$rrdfile");
+	my @info;
+	@info = `$conf{'RRDTOOL'} info $rrdfile`;
+	if( $? > 0 ){
+		print "ERROR: $conf{'RRDTOOL'} info $rrdfile returns with $?\n";
+		exit 1;
 	}
-	my $err = RRDs::error();
-	if($err){
-		printf("RRDtool Error: %s\n",$err);
-		exit;
-	}
-	foreach my $key (sort keys %$info){
-		#print "$key = $$info{$key}\n";
-		if ( $key =~ /ds\[(.*)\]\.type/ ) {
+	foreach(@info){
+		if(m/ds\[(\d+)\]\.type/ ) {
 			$ds_list{$1} = $1;
 		}
-		%original_ds_list = %ds_list;
 	}
+	my $test = keys %ds_list;
+	%original_ds_list = %ds_list;
 }
 
 sub check_ds_list{
@@ -291,6 +270,7 @@ sub write_to_files{
 sub restore_files(){
 	my $host = shift;
 	my $service = shift;
+	my $err;
 	$| = 1;
 	print "Restoring File\n";
 	foreach my $ds (keys %ds_list){
@@ -302,8 +282,8 @@ sub restore_files(){
 			$rrdfile = sprintf("%s/%s/%s_%s.rrd",$conf{RRDPATH},$host,$service,$STRUCT[$ds]{NAME});
 		}
 		print "$rrdfile\n";
-		RRDs::restore($restorefile, $rrdfile, "--force-overwrite");
-		my $err = RRDs::error();
+		$err = system("$conf{'RRDTOOL'} restore -f $restorefile $rrdfile");
+		#my $err = RRDs::error();
 		if($err){
 			printf("RRDtool Error: %s\n",$err);
 			exit;
@@ -339,13 +319,13 @@ sub parse_pnp_xml{
 sub rrdtool_dump{
 	my $rrdfile = shift;
 	my $dumpfile = shift;
+	my $err;
 	print "RRDtool dump to $dumpfile\n";
 	if ( $conf{RRD_DAEMON_OPTS} ){
-		RRDs::dump($rrdfile, $dumpfile, $conf{RRD_DAEMON_OPTS});
+		$err = system("$conf{'RRDTOOL'} dump $conf{RRD_DAEMON_OPTS} $rrdfile > $dumpfile");
 	}else{
-		RRDs::dump($rrdfile, $dumpfile);
+		$err = system("$conf{'RRDTOOL'} dump $rrdfile > $dumpfile");
 	}
-	my $err = RRDs::error();
 	if($err){
 		printf("RRDtool Error: %s\n",$err);
 		exit;
