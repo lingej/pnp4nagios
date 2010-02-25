@@ -46,15 +46,16 @@ my %conf = (
 );
 
 Getopt::Long::Configure('bundling');
-my ( $opt_V, $opt_h, $opt_c, $opt_l );
+my ( $opt_V, $opt_h, $opt_c, $opt_l, $opt_x );
 GetOptions(
-    "V|version"         => \$opt_V,
-    "h|help"            => \$opt_h,
-    "c|check_command=s" => \$opt_c,
-    "l|list_commands"   => \$opt_l,
-    "d|dry-run"         => \$conf{DRY_RUN},
-    "t|tmp_dir=s"       => \$conf{TMP_DIR},
-    "force"             => \$conf{FORCE},
+    "V|version"            => \$opt_V,
+    "h|help"               => \$opt_h,
+    "c|check_command=s"    => \$opt_c,
+    "l|list_commands"      => \$opt_l,
+	"x|no_structure_check" => \$opt_x,
+    "d|dry-run"            => \$conf{DRY_RUN},
+    "t|tmp_dir=s"          => \$conf{TMP_DIR},
+    "force"                => \$conf{FORCE},
 );
 
 print_help()    if $opt_h;
@@ -157,6 +158,9 @@ sub check_ds_list{
 	my $rrd_ds_count = keys %ds_list;
 	my $xml_ds_count = $#STRUCT;
 	if($rrd_ds_count == $xml_ds_count){
+		return 0;
+	}elsif($rrd_ds_count <= $xml_ds_count && $opt_x){
+		printf("OK: RRD countains '%s' DS but XML contains '%s'. Convert forced by --no_structure_check\n",$rrd_ds_count,$xml_ds_count);
 		return 0;
 	}else{
 		printf ("ERROR: RRD Structure mismatch. DS Count is '%s' but should be '%s'\n",$rrd_ds_count,$xml_ds_count);
@@ -460,7 +464,7 @@ sub read_choice{
 
 sub print_help{
 	print "Usage: $0 --check_command=<nagios_check_command> \| --list_commands [ --dry-run ] [ --tmp_dir=<temp directory> ]\n";
-	print "\n";
+	print "       [ --no_structure_check ]\n";
 	print "This script is used to switch to RRD_STORAGE_TYPE = MULTIPLE for a given Nagios Check Command\n";
 	print "More info online http://docs.pnp4nagios.org/pnp-0.6/rrd_convert\n";
 	exit;
