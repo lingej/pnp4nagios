@@ -26,6 +26,11 @@ class Rrdtool_Model extends Model
 		if(!isset($this->config->conf['rrdtool']) )
 	    	return FALSE;
 
+		if ( !is_executable($this->config->conf['rrdtool']) ) {
+			$data = "ERROR: ".$this->config->conf['rrdtool']." is not executable by PHP\n\n";
+			return $data;
+		}
+
 		$rrdtool = $this->config->conf['rrdtool'] . " - ";
 		$command = $this->RRD_CMD;
 		$process = proc_open($rrdtool, $descriptorspec, $pipes);
@@ -34,9 +39,14 @@ class Rrdtool_Model extends Model
         if (is_resource($process)) {
             fwrite($pipes[0], $command);
             fclose($pipes[0]);
-
+            stream_set_timeout($pipes[1],1);
             $data  = stream_get_contents($pipes[1]);
+            stream_set_timeout($pipes[2],1);
             $stderr = stream_get_contents($pipes[2]);
+			$stdout_meta = stream_get_meta_data($pipes[1]);
+			if($stdout_meta['timed_out'] == 1){
+				$data = "ERROR: Timeout while reading rrdtool data.\n\n";
+			}
             fclose($pipes[1]);
             fclose($pipes[2]);
             proc_close($process);

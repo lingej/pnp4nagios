@@ -52,7 +52,11 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 </tr>
 <tr>
 <th>RRDtool Binary</th>
-<td class="pass">@RRDTOOL@</td>
+<?php if (is_executable('@RRDTOOL@') ): ?>
+<td class="pass">@RRDTOOL@ is executable by PHP</td>
+<?php else: $failed++ ?>
+<td class="fail">@RRDTOOL@ is <a href="http://docs.pnp4nagios.org/faq/i8">not executable</a> by PHP</td>
+<?php endif ?>
 </tr>
 <tr>
 <th>PHP GD extension</th>
