@@ -43,6 +43,7 @@ all:
 	cd $(SRC_BASE) && $(MAKE)
 	cd $(SRC_SHARE) && $(MAKE)
 	cd $(SRC_SCRIPTS) && $(MAKE)
+	chmod a+r $(SRC_CONTRIB)/ssi/status-header.ssi
 
 	@echo ""
 	@echo "*** Compile finished ***"
