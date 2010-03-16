@@ -1,6 +1,6 @@
 <?php
 #
-# Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
+# Copyright (c) 2006-2010 Joerg Linge (http://www.pnp4nagios.org)
 # Plugin: check_iftraffic.pl (COUNTER)
 #
 $opt[1]  = "--vertical-label \"Traffic\" -b 1024 --title \"Interface Traffic for $hostname / $servicedesc\" ";

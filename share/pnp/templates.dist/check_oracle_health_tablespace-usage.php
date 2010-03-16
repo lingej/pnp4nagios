@@ -1,6 +1,6 @@
 <?php
 #
-# Copyright (c) 2006-2008 Joerg Linge (http://www.pnp4nagios.org)
+# Copyright (c) 2006-2010 Joerg Linge (http://www.pnp4nagios.org)
 #
 
 $opt[1] = "--vertical-label \"TBS usage %\" -u102 -l0 --title \"Tablespace usage $servicedesc\" ";
