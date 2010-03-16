@@ -759,7 +759,7 @@ sub _parse {
     # Nagios::Plugin::Performance
     my $string     = shift;
     my $tmp_string = $string;
-    $string =~ s/^([^=]+)=([\d\.\-]+)([\w\/%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*//;
+    $string =~ s/^([^=]+)=([\d\.\-]+)([\w\/%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?;?\s*//;
 
 	if ( $tmp_string eq $string ) {
         print_log( "No pattern match in function _parse($string)", 2 );
