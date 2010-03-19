@@ -26,13 +26,15 @@
 # 2009.12.02:        use_url_rewriting / bugfix
 # 2009.12.22: 0.1.18 option -s / xml_update_delay / bugfix (language)
 # 2009.12.27:        bugfix (mod-php detection)
+# 2010.03.12:        bugfix user/group-directive
+# 2010.03.19: 0.1.19 bugfix: stats_dir
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.18";
+my $version = "0.1.19";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -577,29 +579,37 @@ sub process_nagios_cfg {
 			info ("dupEntry","$key");
 		}
 	}
-	info ("[I] ${product}_user=$NagiosCfg{\"${product}_user\"}");
-	if ($user) {
-		$uid = getpwnam ($user);
-		if (! $uid) {
-			info ("noUser","RRDpath","$user");
-			return 31;
+	if (defined($NagiosCfg{"${product}_user"})) {
+		info ("[I] ${product}_user=$NagiosCfg{\"${product}_user\"}");
+		if ($user) {
+			$uid = getpwnam ($user);
+			if (! $uid) {
+				info ("noUser","RRDpath","$user");
+				return 31;
+			}
+			info ("[I] perfdata_user=$user");
+		} else {
+			$uid = getpwnam ($NagiosCfg{"${product}_user"});
+			$user = $NagiosCfg{"${product}_user"};
 		}
-		info ("[I] perfdata_user=$user");
 	} else {
-		$uid = getpwnam ($NagiosCfg{"${product}_user"});
-		$user = $NagiosCfg{"${product}_user"};
+		info ("[E] directive ${product}_user missing");
 	}
-	info ("[I] ${product}_group=$NagiosCfg{\"${product}_group\"}");
-	if ($group) {
-		$gid = getgrnam ($group);
-		if (! $gid) {
-			info ("noGroup","RRDpath","$group");
-			return 32;
+	if (defined($NagiosCfg{"${product}_group"})) {
+		info ("[I] ${product}_group=$NagiosCfg{\"${product}_group\"}");
+		if ($group) {
+			$gid = getgrnam ($group);
+			if (! $gid) {
+				info ("noGroup","RRDpath","$group");
+				return 32;
+			}
+			info ("[I] perfdata_group=$group");
+		} else {
+			$gid = getgrnam ($NagiosCfg{"${product}_group"});
+			$group = $NagiosCfg{"${product}_group"};
 		}
-		info ("[I] perfdata_group=$group");
 	} else {
-		$gid = getgrnam ($NagiosCfg{"${product}_group"});
-		$group = $NagiosCfg{"${product}_group"};
+		info ("[E] directive ${product}_group missing");
 	}
 }
 
@@ -1078,6 +1088,9 @@ sub chk_ppcfg {
 	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
 		$PPcfg{rrd_storage_type} = 'v;SINGLE|MULTIPLE;';
 		$PPcfg{xml_update_delay} = 'n;^\d+$;';
+	}
+	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
+		$PPcfg{stats_dir} = 'd;;';
 	}
 	$err = 0;
 
