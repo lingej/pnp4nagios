@@ -585,7 +585,8 @@ class Data_Model extends Model
         $line = "";
         $tag = "";
         $inside=0;
-        $this->PAGE_DEF   = array();
+        $this->PAGE_DEF['page_name'] = 'UNDEF';
+        $this->PAGE_DEF['use_regex'] = 0;
         $this->PAGE_GRAPH = array();
         $allowed_tags = array("page", "graph");
         foreach($data as $line){
@@ -601,7 +602,7 @@ class Data_Model extends Model
 				continue;
 			}
 			if(preg_match('/\s?(\w+)\s+([^#]+)(#.*)?$/',$line, $key) && $inside == 1){
-				$k=$key[1];
+				$k=strtolower($key[1]);
 				$v=$key[2];
 				if($t=='page'){
 					$this->PAGE_DEF[$k] = trim($v);
@@ -613,9 +614,9 @@ class Data_Model extends Model
 				$inside=0;
 				$t = "";
 				continue;
-			}
-		}
-	}
+            }
+        }
+    }
 
 	/*
 	*
