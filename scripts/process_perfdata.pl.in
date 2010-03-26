@@ -28,7 +28,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $delayed_write $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
 my %conf = (
     TIMEOUT           => "5",
@@ -88,7 +88,7 @@ GetOptions(
 parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 my %stats = (
-	timet       => 0,
+	timet       => time,
 	error       => 0,
 	invalid     => 0,
 	skipped     => 0,
@@ -119,7 +119,7 @@ main();
 #
 # Main function to switch to the right mode.
 sub main {
-    my $t0 = [gettimeofday];
+    $t0 = [gettimeofday];
     my $lines = 0;
     if ($opt_i) {
         print_log( "process_perfdata.pl-$const{VERSION} starting in INETD Mode", 1 );
@@ -139,9 +139,8 @@ sub main {
         %NAGIOS = parse_env();
         $lines = process_perfdata();
     }
-    my $t1 = [gettimeofday];
-    my $rt = tv_interval $t0, $t1;
-	$stats{timet} = time;
+    $t1 = [gettimeofday];
+    $rt = tv_interval $t0, $t1;
 	$stats{runtime} = $rt;
 	$stats{rows} = $lines;
     store_internals();
@@ -1099,7 +1098,11 @@ sub handle_signal {
     if ( -f $temp_file ) {
         unlink($temp_file);
     }
+    print_log( "*** Timeout while processing Host: \"$NAGIOS{HOSTNAME}\" Service: \"$NAGIOS{SERVICEDESC}\"", 0 );
     print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
+    $t1 = [gettimeofday];
+    $rt = tv_interval $t0, $t1;
+	$stats{runtime} = $rt;
     exit 1;
 }
 #
