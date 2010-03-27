@@ -8,18 +8,18 @@
  */
 class System_Controller extends Template_Controller {
 
-	public function __construct()
-	{
-		parent::__construct();
-		
-		$this->data       = new Data_Model();
-		$this->config     = new Config_Model();
-		$this->rrdtool    = new Rrdtool_Model();
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->data       = new Data_Model();
+        $this->config     = new Config_Model();
+        $this->rrdtool    = new Rrdtool_Model();
 
-		$this->config->read_config();
-		Kohana::config_set('locale.language',$this->config->conf['lang']);
-		// Check for mod_rewrite
-		$this->check_mod_rewrite();
+        $this->config->read_config();
+        Kohana::config_set('locale.language',$this->config->conf['lang']);
+        // Check for mod_rewrite
+        $this->check_mod_rewrite();
 
 
         $this->start   = $this->input->get('start',FALSE);
@@ -30,79 +30,79 @@ class System_Controller extends Template_Controller {
             $this->view = pnp::clean($_GET['view']);
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
-		if(Router::$controller != "image"){
-			$this->session = Session::instance();
+        if(Router::$controller != "image"){
+            $this->session = Session::instance();
 
-    	    if($this->start && $this->end ){
-	            if($this->session->get('timerange-reset',0) == 0){
-	                $this->session->set("start", $this->start);
-	                $this->session->set("end", $this->end);
-	            }else{
-	                $this->session->set('timerange-reset', 0);
-	            }
-	        }
-	        if($this->start && !$this->end){
-	            if($this->session->get('timerange-reset',0) == 0){
-	                $this->session->set("start", $this->start);
-	                $this->session->set("end", "");
-	            }else{
-	                $this->session->set('timerange-reset', 0);
-	            }
-	        }
-	        if($this->end && !$this->start){
-	            if($this->session->get('timerange-reset',0) == 0){
-	                $this->session->set("end", $this->end);
-	                $this->session->set("start", "");
-	            }else{
-    	            $this->session->set('timerange-reset', 0);
-	            }
-	        }
-		}
-		$this->template = $this->add_view('template');
-	}
+            if($this->start && $this->end ){
+                if($this->session->get('timerange-reset',0) == 0){
+                    $this->session->set("start", $this->start);
+                    $this->session->set("end", $this->end);
+                }else{
+                    $this->session->set('timerange-reset', 0);
+                }
+            }
+            if($this->start && !$this->end){
+                if($this->session->get('timerange-reset',0) == 0){
+                    $this->session->set("start", $this->start);
+                    $this->session->set("end", "");
+                }else{
+                    $this->session->set('timerange-reset', 0);
+                }
+            }
+            if($this->end && !$this->start){
+                if($this->session->get('timerange-reset',0) == 0){
+                    $this->session->set("end", $this->end);
+                    $this->session->set("start", "");
+                }else{
+                    $this->session->set('timerange-reset', 0);
+                }
+            }
+        }
+        $this->template = $this->add_view('template');
+    }
 
-	public function __call($method, $arguments)
-	{
-		// Disable auto-rendering
-		$this->auto_render = FALSE;
+    public function __call($method, $arguments)
+    {
+        // Disable auto-rendering
+        $this->auto_render = FALSE;
 
-		// By defining a __call method, all pages routed to this controller
-		// that result in 404 errors will be handled by this method, instead of
-		// being displayed as "Page Not Found" errors.
-		echo $this->_("The requested page doesn't exist") . " ($method)";
-	}
+        // By defining a __call method, all pages routed to this controller
+        // that result in 404 errors will be handled by this method, instead of
+        // being displayed as "Page Not Found" errors.
+        echo $this->_("The requested page doesn't exist") . " ($method)";
+    }
 
-	/**
-	 * Handle paths to current theme etc
-	 *
-	 */
-	public function add_view($view=false)
-	{
-		$view = trim($view);
-		if (empty($view)) {
-			return false;
-		}
-		if (!file_exists(APPPATH."/views/".$view.".php")) {
-			return false;
-		}
-		#return new View($this->theme_path.$view);
-		return new View($view);
-	}
+    /**
+     * Handle paths to current theme etc
+     *
+     */
+    public function add_view($view=false)
+    {
+        $view = trim($view);
+        if (empty($view)) {
+            return false;
+        }
+        if (!file_exists(APPPATH."/views/".$view.".php")) {
+            return false;
+        }
+        #return new View($this->theme_path.$view);
+        return new View($view);
+    }
 
-	public function check_mod_rewrite(){
+    public function check_mod_rewrite(){
         if(!function_exists('apache_get_modules')){
             // Add index.php to every URL while not running withn apache mod_php 
             Kohana::config_set('core.index_page','index.php');
             return TRUE;
         }
-		if(!in_array('mod_rewrite', apache_get_modules())){
-			// Add index.php to every URL while mod_rewrite is not available
-			Kohana::config_set('core.index_page','index.php');
-		}
-		if ( $this->config->conf['use_url_rewriting'] == 0 ){
-			Kohana::config_set('core.index_page','index.php');
-		}
-	}
+        if(!in_array('mod_rewrite', apache_get_modules())){
+            // Add index.php to every URL while mod_rewrite is not available
+            Kohana::config_set('core.index_page','index.php');
+        }
+        if ( $this->config->conf['use_url_rewriting'] == 0 ){
+            Kohana::config_set('core.index_page','index.php');
+        }
+    }
 
     public function isAuthorizedFor($auth) {
         $conf = $this->config->conf;

@@ -5,7 +5,7 @@
 */
 class nagios_Core {
 
-	public function SummaryLink($hostname,$start,$end){
+    public function SummaryLink($hostname,$start,$end){
         $smon = date('m' , $start);
         $sday = date('d' , $start);
         $syear = date('Y' , $start);
@@ -21,12 +21,12 @@ class nagios_Core {
         $nagios_base = $this->config->conf['nagios_base'];
         print "<a href=\"$nagios_base/summary.cgi?report=1&displaytype=1&timeperiod=custom&smon=$smon&sday=$sday&syear=$syear&shour=$shour&smin=$smin&ssec=$ssec&emon=$emon&eday=$eday&eyear=$eyear&ehour=$ehour&emin=$emin&esec=$esec&hostgroup=all&servicegroup=all&host=$hostname&alerttypes=3&statetypes=3&hoststates=7&servicestates=120&limit=999\"";
         print " title=\"".Kohana::lang('common.nagios-summary-link-title')."\"><img src=\"".url::base()."media/images/notify.gif\"></a>\n";
-	}
+    }
 
-	public function AvailLink($hostname,$servicedesc,$start,$end){
-		$hostname = urlencode($hostname);	
-		$servicedesc = urlencode($servicedesc);	
-		$smon = date('m' , $start);
+    public function AvailLink($hostname,$servicedesc,$start,$end){
+        $hostname = urlencode($hostname);    
+        $servicedesc = urlencode($servicedesc);    
+        $smon = date('m' , $start);
         $sday = date('d' , $start);
         $syear = date('Y' , $start);
         $shour = date('G' , $start);

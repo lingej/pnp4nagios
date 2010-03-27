@@ -8,19 +8,19 @@
  */
 class Start_Controller extends System_Controller  {
 
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	public function index()
-	{
-		if($this->isAuthorizedFor('host_overview' ) ){
-		    $host = $this->data->getFirstHost();
-		    url::redirect("graph?host=$host", 302);
-		}else{
-		    url::redirect("graph?host=$host", 302);
-		}
-	}
+    public function index()
+    {
+        if($this->isAuthorizedFor('host_overview' ) ){
+            $host = $this->data->getFirstHost();
+            url::redirect("graph?host=$host", 302);
+        }else{
+            url::redirect("graph?host=$host", 302);
+        }
+    }
 
 }

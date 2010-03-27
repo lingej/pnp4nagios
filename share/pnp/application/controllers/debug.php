@@ -9,30 +9,30 @@
 class Debug_Controller extends System_Controller  {
 
 
-	public function __construct()
-	{
-		parent::__construct();
-		$this->template->debug   = $this->add_view('debug');
-		$this->host              = $this->input->get('host');
-		$this->service           = $this->input->get('srv');
-	}
+    public function __construct()
+    {
+        parent::__construct();
+        $this->template->debug   = $this->add_view('debug');
+        $this->host              = $this->input->get('host');
+        $this->service           = $this->input->get('srv');
+    }
 
-	public function index()
-	{
+    public function index()
+    {
 
-		$this->start   = $this->input->get('start');
-		$this->end     = $this->input->get('end');
-		$this->view    = "";
+        $this->start   = $this->input->get('start');
+        $this->end     = $this->input->get('end');
+        $this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
-			$this->view = pnp::clean($_GET['view']);
+            $this->view = pnp::clean($_GET['view']);
 
-		$this->data->getTimeRange($this->start,$this->end,$this->view);
+        $this->data->getTimeRange($this->start,$this->end,$this->view);
 
-		if(isset($this->host) && isset($this->service)){
-		    $this->service = pnp::clean($this->service);
-		    $this->host    = pnp::clean($this->host);
-			$this->url      = "?host=".$this->host."&srv=".$this->service;
+        if(isset($this->host) && isset($this->service)){
+            $this->service = pnp::clean($this->service);
+            $this->host    = pnp::clean($this->host);
+            $this->url      = "?host=".$this->host."&srv=".$this->service;
             if($this->start){
                 $this->url .= "&start=".$this->start;
                 $this->session->set("start", $this->start);
@@ -41,14 +41,14 @@ class Debug_Controller extends System_Controller  {
                 $this->url .= "&end=".$this->end;
                 $this->session->set("end", $this->end);
             }
-			$services      = $this->data->getServices($this->host);
-		    $this->data->buildDataStruct($this->host,$this->service,$this->view);
-		    $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
-		}elseif(isset($this->host)){
-		    $this->host    = pnp::clean($this->host);
-           	if($this->view == ""){
-		    	$this->view = $this->config->conf['overview-range'];
-			}
+            $services      = $this->data->getServices($this->host);
+            $this->data->buildDataStruct($this->host,$this->service,$this->view);
+            $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
+        }elseif(isset($this->host)){
+            $this->host    = pnp::clean($this->host);
+               if($this->view == ""){
+                $this->view = $this->config->conf['overview-range'];
+            }
             if($this->start){
                 $this->url .= "&start=".$this->start;
                 $this->session->set("start", $this->start);
@@ -57,19 +57,19 @@ class Debug_Controller extends System_Controller  {
                 $this->url .= "&end=".$this->end;
                 $this->session->set("end", $this->end);
             }
-		    $this->title   = "Start $this->host";
-		    $services = $this->data->getServices($this->host);
-		    $this->title = "Service Overview for $this->host";
-		    foreach($services as $service){
-			if($service['state'] == 'active')
-		   	    $this->data->buildDataStruct($this->host,$service['name'],$this->view);
-		    }
-		}else{
-		    if(isset($this->host)){
-		    	url::redirect("/graph");
-		    }else{
-				throw new Kohana_Exception('error.get-first-host');
-			}			
-		}
-	}
+            $this->title   = "Start $this->host";
+            $services = $this->data->getServices($this->host);
+            $this->title = "Service Overview for $this->host";
+            foreach($services as $service){
+            if($service['state'] == 'active')
+                   $this->data->buildDataStruct($this->host,$service['name'],$this->view);
+            }
+        }else{
+            if(isset($this->host)){
+                url::redirect("/graph");
+            }else{
+                throw new Kohana_Exception('error.get-first-host');
+            }            
+        }
+    }
 }
