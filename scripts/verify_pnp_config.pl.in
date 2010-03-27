@@ -55,11 +55,11 @@ my $basedir = "/usr/local/nagios";
 my $NagiosBase = "";
 my $NagiosBin = "$product" if (-f "$basedir/bin/$product");
 if (! defined $NagiosBin) {
-	if (-d "/usr/local/icinga") {;
-		$basedir = "/usr/local/icinga";
-		$NagiosBin = "icinga" if (-f "$basedir/bin/icinga");
-		$product = "icinga";
-	}
+    if (-d "/usr/local/icinga") {;
+        $basedir = "/usr/local/icinga";
+        $NagiosBin = "icinga" if (-f "$basedir/bin/icinga");
+        $product = "icinga";
+    }
 }
 my $prod_name = ucfirst($product);
 my $mode = "";
@@ -68,16 +68,16 @@ my %NagiosCfg = ();
 my $rrdtool = '@RRDTOOL@';
 $rrdtool = "/usr/bin/rrdtool" unless ((-f "$rrdtool") and (-x "$rrdtool"));
 my $PreCheck = 0;
-my $LogFile = "";	# PNP config.log
+my $LogFile = "";    # PNP config.log
 my %LogFile = ();
-my $PNPdir = "/usr/local/pnp4nagios";	# PNP root directory
-my $NPCDcfg = "";	# NPCD.cfg 
+my $PNPdir = "/usr/local/pnp4nagios";    # PNP root directory
+my $NPCDcfg = "";    # NPCD.cfg 
 my %NPCDcfg = ();
-my $PPcfg = "";	# process_perfdata.cfg;
+my $PPcfg = "";    # process_perfdata.cfg;
 my %PPcfg = ();
-my $CPcfg = "";	# config.php
+my $CPcfg = "";    # config.php
 my %CPcfg = ();
-my $RFcfg = "";	# resource.cfg
+my $RFcfg = "";    # resource.cfg
 my %RFcfg = ();
 my $nFile = "";
 my @CfgFiles = ();
@@ -101,159 +101,159 @@ my $language = "";
 my $english = "";
 my $valLang = '^en$|^de$|^es$';
 if ((exists $ENV{LANG}) and ($ENV{LANG} ne "POSIX")) {
-	($language) = ($ENV{LANG} =~ /^(..)/);
+    ($language) = ($ENV{LANG} =~ /^(..)/);
 }
 my %msg = ();
 
 # process command line parameters
 Getopt::Long::Configure('bundling');
 GetOptions(
-	"h|help" => \$help,
-	"d|debug" => \$debug,
-	"e|english" => \$english,
-	"b|basedir=s" => \$NagiosBase,
-	"B|binary=s" => \$NagiosBin,
-	"m|mode=s" => \$mode,
-	"c|config=s" => \$NagiosCfg,
-	"D|pnpdir=s" => \$PNPdir,
-	"N|npcdcfg=s" => \$NPCDcfg,
-	"P|ppcfg=s" => \$PPcfg,
-	"C|cpcfg=s" => \$CPcfg,
-	"p|precheck" => \$PreCheck,
-	"q|quiet" => \$quiet,
-	"r|rrdtool=s" => \$rrdtool,
-	"R|RRDpath=s" => \$RRDpath,
-	"U|resource=s" => \$RFcfg,
-	"u|user=s" => \$user,
-	"g|group=s" => \$group,
-	"l|logfile=s" => \$LogFile,
-	"o|object=s" => \$Object,
-	"n|native=s" => \$language,
-	"M|monitor=s" => \$product,
-	"L|layout=s" => \$layout,
-	"T|template=s" => \$TemplPath,
-	"t|time" => \$time,
-	"s|skip" => \$skip,
+    "h|help" => \$help,
+    "d|debug" => \$debug,
+    "e|english" => \$english,
+    "b|basedir=s" => \$NagiosBase,
+    "B|binary=s" => \$NagiosBin,
+    "m|mode=s" => \$mode,
+    "c|config=s" => \$NagiosCfg,
+    "D|pnpdir=s" => \$PNPdir,
+    "N|npcdcfg=s" => \$NPCDcfg,
+    "P|ppcfg=s" => \$PPcfg,
+    "C|cpcfg=s" => \$CPcfg,
+    "p|precheck" => \$PreCheck,
+    "q|quiet" => \$quiet,
+    "r|rrdtool=s" => \$rrdtool,
+    "R|RRDpath=s" => \$RRDpath,
+    "U|resource=s" => \$RFcfg,
+    "u|user=s" => \$user,
+    "g|group=s" => \$group,
+    "l|logfile=s" => \$LogFile,
+    "o|object=s" => \$Object,
+    "n|native=s" => \$language,
+    "M|monitor=s" => \$product,
+    "L|layout=s" => \$layout,
+    "T|template=s" => \$TemplPath,
+    "t|time" => \$time,
+    "s|skip" => \$skip,
 );
 
 if ($pnp_version =~ /^(\d+\.\d+)/) {
-	$doc_version = "$1";
+    $doc_version = "$1";
 }
 $product = lc($product);
 $prod_name = ucfirst($product);
 info ("\n\n$program, v$version\n");
 if ($english) {
-	info ("[I] option -e");
-	$language = "";
+    info ("[I] option -e");
+    $language = "";
 }
 if ($language) {
-	info ("[E] Language \"$language\" is not valid / not supported") unless ($language =~ /$valLang/i);
-	$language = lc("/$language") unless ($language =~ m#^/..#);
+    info ("[E] Language \"$language\" is not valid / not supported") unless ($language =~ /$valLang/i);
+    $language = lc("/$language") unless ($language =~ m#^/..#);
 }
 message();
 
 if (($help) or ((! $mode) and (! $Object))) {
-	usage();
-	exit 0;
+    usage();
+    exit 0;
 }
 
 if (($debug) and ($quiet)) {
-	$quiet = 0;
-	info ("qd");
-	exit 2
+    $quiet = 0;
+    info ("qd");
+    exit 2
 }
 
 # system information
 if (-f "/etc/issue") {
-	my $line = `cat /etc/issue`;
-	$line =~ s/\\.//gs;
-	$line =~ s/\n//gs;
-	info ("info","OS","$line");
+    my $line = `cat /etc/issue`;
+    $line =~ s/\\.//gs;
+    $line =~ s/\n//gs;
+    info ("info","OS","$line");
 }
 info ("info","Perl","$]");
 if (($mode) and (! $skip)) {
-	$pkg_mgr = eval "`whereis yum`";
-	if ($pkg_mgr =~/:\s+$/) {
-		$pkg_mgr = eval "`whereis dpkg`";
-		if ($pkg_mgr =~/:\s+$/) {
-			$pkg_mgr = eval "`whereis rpm`";
-		}
-	}
-	($pkg_mgr) = $pkg_mgr =~ /:\s*(\S+)/;
-	if ($pkg_mgr) {
-		info ("info","Package Manager","$pkg_mgr");
-		chk_pkg ("nagios",0,1);
-		chk_pkg ("icinga",0,1);
-		chk_pkg ("pnp4nagios",0,1);
-#		chk_pkg ("mod-php5,mod_php5,php5_module",1,0);
-		chk_pkg ("php,php5,php5-common",1,1);
-		chk_pkg ("dejavu",1,0);
-		if ($crit) {
-			info ("LinkReqSW");
-			exit 30;
-		}
-	}
-	info ("info","install_opts","$install_opts") unless ($install_opts =~ /INSTALL_OPTS/i);
-	info ("info","PNP-version","$pnp_version") unless ($pnp_version =~ /PKG_VERSION/i);
-}	
-	
+    $pkg_mgr = eval "`whereis yum`";
+    if ($pkg_mgr =~/:\s+$/) {
+        $pkg_mgr = eval "`whereis dpkg`";
+        if ($pkg_mgr =~/:\s+$/) {
+            $pkg_mgr = eval "`whereis rpm`";
+        }
+    }
+    ($pkg_mgr) = $pkg_mgr =~ /:\s*(\S+)/;
+    if ($pkg_mgr) {
+        info ("info","Package Manager","$pkg_mgr");
+        chk_pkg ("nagios",0,1);
+        chk_pkg ("icinga",0,1);
+        chk_pkg ("pnp4nagios",0,1);
+#        chk_pkg ("mod-php5,mod_php5,php5_module",1,0);
+        chk_pkg ("php,php5,php5-common",1,1);
+        chk_pkg ("dejavu",1,0);
+        if ($crit) {
+            info ("LinkReqSW");
+            exit 30;
+        }
+    }
+    info ("info","install_opts","$install_opts") unless ($install_opts =~ /INSTALL_OPTS/i);
+    info ("info","PNP-version","$pnp_version") unless ($pnp_version =~ /PKG_VERSION/i);
+}    
+    
 set_layout_values () if ($layout);
 
 $basedir = "/usr/local/$product" if ($basedir =~ /^\@prefix\@$/);
 $NagiosBase = $basedir unless ($NagiosBase);
 if (! defined($NagiosBase)) {
-	info ("noBase");
-	exit 3
+    info ("noBase");
+    exit 3
 }
 if (! -d "$NagiosBase") {
-	info ("noBaseDir","$NagiosBase");
-	exit 3
+    info ("noBaseDir","$NagiosBase");
+    exit 3
 }
 info ("useBase", "$NagiosBase");
 $NagiosCfg = "$NagiosBase/etc/$product.cfg" unless ($NagiosCfg);
 if (! defined($NagiosCfg)) {
-	if (-f "$NagiosBase/etc/$product.cfg") {
-		$NagiosCfg = "$NagiosBase/etc/$product.cfg";
-	} else {
-		info ("noCfg");
-		exit 4
-	}
+    if (-f "$NagiosBase/etc/$product.cfg") {
+        $NagiosCfg = "$NagiosBase/etc/$product.cfg";
+    } else {
+        info ("noCfg");
+        exit 4
+    }
 }
 if (! -f "$NagiosCfg") {
-	info ("noCfgFile","$NagiosCfg");
-	exit 5
+    info ("noCfgFile","$NagiosCfg");
+    exit 5
 }
 info ("useCfg","$NagiosCfg");
 if (! defined($NagiosBin)) {
-	if (-f "$NagiosBase/bin/$product") {
-		$NagiosBin = "$NagiosBase/bin/$product";
-	} else {
-		info ("noBinary", "$product") && exit 6;
-	}
+    if (-f "$NagiosBase/bin/$product") {
+        $NagiosBin = "$NagiosBase/bin/$product";
+    } else {
+        info ("noBinary", "$product") && exit 6;
+    }
 }
 if ($NagiosBin !~ /^\//) {
-	$NagiosBin = "$NagiosBase/bin/$NagiosBin";
+    $NagiosBin = "$NagiosBase/bin/$NagiosBin";
 }
 examine ("x;", "${prod_name}-Binary", "$NagiosBin") && exit 6;
 info ("useBinary","$NagiosBin");
 
 if ($mode) {
-	if ($mode !~ /^default$|^sync$|^Bulk$|^NPCD$|^Module$/i) {
-		info ("invPNPmode");
-		info ("LinkPNPconfig");
-		exit 7
-	}
-	if ($mode =~ /^default$/) {
-		$mode = "sync";
-		if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
-			$mode = "NPCD";
-		}
-	}
-	info ("PNPmode","$mode");
+    if ($mode !~ /^default$|^sync$|^Bulk$|^NPCD$|^Module$/i) {
+        info ("invPNPmode");
+        info ("LinkPNPconfig");
+        exit 7
+    }
+    if ($mode =~ /^default$/) {
+        $mode = "sync";
+        if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
+            $mode = "NPCD";
+        }
+    }
+    info ("PNPmode","$mode");
 }
 if (($LogFile ne "") and (! -f $LogFile)) {
-	info ("invFile","$LogFile");
-	exit 8
+    info ("invFile","$LogFile");
+    exit 8
 }
 
 info ("useLog","$LogFile") if ($LogFile);
@@ -269,62 +269,62 @@ $NagiosVer = 3 if ($prod_name =~ /icinga/i);
 info ("verifyCfg");
 my $NagiosMsg = `$NagiosBin -v $NagiosCfg | grep "Error:"`;
 if ($NagiosMsg) {
-	print "===\n$NagiosMsg===\n";
-	info ("NagiosChkErr");
-	info ("LinkNagiosChk");
-	exit 9;
+    print "===\n$NagiosMsg===\n";
+    info ("NagiosChkErr");
+    info ("LinkNagiosChk");
+    exit 9;
 }
 process_nagios_cfg();
 
 # check rrdtool
 if ($mode) {
-	info ("verifyRRD","$rrdtool");
-	if (! -f "$rrdtool") {
-		info ("invFile","$rrdtool");
-		info ("LinkReqSW");
-		info ("LinkRRDtool");
-		exit 10;
-	}
-	examine ("x;", "rrdtool", "$rrdtool") && exit 11;
-	my $rrdtoolVer = `$rrdtool | grep "RRDtool [1-9]"`;
-	chomp ($rrdtoolVer);
-	$rrdtoolVer =~ s/ Copy.*//;
-	info ("[I] RRDtool: $rrdtoolVer");
-	
+    info ("verifyRRD","$rrdtool");
+    if (! -f "$rrdtool") {
+        info ("invFile","$rrdtool");
+        info ("LinkReqSW");
+        info ("LinkRRDtool");
+        exit 10;
+    }
+    examine ("x;", "rrdtool", "$rrdtool") && exit 11;
+    my $rrdtoolVer = `$rrdtool | grep "RRDtool [1-9]"`;
+    chomp ($rrdtoolVer);
+    $rrdtoolVer =~ s/ Copy.*//;
+    info ("[I] RRDtool: $rrdtoolVer");
+    
 # check RRDs perl module
-	my $erg = eval "use RRDs;1";
-	if ($erg) {
-		info ("useRRDs");
-	} else {
-		info ("noRRDs");
-	}
+    my $erg = eval "use RRDs;1";
+    if ($erg) {
+        info ("useRRDs");
+    } else {
+        info ("noRRDs");
+    }
 
 # check Time::Hires perl module
-	$erg = eval "use Time::HiRes;1";
-	if (! $erg) {
-		info ("noHiRes");
-	}
+    $erg = eval "use Time::HiRes;1";
+    if (! $erg) {
+        info ("noHiRes");
+    }
 
-	if ($RFcfg eq "") {
-#		($RFcfg) = $NagiosCfg =~ m#(^.*/)#;
-#		$RFcfg .= "resource.cfg";
-		$RFcfg = $NagiosCfg{"resource_file"};
-	}
-	info ("procFile","$RFcfg");
-	open (RFILE, "$RFcfg") || abort (29, "errOpen", "$RFcfg", "$!");
-	while (<RFILE>) {
-		chomp;
-		s/#.*//;
-		s/\s*$//;
-		next if (/^$/);
-		my ($par, $val) = /^(.*?)=(.*)/;	# shortest string (broker module contains multiple equal signs)
-		if (($par eq "") or ($val eq "")) {
-			info ("oddLine", "$_");
-			next;
-		}
-		$RFcfg{"$par"} .= $val;
-	}
-	close (RFILE);
+    if ($RFcfg eq "") {
+#        ($RFcfg) = $NagiosCfg =~ m#(^.*/)#;
+#        $RFcfg .= "resource.cfg";
+        $RFcfg = $NagiosCfg{"resource_file"};
+    }
+    info ("procFile","$RFcfg");
+    open (RFILE, "$RFcfg") || abort (29, "errOpen", "$RFcfg", "$!");
+    while (<RFILE>) {
+        chomp;
+        s/#.*//;
+        s/\s*$//;
+        next if (/^$/);
+        my ($par, $val) = /^(.*?)=(.*)/;    # shortest string (broker module contains multiple equal signs)
+        if (($par eq "") or ($val eq "")) {
+            info ("oddLine", "$_");
+            next;
+        }
+        $RFcfg{"$par"} .= $val;
+    }
+    close (RFILE);
 }
 
 status_log();
@@ -332,60 +332,60 @@ process_cfg_log();
 
 # objects.cache / cfg-files
 if ($PreCheck) {
-	info ("useEntry");
-	process_cfg_entries();
+    info ("useEntry");
+    process_cfg_entries();
 } else {
-	if ($err) {
-		$wc++;
-		$err = 0;
-	}
-	if (! exists $NagiosCfg{"object_cache_file"}) {
-		$NagiosCfg{"object_cache_file"} = "$NagiosBase/var/objects.cache";
-	}
-	examine ("f;","object_cache_file", $NagiosCfg{"object_cache_file"}) && exit 12;
-	info ("useCache","$NagiosCfg{\"object_cache_file\"}");
-	process_file($NagiosCfg{"object_cache_file"});
-}		
+    if ($err) {
+        $wc++;
+        $err = 0;
+    }
+    if (! exists $NagiosCfg{"object_cache_file"}) {
+        $NagiosCfg{"object_cache_file"} = "$NagiosBase/var/objects.cache";
+    }
+    examine ("f;","object_cache_file", $NagiosCfg{"object_cache_file"}) && exit 12;
+    info ("useCache","$NagiosCfg{\"object_cache_file\"}");
+    process_file($NagiosCfg{"object_cache_file"});
+}        
 for my $key (sort keys %commands) {
-	info ("keyValue","$key","$commands{$key}") if (($key =~ /process-/) and ($debug));
-	if ($key =~ /perfdata-file/) {
-		my @par = split(/\s+/,$commands{$key});
-		examine ("x;","pgm",$par[0]);
-		($par[1]) =~ s#.*?=?(/.*/).*#$1#;
-		examine ("d;","src",$par[1]);
-		if (defined $par[2]) {
-			($par[2]) =~ s#.*?=?(/.*/).*#$1#;
-			examine ("d;","tgt",$par[2]);
-		}
-	}
+    info ("keyValue","$key","$commands{$key}") if (($key =~ /process-/) and ($debug));
+    if ($key =~ /perfdata-file/) {
+        my @par = split(/\s+/,$commands{$key});
+        examine ("x;","pgm",$par[0]);
+        ($par[1]) =~ s#.*?=?(/.*/).*#$1#;
+        examine ("d;","src",$par[1]);
+        if (defined $par[2]) {
+            ($par[2]) =~ s#.*?=?(/.*/).*#$1#;
+            examine ("d;","tgt",$par[2]);
+        }
+    }
 }
 
 # check common settings in nagios.cfg
 if (exists $NagiosCfg{"process_performance_data"}) {
-	if ($NagiosCfg{"process_performance_data"} !~ /^1$/) {
-		info ("noPerfEna");
-		info ("LinkEnaPerf");
-		if ($mode =~ /sync/i) {
-			info ("LinkPNPsync");
-		} elsif ($mode =~ /NPCD/i) {
-			info ("LinkPNPnpcd");
-		} elsif ($mode =~ /Bulk/i) {
-			info ("LinkPNPbulk");
-		} else {	
-			info ("LinkPNPmodule");
-		}
-	}
+    if ($NagiosCfg{"process_performance_data"} !~ /^1$/) {
+        info ("noPerfEna");
+        info ("LinkEnaPerf");
+        if ($mode =~ /sync/i) {
+            info ("LinkPNPsync");
+        } elsif ($mode =~ /NPCD/i) {
+            info ("LinkPNPnpcd");
+        } elsif ($mode =~ /Bulk/i) {
+            info ("LinkPNPbulk");
+        } else {    
+            info ("LinkPNPmodule");
+        }
+    }
 } else {
-	info ("noPerfEna");
-	info ("LinkEnaPerf");
+    info ("noPerfEna");
+    info ("LinkEnaPerf");
 }
 
 # check sync mode
 if (($NagiosVer >= 3) and (uc($mode) =~ /sync/i)) {
-	if ((exists $NagiosCfg{"enable_environment_macros"}) and ($NagiosCfg{"enable_environment_macros"} !~ /^1$/)) {
-		info ("envMacrosDis");
-		info ("LinkEnaEnv");
-	}
+    if ((exists $NagiosCfg{"enable_environment_macros"}) and ($NagiosCfg{"enable_environment_macros"} !~ /^1$/)) {
+        info ("envMacrosDis");
+        info ("LinkEnaEnv");
+    }
 }
 chk_param ("service_perfdata_command", "sync");
 chk_param ("host_perfdata_command", "sync");
@@ -404,7 +404,7 @@ chk_param ("host_perfdata_file_processing_command", "Bulk|NPCD");
 chk_param ("broker_module", "Module", 'npcdmod','npcdmod.o');
 
 if ($PNPdir ne "/usr/local/pnp4nagios" ) {
-	info ("[I] option -D: $PNPdir");
+    info ("[I] option -D: $PNPdir");
 }
 chk_npcdcfg ();
 chk_ppcfg ();
@@ -412,16 +412,16 @@ chk_cpcfg ();
 
 # set/check perfdata directory
 if (exists ($PPcfg{rrdpath})) {
-	$RRDpath = "$PPcfg{rrdpath}" unless ($RRDpath);
+    $RRDpath = "$PPcfg{rrdpath}" unless ($RRDpath);
 }
 if (($pnp_version =~ /^0\.4\.|PKG_VERSION/)) {
-	$RRDpath = "$NagiosBase/share/perfdata" unless ($RRDpath);
-} else {	
-	$RRDpath = "$PNPdir/var/perfdata" unless ($RRDpath);
+    $RRDpath = "$NagiosBase/share/perfdata" unless ($RRDpath);
+} else {    
+    $RRDpath = "$PNPdir/var/perfdata" unless ($RRDpath);
 }
 if ("$RRDpath" eq "no") {
-	info ("noRRDchk");
-	$RRDpath = "";
+    info ("noRRDchk");
+    $RRDpath = "";
 }
 chk_rrdpath () if ($RRDpath);
 
@@ -429,17 +429,17 @@ chk_rrdpath () if ($RRDpath);
 chk_templates_dir () if ($TemplPath);
 
 if ($wc == 0) {
-	info ("noErrors");
-	print "OK | Errors=0\n" if ($quiet);
-	exit 0
+    info ("noErrors");
+    print "OK | Errors=0\n" if ($quiet);
+    exit 0
 } elsif ($crit == 0) {
-	info ("Warnings");
-	print "WARNING | Warnings=$warn; Errors=$crit\n" if ($quiet);
-	exit 1
-} else {	
-	info ("Errors");
-	print "CRITICAL | Warnings=$warn; Errors=$crit\n" if ($quiet);
-	exit 2
+    info ("Warnings");
+    print "WARNING | Warnings=$warn; Errors=$crit\n" if ($quiet);
+    exit 1
+} else {    
+    info ("Errors");
+    print "CRITICAL | Warnings=$warn; Errors=$crit\n" if ($quiet);
+    exit 2
 }
 exit 3;
 
@@ -448,10 +448,10 @@ exit 3;
 #
 # show usage
 sub usage {
-	return if ($quiet);
-	my $module = ($pnp_version =~ /^0\.4|VERSION/) ? "" : ", Module";
-	if ($language =~ /de/i) {
-	print <<EOF1;
+    return if ($quiet);
+    my $module = ($pnp_version =~ /^0\.4|VERSION/) ? "" : ", Module";
+    if ($language =~ /de/i) {
+    print <<EOF1;
 Dieses Script prueft verschiedene Einstellungen/Eintraege in Ihrer $prod_name-
 bzw. PNP-Umgebung, um Ihnen beim Finden von Problemen zu helfen.
 Es kann vor und waehrend der Laufzeit von PNP benutzt werden.
@@ -466,7 +466,7 @@ Die Ausgaben beginnen mit einem Buchstaben mit folgender Bedeutung:
 [D] Debugging-Meldung, die hoffentlich zur Fehlerbehebung fuehrt
 EOF1
 } elsif ($language =~ /es/i) {
-	print <<EOF1;
+    print <<EOF1;
 Este script chequeará ciertos valores de su entorno $prod_name/PNP para darle
 asistencia en la resolución de problemas al usar PNP.
 Puede usarse antes y durante el funcionamiento de PNP.
@@ -498,1327 +498,1327 @@ EOF2
 print <<EOF3;
 
 $0 [-h]
-	-m <mode> [ -l <logfile>] [ -p ] | -o <object>
-	[ -b <basedir> ]
-	[ -B <binary> ]
-	[ -c <config file> ]
-	[ -N <npcd config file> ]
-	[ -D <PNP base directory> ]
-	[ -P <process_perfdata config file> ]
-	[ -C <PNP config file> ]
-	[ -r <rrdtool binary> ]
-	[ -R <perfdata directory>|no ]
-	[ -U <resource config file> ]
-	[ -u <user> ]
-	[ -g <group> ]
-	[ -M <monitoring product> ]
-	[ -L <layout> ]
-	[ -T <templates directory> ]
-	[ -t ]
-	[ -s ]
-	[ -e | -n <language> ]
-	[ -d | -q ]
-	   
+    -m <mode> [ -l <logfile>] [ -p ] | -o <object>
+    [ -b <basedir> ]
+    [ -B <binary> ]
+    [ -c <config file> ]
+    [ -N <npcd config file> ]
+    [ -D <PNP base directory> ]
+    [ -P <process_perfdata config file> ]
+    [ -C <PNP config file> ]
+    [ -r <rrdtool binary> ]
+    [ -R <perfdata directory>|no ]
+    [ -U <resource config file> ]
+    [ -u <user> ]
+    [ -g <group> ]
+    [ -M <monitoring product> ]
+    [ -L <layout> ]
+    [ -T <templates directory> ]
+    [ -t ]
+    [ -s ]
+    [ -e | -n <language> ]
+    [ -d | -q ]
+       
 parameters:
-	-h, --help        print these lines
-	-b, --basedir=s   $prod_name Base directory (default: $basedir)
-	-B, --binary=s    $prod_name binary (default: $product)
-	-c, --config=s    $prod_name main config file (default: $basedir/etc/product.cfg)
-	-m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD"$module)
-	-l, --logfile=s   check configure log file 
-	-D, --pnpdir=s    PNP root directory (PNP >= 0.6)
-	-N, --npcdcfg=s   PNP config file for NPCD mode (default: $basedir/etc/pnp/npcd.cfg)
-	-P, --ppcfg=s     process_perfdata config file (default: $basedir/etc/pnp/process_perfdata.cfg)
-	-C, --cpcfg=s     PNP config file (config.php)
-	-p, --precheck    use config files instead of objects cache
-	-r, --rrdtool=s   specify the location of the RRDtool binary
-	-R, --RRDpath=s   specify the perfdata directory (default: $basedir/share/perfdata) or "no" for no check
-	-U, --resource=s  specify the location of the resource.cfg (default: $basedir/etc/resource.cfg)
-	-M, --monitor=s   specify the monitoring product (default: nagios)
-	-L, --layout=s    specify a layout (Nagios2, Nagios3, SuSE, Fedora)
-	-T, --template=s  specify the path to the templates directory (default $basedir/share/pnp/templates.dist)
-	-u, --user=s      user of the perfdata directory
-	-g, --group=s     group of the perfdata directory
-	-q, --quiet       quiet mode, non-zero return code will indicate errors
-	-o, --object=s    $prod_name object (host name/service description)
-	                  "Name" : search for matching host name or service desc
-	                  "Name;": search for matching host name
-	                  ";Name": search for service description
-	-t, --time        show warnings if RRDfiles are too old
-	-s, --skip        skip check of installed packages
-	-n, --native      show messages in native language (so far "es" or "de")
-	-e, --english     show english messages/links
-	-d, --debug       some debugging output
+    -h, --help        print these lines
+    -b, --basedir=s   $prod_name Base directory (default: $basedir)
+    -B, --binary=s    $prod_name binary (default: $product)
+    -c, --config=s    $prod_name main config file (default: $basedir/etc/product.cfg)
+    -m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD"$module)
+    -l, --logfile=s   check configure log file 
+    -D, --pnpdir=s    PNP root directory (PNP >= 0.6)
+    -N, --npcdcfg=s   PNP config file for NPCD mode (default: $basedir/etc/pnp/npcd.cfg)
+    -P, --ppcfg=s     process_perfdata config file (default: $basedir/etc/pnp/process_perfdata.cfg)
+    -C, --cpcfg=s     PNP config file (config.php)
+    -p, --precheck    use config files instead of objects cache
+    -r, --rrdtool=s   specify the location of the RRDtool binary
+    -R, --RRDpath=s   specify the perfdata directory (default: $basedir/share/perfdata) or "no" for no check
+    -U, --resource=s  specify the location of the resource.cfg (default: $basedir/etc/resource.cfg)
+    -M, --monitor=s   specify the monitoring product (default: nagios)
+    -L, --layout=s    specify a layout (Nagios2, Nagios3, SuSE, Fedora)
+    -T, --template=s  specify the path to the templates directory (default $basedir/share/pnp/templates.dist)
+    -u, --user=s      user of the perfdata directory
+    -g, --group=s     group of the perfdata directory
+    -q, --quiet       quiet mode, non-zero return code will indicate errors
+    -o, --object=s    $prod_name object (host name/service description)
+                      "Name" : search for matching host name or service desc
+                      "Name;": search for matching host name
+                      ";Name": search for service description
+    -t, --time        show warnings if RRDfiles are too old
+    -s, --skip        skip check of installed packages
+    -n, --native      show messages in native language (so far "es" or "de")
+    -e, --english     show english messages/links
+    -d, --debug       some debugging output
 EOF3
 }
 
 # process nagios.cfg
 sub process_nagios_cfg {
-	info ("procFile","$NagiosCfg");
-	open (NFILE, "$NagiosCfg") || abort (21, "errOpen", "$NagiosCfg", "$!");
-	while (<NFILE>) {
-		chomp;
-		s/#.*//;
-		s/\s*$//;
-		next if (/^$/);
-		my ($par, $val) = /^(.*?)=(.*)/;	# shortest string (broker module contains multiple equal signs)
-		if (($par eq "") or ($val eq "")) {
-			info ("oddLine", "$_");
-			next;
-		}
-		next if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
-		$val .= ";";	# multiple cfg_dir/cfg_file entries might occur
-		$NagiosCfg{"$par"} .= $val;
-	}
-	close (NFILE);
-	# remove trailing semicolon
-	foreach my $key (keys %NagiosCfg) {
-		chop $NagiosCfg{"$key"};
-		next if ($key =~ /^cfg_/);
-		if ($NagiosCfg{"$key"} =~ /;/) {
-			info ("dupEntry","$key");
-		}
-	}
-	if (defined($NagiosCfg{"${product}_user"})) {
-		info ("[I] ${product}_user=$NagiosCfg{\"${product}_user\"}");
-		if ($user) {
-			$uid = getpwnam ($user);
-			if (! $uid) {
-				info ("noUser","RRDpath","$user");
-				return 31;
-			}
-			info ("[I] perfdata_user=$user");
-		} else {
-			$uid = getpwnam ($NagiosCfg{"${product}_user"});
-			$user = $NagiosCfg{"${product}_user"};
-		}
-	} else {
-		info ("[E] directive ${product}_user missing");
-	}
-	if (defined($NagiosCfg{"${product}_group"})) {
-		info ("[I] ${product}_group=$NagiosCfg{\"${product}_group\"}");
-		if ($group) {
-			$gid = getgrnam ($group);
-			if (! $gid) {
-				info ("noGroup","RRDpath","$group");
-				return 32;
-			}
-			info ("[I] perfdata_group=$group");
-		} else {
-			$gid = getgrnam ($NagiosCfg{"${product}_group"});
-			$group = $NagiosCfg{"${product}_group"};
-		}
-	} else {
-		info ("[E] directive ${product}_group missing");
-	}
+    info ("procFile","$NagiosCfg");
+    open (NFILE, "$NagiosCfg") || abort (21, "errOpen", "$NagiosCfg", "$!");
+    while (<NFILE>) {
+        chomp;
+        s/#.*//;
+        s/\s*$//;
+        next if (/^$/);
+        my ($par, $val) = /^(.*?)=(.*)/;    # shortest string (broker module contains multiple equal signs)
+        if (($par eq "") or ($val eq "")) {
+            info ("oddLine", "$_");
+            next;
+        }
+        next if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
+        $val .= ";";    # multiple cfg_dir/cfg_file entries might occur
+        $NagiosCfg{"$par"} .= $val;
+    }
+    close (NFILE);
+    # remove trailing semicolon
+    foreach my $key (keys %NagiosCfg) {
+        chop $NagiosCfg{"$key"};
+        next if ($key =~ /^cfg_/);
+        if ($NagiosCfg{"$key"} =~ /;/) {
+            info ("dupEntry","$key");
+        }
+    }
+    if (defined($NagiosCfg{"${product}_user"})) {
+        info ("[I] ${product}_user=$NagiosCfg{\"${product}_user\"}");
+        if ($user) {
+            $uid = getpwnam ($user);
+            if (! $uid) {
+                info ("noUser","RRDpath","$user");
+                return 31;
+            }
+            info ("[I] perfdata_user=$user");
+        } else {
+            $uid = getpwnam ($NagiosCfg{"${product}_user"});
+            $user = $NagiosCfg{"${product}_user"};
+        }
+    } else {
+        info ("[E] directive ${product}_user missing");
+    }
+    if (defined($NagiosCfg{"${product}_group"})) {
+        info ("[I] ${product}_group=$NagiosCfg{\"${product}_group\"}");
+        if ($group) {
+            $gid = getgrnam ($group);
+            if (! $gid) {
+                info ("noGroup","RRDpath","$group");
+                return 32;
+            }
+            info ("[I] perfdata_group=$group");
+        } else {
+            $gid = getgrnam ($NagiosCfg{"${product}_group"});
+            $group = $NagiosCfg{"${product}_group"};
+        }
+    } else {
+        info ("[E] directive ${product}_group missing");
+    }
 }
 
 # process status log file
 sub status_log {
-	return if ($Object eq "");
-	my $hint = 0;
-	
-	# check if status log file is present
-	$StatusLog = $NagiosCfg{"status_file"};
-	if (($StatusLog eq "") or (! -f $StatusLog)) {
-		info ("invFile","$StatusLog");
-		return 20;
-	}
-	
-	# process status log file
-	info ("procFile","$StatusLog");
-	info ("searchObj","$Object");
-	my $zeile = "";
-	my $name = "";
-	my ($hostname,$srvdesc) = $Object =~ /(.*);(.*)/;
-	$hostname = "" unless (defined($hostname));
-	$srvdesc = "" unless (defined($srvdesc));
-	
-	open (SFILE, "$StatusLog") || abort (22, "errOpen", $StatusLog, $!);
-	while (<SFILE>) {
-		chomp;
-		s/^\s+//;
-		s/\s+$//;
-		s/#.*//;
-		s/\\$//;
-		next if (/^$/);
-		my ($host) = /host_name=(.*)/;
-		my ($service) = /service_description=(.*)/;
-		my ($type) = /(\S+)\s+\{/;
-		$name = "$type" if (defined($type));		
-		$name .= ";$host" if (defined $host);		
-		$name .= ";$service" if (defined $service);		
-		$zeile .= "$_";
-		$zeile .= "#" if ($_ =~ /=/);
-		if ($zeile =~ /\}/) {			
-			$StatusLog{"$name"} = $zeile;
-			info ("[D] $zeile") if ($debug);
-			if ($hostname ne "") {
-				if ($zeile !~ /host_name=$hostname/i) {
-					$zeile = "";
-					next;
-				}	
-			}
-			if ($srvdesc ne "") {
-				if ($zeile !~ /service_description=$srvdesc/i) {
-					$zeile = "";
-					next;
-				}	
-			}
-			if (uc($name) =~ /$Object/i) {
-				$name =~ s/.*?;//;
-				my ($perf_data) = $zeile =~ /#performance_data\s*=\s*(.*?)#/;
-				if ($perf_data ne "") {
-					info ("[I] Performance data ($name): $perf_data");
-					$_= $perf_data." ";
-					# try to check for valid performance data according to
-					# http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203
-					while ($_) {
-						my $label = "";
-						if (/^'/) {
-							s/^'(.*?)'=//;
-							$label = $1;
-						} else {
-							s/(.*?)=//;
-							$label = $1;
-						}
-						if (! defined($label)) {
-							info ("noLabel");
-							$hint = 1;
-						} else {
-							info ("[D] Label:>$label<") if ($debug);
-						}
-						s/,/./g;	# change decimal comma 
-						s/^(.*?)[; ]//;
-						my ($value,$uom) = $1 =~ /([-]?[0-9.]+)(.*)/;
-						if (! defined($value)) {
-							info ("invValue");
-							$hint = 1;
-						} else {
-							info ("[D] value:>$value<") if ($debug);
-						}
-						if (($uom) and ($uom !~ /^(c|%|[um]?s|[KMGT]?B)$/)) {
-							info ("invUOM","$uom");
-							$hint = 1;
-						}
-						info ("[D] UOM:>$uom<:\n") if (($debug) and (defined($uom)));
-						chk_fmt ("Warning",  '^[@~]?[-]?[0-9.:]+$');
-						chk_fmt ("Critical", '^[@~]?[-]?[0-9.:]+$');
-						chk_fmt ("Minimum",  '^[-]?[0-9.]+$');
-						chk_fmt ("Maximum",  '^[-]?[0-9.]+$');
-						s/^\s+//;
-					}
-				} else {
-					info ("noPerf","$name");
-					info ("LinkPNPreq");
-					$hint = 1;
-				}
-			}
-			$zeile = "";
-			$name = "";
-		}
-	}
-	close (SFILE);
-	info ("LinkDevInfo") if ($hint);
-	exit 0;
+    return if ($Object eq "");
+    my $hint = 0;
+    
+    # check if status log file is present
+    $StatusLog = $NagiosCfg{"status_file"};
+    if (($StatusLog eq "") or (! -f $StatusLog)) {
+        info ("invFile","$StatusLog");
+        return 20;
+    }
+    
+    # process status log file
+    info ("procFile","$StatusLog");
+    info ("searchObj","$Object");
+    my $zeile = "";
+    my $name = "";
+    my ($hostname,$srvdesc) = $Object =~ /(.*);(.*)/;
+    $hostname = "" unless (defined($hostname));
+    $srvdesc = "" unless (defined($srvdesc));
+    
+    open (SFILE, "$StatusLog") || abort (22, "errOpen", $StatusLog, $!);
+    while (<SFILE>) {
+        chomp;
+        s/^\s+//;
+        s/\s+$//;
+        s/#.*//;
+        s/\\$//;
+        next if (/^$/);
+        my ($host) = /host_name=(.*)/;
+        my ($service) = /service_description=(.*)/;
+        my ($type) = /(\S+)\s+\{/;
+        $name = "$type" if (defined($type));        
+        $name .= ";$host" if (defined $host);        
+        $name .= ";$service" if (defined $service);        
+        $zeile .= "$_";
+        $zeile .= "#" if ($_ =~ /=/);
+        if ($zeile =~ /\}/) {            
+            $StatusLog{"$name"} = $zeile;
+            info ("[D] $zeile") if ($debug);
+            if ($hostname ne "") {
+                if ($zeile !~ /host_name=$hostname/i) {
+                    $zeile = "";
+                    next;
+                }    
+            }
+            if ($srvdesc ne "") {
+                if ($zeile !~ /service_description=$srvdesc/i) {
+                    $zeile = "";
+                    next;
+                }    
+            }
+            if (uc($name) =~ /$Object/i) {
+                $name =~ s/.*?;//;
+                my ($perf_data) = $zeile =~ /#performance_data\s*=\s*(.*?)#/;
+                if ($perf_data ne "") {
+                    info ("[I] Performance data ($name): $perf_data");
+                    $_= $perf_data." ";
+                    # try to check for valid performance data according to
+                    # http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203
+                    while ($_) {
+                        my $label = "";
+                        if (/^'/) {
+                            s/^'(.*?)'=//;
+                            $label = $1;
+                        } else {
+                            s/(.*?)=//;
+                            $label = $1;
+                        }
+                        if (! defined($label)) {
+                            info ("noLabel");
+                            $hint = 1;
+                        } else {
+                            info ("[D] Label:>$label<") if ($debug);
+                        }
+                        s/,/./g;    # change decimal comma 
+                        s/^(.*?)[; ]//;
+                        my ($value,$uom) = $1 =~ /([-]?[0-9.]+)(.*)/;
+                        if (! defined($value)) {
+                            info ("invValue");
+                            $hint = 1;
+                        } else {
+                            info ("[D] value:>$value<") if ($debug);
+                        }
+                        if (($uom) and ($uom !~ /^(c|%|[um]?s|[KMGT]?B)$/)) {
+                            info ("invUOM","$uom");
+                            $hint = 1;
+                        }
+                        info ("[D] UOM:>$uom<:\n") if (($debug) and (defined($uom)));
+                        chk_fmt ("Warning",  '^[@~]?[-]?[0-9.:]+$');
+                        chk_fmt ("Critical", '^[@~]?[-]?[0-9.:]+$');
+                        chk_fmt ("Minimum",  '^[-]?[0-9.]+$');
+                        chk_fmt ("Maximum",  '^[-]?[0-9.]+$');
+                        s/^\s+//;
+                    }
+                } else {
+                    info ("noPerf","$name");
+                    info ("LinkPNPreq");
+                    $hint = 1;
+                }
+            }
+            $zeile = "";
+            $name = "";
+        }
+    }
+    close (SFILE);
+    info ("LinkDevInfo") if ($hint);
+    exit 0;
 }
 
 # process config.log
 sub process_cfg_log {
-	return if ($LogFile eq "");
+    return if ($LogFile eq "");
 
-	info ("procFile","$LogFile");
-	open (LFILE, "$LogFile") || abort (23, "errOpen", $LogFile, $!);
-	while (<LFILE>) {
-		chomp;
-		s/="(.*)"/=$1/;
-		s/='(.*)'/=$1/;
-		if (/\/configure\s/) {
-			$cfg_call = $_;
-		}
-		if (/(.*)\s*?=\s*?(.*)/) {
-			$LogFile{"$1"} = $2;
-		}
-	}
-	close (LFILE);
-	foreach my $key (keys %LogFile) {
-		while ($LogFile{"$key"} =~ /{(.*?)}/) {
-			my ($val) = $1;
-			if (exists ($LogFile{$val})) {
-				$LogFile{"$key"} =~ s/\${$val}/$LogFile{$val}/;
-			}
-		}
-	}
-	examine ("d;","CFG_DIR",$LogFile{"CFG_DIR"});	
-	examine ("d;","PERFDATA_DIR",$LogFile{"PERFDATA_DIR"});	
-	examine ("d;","PERFDATA_SPOOL_DIR",$LogFile{"PERFDATA_SPOOL_DIR"});	
-	examine ("d;","HTML_DIR",$LogFile{"HTML_DIR"});	
+    info ("procFile","$LogFile");
+    open (LFILE, "$LogFile") || abort (23, "errOpen", $LogFile, $!);
+    while (<LFILE>) {
+        chomp;
+        s/="(.*)"/=$1/;
+        s/='(.*)'/=$1/;
+        if (/\/configure\s/) {
+            $cfg_call = $_;
+        }
+        if (/(.*)\s*?=\s*?(.*)/) {
+            $LogFile{"$1"} = $2;
+        }
+    }
+    close (LFILE);
+    foreach my $key (keys %LogFile) {
+        while ($LogFile{"$key"} =~ /{(.*?)}/) {
+            my ($val) = $1;
+            if (exists ($LogFile{$val})) {
+                $LogFile{"$key"} =~ s/\${$val}/$LogFile{$val}/;
+            }
+        }
+    }
+    examine ("d;","CFG_DIR",$LogFile{"CFG_DIR"});    
+    examine ("d;","PERFDATA_DIR",$LogFile{"PERFDATA_DIR"});    
+    examine ("d;","PERFDATA_SPOOL_DIR",$LogFile{"PERFDATA_SPOOL_DIR"});    
+    examine ("d;","HTML_DIR",$LogFile{"HTML_DIR"});    
 
-	examine ("f;","PERFDATA_SPOOL_FILENAME",$LogFile{"PERFDATA_SPOOL_FILENAME"});	
-	examine ("f;","PERFDATA_LOG",$LogFile{"PERFDATA_LOG"});	
-	examine ("f;","RRDTOOL",$LogFile{"RRDTOOL"});	
-	examine ("f;","NPCD_LOG",$LogFile{"NPCD_LOG"});	
+    examine ("f;","PERFDATA_SPOOL_FILENAME",$LogFile{"PERFDATA_SPOOL_FILENAME"});    
+    examine ("f;","PERFDATA_LOG",$LogFile{"PERFDATA_LOG"});    
+    examine ("f;","RRDTOOL",$LogFile{"RRDTOOL"});    
+    examine ("f;","NPCD_LOG",$LogFile{"NPCD_LOG"});    
 
-	examine ("u;","${product}_user",$LogFile{"${product}_user"});	
-	examine ("g;","${product}_grp",$LogFile{"${product}_grp"});	
+    examine ("u;","${product}_user",$LogFile{"${product}_user"});    
+    examine ("g;","${product}_grp",$LogFile{"${product}_grp"});    
 }
 
 # check parameter from nagios.cfg
 sub chk_param {
-	my ($param,$valid,$val) = @_;
-	info ("chkPar","$param") if ($debug);
-	if (exists $NagiosCfg{"$param"}) {
-		info ("keyValue","$param","$NagiosCfg{\"$param\"}") if ($debug);
-		if (uc($mode) !~ /$valid/i) {
-			info ("parModeInv","$param","$mode");
-			info ("LinkPNPconfig","$param");
-			return;
-		}
-		if (defined($val)) {
-			info ("ParValue","$val") if ($debug);
-			if ($NagiosCfg{"$param"} !~ /$val/) {
-				info ("invValue2","$NagiosCfg{\"$param\"}","$param");
-				info ("LinkNagiosCfg","$param");
-			}
-		}
-		if ($param =~ /.*_perfdata_command/) {
-			my $cmd = "$commands{$NagiosCfg{\"$param\"}}";
-			my $chk = '/process_perfdata.pl';
-			$chk .= " -d HOSTPERFDATA" if ($param =~ /^host/);
-			if ( $cmd !~ /$chk$/i) {
-				info ("invValue2","$cmd","$param");
-				info ("LinkPNPsync");
-			}
-		}
-		if ($param =~ /perfdata_file_template/) {
-			chk_template ("$param");
-		}
-		if ($param =~ /perfdata_.*_command/) {
-			if (! exists($commands{"$NagiosCfg{\"$param\"}"})) {
-				info ("noCmd","$NagiosCfg{\"$param\"}");
-				info ("LinkNagiosCfg2");
-			}
-		}
-		if ($param =~ /broker_module/) {
-			my ($module,$config) = $NagiosCfg{"$param"} =~ /(\S+) .*=(\S+)/;
-			if ($module) {
-				examine ("x;","Broker-Module","$module");
-			} else {
-				info ("invFile","$module");
-			}
-			if ($config) {
-				examine ("f;","Broker-Config","$config");
-			} else {
-				info ("invFile","$config");
-			}
-			info ("info", "$param", $NagiosCfg{"$param"});
-		}
-		return;
-	}
-	# param not found in nagios.cfg
-	if (uc($mode) =~ /$valid/i) {
-		if ($param =~ /^service/) {
-			info ("noParCfg","$param");
-			info ("LinkNagiosCfg","$param");
-			return;
-		}
-		if ($param =~ /^broker_module/) {
-			info ("noParCfg","$param");
-			info ("LinkPNPmodule","$param");
-			return;
-		}
-		if ($prod_name eq "Icinga") {
-			if ($NagiosVer >= 3) {
-				info ("noParCfgH","$param");
-			} else {
-				info ("notAdv","$param");
-			}
-			info ("LinkNagiosCfg","$param");
-		}
-	}
+    my ($param,$valid,$val) = @_;
+    info ("chkPar","$param") if ($debug);
+    if (exists $NagiosCfg{"$param"}) {
+        info ("keyValue","$param","$NagiosCfg{\"$param\"}") if ($debug);
+        if (uc($mode) !~ /$valid/i) {
+            info ("parModeInv","$param","$mode");
+            info ("LinkPNPconfig","$param");
+            return;
+        }
+        if (defined($val)) {
+            info ("ParValue","$val") if ($debug);
+            if ($NagiosCfg{"$param"} !~ /$val/) {
+                info ("invValue2","$NagiosCfg{\"$param\"}","$param");
+                info ("LinkNagiosCfg","$param");
+            }
+        }
+        if ($param =~ /.*_perfdata_command/) {
+            my $cmd = "$commands{$NagiosCfg{\"$param\"}}";
+            my $chk = '/process_perfdata.pl';
+            $chk .= " -d HOSTPERFDATA" if ($param =~ /^host/);
+            if ( $cmd !~ /$chk$/i) {
+                info ("invValue2","$cmd","$param");
+                info ("LinkPNPsync");
+            }
+        }
+        if ($param =~ /perfdata_file_template/) {
+            chk_template ("$param");
+        }
+        if ($param =~ /perfdata_.*_command/) {
+            if (! exists($commands{"$NagiosCfg{\"$param\"}"})) {
+                info ("noCmd","$NagiosCfg{\"$param\"}");
+                info ("LinkNagiosCfg2");
+            }
+        }
+        if ($param =~ /broker_module/) {
+            my ($module,$config) = $NagiosCfg{"$param"} =~ /(\S+) .*=(\S+)/;
+            if ($module) {
+                examine ("x;","Broker-Module","$module");
+            } else {
+                info ("invFile","$module");
+            }
+            if ($config) {
+                examine ("f;","Broker-Config","$config");
+            } else {
+                info ("invFile","$config");
+            }
+            info ("info", "$param", $NagiosCfg{"$param"});
+        }
+        return;
+    }
+    # param not found in nagios.cfg
+    if (uc($mode) =~ /$valid/i) {
+        if ($param =~ /^service/) {
+            info ("noParCfg","$param");
+            info ("LinkNagiosCfg","$param");
+            return;
+        }
+        if ($param =~ /^broker_module/) {
+            info ("noParCfg","$param");
+            info ("LinkPNPmodule","$param");
+            return;
+        }
+        if ($prod_name eq "Icinga") {
+            if ($NagiosVer >= 3) {
+                info ("noParCfgH","$param");
+            } else {
+                info ("notAdv","$param");
+            }
+            info ("LinkNagiosCfg","$param");
+        }
+    }
 }
 
 # read config file
 sub process_file {
-	my ($file) = @_;
-	my $cmd = "";
-	my $line = "";
-	info ("procFile",$file) if ($debug);
-	chk_usrgrp ($file);
-	open (CFILE, "$file") || abort (24, "errOpen", $file, $!);
-	while (<CFILE>) {
-		s/#.*//;
-		next if (/^$/);
-		chomp;	
-		next unless (/command_[name|line]/);
-		if (/command_name/) {
-			($cmd) = /command_name\s*(.*)/;	
-			next;	
-		}
-		($line) = /command_line\s*(.*)/ ;	
-		$commands{"$cmd"} = "$line";
-		next unless (/process_perfdata.pl/);
-		my @cmd = split (/\s+/,$line);
-		for my $i (0..$#cmd) {
-			if ($cmd[$i] =~ /(\$USER\d+\$)/) {
-				if (exists $RFcfg{"$1"}) {		
-					my $val = $RFcfg{"$1"};
-					$cmd[$i] =~ s/\$USER\d+\$/$val/;
-				} else {
-					info ("noRes", "$1");	
-				}
-			}
-			info ("noFile", "$cmd", "$cmd[$i]") unless (-f "$cmd[$i]");
-			last if ($cmd[$i] =~ /perfdata.pl/);
-		}
-	}
-	close (CFILE);
+    my ($file) = @_;
+    my $cmd = "";
+    my $line = "";
+    info ("procFile",$file) if ($debug);
+    chk_usrgrp ($file);
+    open (CFILE, "$file") || abort (24, "errOpen", $file, $!);
+    while (<CFILE>) {
+        s/#.*//;
+        next if (/^$/);
+        chomp;    
+        next unless (/command_[name|line]/);
+        if (/command_name/) {
+            ($cmd) = /command_name\s*(.*)/;    
+            next;    
+        }
+        ($line) = /command_line\s*(.*)/ ;    
+        $commands{"$cmd"} = "$line";
+        next unless (/process_perfdata.pl/);
+        my @cmd = split (/\s+/,$line);
+        for my $i (0..$#cmd) {
+            if ($cmd[$i] =~ /(\$USER\d+\$)/) {
+                if (exists $RFcfg{"$1"}) {        
+                    my $val = $RFcfg{"$1"};
+                    $cmd[$i] =~ s/\$USER\d+\$/$val/;
+                } else {
+                    info ("noRes", "$1");    
+                }
+            }
+            info ("noFile", "$cmd", "$cmd[$i]") unless (-f "$cmd[$i]");
+            last if ($cmd[$i] =~ /perfdata.pl/);
+        }
+    }
+    close (CFILE);
 }
 
 # resolve config dir/file entries
 sub process_cfg_entries {
-	# process cfg_dir entries
-	if (exists $NagiosCfg{"cfg_dir"}) {
-		my @dirs = split (/;/,$NagiosCfg{cfg_dir});
-		for my $idx (0..$#dirs) {
-			info ("[D] cfg_dir : $dirs[$idx]") if ($debug);
-			my @files = glob("$dirs[$idx]/*.cfg");
-			push @CfgFiles, @files;
-		}
-	}
-	# process cfg_file entries
-	if (exists $NagiosCfg{"cfg_file"}) {
-		my @files = split (/;/,$NagiosCfg{cfg_file});
-		for my $idx (0..$#files) {
-			info ("[D] cfg_file: $files[$idx]") if ($debug);
-			push @CfgFiles, $files[$idx];
-		}
-	}
-	# process config file(s) to get command_name entries
-	for my $idx (0..$#CfgFiles) {
-		process_file ("$CfgFiles[$idx]");
-	}
+    # process cfg_dir entries
+    if (exists $NagiosCfg{"cfg_dir"}) {
+        my @dirs = split (/;/,$NagiosCfg{cfg_dir});
+        for my $idx (0..$#dirs) {
+            info ("[D] cfg_dir : $dirs[$idx]") if ($debug);
+            my @files = glob("$dirs[$idx]/*.cfg");
+            push @CfgFiles, @files;
+        }
+    }
+    # process cfg_file entries
+    if (exists $NagiosCfg{"cfg_file"}) {
+        my @files = split (/;/,$NagiosCfg{cfg_file});
+        for my $idx (0..$#files) {
+            info ("[D] cfg_file: $files[$idx]") if ($debug);
+            push @CfgFiles, $files[$idx];
+        }
+    }
+    # process config file(s) to get command_name entries
+    for my $idx (0..$#CfgFiles) {
+        process_file ("$CfgFiles[$idx]");
+    }
 }
 
 # check performance data format
 sub chk_fmt {
-	my ($var,$pattern) = @_;
-	my $zeile = "";
-	info ("[D] var:>$var<") if ($debug);
-	return if (/^$/);
-	s/^(.*?)([; ])//;
-	my $value = $1 || "";
-	if (($value ne "") and ($2 eq " ")) {
-		$_ = " ".$_;
-		return;
-	}
-	$zeile .= "value:>$value< ";
-	if ($value) {
-		if ($value !~ /$pattern/) {
-			info ("invChar","$var","$value");
-		}
-		if ($value =~ /[~@]?([-]?[0-9.]*):([-]?[0-9.]*)/) {
-			my $v1 = $1;
-			my $v2 = $2;
-			if ($value =~ /~/) {
-				$zeile .= "alert if value > $v2";
-			} else {
-				if (! $v1) {
-					info ("undefVal","$var");
-					return;
-				}
-				if ($v2) {	
-					info ("startEnd", "$v1", "$v2") if ($v1 > $v2);
-					if ($value =~ /@/) {
-			 			$zeile .= "alert if $v1 <= value <= $v2";
-					} else {
-						$zeile .= "alert if value < $v1 or value > $v2";
-					}
-				} else {
-					if ($value =~ /:/) {
-						$zeile .= "alert if value < $v1";
-					} else {
-						$zeile .= "alert if value < 0 or value > $v1";
-					}
-				}
-			}
-		} else {	
-			$value =~ /([-]?[0-9.]+)/;
-			$zeile .= "alert if value > $1";
-		}		
-	}
-	info ("[D] $zeile") if (($debug) and ($zeile)); 
+    my ($var,$pattern) = @_;
+    my $zeile = "";
+    info ("[D] var:>$var<") if ($debug);
+    return if (/^$/);
+    s/^(.*?)([; ])//;
+    my $value = $1 || "";
+    if (($value ne "") and ($2 eq " ")) {
+        $_ = " ".$_;
+        return;
+    }
+    $zeile .= "value:>$value< ";
+    if ($value) {
+        if ($value !~ /$pattern/) {
+            info ("invChar","$var","$value");
+        }
+        if ($value =~ /[~@]?([-]?[0-9.]*):([-]?[0-9.]*)/) {
+            my $v1 = $1;
+            my $v2 = $2;
+            if ($value =~ /~/) {
+                $zeile .= "alert if value > $v2";
+            } else {
+                if (! $v1) {
+                    info ("undefVal","$var");
+                    return;
+                }
+                if ($v2) {    
+                    info ("startEnd", "$v1", "$v2") if ($v1 > $v2);
+                    if ($value =~ /@/) {
+                         $zeile .= "alert if $v1 <= value <= $v2";
+                    } else {
+                        $zeile .= "alert if value < $v1 or value > $v2";
+                    }
+                } else {
+                    if ($value =~ /:/) {
+                        $zeile .= "alert if value < $v1";
+                    } else {
+                        $zeile .= "alert if value < 0 or value > $v1";
+                    }
+                }
+            }
+        } else {    
+            $value =~ /([-]?[0-9.]+)/;
+            $zeile .= "alert if value > $1";
+        }        
+    }
+    info ("[D] $zeile") if (($debug) and ($zeile)); 
 }
 
 sub chk_template {
-	my ($param) = @_;
-	my ($type) = $param =~ /^(.*)_perfdata/;
-	$type = uc($type);
-	my %template = ();
-	$err = 0;
-	$template{"DATATYPE"} = 0;
-	$template{"TIMET"} = 0;
-	$template{"HOSTNAME"} = 0;
-	$template{"${type}CHECKCOMMAND"} = 0;
-	$template{"${type}PERFDATA"} = 0;
-#	$template{"${type}STATE"} = 0;
-	$template{"HOSTSTATE"} = 0;
-	$template{"HOSTSTATETYPE"} = 0;
-	if ($type eq "SERVICE") {
-		$template{"SERVICEDESC"} = 0;
-		$template{"SERVICESTATE"} = 0;
-		$template{"SERVICESTATETYPE"} = 0;
-	}
-	info ("chkTemplate","$param");
-	my $val = $NagiosCfg{"$param"};
-	if ($val !~ /([A-Z]+?::[A-Z\$]+?.?)+/) {
-		info ("invTemplate");
-	}
-	$val .= "\\t";
-	while ($val =~ s/([A-Z]+?)::(.+?)([^A-Z\$].)//) {
-		my $p1 = $1; my $p2 = $2; my $p3 = $3;
-		if ($val ne "") {
-			info ("invDelim","$p3") if ($p3 ne "\\t");
-			info ("missDelim") if (! defined ($p3));
-		}
-		if (defined ($p1)) {
-			if (exists ($template{$p1})) {
-				$template{$p1}++;
-			} else {
-				info ("invTempVar","$p1");
-			}	
-			if (defined ($p2)) {
-				info ("keyValue","$p1","$p2") if ($debug);
-				if ($p1 eq "DATATYPE") {
-					info ("invDatatype","$p2") if ($p2 ne "${type}PERFDATA");
-				} else {
-					info ("invTempVal","$p2","\$$p1\$") if ($p2 ne "\$$p1\$");
-				}
-			} else {
-				info ("missTempVal");
-			}	
-		} else {
-			info ("missTempVar");
-		}
-	} 
-	for my $key (sort keys %template) {
-		info ("missTempVar","$key") unless ($template{$key} > 0);
-	}
-	info ("LinkPNPbulk") if ($err);
+    my ($param) = @_;
+    my ($type) = $param =~ /^(.*)_perfdata/;
+    $type = uc($type);
+    my %template = ();
+    $err = 0;
+    $template{"DATATYPE"} = 0;
+    $template{"TIMET"} = 0;
+    $template{"HOSTNAME"} = 0;
+    $template{"${type}CHECKCOMMAND"} = 0;
+    $template{"${type}PERFDATA"} = 0;
+#    $template{"${type}STATE"} = 0;
+    $template{"HOSTSTATE"} = 0;
+    $template{"HOSTSTATETYPE"} = 0;
+    if ($type eq "SERVICE") {
+        $template{"SERVICEDESC"} = 0;
+        $template{"SERVICESTATE"} = 0;
+        $template{"SERVICESTATETYPE"} = 0;
+    }
+    info ("chkTemplate","$param");
+    my $val = $NagiosCfg{"$param"};
+    if ($val !~ /([A-Z]+?::[A-Z\$]+?.?)+/) {
+        info ("invTemplate");
+    }
+    $val .= "\\t";
+    while ($val =~ s/([A-Z]+?)::(.+?)([^A-Z\$].)//) {
+        my $p1 = $1; my $p2 = $2; my $p3 = $3;
+        if ($val ne "") {
+            info ("invDelim","$p3") if ($p3 ne "\\t");
+            info ("missDelim") if (! defined ($p3));
+        }
+        if (defined ($p1)) {
+            if (exists ($template{$p1})) {
+                $template{$p1}++;
+            } else {
+                info ("invTempVar","$p1");
+            }    
+            if (defined ($p2)) {
+                info ("keyValue","$p1","$p2") if ($debug);
+                if ($p1 eq "DATATYPE") {
+                    info ("invDatatype","$p2") if ($p2 ne "${type}PERFDATA");
+                } else {
+                    info ("invTempVal","$p2","\$$p1\$") if ($p2 ne "\$$p1\$");
+                }
+            } else {
+                info ("missTempVal");
+            }    
+        } else {
+            info ("missTempVar");
+        }
+    } 
+    for my $key (sort keys %template) {
+        info ("missTempVar","$key") unless ($template{$key} > 0);
+    }
+    info ("LinkPNPbulk") if ($err);
 }
 
 # check npcd.cfg
 sub chk_npcdcfg {
-# create hash with options and valid values	
-	%NPCDcfg = ();
-	$NPCDcfg{user} = "u;";
-	$NPCDcfg{group} = "g;";
-	$NPCDcfg{log_type} = "v;syslog|file";
-	$NPCDcfg{log_file} = "f;[H]";
-	$NPCDcfg{max_logfile_size} = 'n;^\d+$;341';
-	$NPCDcfg{log_level} = "v;-1|0|1|2";
-	$NPCDcfg{perfdata_spool_dir} = "d;;344";
-	$NPCDcfg{perfdata_file_run_cmd} = "x;;336";
-	$NPCDcfg{perfdata_file_run_cmd_args} = "o;";
-	$NPCDcfg{npcd_max_threads} = 'n;^\d+$';
-	$NPCDcfg{use_load_threshold} = "v;0|1;341-494";	# deprecated since 0.4.11
-	$NPCDcfg{load_threshold} = 'n;^\d+\.\d+$;341';
-	$NPCDcfg{pid_file} = "f;[H];386";
-	$NPCDcfg{sleep_time} = 'n;^\d+$;439';	# new since 0.4.8
-	$NPCDcfg{identify_npcd} = "v;0|1;497";	# new since 0.4.11
-	$NPCDcfg{perfdata_file} = "f;;558";
-	$NPCDcfg{perfdata_spool_filename} = "f;;643";
-	$err = 0;
+# create hash with options and valid values    
+    %NPCDcfg = ();
+    $NPCDcfg{user} = "u;";
+    $NPCDcfg{group} = "g;";
+    $NPCDcfg{log_type} = "v;syslog|file";
+    $NPCDcfg{log_file} = "f;[H]";
+    $NPCDcfg{max_logfile_size} = 'n;^\d+$;341';
+    $NPCDcfg{log_level} = "v;-1|0|1|2";
+    $NPCDcfg{perfdata_spool_dir} = "d;;344";
+    $NPCDcfg{perfdata_file_run_cmd} = "x;;336";
+    $NPCDcfg{perfdata_file_run_cmd_args} = "o;";
+    $NPCDcfg{npcd_max_threads} = 'n;^\d+$';
+    $NPCDcfg{use_load_threshold} = "v;0|1;341-494";    # deprecated since 0.4.11
+    $NPCDcfg{load_threshold} = 'n;^\d+\.\d+$;341';
+    $NPCDcfg{pid_file} = "f;[H];386";
+    $NPCDcfg{sleep_time} = 'n;^\d+$;439';    # new since 0.4.8
+    $NPCDcfg{identify_npcd} = "v;0|1;497";    # new since 0.4.11
+    $NPCDcfg{perfdata_file} = "f;;558";
+    $NPCDcfg{perfdata_spool_filename} = "f;;643";
+    $err = 0;
 
 # try to set a file name if variable is unset
-	if (($mode =~ /^NPCD/i) and ($NPCDcfg eq "")) {
-		if (-f "$NagiosBase/etc/pnp/npcd.cfg-sample") {
-			$NPCDcfg = "$NagiosBase/etc/pnp/npcd.cfg-sample";
-		}
-		if (-f "$NagiosBase/etc/pnp/npcd.cfg") {
-			$NPCDcfg = "$NagiosBase/etc/pnp/npcd.cfg";
-		}
-		if (-f "$PNPdir/etc/npcd.cfg-sample") {
-			$NPCDcfg = "$PNPdir/etc/npcd.cfg-sample";
-		}
-		if (-f "$PNPdir/etc/npcd.cfg") {
-			$NPCDcfg = "$PNPdir/etc/npcd.cfg";
-		}
-	}
+    if (($mode =~ /^NPCD/i) and ($NPCDcfg eq "")) {
+        if (-f "$NagiosBase/etc/pnp/npcd.cfg-sample") {
+            $NPCDcfg = "$NagiosBase/etc/pnp/npcd.cfg-sample";
+        }
+        if (-f "$NagiosBase/etc/pnp/npcd.cfg") {
+            $NPCDcfg = "$NagiosBase/etc/pnp/npcd.cfg";
+        }
+        if (-f "$PNPdir/etc/npcd.cfg-sample") {
+            $NPCDcfg = "$PNPdir/etc/npcd.cfg-sample";
+        }
+        if (-f "$PNPdir/etc/npcd.cfg") {
+            $NPCDcfg = "$PNPdir/etc/npcd.cfg";
+        }
+    }
 
 # config file name set?
-	if ($NPCDcfg eq "") {
-		if ($mode =~ /NPCD/i) {
-			info ("NPCDcfgReq");
-			info ("LinkPNPnpcd");
-			$wc++;
-		}
-		return;
-	}
+    if ($NPCDcfg eq "") {
+        if ($mode =~ /NPCD/i) {
+            info ("NPCDcfgReq");
+            info ("LinkPNPnpcd");
+            $wc++;
+        }
+        return;
+    }
 
-# only needed in npcd mode	
-	if ($mode !~ /NPCD/i) {
-		info ("noNPCDreq");
-		return;
-	}
+# only needed in npcd mode    
+    if ($mode !~ /NPCD/i) {
+        info ("noNPCDreq");
+        return;
+    }
 
 # process file
-	procFile ("npcd.cfg","$NPCDcfg",\%NPCDcfg,25);
+    procFile ("npcd.cfg","$NPCDcfg",\%NPCDcfg,25);
 
-# show doc link if needed	
-	info ("LinkPNPnpcd") if ($err);
+# show doc link if needed    
+    info ("LinkPNPnpcd") if ($err);
 }
 
 # check process_perfdata.cfg
 sub chk_ppcfg {
-# create hash with options and valid values	
-	%PPcfg = ();
-	$PPcfg{timeout} = 'n;^\d+$;209';
-	$PPcfg{use_rrds} = 'n;^\d+$;'; 
-	$PPcfg{rrdpath} = 'd;;';
-	$PPcfg{rrdtool} = 'x;;';
-	$PPcfg{cfg_dir} = 'd;;';
-	$PPcfg{rrd_heartbeat} = 'n;^\d+$;423'; 
-	$PPcfg{rra_cfg} = 'f;;';
-	$PPcfg{rra_step} = 'n;^\d+$;';
-	$PPcfg{log_file} = 'f;[H];';
-	$PPcfg{log_level} = 'v;0|1|2;';
-	$PPcfg{xml_enc} = 'v;UTF-8|ISO-8859-1|US-ASCII;414';
-	$PPcfg{rrd_daemon_opts} = 'S;.*;520'; 
-	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
-		$PPcfg{rrd_storage_type} = 'v;SINGLE|MULTIPLE;';
-		$PPcfg{xml_update_delay} = 'n;^\d+$;';
-	}
-	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
-		$PPcfg{stats_dir} = 'd;;';
-	}
-	$err = 0;
+# create hash with options and valid values    
+    %PPcfg = ();
+    $PPcfg{timeout} = 'n;^\d+$;209';
+    $PPcfg{use_rrds} = 'n;^\d+$;'; 
+    $PPcfg{rrdpath} = 'd;;';
+    $PPcfg{rrdtool} = 'x;;';
+    $PPcfg{cfg_dir} = 'd;;';
+    $PPcfg{rrd_heartbeat} = 'n;^\d+$;423'; 
+    $PPcfg{rra_cfg} = 'f;;';
+    $PPcfg{rra_step} = 'n;^\d+$;';
+    $PPcfg{log_file} = 'f;[H];';
+    $PPcfg{log_level} = 'v;0|1|2;';
+    $PPcfg{xml_enc} = 'v;UTF-8|ISO-8859-1|US-ASCII;414';
+    $PPcfg{rrd_daemon_opts} = 'S;.*;520'; 
+    if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
+        $PPcfg{rrd_storage_type} = 'v;SINGLE|MULTIPLE;';
+        $PPcfg{xml_update_delay} = 'n;^\d+$;';
+    }
+    if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
+        $PPcfg{stats_dir} = 'd;;';
+    }
+    $err = 0;
 
 # try to set a file name if variable is unset
-	if ($PPcfg eq "") {
-		if (-f "$NagiosBase/etc/pnp/process_perfdata.cfg-sample") {
-			$PPcfg = "$NagiosBase/etc/pnp/process_perfdata.cfg-sample";
-		}
-		if (-f "$NagiosBase/etc/pnp/process_perfdata.cfg") {
-			$PPcfg = "$NagiosBase/etc/pnp/process_perfdata.cfg";
-		}
-		if (-f "$PNPdir/etc/process_perfdata.cfg-sample") {
-			$PPcfg = "$PNPdir/etc/process_perfdata.cfg-sample";
-		}
-		if (-f "$PNPdir/etc/process_perfdata.cfg") {
-			$PPcfg = "$PNPdir/etc/process_perfdata.cfg";
-		}
-	}
+    if ($PPcfg eq "") {
+        if (-f "$NagiosBase/etc/pnp/process_perfdata.cfg-sample") {
+            $PPcfg = "$NagiosBase/etc/pnp/process_perfdata.cfg-sample";
+        }
+        if (-f "$NagiosBase/etc/pnp/process_perfdata.cfg") {
+            $PPcfg = "$NagiosBase/etc/pnp/process_perfdata.cfg";
+        }
+        if (-f "$PNPdir/etc/process_perfdata.cfg-sample") {
+            $PPcfg = "$PNPdir/etc/process_perfdata.cfg-sample";
+        }
+        if (-f "$PNPdir/etc/process_perfdata.cfg") {
+            $PPcfg = "$PNPdir/etc/process_perfdata.cfg";
+        }
+    }
 # config file name set?
-	if ($PPcfg eq "") {
-		%PPcfg = ();
-		return;
-	}
+    if ($PPcfg eq "") {
+        %PPcfg = ();
+        return;
+    }
 
 # process file
-	procFile ("process_perfdata.cfg","$PPcfg",\%PPcfg,26);
+    procFile ("process_perfdata.cfg","$PPcfg",\%PPcfg,26);
 
-# show doc link if needed	
-	info ("LinkPPcfg") if ($err);
+# show doc link if needed    
+    info ("LinkPPcfg") if ($err);
 }
 
 # check config.php
 sub chk_cpcfg {
-	%CPcfg = ();
-	$CPcfg{'$conf[\'rrdtool\']'} = "x;$rrdtool;";
-	$CPcfg{'$conf[\'graph_width\']'} = 'n;^\d+$;243';
-	$CPcfg{'$conf[\'graph_height\']'} = 'n;^\d+$;243';
-	$CPcfg{'$conf[\'pdf_width\']'} = 'n;^\d+$;657';
-	$CPcfg{'$conf[\'pdf_height\']'} = 'n;^\d+$;657';
-	$CPcfg{'$conf[\'pdf_graph_opt\']'} = 'S;.*;'; 
-	$CPcfg{'$conf[\'graph_opt\']'} = 'S;.*;'; 
-	$CPcfg{'$conf[\'rrdbase\']'} = 'd;;';
-	$CPcfg{'$conf[\'page_dir\']'} = 'd;;279';
-	$CPcfg{'$conf[\'refresh\']'} = 'n;^\d+$;';
-	$CPcfg{'$conf[\'max_age\']'} = 'n;^\(?[\d\* ]+\)?$';   
-	$CPcfg{'$conf[\'temp\']'} = 'd;;';
-	$CPcfg{'$conf[\'nagios_base\']'} = "S;.+;";
-	$CPcfg{'$conf[\'allowed_for_service_links\']'} = 'S;[\S,]+;';
-	$CPcfg{'$conf[\'allowed_for_host_search\']'} = 'S;[\S,]+;';
-	$CPcfg{'$conf[\'allowed_for_host_overview\']'} = 'S;[\S,]+;';
-	$CPcfg{'$conf[\'allowed_for_pages\']'} = 'S;[\S,]+;381';
-	$CPcfg{'$conf[\'overview-range\']'} = 'v;0|1;';
-	$CPcfg{'$conf[\'popup-width\']'} = 'v;\d+px;607';
-	$CPcfg{'$conf[\'ui-theme\']'} = 'v;lightness|smoothness|redmond;656';
-	$CPcfg{'$conf[\'lang\']'} = 'v;en|de|fr|se|nl|es;';
-	if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
-		$CPcfg{'$conf[\'lang\']'} = 'v;en_US|de_DE|fr_FR|se_SE|nl_NL|es_ES;';
-	}
-	$CPcfg{'$conf[\'date_fmt\']'} = "S;.*;279";
-	$CPcfg{'$conf[\'rrd_daemon_opts\']'} = 'S;.*;520';
-	$CPcfg{'$conf[\'enable_recursive_template_search\']'} = 'v;0|1;595';
-	$CPcfg{'$conf[\'use_fpdf\']'} = 'v;0|1;';	
-	$CPcfg{'$conf[\'background_pdf\']'} = 'f;;321';
-	$CPcfg{'$conf[\'use_calendar\']'} = 'v;0|1;';
-	$CPcfg{'$conf[\'use_url_rewriting\']'} = 'v;0|1;';	
-	$CPcfg{'$conf[\'show_xml_icon\']'} = 'v;0|1;607';
-	$CPcfg{'$conf[\'template_dir\']'} = 'd;;607';
-	$CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';	
-	$CPcfg{'$conf[\'html_dir-links\']'} = 'd;;235-237';	
-	$CPcfg{'$views[0]["title"]'} = 'S;[\S,]+;173';
-	$CPcfg{'$views[0]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-	$CPcfg{'$views[1]["title"]'} = 'S;[\S,]+;173';
-	$CPcfg{'$views[1]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-	$CPcfg{'$views[2]["title"]'} = 'S;[\S,]+;173';
-	$CPcfg{'$views[2]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-	$CPcfg{'$views[3]["title"]'} = 'S;[\S,]+;173';
-	$CPcfg{'$views[3]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-	$CPcfg{'$views[4]["title"]'} = 'S;[\S,]+;173';
-	$CPcfg{'$views[4]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-	$err = 0;
+    %CPcfg = ();
+    $CPcfg{'$conf[\'rrdtool\']'} = "x;$rrdtool;";
+    $CPcfg{'$conf[\'graph_width\']'} = 'n;^\d+$;243';
+    $CPcfg{'$conf[\'graph_height\']'} = 'n;^\d+$;243';
+    $CPcfg{'$conf[\'pdf_width\']'} = 'n;^\d+$;657';
+    $CPcfg{'$conf[\'pdf_height\']'} = 'n;^\d+$;657';
+    $CPcfg{'$conf[\'pdf_graph_opt\']'} = 'S;.*;'; 
+    $CPcfg{'$conf[\'graph_opt\']'} = 'S;.*;'; 
+    $CPcfg{'$conf[\'rrdbase\']'} = 'd;;';
+    $CPcfg{'$conf[\'page_dir\']'} = 'd;;279';
+    $CPcfg{'$conf[\'refresh\']'} = 'n;^\d+$;';
+    $CPcfg{'$conf[\'max_age\']'} = 'n;^\(?[\d\* ]+\)?$';   
+    $CPcfg{'$conf[\'temp\']'} = 'd;;';
+    $CPcfg{'$conf[\'nagios_base\']'} = "S;.+;";
+    $CPcfg{'$conf[\'allowed_for_service_links\']'} = 'S;[\S,]+;';
+    $CPcfg{'$conf[\'allowed_for_host_search\']'} = 'S;[\S,]+;';
+    $CPcfg{'$conf[\'allowed_for_host_overview\']'} = 'S;[\S,]+;';
+    $CPcfg{'$conf[\'allowed_for_pages\']'} = 'S;[\S,]+;381';
+    $CPcfg{'$conf[\'overview-range\']'} = 'v;0|1;';
+    $CPcfg{'$conf[\'popup-width\']'} = 'v;\d+px;607';
+    $CPcfg{'$conf[\'ui-theme\']'} = 'v;lightness|smoothness|redmond;656';
+    $CPcfg{'$conf[\'lang\']'} = 'v;en|de|fr|se|nl|es;';
+    if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
+        $CPcfg{'$conf[\'lang\']'} = 'v;en_US|de_DE|fr_FR|se_SE|nl_NL|es_ES;';
+    }
+    $CPcfg{'$conf[\'date_fmt\']'} = "S;.*;279";
+    $CPcfg{'$conf[\'rrd_daemon_opts\']'} = 'S;.*;520';
+    $CPcfg{'$conf[\'enable_recursive_template_search\']'} = 'v;0|1;595';
+    $CPcfg{'$conf[\'use_fpdf\']'} = 'v;0|1;';    
+    $CPcfg{'$conf[\'background_pdf\']'} = 'f;;321';
+    $CPcfg{'$conf[\'use_calendar\']'} = 'v;0|1;';
+    $CPcfg{'$conf[\'use_url_rewriting\']'} = 'v;0|1;';    
+    $CPcfg{'$conf[\'show_xml_icon\']'} = 'v;0|1;607';
+    $CPcfg{'$conf[\'template_dir\']'} = 'd;;607';
+    $CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';    
+    $CPcfg{'$conf[\'html_dir-links\']'} = 'd;;235-237';    
+    $CPcfg{'$views[0]["title"]'} = 'S;[\S,]+;173';
+    $CPcfg{'$views[0]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
+    $CPcfg{'$views[1]["title"]'} = 'S;[\S,]+;173';
+    $CPcfg{'$views[1]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
+    $CPcfg{'$views[2]["title"]'} = 'S;[\S,]+;173';
+    $CPcfg{'$views[2]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
+    $CPcfg{'$views[3]["title"]'} = 'S;[\S,]+;173';
+    $CPcfg{'$views[3]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
+    $CPcfg{'$views[4]["title"]'} = 'S;[\S,]+;173';
+    $CPcfg{'$views[4]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
+    $err = 0;
 
 # try to set a file name if variable is unset
-	if ($CPcfg eq "") {
-		if (-f "$NagiosBase/etc/pnp/config.php") {
-			$CPcfg = "$NagiosBase/etc/pnp/config.php";
-		}
-		if (-f "$NagiosBase/etc/pnp/config_local.php") {
-			$CPcfg = "$NagiosBase/etc/pnp/config_local.php";
-		}
-		if (-f "$PNPdir/etc/config.php") {
-			$CPcfg = "$PNPdir/etc/config.php";
-		}
-		if (-f "$PNPdir/etc/config_local.php") {
-			$CPcfg = "$PNPdir/etc/config_local.php";
-		}
-	}
+    if ($CPcfg eq "") {
+        if (-f "$NagiosBase/etc/pnp/config.php") {
+            $CPcfg = "$NagiosBase/etc/pnp/config.php";
+        }
+        if (-f "$NagiosBase/etc/pnp/config_local.php") {
+            $CPcfg = "$NagiosBase/etc/pnp/config_local.php";
+        }
+        if (-f "$PNPdir/etc/config.php") {
+            $CPcfg = "$PNPdir/etc/config.php";
+        }
+        if (-f "$PNPdir/etc/config_local.php") {
+            $CPcfg = "$PNPdir/etc/config_local.php";
+        }
+    }
 
 # config file name set?
-	if ($CPcfg eq "") {
-		%CPcfg = ();
-		return;
-	}
+    if ($CPcfg eq "") {
+        %CPcfg = ();
+        return;
+    }
 
 # process file
-	procFile ("config.php","$CPcfg",\%CPcfg,27);
-# show doc link if needed	
-	info ("LinkCPcfg") if ($err);
+    procFile ("config.php","$CPcfg",\%CPcfg,27);
+# show doc link if needed    
+    info ("LinkCPcfg") if ($err);
 }
 
 # read file and examine if options are valid
 sub procFile {
-	my ($desc,$fname,$ptr,$errno) = @_;
-	my $rev = "";
-	
+    my ($desc,$fname,$ptr,$errno) = @_;
+    my $rev = "";
+    
 # not a (regular) file?
-	examine ("f;", "$desc","$fname") && return;
-	my $php = $fname =~ /php$/;
+    examine ("f;", "$desc","$fname") && return;
+    my $php = $fname =~ /php$/;
 
-# check contents	
-	info ("procFile","$fname");
-	open (PFILE,"$fname") || abort ($errno, "errOpen", $fname, $!);
-	while (<PFILE>) {
-		chomp;
-		if (/\$Id:/) {
-			($rev) = /\S\s+(\d+)\s+\d{4}-\d{2}-\d{2}/;
-			info ("info","$_");
-		}
-		s/#.*//;
-		s/\s*$//;
-		next if (/^$/);
-		next if (/^\<\?php|\?\>/);
-		my ($par, $val) = /(.*?)\s*=\s*(.*)/;
-		if ($php and ($val !~ /.*;$/)) {
-			info ("invEOL","$_");
-			next;
-		}
-		$val =~ s/;$//;
-		$val =~ s/\s*$//;
-		if ((($val =~ /^\"/) and ($val !~ /\"$/)) or
-			(($val =~ /^\'/) and ($val !~ /\'$/)) or
-			(($val !~ /^\"/) and ($val =~ /\"$/)) or
-			(($val !~ /^\'/) and ($val =~ /\'$/))) {
-			info ("invQuote","$val");
-		}
-		$val =~ s/^["']//;
-		$val =~ s/["']$//;
-		$par = $_ if (! defined ($par));
-		$par = lc($par);
-		if (examine ($ptr,$par,$val)) {
-			delete $ptr->{$par};
-		} else {
-			$ptr->{$par} = $val;
-		}
-	}
-	close (PFILE);
+# check contents    
+    info ("procFile","$fname");
+    open (PFILE,"$fname") || abort ($errno, "errOpen", $fname, $!);
+    while (<PFILE>) {
+        chomp;
+        if (/\$Id:/) {
+            ($rev) = /\S\s+(\d+)\s+\d{4}-\d{2}-\d{2}/;
+            info ("info","$_");
+        }
+        s/#.*//;
+        s/\s*$//;
+        next if (/^$/);
+        next if (/^\<\?php|\?\>/);
+        my ($par, $val) = /(.*?)\s*=\s*(.*)/;
+        if ($php and ($val !~ /.*;$/)) {
+            info ("invEOL","$_");
+            next;
+        }
+        $val =~ s/;$//;
+        $val =~ s/\s*$//;
+        if ((($val =~ /^\"/) and ($val !~ /\"$/)) or
+            (($val =~ /^\'/) and ($val !~ /\'$/)) or
+            (($val !~ /^\"/) and ($val =~ /\"$/)) or
+            (($val !~ /^\'/) and ($val =~ /\'$/))) {
+            info ("invQuote","$val");
+        }
+        $val =~ s/^["']//;
+        $val =~ s/["']$//;
+        $par = $_ if (! defined ($par));
+        $par = lc($par);
+        if (examine ($ptr,$par,$val)) {
+            delete $ptr->{$par};
+        } else {
+            $ptr->{$par} = $val;
+        }
+    }
+    close (PFILE);
 }
 
 # examine option and value
 sub examine {
-	my ($var,$par,$val,$curr_rev) = @_;
-	my $hint = "";
-	my $rev = "";
+    my ($var,$par,$val,$curr_rev) = @_;
+    my $hint = "";
+    my $rev = "";
 
-	if (ref($var)) {
-		if (exists($var->{$par})) {
-			$var = $var->{$par};
-		} else {
-			info ("invOption",$par);
-			return
-		}
-		($hint) = $var =~ /\w;(.*)/;
-	}
-			
-	info ("keyValue","$par","$val") if ($debug);
-	my ($act,$patt) = $var =~ /(.*?);(.*)/;
-	($patt,$rev) = $patt =~ /(.*);(\d*?-?\d*?)$/ if ($patt =~ /;/);
-	if (defined $curr_rev) {
-		my ($min_rev,$max_rev) = $rev =~ /(\d*)[-]?(\d*)/;
-		$min_rev = 0 unless (defined($min_rev) and ($min_rev ne ""));
-		$max_rev = 9999 unless (defined($max_rev) and ($max_rev ne ""));
-		info ("minRev","$par","$min_rev") if ($curr_rev < $min_rev);
-		info ("maxRev","$par","$max_rev") if ($curr_rev >= $max_rev);
-	}
-	if (($act eq "u") and (! getpwnam($val))) {
-		info ("noUser",$par, "$val");
-	} elsif (($act eq "g") and (! getgrnam($val))) {
-		info ("noGroup",$par, "$val");
-	} elsif ($act eq "x") {
-			if (! -f $val) { 
-				info ("noFile",$par,$val); 
-			} elsif (! -x $val) { 
-				info ("binExec",$val);
-			}
-	} elsif (($act eq "f") and (! -f $val)) {
-		if ($hint) {
-			info ("noFileYet",$par,$val);
-		} else {
-			info ("noFile",$par,$val);
-		}
-	} elsif (($act eq "d") and (! -d $val)) {
-		info ("noDir",$par,$val);
-	} elsif (($act eq "s") and (! -s $val)) {
-		info ("noSock",$val);
-	} elsif (($act eq "n") and ($val !~ /$patt/)) {
-		info ("noNumber",$par, $val);
-	} elsif (($act eq "v") and ($val !~ /$patt/)) {
-		info ("invValue2",$val,$par);
-	} elsif (($act eq "S") and ($val !~ /$patt/)) {
-		info ("invValue2",$val,$par);
-	}
-	return $err;
+    if (ref($var)) {
+        if (exists($var->{$par})) {
+            $var = $var->{$par};
+        } else {
+            info ("invOption",$par);
+            return
+        }
+        ($hint) = $var =~ /\w;(.*)/;
+    }
+            
+    info ("keyValue","$par","$val") if ($debug);
+    my ($act,$patt) = $var =~ /(.*?);(.*)/;
+    ($patt,$rev) = $patt =~ /(.*);(\d*?-?\d*?)$/ if ($patt =~ /;/);
+    if (defined $curr_rev) {
+        my ($min_rev,$max_rev) = $rev =~ /(\d*)[-]?(\d*)/;
+        $min_rev = 0 unless (defined($min_rev) and ($min_rev ne ""));
+        $max_rev = 9999 unless (defined($max_rev) and ($max_rev ne ""));
+        info ("minRev","$par","$min_rev") if ($curr_rev < $min_rev);
+        info ("maxRev","$par","$max_rev") if ($curr_rev >= $max_rev);
+    }
+    if (($act eq "u") and (! getpwnam($val))) {
+        info ("noUser",$par, "$val");
+    } elsif (($act eq "g") and (! getgrnam($val))) {
+        info ("noGroup",$par, "$val");
+    } elsif ($act eq "x") {
+            if (! -f $val) { 
+                info ("noFile",$par,$val); 
+            } elsif (! -x $val) { 
+                info ("binExec",$val);
+            }
+    } elsif (($act eq "f") and (! -f $val)) {
+        if ($hint) {
+            info ("noFileYet",$par,$val);
+        } else {
+            info ("noFile",$par,$val);
+        }
+    } elsif (($act eq "d") and (! -d $val)) {
+        info ("noDir",$par,$val);
+    } elsif (($act eq "s") and (! -s $val)) {
+        info ("noSock",$val);
+    } elsif (($act eq "n") and ($val !~ /$patt/)) {
+        info ("noNumber",$par, $val);
+    } elsif (($act eq "v") and ($val !~ /$patt/)) {
+        info ("invValue2",$val,$par);
+    } elsif (($act eq "S") and ($val !~ /$patt/)) {
+        info ("invValue2",$val,$par);
+    }
+    return $err;
 }
 
 # show additional info if desired
 sub info {
-	my @par = @_;
-	my $line = "";
-	
-	if (exists ($msg{"$par[0]"})) {
-		$line = $msg{"$par[0]"};
-	} else {
-		$line = $par[0];
-	}
-	for (1..$#par) {
-		$line =~ s/%s/$par[$_]/;
-	}
-	if ($line =~ /\[E\]/) {
-		$wc++;
-		$crit++;
-	}
-	if ($line =~ /\[W\]/) {
-		$wc++;
-		$warn++;
-	}
-	print "$line\n" unless ($quiet);
+    my @par = @_;
+    my $line = "";
+    
+    if (exists ($msg{"$par[0]"})) {
+        $line = $msg{"$par[0]"};
+    } else {
+        $line = $par[0];
+    }
+    for (1..$#par) {
+        $line =~ s/%s/$par[$_]/;
+    }
+    if ($line =~ /\[E\]/) {
+        $wc++;
+        $crit++;
+    }
+    if ($line =~ /\[W\]/) {
+        $wc++;
+        $warn++;
+    }
+    print "$line\n" unless ($quiet);
 }
 
 # abort script
 sub abort {
-	my ($rc, @par) = @_;
-	info (@par);
-	exit $rc;
+    my ($rc, @par) = @_;
+    info (@par);
+    exit $rc;
 }
 
 # check perfdata dir
 sub chk_perfdata {
-	-d && $_ ne "." && $RRDdir++;
-	-d && $_ ne "." && info ("procFile", "$_") if ($debug);
-	my $f = "$File::Find::name";
-	return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
-	chk_usrgrp ($f);
-	-d && return;
-	$RRDfile++ if ($f =~ /rrd$/);
-	return unless ($f =~ /xml$/);
-	my $rc = 99;
-	my $txt = "no RC found in file";
-	if ($time) {
-		my $max_age = $CPcfg{'$conf[\'max_age\']'};
-		while ($max_age =~ /(\d+)\*(\d+)(\D.*)?/) {
-			if (defined($3)) {	
-				$max_age = $1 * $2."$3";
-			} else {
-				$max_age = $1 * $2;
-			}
-		}	
-		my $old = time() - $max_age;
-		my $age = (stat ($f))[9];
-		info ("RRDold","$f","$max_age") if ($age < $old);
-	}
-	open (F, "$f");
-	while (<F>) {
-		if (/<RC>(\d)<\/RC>/) {
-			$rc = $1;
-		}
-		if (/<TXT>(.*)<\/TXT>/) {
-			$txt = $1;
-			last;
-		}
-	}	
-	info ("RRDrc","$f",$rc, "$txt") if ($rc);
+    -d && $_ ne "." && $RRDdir++;
+    -d && $_ ne "." && info ("procFile", "$_") if ($debug);
+    my $f = "$File::Find::name";
+    return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
+    chk_usrgrp ($f);
+    -d && return;
+    $RRDfile++ if ($f =~ /rrd$/);
+    return unless ($f =~ /xml$/);
+    my $rc = 99;
+    my $txt = "no RC found in file";
+    if ($time) {
+        my $max_age = $CPcfg{'$conf[\'max_age\']'};
+        while ($max_age =~ /(\d+)\*(\d+)(\D.*)?/) {
+            if (defined($3)) {    
+                $max_age = $1 * $2."$3";
+            } else {
+                $max_age = $1 * $2;
+            }
+        }    
+        my $old = time() - $max_age;
+        my $age = (stat ($f))[9];
+        info ("RRDold","$f","$max_age") if ($age < $old);
+    }
+    open (F, "$f");
+    while (<F>) {
+        if (/<RC>(\d)<\/RC>/) {
+            $rc = $1;
+        }
+        if (/<TXT>(.*)<\/TXT>/) {
+            $txt = $1;
+            last;
+        }
+    }    
+    info ("RRDrc","$f",$rc, "$txt") if ($rc);
 }
-	
+    
 sub chk_usrgrp {
-	my $file = shift;
-	if ($uid) {
-		my $fuid = (stat("$file"))[4];
-		my $fname = getpwuid($fuid);
-		info ("fileUser","$file", "$fname", "$user") if ($fuid != $uid);
-	}
-	if ($gid) {
-		my $fgid = (stat("$file"))[5];
-		my $fgroup = getpwuid($fgid);
-		info ("fileGroup","$file", "$fgroup", "$group") if ($fgid != $gid);
-	}
+    my $file = shift;
+    if ($uid) {
+        my $fuid = (stat("$file"))[4];
+        my $fname = getpwuid($fuid);
+        info ("fileUser","$file", "$fname", "$user") if ($fuid != $uid);
+    }
+    if ($gid) {
+        my $fgid = (stat("$file"))[5];
+        my $fgroup = getpwuid($fgid);
+        info ("fileGroup","$file", "$fgroup", "$group") if ($fgid != $gid);
+    }
 }
 
 sub chk_pkg {
-	my ($pkg_names,$req,$exactly) = @_;
-	my @pkg_names = split (/,/,$pkg_names);
-	my $pkg_name = "";
-	my $pkg = "";
+    my ($pkg_names,$req,$exactly) = @_;
+    my @pkg_names = split (/,/,$pkg_names);
+    my $pkg_name = "";
+    my $pkg = "";
 
-	for my $idx (0..$#pkg_names) {
-		next if ($pkg);
-		$pkg_name = $pkg_names[$idx];
-		info ("key", $pkg_name) if ($debug);
-		if ($pkg_mgr =~ /yum/) {
-			if ($exactly) {
-				$pkg = `yum list installed $pkg_name 2>/dev/null | grep "installed"`;
-			} else {
-				$pkg = `yum list installed 2>/dev/null | grep "$pkg_name" | grep "installed"`;
-			}
-			$pkg =~ s/\s+/ /g;
-			$pkg =~ s/ installed//g;
-		} elsif ($pkg_mgr =~ /dpkg/) {
-			if ($exactly) {
-				$pkg = `dpkg -l "$pkg_name" 2>/dev/null | grep "ii"`;
-			} else {
-				$pkg = `dpkg -l 2>/dev/null | grep "$pkg_name" | grep "ii"`;
-			}
-			$pkg =~ s/ii\s+//g;
-			$pkg =~ s/\s+/ /g;
-			$pkg =~ s/(\S+ \S+).*/$1/g;
-		} elsif ($pkg_mgr =~ /rpm/) {
-			if ($exactly) {
-				$pkg = `rpm -qa $pkg_name`;
-			} else {
-				$pkg = `rpm -qa | grep $pkg_name`;
-			}
-		}
-	}
-	$pkg =~ s/\s$//gs;
-	if ($pkg) {
-		info ("Package","$pkg");
-		return 1
-	}
-	if (-x "/usr/sbin/httpd") {
-		$pkg = `/usr/sbin/httpd -t -D DUMP_MODULES 2>&1 | grep "$pkg_name"`;
-		$pkg =~ s/\s (shared)//;
-		$pkg =~ s/\s$//gs;
-	}
-	if ($pkg ne "") {
-		info ("keyVal","HTTPD","$pkg");
-	} else {
-		info ("noPkg","$pkg_names") if ($req);
-		return 0
-	}
+    for my $idx (0..$#pkg_names) {
+        next if ($pkg);
+        $pkg_name = $pkg_names[$idx];
+        info ("key", $pkg_name) if ($debug);
+        if ($pkg_mgr =~ /yum/) {
+            if ($exactly) {
+                $pkg = `yum list installed $pkg_name 2>/dev/null | grep "installed"`;
+            } else {
+                $pkg = `yum list installed 2>/dev/null | grep "$pkg_name" | grep "installed"`;
+            }
+            $pkg =~ s/\s+/ /g;
+            $pkg =~ s/ installed//g;
+        } elsif ($pkg_mgr =~ /dpkg/) {
+            if ($exactly) {
+                $pkg = `dpkg -l "$pkg_name" 2>/dev/null | grep "ii"`;
+            } else {
+                $pkg = `dpkg -l 2>/dev/null | grep "$pkg_name" | grep "ii"`;
+            }
+            $pkg =~ s/ii\s+//g;
+            $pkg =~ s/\s+/ /g;
+            $pkg =~ s/(\S+ \S+).*/$1/g;
+        } elsif ($pkg_mgr =~ /rpm/) {
+            if ($exactly) {
+                $pkg = `rpm -qa $pkg_name`;
+            } else {
+                $pkg = `rpm -qa | grep $pkg_name`;
+            }
+        }
+    }
+    $pkg =~ s/\s$//gs;
+    if ($pkg) {
+        info ("Package","$pkg");
+        return 1
+    }
+    if (-x "/usr/sbin/httpd") {
+        $pkg = `/usr/sbin/httpd -t -D DUMP_MODULES 2>&1 | grep "$pkg_name"`;
+        $pkg =~ s/\s (shared)//;
+        $pkg =~ s/\s$//gs;
+    }
+    if ($pkg ne "") {
+        info ("keyVal","HTTPD","$pkg");
+    } else {
+        info ("noPkg","$pkg_names") if ($req);
+        return 0
+    }
 }
 
 sub chk_rrdpath {
-	if (! -d "$RRDpath") {
-		info ("invDir", "RRDpath","$RRDpath");
-	} else {
-		info ("chkPath", "RRDpath", "$RRDpath");
-		my $erg = eval "open (TST, \">$RRDpath/testfile\")";
-		if (! $erg) {
-			info ("noWrite","$RRDpath","$NagiosCfg{\"${product}_user\"}");
-		} else {
-			unlink ("$RRDpath/testfile");
-		}
-		find(\&chk_perfdata, "$RRDpath");
-		if ($RRDfile) {
-			info ("RRDcount", $RRDdir, $RRDfile);
-		} else {
-			info ("noRRDfiles", $RRDdir);
-		}
-	}
+    if (! -d "$RRDpath") {
+        info ("invDir", "RRDpath","$RRDpath");
+    } else {
+        info ("chkPath", "RRDpath", "$RRDpath");
+        my $erg = eval "open (TST, \">$RRDpath/testfile\")";
+        if (! $erg) {
+            info ("noWrite","$RRDpath","$NagiosCfg{\"${product}_user\"}");
+        } else {
+            unlink ("$RRDpath/testfile");
+        }
+        find(\&chk_perfdata, "$RRDpath");
+        if ($RRDfile) {
+            info ("RRDcount", $RRDdir, $RRDfile);
+        } else {
+            info ("noRRDfiles", $RRDdir);
+        }
+    }
 }
 
 sub set_layout_values {
-	info ("info","Layout","$layout");
-	if ($layout =~ /fedora/i) {
-		$basedir = "/usr/share" unless ($NagiosBase);
-		$NagiosCfg = "/etc/nagios/nagios.cfg" unless ($NagiosCfg);
-		$NagiosBin = "/usr/sbin/nagios" unless ($NagiosBin);
-		$RRDpath = "/var/lib/pnp4nagios" unless ($RRDpath);
-	}	
-	elsif ($layout =~ /suse/i) {
-		$basedir = "/usr/share" unless ($NagiosBase);
-		$NagiosCfg = "/etc/nagios/nagios.cfg" unless ($NagiosCfg);
-		$NagiosBin = "/usr/sbin/nagios" unless ($NagiosBin);
-		$RRDpath = "/var/spool/nagios-pnp" unless ($RRDpath);
-	}	
-	elsif ($layout =~ /nagios2/i) {
-		$basedir = "/etc/nagios2" unless ($NagiosBase);
-		$NagiosCfg = "/etc/nagios2/nagios.cfg" unless ($NagiosCfg);
-		$NagiosBin = "/usr/sbin/nagios2" unless ($NagiosBin);
-	}	
-	elsif ($layout =~ /nagios3/i) {
-		$basedir = "/etc/nagios3" unless ($NagiosBase);
-		$NagiosCfg = "/etc/nagios3/nagios.cfg" unless ($NagiosCfg);
-		$NagiosBin = "/usr/sbin/nagios3" unless ($NagiosBin);
-	} else {
-		info ("invOption","$layout");
-	}	
+    info ("info","Layout","$layout");
+    if ($layout =~ /fedora/i) {
+        $basedir = "/usr/share" unless ($NagiosBase);
+        $NagiosCfg = "/etc/nagios/nagios.cfg" unless ($NagiosCfg);
+        $NagiosBin = "/usr/sbin/nagios" unless ($NagiosBin);
+        $RRDpath = "/var/lib/pnp4nagios" unless ($RRDpath);
+    }    
+    elsif ($layout =~ /suse/i) {
+        $basedir = "/usr/share" unless ($NagiosBase);
+        $NagiosCfg = "/etc/nagios/nagios.cfg" unless ($NagiosCfg);
+        $NagiosBin = "/usr/sbin/nagios" unless ($NagiosBin);
+        $RRDpath = "/var/spool/nagios-pnp" unless ($RRDpath);
+    }    
+    elsif ($layout =~ /nagios2/i) {
+        $basedir = "/etc/nagios2" unless ($NagiosBase);
+        $NagiosCfg = "/etc/nagios2/nagios.cfg" unless ($NagiosCfg);
+        $NagiosBin = "/usr/sbin/nagios2" unless ($NagiosBin);
+    }    
+    elsif ($layout =~ /nagios3/i) {
+        $basedir = "/etc/nagios3" unless ($NagiosBase);
+        $NagiosCfg = "/etc/nagios3/nagios.cfg" unless ($NagiosCfg);
+        $NagiosBin = "/usr/sbin/nagios3" unless ($NagiosBin);
+    } else {
+        info ("invOption","$layout");
+    }    
 }
 
 sub chk_templates_dir {
-	$TemplPath =~ s/\.dist//;
-	if (! -d "$TemplPath") {
-		info ("invDir", "templUser","$TemplPath");
-		return;
-	}
-	if (! -d "$TemplPath.dist") {
-		info ("invDir", "templDist","$TemplPath.dist");
-		return;
-	}
-	my $PHP = `which php5`;
-	chomp ($PHP);
-	$PHP = `which php` unless ($PHP);
-	chomp ($PHP);
-	return unless ($PHP);
+    $TemplPath =~ s/\.dist//;
+    if (! -d "$TemplPath") {
+        info ("invDir", "templUser","$TemplPath");
+        return;
+    }
+    if (! -d "$TemplPath.dist") {
+        info ("invDir", "templDist","$TemplPath.dist");
+        return;
+    }
+    my $PHP = `which php5`;
+    chomp ($PHP);
+    $PHP = `which php` unless ($PHP);
+    chomp ($PHP);
+    return unless ($PHP);
 
-	info ("chkPath", "TemplPath", "$TemplPath");
-	my @files = glob ("$TemplPath/*.php");
-	my @files2 = glob ("$TemplPath.dist/*.php");
-	push @files,@files2;
-	for (0..$#files) {
-		next unless (-f $files[$_]);	# don't check symbolic links
-		info ("procFile", "$files[$_]") if ($debug);
-		my $php_rc = `$PHP -l $files[$_] | grep -i "parse error"`;
-		chomp $php_rc;
-		info ("error", "PHP",$php_rc) if ($php_rc);
-	}  
+    info ("chkPath", "TemplPath", "$TemplPath");
+    my @files = glob ("$TemplPath/*.php");
+    my @files2 = glob ("$TemplPath.dist/*.php");
+    push @files,@files2;
+    for (0..$#files) {
+        next unless (-f $files[$_]);    # don't check symbolic links
+        info ("procFile", "$files[$_]") if ($debug);
+        my $php_rc = `$PHP -l $files[$_] | grep -i "parse error"`;
+        chomp $php_rc;
+        info ("error", "PHP",$php_rc) if ($php_rc);
+    }  
 }
 
 # set different messages according to the language
 sub message {
-	$language = "" if (($pnp_version =~ /^0\.4\.|PKG_VERSION/) and ($language =~ /es/i));
-	my $module = ($pnp_version =~ /^0\.4|VERSION/) ? "" : ", Module";
-	$msg{"qd"} = "[E] --quiet and --debug are mutually exclusive";
-	$msg{"noBase"} = "[E] $prod_name basedir not found/not specified";
-	$msg{"noBaseDir"} = "[E] $prod_name basedir \"%s\" does not exist";
-	$msg{"useBase"} = "[I] using $prod_name basedir \"%s\"";
-	$msg{"noBinary"} = "[E] binary \"%s\" not found/defined";
-	$msg{"useBinary"} = "[I] using $prod_name binary \"%s\"";
-	$msg{"noCfg"} = "[E] $product.cfg not specified";
-	$msg{"noCfgFile"} = "[E] config file \"%s\" not found";
-	$msg{"useCfg"} = "[I] using $prod_name config \"%s\"";
-	$msg{"binExec"} = "[E] File \"%s\" is not executable";
-	$msg{"verifyCfg"} = "[A] verifying $prod_name config";
-	$msg{"invPNPmode"} = "[E] no valid mode specified (sync, Bulk, NPCD, default$module)";
-	$msg{"PNPmode"} = "[I] PNP mode: \"%s\"";
-	$msg{"Package"} = "[I] Package: \"%s\"";
-	$msg{"noPkg"} = "[E] Package \"%s\" not found";
-	$msg{"useLog"} = "[I] LogFile \"%s\" specified";
-	$msg{"NagiosChkErr"} = "[E] $prod_name check found errors";
-	$msg{"NagiosCfgErr"} = "[E] $prod_name config contains errors";
-	$msg{"verifyRRD"} = "[A] checking RRDtool (%s)";
-	$msg{"info"} = "[I] %s: %s";
-	$msg{"error"} = "[E] %s: %s";
-	$msg{"invFile"} = "[E] \"%s\" is not a (regular) file";
-	$msg{"invDir"} = "[E] (%s) directory \"%s\" does not exist";
-	$msg{"useEntry"} = "[I] using cfg_dir/cfg_file entries";
-	$msg{"useCache"} = "[I] using \"%s\" entries";
-	$msg{"dupEntry"} = "[E] directive \"%s\" is duplicate";
-	$msg{"noPerfEna"} = "[E] no performance data enabled (process_performance_data=1 in $product.cfg)";
-	$msg{"envMacrosDis"} = "[E] environment macros disabled (enable_environment_macros=0)";
-	$msg{"noErrors"} = "\nNo (obvious) errors found. Happy graphing with PNP";
-	$msg{"Warnings"} = "\nWarnings found. Please check the settings.";
-	$msg{"Errors"} = "\nErrors found. Please check the settings and have a look at the documentation.";
-	$msg{"procFile"} = "[A] processing \"%s\"";
-	$msg{"searchObj"} = "[A] searching for \"%s\"";
-	$msg{"noLabel"} = "[E] no label defined";
-	$msg{"invValue"} = "[E] no valid value";
-	$msg{"invOption"} = "[E] \"%s\" is not a valid option";
-	$msg{"invUOM"} = "[E] \"%s\" doesn't seem to be a valid UOM";
-	$msg{"minRev"} = "[W] option \"%s\" is valid starting with revision %s";
-	$msg{"maxRev"} = "[W] option \"%s\" is only valid until revision %s";
-	$msg{"noUser"} = "[E] (%s) user \"%s\" does not exist";
-	$msg{"noGroup"} = "[E] (%s) group \"%s\" does not exist";
-	$msg{"noPerf"} = "[E] There is NO performance data for \"%s\" !";
-	$msg{"noRRDchk"} = "[I] perfdata directory will NOT be checked";
-	$msg{"chkPath"} = "[A] checking of %s \"%s\"";
-	$msg{"fileUser"} = "[E] \"%s\": owner is \"%s\" instead of \"%s\"";
-	$msg{"fileGroup"} = "[E] \"%s\": group is \"%s\" instead of \"%s\"";
-	$msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
-	$msg{"RRDold"} = "[W] \"%s\" is older than %s seconds";
-	$msg{"RRDcount"} = "[I] %s dir(s) with a total of %s rrd file(s)";
-	$msg{"noRRDfiles"} = "[E] %s dir(s) but NO rrd files => NO graphs!";
-	$msg{"useRRDs"} = "[I] RRDs perl module installed";
-	$msg{"noRRDs"} = "[I] RRDs perl module not installed";
-	$msg{"noHiRes"} = "[E] Time::HiRes perl module not installed";
-	$msg{"chkPar"} = "[D] checking parameter \"%s\"";
-	$msg{"ParValue"} = "[I] parameter value \"%s\"";
-	$msg{"parModeInv"} = "[E] \"%s\" not valid in \"%s\" mode";
-	$msg{"invValue2"} = "[E] value \"%s\" for \"%s\" is invalid";
-	$msg{"chkTemplate"} = "[A] checking template \"%s\"";
-	$msg{"invTemplate"} = "[E] syntax of template is invalid";
-	$msg{"invDelim"} = "[E] invalid delimiter (%s) in template";
-	$msg{"missDelim"} = "[E] missing delimiter in template";
-	$msg{"invDatatype"} = "[E] datatype \"%s\" in template is invalid";
-	$msg{"invTempVar"} = "[E] variable \"%s\" in template is (probably) invalid";
-	$msg{"invTempVal"} = "[E] value \"%s\" in template is invalid, should be \"%s\"";
-	$msg{"invEOL"} = "[E] \"%s\" should end with a semicolon";
-	$msg{"invQuote"} = "[E] \"%s\" quotes are not matching";
-	$msg{"missTempVar"} = "[E] variable \"%s\" in template is missing";
-	$msg{"missinvTempVal"} = "[E] value \"%s\" in template is missing";
-	$msg{"noCmd"} = "[E] command_name \"%s\" not found";
-	$msg{"noParCfg"} = "[E] \"%s\" not found in $product.cfg";
-	$msg{"noParCfgH"} = "[H] \"%s\" not found in $product.cfg";
-	$msg{"notAdv"} = "[H] \"%s\" not advisable in Nagios < 3.x";
-	$msg{"invChar"} = "[E] \"%s\" (\"%s\") has invalid format/contains invalid characters";
-	$msg{"undefVal"} = "[E] no (valid) value for \"%s\" defined";
-	$msg{"noNumber"} = "[E] %s: \"%s\" not a valid number";
-	$msg{"startEnd"} = "[E] start (%s) is greater than end (%s)";
-	$msg{"noFile"} = "[E] (%s) file \"%s\" is missing";
-	$msg{"noRes"} = "[E] resource \"%s\" is not defined";
-	$msg{"noFileYet"} = "[I] (%s) file \"%s\" doesn't exist (yet)";
-	$msg{"noDir"} = "[E] (%s) directory \"%s\" is missing";
-	$msg{"noSock"} = "[E] \"%s\" is not a socket";
-	$msg{"noWrite"} = "[E] \"%s\": no write permissions for \"%s\"";
-	$msg{"key"} = "[D] key:\"%s\"";
-	$msg{"keyVal"} = "[I] %s:\"%s\"";
-	$msg{"keyValue"} = "[D] directive:\"%s\", value:\"%s\"";
-	$msg{"oddLine"} = "[W] \"%s\" looks odd";
-	$msg{"errOpen"} = "[E] open of %s failed, RC=%s";
+    $language = "" if (($pnp_version =~ /^0\.4\.|PKG_VERSION/) and ($language =~ /es/i));
+    my $module = ($pnp_version =~ /^0\.4|VERSION/) ? "" : ", Module";
+    $msg{"qd"} = "[E] --quiet and --debug are mutually exclusive";
+    $msg{"noBase"} = "[E] $prod_name basedir not found/not specified";
+    $msg{"noBaseDir"} = "[E] $prod_name basedir \"%s\" does not exist";
+    $msg{"useBase"} = "[I] using $prod_name basedir \"%s\"";
+    $msg{"noBinary"} = "[E] binary \"%s\" not found/defined";
+    $msg{"useBinary"} = "[I] using $prod_name binary \"%s\"";
+    $msg{"noCfg"} = "[E] $product.cfg not specified";
+    $msg{"noCfgFile"} = "[E] config file \"%s\" not found";
+    $msg{"useCfg"} = "[I] using $prod_name config \"%s\"";
+    $msg{"binExec"} = "[E] File \"%s\" is not executable";
+    $msg{"verifyCfg"} = "[A] verifying $prod_name config";
+    $msg{"invPNPmode"} = "[E] no valid mode specified (sync, Bulk, NPCD, default$module)";
+    $msg{"PNPmode"} = "[I] PNP mode: \"%s\"";
+    $msg{"Package"} = "[I] Package: \"%s\"";
+    $msg{"noPkg"} = "[E] Package \"%s\" not found";
+    $msg{"useLog"} = "[I] LogFile \"%s\" specified";
+    $msg{"NagiosChkErr"} = "[E] $prod_name check found errors";
+    $msg{"NagiosCfgErr"} = "[E] $prod_name config contains errors";
+    $msg{"verifyRRD"} = "[A] checking RRDtool (%s)";
+    $msg{"info"} = "[I] %s: %s";
+    $msg{"error"} = "[E] %s: %s";
+    $msg{"invFile"} = "[E] \"%s\" is not a (regular) file";
+    $msg{"invDir"} = "[E] (%s) directory \"%s\" does not exist";
+    $msg{"useEntry"} = "[I] using cfg_dir/cfg_file entries";
+    $msg{"useCache"} = "[I] using \"%s\" entries";
+    $msg{"dupEntry"} = "[E] directive \"%s\" is duplicate";
+    $msg{"noPerfEna"} = "[E] no performance data enabled (process_performance_data=1 in $product.cfg)";
+    $msg{"envMacrosDis"} = "[E] environment macros disabled (enable_environment_macros=0)";
+    $msg{"noErrors"} = "\nNo (obvious) errors found. Happy graphing with PNP";
+    $msg{"Warnings"} = "\nWarnings found. Please check the settings.";
+    $msg{"Errors"} = "\nErrors found. Please check the settings and have a look at the documentation.";
+    $msg{"procFile"} = "[A] processing \"%s\"";
+    $msg{"searchObj"} = "[A] searching for \"%s\"";
+    $msg{"noLabel"} = "[E] no label defined";
+    $msg{"invValue"} = "[E] no valid value";
+    $msg{"invOption"} = "[E] \"%s\" is not a valid option";
+    $msg{"invUOM"} = "[E] \"%s\" doesn't seem to be a valid UOM";
+    $msg{"minRev"} = "[W] option \"%s\" is valid starting with revision %s";
+    $msg{"maxRev"} = "[W] option \"%s\" is only valid until revision %s";
+    $msg{"noUser"} = "[E] (%s) user \"%s\" does not exist";
+    $msg{"noGroup"} = "[E] (%s) group \"%s\" does not exist";
+    $msg{"noPerf"} = "[E] There is NO performance data for \"%s\" !";
+    $msg{"noRRDchk"} = "[I] perfdata directory will NOT be checked";
+    $msg{"chkPath"} = "[A] checking of %s \"%s\"";
+    $msg{"fileUser"} = "[E] \"%s\": owner is \"%s\" instead of \"%s\"";
+    $msg{"fileGroup"} = "[E] \"%s\": group is \"%s\" instead of \"%s\"";
+    $msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
+    $msg{"RRDold"} = "[W] \"%s\" is older than %s seconds";
+    $msg{"RRDcount"} = "[I] %s dir(s) with a total of %s rrd file(s)";
+    $msg{"noRRDfiles"} = "[E] %s dir(s) but NO rrd files => NO graphs!";
+    $msg{"useRRDs"} = "[I] RRDs perl module installed";
+    $msg{"noRRDs"} = "[I] RRDs perl module not installed";
+    $msg{"noHiRes"} = "[E] Time::HiRes perl module not installed";
+    $msg{"chkPar"} = "[D] checking parameter \"%s\"";
+    $msg{"ParValue"} = "[I] parameter value \"%s\"";
+    $msg{"parModeInv"} = "[E] \"%s\" not valid in \"%s\" mode";
+    $msg{"invValue2"} = "[E] value \"%s\" for \"%s\" is invalid";
+    $msg{"chkTemplate"} = "[A] checking template \"%s\"";
+    $msg{"invTemplate"} = "[E] syntax of template is invalid";
+    $msg{"invDelim"} = "[E] invalid delimiter (%s) in template";
+    $msg{"missDelim"} = "[E] missing delimiter in template";
+    $msg{"invDatatype"} = "[E] datatype \"%s\" in template is invalid";
+    $msg{"invTempVar"} = "[E] variable \"%s\" in template is (probably) invalid";
+    $msg{"invTempVal"} = "[E] value \"%s\" in template is invalid, should be \"%s\"";
+    $msg{"invEOL"} = "[E] \"%s\" should end with a semicolon";
+    $msg{"invQuote"} = "[E] \"%s\" quotes are not matching";
+    $msg{"missTempVar"} = "[E] variable \"%s\" in template is missing";
+    $msg{"missinvTempVal"} = "[E] value \"%s\" in template is missing";
+    $msg{"noCmd"} = "[E] command_name \"%s\" not found";
+    $msg{"noParCfg"} = "[E] \"%s\" not found in $product.cfg";
+    $msg{"noParCfgH"} = "[H] \"%s\" not found in $product.cfg";
+    $msg{"notAdv"} = "[H] \"%s\" not advisable in Nagios < 3.x";
+    $msg{"invChar"} = "[E] \"%s\" (\"%s\") has invalid format/contains invalid characters";
+    $msg{"undefVal"} = "[E] no (valid) value for \"%s\" defined";
+    $msg{"noNumber"} = "[E] %s: \"%s\" not a valid number";
+    $msg{"startEnd"} = "[E] start (%s) is greater than end (%s)";
+    $msg{"noFile"} = "[E] (%s) file \"%s\" is missing";
+    $msg{"noRes"} = "[E] resource \"%s\" is not defined";
+    $msg{"noFileYet"} = "[I] (%s) file \"%s\" doesn't exist (yet)";
+    $msg{"noDir"} = "[E] (%s) directory \"%s\" is missing";
+    $msg{"noSock"} = "[E] \"%s\" is not a socket";
+    $msg{"noWrite"} = "[E] \"%s\": no write permissions for \"%s\"";
+    $msg{"key"} = "[D] key:\"%s\"";
+    $msg{"keyVal"} = "[I] %s:\"%s\"";
+    $msg{"keyValue"} = "[D] directive:\"%s\", value:\"%s\"";
+    $msg{"oddLine"} = "[W] \"%s\" looks odd";
+    $msg{"errOpen"} = "[E] open of %s failed, RC=%s";
 
-	$msg{"LinkNagiosChk"} = "[H] http://nagios.sourceforge.net/docs/3_0/verify_config.html";
-	$msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#required_software";
-	$msg{"LinkRRDtool"} = "[H] http://www.rrdtool.org";
-	$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#system_requirements";
-	$msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#default_mode";
-	if ($doc_version =~ /^0\.6/) {
-		$msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#sync_mode";
-	}
-	$msg{"LinkPNPbulk"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#bulk_mode";
-	$msg{"LinkPNPnpcd"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#npcd";
-	$msg{"LinkPNPmodule"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#module";
-	$msg{"NPCDcfgReq"} = "[E] NPCD config file required";
-	$msg{"noNPCDreq"} = "[H] NPCD config file is not required";
-	$msg{"LinkEnaEnv"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#enable_environment_macros";
-	$msg{"LinkEnaPerf"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data";
-	$msg{"LinkDevInfo"} = "[H] http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203";
-	$msg{"LinkPNPconfig"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config";
-	$msg{"LinkPPcfg"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config";
-	$msg{"LinkCPcfg"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/webfe";
-	$msg{"LinkNagiosCfg"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#%s";
-	$msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (and following options)";
-	
-	if ($language =~ /de/i) {
-		$msg{"qd"} = "[E] --quiet und --debug schliessen sich gegenseitig aus";
-		$msg{"noBase"} = "[E] ${prod_name}-Basisverzeichnis nicht gefunden/angegeben";
-		$msg{"noBaseDir"} = "[E] ${prod_name}-Basisverzeichnis \"%s\" existiert nicht";
-		$msg{"useBase"} = "[I] benutze ${prod_name}-Basisverzeichnis \"%s\"";
-		$msg{"noBinary"} = "[E] Binary \"%s\" nicht gefunden/definiert";
-		$msg{"useBinary"} = "[I] benutze ${prod_name}-Binary \"%s\"";
-		$msg{"noCfg"} = "[E] $product.cfg nicht angegeben";
-		$msg{"noCfgFile"} = "[E] Konfigurationsdatei \"%s\" nicht gefunden";
-		$msg{"useCfg"} = "[I] benutze ${prod_name}-config \"%s\"";
-		$msg{"binExec"} = "[E] Datei \"%s\" ist nicht ausfuehrbar";
-		$msg{"verifyCfg"} = "[A] verifiziere ${prod_name}-Konfiguration";
-		$msg{"invPNPmode"} = "[E] kein gueltiger PNP-Modus angegeben (sync, Bulk, NPCD, default$module)";
-		$msg{"PNPmode"} = "[I] PNP-Modus: \"%s\"";
-		$msg{"Package"} = "[I] Paket: \"%s\"";
-		$msg{"noPkg"} = "[E] Paket \"%s\" nicht gefunden";
-		$msg{"NPCDcfgReq"} = "[E] NPCD-Konfigurationsdatei erforderlich";
-		$msg{"noNPCDreq"} = "[H] NPCD-Konfigurationsdatei nicht erforderlich";
-		$msg{"useLog"} = "[I] LogFile \"%s\" angegeben";
-		$msg{"NagiosChkErr"} = "[E] ${prod_name}-Konfigurationspruefung findet Fehler";
-		$msg{"NagiosCfgErr"} = "[E] ${prod_name}-Konfigurationsdatei enthaelt Fehler";
-		$msg{"verifyRRD"} = "[A] pruefe RRDtool (%s)";
-		$msg{"invFile"} = "[E]: \"%s\" ist keine (regulaere) Datei";
-		$msg{"invDir"} = "[E] (%s) Verzeichnis \"%s\" existiert nicht";
-		$msg{"useEntry"} = "[I] benutze cfg_dir/cfg_file-Eintraege";
-		$msg{"useCache"} = "[I] benutze \"%s\"-Eintraege";
-		$msg{"dupEntry"} = "[E] Direktive \"%s\" ist doppelt";
-		$msg{"noPerfEna"} = "[E] keine Performance-Daten aktiviert (process_performance_data=1 in $product.cfg)";
-		$msg{"envMacrosDis"} = "[E] Environment-Makros deaktiviert (enable_environment_macros=0)";
-		$msg{"noErrors"} = "\nKeine (offensichtlichen) Fehler gefunden. Viel Spass mit PNP";
-		$msg{"Warnings"} = "\nWarnungen gefunden.\nBitte ueberpruefen Sie die Einstellungen.";
-		$msg{"Errors"} = "\nFehler gefunden.\nBitte ueberpruefen Sie die Einstellungen und lesen Sie die Dokumentation.";
-		$msg{"procFile"} = "[A] verarbeite \"%s\"";
-		$msg{"searchObj"} = "[A] suche nach \"%s\"";
-		$msg{"noLabel"} = "[E] kein Label definiert";
-		$msg{"invValue"} = "[E] kein gueltiger Wert";
-		$msg{"invOption"} = "[E] \"%s\" ist keine gueltige Option";
-		$msg{"invUOM"} = "[E] \"%s\" scheint keine gueltige Masseinheit zu sein";
-		$msg{"minRev"} = "[W] Option \"%s\" ist erst gueltig ab Revision %s";
-		$msg{"maxRev"} = "[W] Option \"%s\" ist nur gueltig bis Revision %s";
-		$msg{"noUser"} = "[E] (%s) Benutzer \"%s\" existiert nicht";
-		$msg{"noGroup"} = "[E] (%s) Gruppe \"%s\" existiert nicht";
-		$msg{"noPerf"} = "[E] es gibt KEINE Performance-Daten fuer \"%s\"";
-		$msg{"noRRDchk"} = "[I] perfdata-Verzeichnis wird NICHT geprueft";
-		$msg{"chkPath"} = "[A] pruefen von %s \"%s\"";
-		$msg{"fileUser"} = "[E] \"%s\": Owner ist \"%s\" anstatt \"%s\"";
-		$msg{"fileGroup"} = "[E] \"%s\": Group ist \"%s\" anstatt \"%s\"";
-		$msg{"RRDold"} = "[W] \"%s\" ist aelter als %s Sekunden";
-		$msg{"RRDcount"} = "[I] %s Verzeichnis(se) mit insgesamt %s rrd-Datei(en)";
-		$msg{"noRRDfiles"} = "[E] %s Verzeichnis(se) aber KEINE rrd-Dateien => KEINE Graphen!";
-		$msg{"useRRDs"} = "[I] RRDs Perl-Modul installiert";
-		$msg{"noRRDs"} = "[I] RRDs Perl-Modul nicht installiert";
-		$msg{"noHiRes"} = "[E] Time::HiRes Perl-Modul nicht installiert";
-		$msg{"chkPar"} = "[D] pruefe Parameter \"%s\"";
-		$msg{"ParValue"} = "[I] Parameterwert \"%s\"";
-		$msg{"parModeInv"} = "[E] \"%s\" ist im \"%s\"-Modus nicht gueltig";
-		$msg{"invValue2"} = "[E] Wert \"%s\" fuer \"%s\" ist ungueltig";
-		$msg{"chkTemplate"} = "[A] pruefe Template \"%s\"";
-		$msg{"invTemplate"} = "[E] Syntax des Templates ist ungueltig";
-		$msg{"invDelim"} = "[E] ungueltiger Delimiter (%s) im Template";
-		$msg{"missDelim"} = "[E] fehlender Delimiter im Template";
-		$msg{"invDatatype"} = "[E] Datentyp \"%s\" im Template ist ungueltig";
-		$msg{"invTempVar"} = "[E] Variable \"%s\" im Template ist (wahrscheinlich) ungueltig";
-		$msg{"invTempVal"} = "[E] Wert \"%s\" im Template ist ungueltig, sollte \"%s\" lauten";
-		$msg{"invEOL"} = "[E] \"%s\" sollte mit einem Semikolon enden";
-		$msg{"invQuote"} = "[E] \"%s\" Anfuehrungszeichen nicht paarig";
-		$msg{"missTempVar"} = "[E] Variable \"%s\" im Template fehlt";
-		$msg{"missinvTempVal"} = "[E] Wert \"%s\" im Template fehlt";
-		$msg{"noCmd"} = "[E] command_name \"%s\" nicht gefunden";
-		$msg{"noParCfg"} = "[E] \"%s\" nicht in $product.cfg gefunden";
-		$msg{"noParCfgH"} = "[H] \"%s\" nicht in $product.cfg gefunden";
-		$msg{"notAdv"} = "[H] \"%s\" wird fuer Nagios < 3.x nicht empfohlen";
-		$msg{"invChar"} = "[E] \"%s\" (%s) hat ein ungueltiges Format/enthaelt ungueltige Zeichen";
-		$msg{"undefVal"} = "[E] kein (gueltiger) Wert fuer \"%s\" definiert";
-		$msg{"noNumber"} = "[E] %s: \"%s\" ist keine gueltige Zahl";
-		$msg{"startEnd"} = "[E] Startwert (%s) ist groesser als Endwert (%s)";
-		$msg{"noFile"} = "[E] (%s) Datei \"%s\" fehlt";
-		$msg{"noRes"} = "[E] Ressource \"%s\" ist nicht definiert";
-		$msg{"noFileYet"} = "[I] (%s) Datei \"%s\" existiert (noch) nicht";
-		$msg{"noDir"} = "[E] (%s) Verzeichnis \"%s\" fehlt";
-		$msg{"noSock"} = "[E] \"%s\" ist kein Socket";
-		$msg{"noWrite"} = "[E] \"%s\": keine Schreibberechtigung fuer \"%s\"";
-		$msg{"key"} = "[D] key:\"%s\"";
-		$msg{"keyVal"} = "[I] %s:\"%s\"";
-		$msg{"keyValue"} = "[D] Direktive:\"%s\", Wert:\"%s\"";
-		$msg{"oddLine"} = "[W] \"%s\" sieht komisch aus";
-		$msg{"errOpen"} = "[E] oeffnen von %s fehlgeschlagen, RC=%s";
+    $msg{"LinkNagiosChk"} = "[H] http://nagios.sourceforge.net/docs/3_0/verify_config.html";
+    $msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#required_software";
+    $msg{"LinkRRDtool"} = "[H] http://www.rrdtool.org";
+    $msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#system_requirements";
+    $msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#default_mode";
+    if ($doc_version =~ /^0\.6/) {
+        $msg{"LinkPNPsync"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#sync_mode";
+    }
+    $msg{"LinkPNPbulk"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#bulk_mode";
+    $msg{"LinkPNPnpcd"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#npcd";
+    $msg{"LinkPNPmodule"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config#module";
+    $msg{"NPCDcfgReq"} = "[E] NPCD config file required";
+    $msg{"noNPCDreq"} = "[H] NPCD config file is not required";
+    $msg{"LinkEnaEnv"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#enable_environment_macros";
+    $msg{"LinkEnaPerf"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data";
+    $msg{"LinkDevInfo"} = "[H] http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203";
+    $msg{"LinkPNPconfig"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config";
+    $msg{"LinkPPcfg"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/config";
+    $msg{"LinkCPcfg"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/webfe";
+    $msg{"LinkNagiosCfg"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#%s";
+    $msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (and following options)";
+    
+    if ($language =~ /de/i) {
+        $msg{"qd"} = "[E] --quiet und --debug schliessen sich gegenseitig aus";
+        $msg{"noBase"} = "[E] ${prod_name}-Basisverzeichnis nicht gefunden/angegeben";
+        $msg{"noBaseDir"} = "[E] ${prod_name}-Basisverzeichnis \"%s\" existiert nicht";
+        $msg{"useBase"} = "[I] benutze ${prod_name}-Basisverzeichnis \"%s\"";
+        $msg{"noBinary"} = "[E] Binary \"%s\" nicht gefunden/definiert";
+        $msg{"useBinary"} = "[I] benutze ${prod_name}-Binary \"%s\"";
+        $msg{"noCfg"} = "[E] $product.cfg nicht angegeben";
+        $msg{"noCfgFile"} = "[E] Konfigurationsdatei \"%s\" nicht gefunden";
+        $msg{"useCfg"} = "[I] benutze ${prod_name}-config \"%s\"";
+        $msg{"binExec"} = "[E] Datei \"%s\" ist nicht ausfuehrbar";
+        $msg{"verifyCfg"} = "[A] verifiziere ${prod_name}-Konfiguration";
+        $msg{"invPNPmode"} = "[E] kein gueltiger PNP-Modus angegeben (sync, Bulk, NPCD, default$module)";
+        $msg{"PNPmode"} = "[I] PNP-Modus: \"%s\"";
+        $msg{"Package"} = "[I] Paket: \"%s\"";
+        $msg{"noPkg"} = "[E] Paket \"%s\" nicht gefunden";
+        $msg{"NPCDcfgReq"} = "[E] NPCD-Konfigurationsdatei erforderlich";
+        $msg{"noNPCDreq"} = "[H] NPCD-Konfigurationsdatei nicht erforderlich";
+        $msg{"useLog"} = "[I] LogFile \"%s\" angegeben";
+        $msg{"NagiosChkErr"} = "[E] ${prod_name}-Konfigurationspruefung findet Fehler";
+        $msg{"NagiosCfgErr"} = "[E] ${prod_name}-Konfigurationsdatei enthaelt Fehler";
+        $msg{"verifyRRD"} = "[A] pruefe RRDtool (%s)";
+        $msg{"invFile"} = "[E]: \"%s\" ist keine (regulaere) Datei";
+        $msg{"invDir"} = "[E] (%s) Verzeichnis \"%s\" existiert nicht";
+        $msg{"useEntry"} = "[I] benutze cfg_dir/cfg_file-Eintraege";
+        $msg{"useCache"} = "[I] benutze \"%s\"-Eintraege";
+        $msg{"dupEntry"} = "[E] Direktive \"%s\" ist doppelt";
+        $msg{"noPerfEna"} = "[E] keine Performance-Daten aktiviert (process_performance_data=1 in $product.cfg)";
+        $msg{"envMacrosDis"} = "[E] Environment-Makros deaktiviert (enable_environment_macros=0)";
+        $msg{"noErrors"} = "\nKeine (offensichtlichen) Fehler gefunden. Viel Spass mit PNP";
+        $msg{"Warnings"} = "\nWarnungen gefunden.\nBitte ueberpruefen Sie die Einstellungen.";
+        $msg{"Errors"} = "\nFehler gefunden.\nBitte ueberpruefen Sie die Einstellungen und lesen Sie die Dokumentation.";
+        $msg{"procFile"} = "[A] verarbeite \"%s\"";
+        $msg{"searchObj"} = "[A] suche nach \"%s\"";
+        $msg{"noLabel"} = "[E] kein Label definiert";
+        $msg{"invValue"} = "[E] kein gueltiger Wert";
+        $msg{"invOption"} = "[E] \"%s\" ist keine gueltige Option";
+        $msg{"invUOM"} = "[E] \"%s\" scheint keine gueltige Masseinheit zu sein";
+        $msg{"minRev"} = "[W] Option \"%s\" ist erst gueltig ab Revision %s";
+        $msg{"maxRev"} = "[W] Option \"%s\" ist nur gueltig bis Revision %s";
+        $msg{"noUser"} = "[E] (%s) Benutzer \"%s\" existiert nicht";
+        $msg{"noGroup"} = "[E] (%s) Gruppe \"%s\" existiert nicht";
+        $msg{"noPerf"} = "[E] es gibt KEINE Performance-Daten fuer \"%s\"";
+        $msg{"noRRDchk"} = "[I] perfdata-Verzeichnis wird NICHT geprueft";
+        $msg{"chkPath"} = "[A] pruefen von %s \"%s\"";
+        $msg{"fileUser"} = "[E] \"%s\": Owner ist \"%s\" anstatt \"%s\"";
+        $msg{"fileGroup"} = "[E] \"%s\": Group ist \"%s\" anstatt \"%s\"";
+        $msg{"RRDold"} = "[W] \"%s\" ist aelter als %s Sekunden";
+        $msg{"RRDcount"} = "[I] %s Verzeichnis(se) mit insgesamt %s rrd-Datei(en)";
+        $msg{"noRRDfiles"} = "[E] %s Verzeichnis(se) aber KEINE rrd-Dateien => KEINE Graphen!";
+        $msg{"useRRDs"} = "[I] RRDs Perl-Modul installiert";
+        $msg{"noRRDs"} = "[I] RRDs Perl-Modul nicht installiert";
+        $msg{"noHiRes"} = "[E] Time::HiRes Perl-Modul nicht installiert";
+        $msg{"chkPar"} = "[D] pruefe Parameter \"%s\"";
+        $msg{"ParValue"} = "[I] Parameterwert \"%s\"";
+        $msg{"parModeInv"} = "[E] \"%s\" ist im \"%s\"-Modus nicht gueltig";
+        $msg{"invValue2"} = "[E] Wert \"%s\" fuer \"%s\" ist ungueltig";
+        $msg{"chkTemplate"} = "[A] pruefe Template \"%s\"";
+        $msg{"invTemplate"} = "[E] Syntax des Templates ist ungueltig";
+        $msg{"invDelim"} = "[E] ungueltiger Delimiter (%s) im Template";
+        $msg{"missDelim"} = "[E] fehlender Delimiter im Template";
+        $msg{"invDatatype"} = "[E] Datentyp \"%s\" im Template ist ungueltig";
+        $msg{"invTempVar"} = "[E] Variable \"%s\" im Template ist (wahrscheinlich) ungueltig";
+        $msg{"invTempVal"} = "[E] Wert \"%s\" im Template ist ungueltig, sollte \"%s\" lauten";
+        $msg{"invEOL"} = "[E] \"%s\" sollte mit einem Semikolon enden";
+        $msg{"invQuote"} = "[E] \"%s\" Anfuehrungszeichen nicht paarig";
+        $msg{"missTempVar"} = "[E] Variable \"%s\" im Template fehlt";
+        $msg{"missinvTempVal"} = "[E] Wert \"%s\" im Template fehlt";
+        $msg{"noCmd"} = "[E] command_name \"%s\" nicht gefunden";
+        $msg{"noParCfg"} = "[E] \"%s\" nicht in $product.cfg gefunden";
+        $msg{"noParCfgH"} = "[H] \"%s\" nicht in $product.cfg gefunden";
+        $msg{"notAdv"} = "[H] \"%s\" wird fuer Nagios < 3.x nicht empfohlen";
+        $msg{"invChar"} = "[E] \"%s\" (%s) hat ein ungueltiges Format/enthaelt ungueltige Zeichen";
+        $msg{"undefVal"} = "[E] kein (gueltiger) Wert fuer \"%s\" definiert";
+        $msg{"noNumber"} = "[E] %s: \"%s\" ist keine gueltige Zahl";
+        $msg{"startEnd"} = "[E] Startwert (%s) ist groesser als Endwert (%s)";
+        $msg{"noFile"} = "[E] (%s) Datei \"%s\" fehlt";
+        $msg{"noRes"} = "[E] Ressource \"%s\" ist nicht definiert";
+        $msg{"noFileYet"} = "[I] (%s) Datei \"%s\" existiert (noch) nicht";
+        $msg{"noDir"} = "[E] (%s) Verzeichnis \"%s\" fehlt";
+        $msg{"noSock"} = "[E] \"%s\" ist kein Socket";
+        $msg{"noWrite"} = "[E] \"%s\": keine Schreibberechtigung fuer \"%s\"";
+        $msg{"key"} = "[D] key:\"%s\"";
+        $msg{"keyVal"} = "[I] %s:\"%s\"";
+        $msg{"keyValue"} = "[D] Direktive:\"%s\", Wert:\"%s\"";
+        $msg{"oddLine"} = "[W] \"%s\" sieht komisch aus";
+        $msg{"errOpen"} = "[E] oeffnen von %s fehlgeschlagen, RC=%s";
 
-		$msg{"LinkNagiosChk"} = "[H] http://www.nagios-wiki.de/nagios/doku3/verify_config";
-		$msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#benoetigte_software";
-		$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#anforderungen_an_plugins";
-		if ($doc_version =~ /^0\.6/) {
-			$msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#anforderungen";
-		}
-		$msg{"LinkEnaEnv"} = "[H] http://www.nagios-wiki.de/nagios/doku3/#enable_environment_macros";
-		$msg{"LinkEnaPerf"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data";
-		$msg{"LinkNagiosCfg"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#%s";
-		$msg{"LinkNagiosCfg2"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data\n    (und folgende Optionen)";
-	}
-	if ($language =~ /es/i) {
-		$msg{"qd"} = "[E] --quiet y --debug son mutuamente exclusivos";
-		$msg{"noBase"} = "[E] directorio base $prod_name no encontrado/no especificado";
-		$msg{"noBaseDir"} = "[E] directorio base $prod_name \"%s\" no existe";
-		$msg{"useBase"} = "[I] usando directorio base $prod_name \"%s\"";
-		$msg{"noBinary"} = "[E] binario \"%s\" no encontrado/definido";
-		$msg{"useBinary"} = "[I] usando binario $prod_name \"%s\"";
-		$msg{"noCfg"} = "[E] $product.cfg no especificado";
-		$msg{"noCfgFile"} = "[E] fichero de configuración \"%s\" no encontrado";
-		$msg{"useCfg"} = "[I] usando configuración $prod_name \"%s\"";
-		$msg{"binExec"} = "[E] Fichero \"%s\" no es ejecutable";
-		$msg{"verifyCfg"} = "[A] verificando $prod_name config";
-		$msg{"invPNPmode"} = "[E] no se ha especificado un modo valido (sync, Bulk, NPCD, default$module)";
-		$msg{"PNPmode"} = "[I] modo PNP: \"%s\"";
-		$msg{"Package"} = "[I] Paquete: \"%s\"";
-		$msg{"noPkg"} = "[E] Paquete \"%s\" no encontrado";
-		$msg{"useLog"} = "[I] Fichero de Log \"%s\" especificado";
-		$msg{"NagiosChkErr"} = "[E] $prod_name check ha encontrado errores";
-		$msg{"NagiosCfgErr"} = "[E] $prod_name config contiene errores";
-		$msg{"verifyRRD"} = "[A] comprobando RRDtool (%s)";
-		$msg{"invFile"} = "[E] \"%s\" no es un fichero (regular)";
-		$msg{"invDir"} = "[E] (%s) directorio \"%s\" no existe";
-		$msg{"useEntry"} = "[I] usando cfg_dir/cfg_file entradas";
-		$msg{"useCache"} = "[I] usando \"%s\" entradas";
-		$msg{"dupEntry"} = "[E] directiva \"%s\" duplicada";
-		$msg{"noPerfEna"} = "[E] procesado de datos de rendimiento no habilitado (process_performance_data=1 en $product.cfg)";
-		$msg{"envMacrosDis"} = "[E] macros de entorno deshabilitadas (enable_environment_macros=0)";
-		$msg{"noErrors"} = "\nNo se han encontrado errores (obvios). Disfrute de sus gráficos con PNP";
-		$msg{"Warnings"} = "\nAlertas encontradas. Compruebe los valores de configuración.";
-		$msg{"Errors"} = "\nErrores encontrados. Compruebe los valores de configuración y eche un vistazo a la documentación.";
-		$msg{"procFile"} = "[A] procesando \"%s\"";
-		$msg{"searchObj"} = "[A] buscando \"%s\"";
-		$msg{"noLabel"} = "[E] no se ha definido etiqueta";
-		$msg{"invValue"} = "[E] no hay valor válido";
-		$msg{"invOption"} = "[E] \"%s\" no es un opción válida";
-		$msg{"invUOM"} = "[E] \"%s\" no parece existir un UOM válido";
-		$msg{"minRev"} = "[W] opción \"%s\" válida comenzando con revisión %s";
-		$msg{"maxRev"} = "[W] opción \"%s\" sólo es válida hasta su revisión %s";
-		$msg{"noUser"} = "[E] (%s) usuario \"%s\" no existe";
-		$msg{"noGroup"} = "[E] (%s) grupo \"%s\" no existe";
-		$msg{"noPerf"} = "[E] NO hay datos de rendimiento para \"%s\" !";
-		$msg{"noRRDchk"} = "[I] directorio de perfdata NO se chequeará";
-		$msg{"chkPath"} = "[A] chequeo de %s \"%s\"";
-		$msg{"fileUser"} = "[E] \"%s\": propietario es \"%s\" en lugar de \"%s\"";
-		$msg{"fileGroup"} = "[E] \"%s\": grupo es \"%s\" en lugar de \"%s\"";
-		$msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
-		$msg{"RRDold"} = "[W] \"%s\" es más antiguo de %s seconds";
-		$msg{"RRDcount"} = "[I] %s dir(s) con un total de %s fichero(s) rrd";
-		$msg{"noRRDfiles"} = "[E] %s dir(s) pero NO ficheros rrd => ¡NO gráficos!";
-		$msg{"useRRDs"} = "[I] módulos perl de RRD instalados";
-		$msg{"noRRDs"} = "[I] módulos perl de RRD no instalados";
-		$msg{"noHiRes"} = "[E] módulos perl Time::HiRes no instalados";
-		$msg{"chkPar"} = "[D] comprobando parámetro \"%s\"";
-		$msg{"ParValue"} = "[I] parámetro valor \"%s\"";
-		$msg{"parModeInv"} = "[E] \"%s\" no válido en modo \"%s\"";
-		$msg{"invValue2"} = "[E] valor \"%s\" para \"%s\" inválido";
-		$msg{"chkTemplate"} = "[A] comprobando plantila \"%s\"";
-		$msg{"invTemplate"} = "[E] sintaxis de plantilla no válida";
-		$msg{"invDelim"} = "[E] delimitador inválido (%s) en plantilla";
-		$msg{"missDelim"} = "[E] falta delimitador en plantilla";
-		$msg{"invDatatype"} = "[E] datatype \"%s\" en plantilla es inválido";
-		$msg{"invTempVar"} = "[E] variable \"%s\" en plantilla es (probablemente) inválido";
-		$msg{"invTempVal"} = "[E] valor \"%s\" en plantilla inválido, debería ser \"%s\"";
-		$msg{"invEOL"} = "[E] \"%s\" debería finalizar con punto y coma";
-		$msg{"invQuote"} = "[E] \"%s\" no hay correspondencia en el cierre de comillas";
-		$msg{"missTempVar"} = "[E] variable \"%s\" en plantilla no existe";
-		$msg{"missinvTempVal"} = "[E] valor \"%s\" en plantilla no existe";
-		$msg{"noCmd"} = "[E] command_name \"%s\" no encontrado";
-		$msg{"noParCfg"} = "[E] \"%s\" no encontrado en $product.cfg";
-		$msg{"noParCfgH"} = "[H] \"%s\" no encontrado en $product.cfg";
-		$msg{"notAdv"} = "[H] \"%s\" no aconsejable en Nagios < 3.x";
-		$msg{"invChar"} = "[E] \"%s\" (\"%s\") tiene un formato o contiene carácteres no válidos";
-		$msg{"undefVal"} = "[E] no hay valor (válido) definido para \"%s\"";
-		$msg{"noNumber"} = "[E] %s: \"%s\" no es un número válido";
-		$msg{"startEnd"} = "[E] el comienzo (%s) es más grande que el final (%s)";
-		$msg{"noFile"} = "[E] (%s) fichero \"%s\" no existe";
-		$msg{"noRes"} = "[E] recurso \"%s\" no está definido";
-		$msg{"noFileYet"} = "[I] (%s) fichero \"%s\" no existe (todavía)";
-		$msg{"noDir"} = "[E] (%s) directorio \"%s\" no existe";
-		$msg{"noSock"} = "[E] \"%s\" no es un socket";
-		$msg{"noWrite"} = "[E] \"%s\": sin permisos de escritura para \"%s\"";
-		$msg{"key"} = "[D] key:\"%s\"";
-		$msg{"keyVal"} = "[I] %s:\"%s\"";
-		$msg{"keyValue"} = "[D] directiva:\"%s\", valor:\"%s\"";
-		$msg{"oddLine"} = "[W] \"%s\" parece extraño";
-		$msg{"errOpen"} = "[E] ha fallado la apertura de %s , RC=%s";
+        $msg{"LinkNagiosChk"} = "[H] http://www.nagios-wiki.de/nagios/doku3/verify_config";
+        $msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#benoetigte_software";
+        $msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#anforderungen_an_plugins";
+        if ($doc_version =~ /^0\.6/) {
+            $msg{"LinkPNPreq"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#anforderungen";
+        }
+        $msg{"LinkEnaEnv"} = "[H] http://www.nagios-wiki.de/nagios/doku3/#enable_environment_macros";
+        $msg{"LinkEnaPerf"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data";
+        $msg{"LinkNagiosCfg"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#%s";
+        $msg{"LinkNagiosCfg2"} = "[H] http://www.nagios-wiki.de/nagios/doku3/configmain#process_performance_data\n    (und folgende Optionen)";
+    }
+    if ($language =~ /es/i) {
+        $msg{"qd"} = "[E] --quiet y --debug son mutuamente exclusivos";
+        $msg{"noBase"} = "[E] directorio base $prod_name no encontrado/no especificado";
+        $msg{"noBaseDir"} = "[E] directorio base $prod_name \"%s\" no existe";
+        $msg{"useBase"} = "[I] usando directorio base $prod_name \"%s\"";
+        $msg{"noBinary"} = "[E] binario \"%s\" no encontrado/definido";
+        $msg{"useBinary"} = "[I] usando binario $prod_name \"%s\"";
+        $msg{"noCfg"} = "[E] $product.cfg no especificado";
+        $msg{"noCfgFile"} = "[E] fichero de configuración \"%s\" no encontrado";
+        $msg{"useCfg"} = "[I] usando configuración $prod_name \"%s\"";
+        $msg{"binExec"} = "[E] Fichero \"%s\" no es ejecutable";
+        $msg{"verifyCfg"} = "[A] verificando $prod_name config";
+        $msg{"invPNPmode"} = "[E] no se ha especificado un modo valido (sync, Bulk, NPCD, default$module)";
+        $msg{"PNPmode"} = "[I] modo PNP: \"%s\"";
+        $msg{"Package"} = "[I] Paquete: \"%s\"";
+        $msg{"noPkg"} = "[E] Paquete \"%s\" no encontrado";
+        $msg{"useLog"} = "[I] Fichero de Log \"%s\" especificado";
+        $msg{"NagiosChkErr"} = "[E] $prod_name check ha encontrado errores";
+        $msg{"NagiosCfgErr"} = "[E] $prod_name config contiene errores";
+        $msg{"verifyRRD"} = "[A] comprobando RRDtool (%s)";
+        $msg{"invFile"} = "[E] \"%s\" no es un fichero (regular)";
+        $msg{"invDir"} = "[E] (%s) directorio \"%s\" no existe";
+        $msg{"useEntry"} = "[I] usando cfg_dir/cfg_file entradas";
+        $msg{"useCache"} = "[I] usando \"%s\" entradas";
+        $msg{"dupEntry"} = "[E] directiva \"%s\" duplicada";
+        $msg{"noPerfEna"} = "[E] procesado de datos de rendimiento no habilitado (process_performance_data=1 en $product.cfg)";
+        $msg{"envMacrosDis"} = "[E] macros de entorno deshabilitadas (enable_environment_macros=0)";
+        $msg{"noErrors"} = "\nNo se han encontrado errores (obvios). Disfrute de sus gráficos con PNP";
+        $msg{"Warnings"} = "\nAlertas encontradas. Compruebe los valores de configuración.";
+        $msg{"Errors"} = "\nErrores encontrados. Compruebe los valores de configuración y eche un vistazo a la documentación.";
+        $msg{"procFile"} = "[A] procesando \"%s\"";
+        $msg{"searchObj"} = "[A] buscando \"%s\"";
+        $msg{"noLabel"} = "[E] no se ha definido etiqueta";
+        $msg{"invValue"} = "[E] no hay valor válido";
+        $msg{"invOption"} = "[E] \"%s\" no es un opción válida";
+        $msg{"invUOM"} = "[E] \"%s\" no parece existir un UOM válido";
+        $msg{"minRev"} = "[W] opción \"%s\" válida comenzando con revisión %s";
+        $msg{"maxRev"} = "[W] opción \"%s\" sólo es válida hasta su revisión %s";
+        $msg{"noUser"} = "[E] (%s) usuario \"%s\" no existe";
+        $msg{"noGroup"} = "[E] (%s) grupo \"%s\" no existe";
+        $msg{"noPerf"} = "[E] NO hay datos de rendimiento para \"%s\" !";
+        $msg{"noRRDchk"} = "[I] directorio de perfdata NO se chequeará";
+        $msg{"chkPath"} = "[A] chequeo de %s \"%s\"";
+        $msg{"fileUser"} = "[E] \"%s\": propietario es \"%s\" en lugar de \"%s\"";
+        $msg{"fileGroup"} = "[E] \"%s\": grupo es \"%s\" en lugar de \"%s\"";
+        $msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
+        $msg{"RRDold"} = "[W] \"%s\" es más antiguo de %s seconds";
+        $msg{"RRDcount"} = "[I] %s dir(s) con un total de %s fichero(s) rrd";
+        $msg{"noRRDfiles"} = "[E] %s dir(s) pero NO ficheros rrd => ¡NO gráficos!";
+        $msg{"useRRDs"} = "[I] módulos perl de RRD instalados";
+        $msg{"noRRDs"} = "[I] módulos perl de RRD no instalados";
+        $msg{"noHiRes"} = "[E] módulos perl Time::HiRes no instalados";
+        $msg{"chkPar"} = "[D] comprobando parámetro \"%s\"";
+        $msg{"ParValue"} = "[I] parámetro valor \"%s\"";
+        $msg{"parModeInv"} = "[E] \"%s\" no válido en modo \"%s\"";
+        $msg{"invValue2"} = "[E] valor \"%s\" para \"%s\" inválido";
+        $msg{"chkTemplate"} = "[A] comprobando plantila \"%s\"";
+        $msg{"invTemplate"} = "[E] sintaxis de plantilla no válida";
+        $msg{"invDelim"} = "[E] delimitador inválido (%s) en plantilla";
+        $msg{"missDelim"} = "[E] falta delimitador en plantilla";
+        $msg{"invDatatype"} = "[E] datatype \"%s\" en plantilla es inválido";
+        $msg{"invTempVar"} = "[E] variable \"%s\" en plantilla es (probablemente) inválido";
+        $msg{"invTempVal"} = "[E] valor \"%s\" en plantilla inválido, debería ser \"%s\"";
+        $msg{"invEOL"} = "[E] \"%s\" debería finalizar con punto y coma";
+        $msg{"invQuote"} = "[E] \"%s\" no hay correspondencia en el cierre de comillas";
+        $msg{"missTempVar"} = "[E] variable \"%s\" en plantilla no existe";
+        $msg{"missinvTempVal"} = "[E] valor \"%s\" en plantilla no existe";
+        $msg{"noCmd"} = "[E] command_name \"%s\" no encontrado";
+        $msg{"noParCfg"} = "[E] \"%s\" no encontrado en $product.cfg";
+        $msg{"noParCfgH"} = "[H] \"%s\" no encontrado en $product.cfg";
+        $msg{"notAdv"} = "[H] \"%s\" no aconsejable en Nagios < 3.x";
+        $msg{"invChar"} = "[E] \"%s\" (\"%s\") tiene un formato o contiene carácteres no válidos";
+        $msg{"undefVal"} = "[E] no hay valor (válido) definido para \"%s\"";
+        $msg{"noNumber"} = "[E] %s: \"%s\" no es un número válido";
+        $msg{"startEnd"} = "[E] el comienzo (%s) es más grande que el final (%s)";
+        $msg{"noFile"} = "[E] (%s) fichero \"%s\" no existe";
+        $msg{"noRes"} = "[E] recurso \"%s\" no está definido";
+        $msg{"noFileYet"} = "[I] (%s) fichero \"%s\" no existe (todavía)";
+        $msg{"noDir"} = "[E] (%s) directorio \"%s\" no existe";
+        $msg{"noSock"} = "[E] \"%s\" no es un socket";
+        $msg{"noWrite"} = "[E] \"%s\": sin permisos de escritura para \"%s\"";
+        $msg{"key"} = "[D] key:\"%s\"";
+        $msg{"keyVal"} = "[I] %s:\"%s\"";
+        $msg{"keyValue"} = "[D] directiva:\"%s\", valor:\"%s\"";
+        $msg{"oddLine"} = "[W] \"%s\" parece extraño";
+        $msg{"errOpen"} = "[E] ha fallado la apertura de %s , RC=%s";
 
-		$msg{"NPCDcfgReq"} = "[E] Se requiere fichero de configuración NPCD";
-		$msg{"noNPCDreq"} = "[H] No se requiere fichero de configuración NPCD";
-		$msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (y las opciones que siguen)";
-	}
+        $msg{"NPCDcfgReq"} = "[E] Se requiere fichero de configuración NPCD";
+        $msg{"noNPCDreq"} = "[H] No se requiere fichero de configuración NPCD";
+        $msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (y las opciones que siguen)";
+    }
 }

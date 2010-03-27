@@ -88,15 +88,15 @@ GetOptions(
 parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 my %stats = (
-	timet       => time,
-	error       => 0,
-	invalid     => 0,
-	skipped     => 0,
-	runtime     => 0,
-	rows        => 0,
-	create      => 0,
-	update      => 0,
-	);
+    timet       => time,
+    error       => 0,
+    invalid     => 0,
+    skipped     => 0,
+    runtime     => 0,
+    rows        => 0,
+    create      => 0,
+    update      => 0,
+    );
 
 #
 # RRDs Perl Module Detection
@@ -141,8 +141,8 @@ sub main {
     }
     $t1 = [gettimeofday];
     $rt = tv_interval $t0, $t1;
-	$stats{runtime} = $rt;
-	$stats{rows} = $lines;
+    $stats{runtime} = $rt;
+    $stats{rows} = $lines;
     store_internals();
     print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
     exit 0;
@@ -200,7 +200,7 @@ sub parse_env {
 sub process_perfdata {
     if ( !$NAGIOS{PERFDATA} ) {
         print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
-		if ( !$opt_b ) {
+        if ( !$opt_b ) {
             print_log( "PNP exiting ...", 1 );
             exit 1;
         }
@@ -258,7 +258,7 @@ sub process_perfdata_file {
             }
             else {
                 print_log( "No Perfdata. Skipping line $count", 2 );
-				$stats{skipped}++;
+                $stats{skipped}++;
             }
         }
 
@@ -269,7 +269,7 @@ sub process_perfdata_file {
         }else {
             print_log( "Could not delete $pdfile:$!", 1 );
         }
-	return $count;
+    return $count;
     }
     else {
         print_log( "ERROR: File $opt_b not found", 1 );
@@ -332,10 +332,10 @@ sub data2rrd {
 
         if ( $data[$i]{rrd_storage_type} eq "MULTIPLE" ) {
             print_log( "DEBUG: MULTIPLE Storage Type", 3 );
-			$DS = 1;
+            $DS = 1;
             # PNP 0.4.x Template compatibility
             $NAGIOS{RRDFILE} = "";
-			
+            
             #
             $rrd_storage_type = "MULTIPLE";
             $rrdfile          = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . "_" . $data[$i]{name} . ".rrd";
@@ -410,12 +410,12 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::create ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
-				$stats{error}++;
+                $stats{error}++;
             }
             else {
                 print_log( "$rrdfile created", 2 );
                 @rrd_state = ( 0, "just created" );
-				$stats{create}++;
+                $stats{create}++;
             }
         }
         else {
@@ -425,12 +425,12 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( $?, "create failed" );
-				$stats{error}++;
+                $stats{error}++;
             }
             else {
                 print_log( "rrdtool create returns $?", 1 );
                 @rrd_state = ( 0, "just created" );
-				$stats{create}++;
+                $stats{create}++;
             }
         }
     }
@@ -448,12 +448,12 @@ sub write_rrd {
             if ($err) {
                 print_log( "RRDs::update ERROR $err", 1 );
                 @rrd_state = ( 1, $err );
-				$stats{error}++;
+                $stats{error}++;
             }
             else {
                 print_log( "$rrdfile updated", 2 );
                 @rrd_state = ( 0, "successful updated" );
-				$stats{update}++;
+                $stats{update}++;
             }
         }
         else {
@@ -469,12 +469,12 @@ sub write_rrd {
             if ( $? > 0 ) {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "update failed" );
-				$stats{error}++;
+                $stats{error}++;
             }
             else {
                 print_log( "rrdtool update returns $?", 1 );
                 @rrd_state = ( $?, "successful updated" );
-				$stats{update}++;
+                $stats{update}++;
             }
         }
     }
@@ -486,20 +486,20 @@ sub write_rrd {
 #
 sub open_template {
     my $xmlfile = shift;
-	$delayed_write = 0;
-	if( -e $xmlfile ){
-		my $mtime = (stat($xmlfile))[9];
-		my $t = time();
-		my $age = ($t - $mtime);
-		if ( $age < $conf{'XML_UPDATE_DELAY'} ){
-			print_log( "DEBUG: XML File is $age seconds old. No update needed", 3 );
-			$delayed_write = 1;
-			return;
-		}
-		print_log( "DEBUG: XML File is $age Seconds old. UPDATE!", 3 );
-	}
+    $delayed_write = 0;
+    if( -e $xmlfile ){
+        my $mtime = (stat($xmlfile))[9];
+        my $t = time();
+        my $age = ($t - $mtime);
+        if ( $age < $conf{'XML_UPDATE_DELAY'} ){
+            print_log( "DEBUG: XML File is $age seconds old. No update needed", 3 );
+            $delayed_write = 1;
+            return;
+        }
+        print_log( "DEBUG: XML File is $age Seconds old. UPDATE!", 3 );
+    }
     open( XML, "> $xmlfile.$$" ) or die "Cant create temporary XML file ", $!;
-	print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
+    print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
     print XML "<NAGIOS>\n";
 }
 
@@ -507,7 +507,7 @@ sub open_template {
 # Close Template FH
 #
 sub close_template {
-	return if $delayed_write == 1;
+    return if $delayed_write == 1;
     my $xmlfile = shift;
     printf( XML "  <XML>\n" );
     printf( XML "   <VERSION>%d</VERSION>\n", $const{'XML_STRUCTURE_VERSION'} );
@@ -522,7 +522,7 @@ sub close_template {
 # Add Lines
 #
 sub write_to_template {
-	return if $delayed_write == 1;
+    return if $delayed_write == 1;
     my $tag  = shift;
     my $data = shift;
     if ( !defined $data ) {
@@ -542,7 +542,7 @@ sub write_to_template {
 }
 
 sub write_state_to_template {
-	return if $delayed_write == 1;
+    return if $delayed_write == 1;
     my @rrd_state = @_;
     printf( XML "  <RRD>\n" );
     printf( XML "    <RC>%s</RC>\n",   $rrd_state[0] );
@@ -554,7 +554,7 @@ sub write_state_to_template {
 # Store the complete Nagios ENV
 #
 sub write_env_to_template {
-	return if $delayed_write == 1;
+    return if $delayed_write == 1;
     foreach my $key ( sort keys %NAGIOS ) {
         $NAGIOS{$key} = urlencode($NAGIOS{$key});
         printf( XML "  <NAGIOS_%s>%s</NAGIOS_%s>\n", $key, $NAGIOS{$key}, $key );
@@ -572,11 +572,11 @@ sub adjust_template {
     my $initial_template = cleanup( $temp_template[0] );
     my $template = cleanup( $temp_template[0] );
     my %CTPL = read_custom_template ( $command, $uom, $count );
-	# 
+    # 
     if ( $CTPL{'TEMPLATE'} ne $initial_template ){
-		%CTPL = read_custom_template ( $CTPL{'TEMPLATE'}, $uom, $count );
+        %CTPL = read_custom_template ( $CTPL{'TEMPLATE'}, $uom, $count );
     }
-	return %CTPL;
+    return %CTPL;
 }
 
 
@@ -760,7 +760,7 @@ sub _parse {
     my $tmp_string = $string;
     $string =~ s/^([^=]+)=([\d\.\-]+)([\w\/%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?;?\s*//;
 
-	if ( $tmp_string eq $string ) {
+    if ( $tmp_string eq $string ) {
         print_log( "No pattern match in function _parse($string)", 2 );
         return undef;
     }
@@ -779,7 +779,7 @@ sub _parse {
         "min"      => $6,
         "max"      => $7
     );
-	
+    
     $p{label}  =~ s/[']//g;        # cleanup
     $p{name}   =~ s/[']//g;        # cleanup
     $p{name}   =~ s/[\/\\]/_/g;    # cleanup
@@ -819,7 +819,7 @@ sub _parse {
             $p{critical_range_type} = "outside";
         }
     }
-	# Strip Range indicators
+    # Strip Range indicators
     $p{warning}  =~ s/[~@]// if($p{warning});
     $p{critical} =~ s/[~@]// if($p{critical});
 
@@ -891,7 +891,7 @@ sub parse_perfstring {
             ( $perfstring, %p ) = _parse($perfstring);
             if ( !$p{label} ) {
                 print_log( "Invalid Perfdata detected ", 1 );
-				$stats{invalid}++;
+                $stats{invalid}++;
                 @perfs = ();
                 last;
             }
@@ -1102,77 +1102,77 @@ sub handle_signal {
     print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
     $t1 = [gettimeofday];
     $rt = tv_interval $t0, $t1;
-	$stats{runtime} = $rt;
+    $stats{runtime} = $rt;
     exit 1;
 }
 #
 # Store some internal runtime infos
 # 
 sub store_internals {
-	if( ! -w $conf{'STATS_DIR'}){
-		print_log("*** ERROR: ".$conf{'STATS_DIR'}." is not writable or does not exist",0);
-		return;
-	}
-	my $statsfile = $conf{'STATS_DIR'}."/".(int $stats{timet} / 60);
-	open( STAT, ">> $statsfile" ) or die "Cant create statistic file ", $!;
-	printf(STAT "%d %f %d %d %d %d %d %d\n", $stats{timet},$stats{runtime},$stats{rows},$stats{update},$stats{create},$stats{error},$stats{invalid},$stats{skipped}); 
-	close(STAT);
-	check_internals();
+    if( ! -w $conf{'STATS_DIR'}){
+        print_log("*** ERROR: ".$conf{'STATS_DIR'}." is not writable or does not exist",0);
+        return;
+    }
+    my $statsfile = $conf{'STATS_DIR'}."/".(int $stats{timet} / 60);
+    open( STAT, ">> $statsfile" ) or die "Cant create statistic file ", $!;
+    printf(STAT "%d %f %d %d %d %d %d %d\n", $stats{timet},$stats{runtime},$stats{rows},$stats{update},$stats{create},$stats{error},$stats{invalid},$stats{skipped}); 
+    close(STAT);
+    check_internals();
 }
 
 #
 # Search for statistic files
 #
 sub check_internals {
-	my $file;
-	my @files;
-	opendir(STATS, $conf{'STATS_DIR'});
-	while ( defined ( my $file = readdir STATS) ){
-		next if $file =~ /^\.\.?$/; # skip . and ..
-		next if $file =~ /-PID-/;   # skip temporary files 
-		next if $file == (int $stats{timet} / 60); # skip our current file
-		push @files, $file;
-	}
-	read_internals(@files);
+    my $file;
+    my @files;
+    opendir(STATS, $conf{'STATS_DIR'});
+    while ( defined ( my $file = readdir STATS) ){
+        next if $file =~ /^\.\.?$/; # skip . and ..
+        next if $file =~ /-PID-/;   # skip temporary files 
+        next if $file == (int $stats{timet} / 60); # skip our current file
+        push @files, $file;
+    }
+    read_internals(@files);
 }
 
 #
 # Read and aggregate files found by check_internals() 
 #
 sub read_internals {
-	my @files = @_;
-	my @chunks;
-	foreach my $file (sort { $a <=> $b} @files){
-		unless ( rename($conf{'STATS_DIR'}."/".$file, $conf{'STATS_DIR'}."/".$file."-PID-".$$) ){
-			print_log( "ERROR: renaming stats file " . $conf{'STATS_DIR'}."/".$file . " to " . $conf{'STATS_DIR'}."/".$file."-PID-".$$ . " failed", 1 );
-			next;
-		}
-		open( STAT, "< ".$conf{'STATS_DIR'}."/".$file."-PID-".$$ );
-		%stats = (
-    		timet       => 0,
-    		error       => 0,
-    		invalid     => 0,
-    		skipped     => 0,
-    		runtime     => 0,
-    		rows        => 0,
-    		create      => 0,
-    		update      => 0,
-    	);
-		while(<STAT>){
-			@chunks = split();
-			$stats{timet}    = $chunks[0];
-			$stats{runtime} += $chunks[1];
-			$stats{rows}    += $chunks[2]; 
-			$stats{update}  += $chunks[3];
-			$stats{create}  += $chunks[4];
-			$stats{error}   += $chunks[5];
-			$stats{invalid} += $chunks[6];
-			$stats{skipped} += $chunks[7];
-		}
-		close(STAT);
-		unlink($conf{'STATS_DIR'}."/".$file."-PID-".$$);
-		process_internals();
-	}
+    my @files = @_;
+    my @chunks;
+    foreach my $file (sort { $a <=> $b} @files){
+        unless ( rename($conf{'STATS_DIR'}."/".$file, $conf{'STATS_DIR'}."/".$file."-PID-".$$) ){
+            print_log( "ERROR: renaming stats file " . $conf{'STATS_DIR'}."/".$file . " to " . $conf{'STATS_DIR'}."/".$file."-PID-".$$ . " failed", 1 );
+            next;
+        }
+        open( STAT, "< ".$conf{'STATS_DIR'}."/".$file."-PID-".$$ );
+        %stats = (
+            timet       => 0,
+            error       => 0,
+            invalid     => 0,
+            skipped     => 0,
+            runtime     => 0,
+            rows        => 0,
+            create      => 0,
+            update      => 0,
+        );
+        while(<STAT>){
+            @chunks = split();
+            $stats{timet}    = $chunks[0];
+            $stats{runtime} += $chunks[1];
+            $stats{rows}    += $chunks[2]; 
+            $stats{update}  += $chunks[3];
+            $stats{create}  += $chunks[4];
+            $stats{error}   += $chunks[5];
+            $stats{invalid} += $chunks[6];
+            $stats{skipped} += $chunks[7];
+        }
+        close(STAT);
+        unlink($conf{'STATS_DIR'}."/".$file."-PID-".$$);
+        process_internals();
+    }
 }
 #
 # 
@@ -1180,14 +1180,14 @@ sub read_internals {
 sub process_internals {
     $conf{'RRD_STORAGE_TYPE'} = "MULTIPLE";
     %NAGIOS = ( 
-		HOSTNAME => '.pnp-internal',
-		DISP_HOSTNAME => 'pnp-internal',
-		SERVICEDESC => 'runtime',
-		DISP_SERVICEDESC => 'runtime',
-		TIMET => $stats{timet},
-		DATATYPE => 'SERVICEPERFDATA',
-		CHECK_COMMAND => 'pnp-runtime',
-		PERFDATA => "runtime=".$stats{runtime}."s rows=".$stats{rows}." errors=".$stats{error}." invalid=".$stats{invalid}." skipped=".$stats{skipped} ." update=".$stats{update}. " create=".$stats{create} 
+        HOSTNAME => '.pnp-internal',
+        DISP_HOSTNAME => 'pnp-internal',
+        SERVICEDESC => 'runtime',
+        DISP_SERVICEDESC => 'runtime',
+        TIMET => $stats{timet},
+        DATATYPE => 'SERVICEPERFDATA',
+        CHECK_COMMAND => 'pnp-runtime',
+        PERFDATA => "runtime=".$stats{runtime}."s rows=".$stats{rows}." errors=".$stats{error}." invalid=".$stats{invalid}." skipped=".$stats{skipped} ." update=".$stats{update}. " create=".$stats{create} 
     );
     parse_perfstring(  $NAGIOS{PERFDATA} );
 }
