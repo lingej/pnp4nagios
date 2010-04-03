@@ -20,15 +20,13 @@ class Ajax_Controller extends System_Controller  {
         // Disable auto-rendering
         $this->auto_render = FALSE;
     
-        $query     = $this->input->get('query');
+        $query     = $this->input->get('term');
         $result    = array();
-        $result['query'] = $query;
-        $result['suggestions'] = array();
         if(strlen($query)>=1) {
             $hosts = $this->data->getHosts();
             foreach($hosts as $host){
                 if(preg_match("/$query/i",$host['name'])){
-                    array_push($result['suggestions'],$host['name']);
+                    array_push($result,$host['name']);
                 }
             }
             echo json_encode($result);
