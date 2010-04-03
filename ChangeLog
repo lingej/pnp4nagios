@@ -1,5 +1,8 @@
 **pnp-0.6.4 ??/??/2010**
 
+  * Update: jQuery Update to 1.4.2
+  * Update: jQuery-ui Update to 1.8
+
 **pnp-0.6.3 03/16/2010**
 
   * Feature: New helper script libexec/rrd_convert.pl -> [[rrd_convert]]
