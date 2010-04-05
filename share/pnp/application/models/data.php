@@ -553,13 +553,33 @@ class Data_Model extends Model
         $servicelist = array();
         $this->parse_page_cfg($page);
         $hosts = $this->getHostsByPage();
-        foreach($hosts as $host){
-            $services = $this->getServices($host);
-            foreach($services as $service) {
-                // search for definition
-                $data = $this->filterServiceByPage($host,$service);
-                if($data){
-                    $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
+        # No regex so we keep the order defined by config
+        if($this->PAGE_DEF['use_regex'] == 0){
+            #loop through page definitions 
+            foreach($this->PAGE_GRAPH as $graph){
+                $hosts_to_search_for = explode(",", $graph['host_name']);
+                foreach($hosts_to_search_for as $host){
+                    if(in_array($host, $hosts)){
+                        $services = $this->getServices($host);
+                        foreach($services as $service) {
+                            // search for definition
+                            $data = $this->filterServiceByPage($host,$service);
+                            if($data){
+                                $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
+                            }
+                        }
+                    }    
+                }
+            }
+        }else{
+            foreach($hosts as $host){
+                $services = $this->getServices($host);
+                foreach($services as $service) {
+                    // search for definition
+                    $data = $this->filterServiceByPage($host,$service);
+                    if($data){
+                        $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
+                    }
                 }
             }
         }
