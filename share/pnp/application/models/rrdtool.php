@@ -50,8 +50,15 @@ class Rrdtool_Model extends Model
             fclose($pipes[1]);
             fclose($pipes[2]);
             proc_close($process);
-            if($stderr && sizeof($data) >= 10 ){
-                $data = "ERROR: ".$stderr;
+            // Catch STDERR
+            if($stderr && strlen($stderr) >= 0 ){
+                $data = "ERROR: STDERR => ".$stderr."\n\n";
+                return $data;
+            }
+            // Catch STDOUT < 50 Characters
+            if($data && strlen($data) < 50 ){
+                $data = "ERROR: STDOUT => ".$data."\n\n";
+                return $data;
             }
         }else{
             $data =  "ERROR: proc_open(".$rrdtool." ... failed";
