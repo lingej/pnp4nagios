@@ -130,6 +130,8 @@ sub conv {
 		s/í/\&iacute;/g;
 		s/ó/\&oacute;/g;
 		s/ú/\&uacute;/g;
+		s/è/\&egrave;/g;
+		s/ô/\&ocirc;/g;
 		s/ñ/\&ntilde;/g;
 		s/¿/\&iquest;/g;
 		s/–/--/g;
