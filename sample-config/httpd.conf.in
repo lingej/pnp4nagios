@@ -1,6 +1,6 @@
 # SAMPLE CONFIG SNIPPETS FOR APACHE WEB SERVER
 
-Alias /@PKG_NAME@ "@datarootdir@"
+Alias @BASE_URL@ "@datarootdir@"
 
 <Directory "@datarootdir@">
    	AllowOverride None
@@ -18,7 +18,7 @@ Alias /@PKG_NAME@ "@datarootdir@"
 		RewriteEngine On
 		Options FollowSymLinks
 		# Installation directory
-		RewriteBase /@PKG_NAME@/
+		RewriteBase @BASE_URL@/
 		# Protect application and system files from being viewed
 		RewriteRule ^(application|modules|system) - [F,L]
 		# Allow any files or directories that exist to be displayed directly

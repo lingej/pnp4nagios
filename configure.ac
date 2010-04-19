@@ -104,8 +104,6 @@ case $layout in
 	;;
 esac
 
-
-
 AC_ARG_WITH(kohana,[  --without-kohana does not install the kohana framework],KOHANA=no,KOHANA=yes)
 AC_SUBST(KOHANA)
 AC_ARG_WITH(kohana_system,[  --with-kohana_system=<existing kohana system dir> Points to an already installed kohana framework],KOHANA_SYSTEM=$withval,KOHANA_SYSTEM=$libdir/kohana/system)
@@ -199,6 +197,10 @@ elif test -d /etc/init.d; then
 elif test -d /sbin/init.d; then
     init_dir="/sbin/init.d"
 fi
+
+BASE_URL=${PKG_NAME}
+AC_ARG_WITH(base-url,[  --with-base-url=/${PKG_NAME} ],BASE_URL=$withval,BASE_URL=/${PKG_NAME})
+AC_SUBST(BASE_URL)
 
 dnl User can override init script location
 AC_ARG_WITH(init_dir,[  --with-init-dir=<path> sets directory to place init script into],init_dir=$withval) 

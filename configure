@@ -697,6 +697,7 @@ PERFDATA_DIR
 PERFDATA_SPOOL_DIR
 DEBUG
 HTTPD_CONF
+BASE_URL
 init_dir
 pnpsender_name
 npcd_name
@@ -1301,6 +1302,7 @@ Optional Packages:
   --with-perfdata-spool-dir=<path_to_perfdata_spool_dir> Tell me where I should store perfdata files for bulk mode with npcd
   --with-debug Enable debuging for process_perfdata.pl
   --with-httpd-conf=<path_to_conf> sets path to Apache conf.d directory
+  --with-base-url=/${PKG_NAME}
   --with-init-dir=<path> sets directory to place init script into
 
 Some influential environment variables:
@@ -5565,8 +5567,6 @@ case $layout in
 esac
 
 
-
-
 # Check whether --with-kohana was given.
 if test "${with_kohana+set}" = set; then
   withval=$with_kohana; KOHANA=no
@@ -5817,6 +5817,17 @@ elif test -d /etc/init.d; then
 elif test -d /sbin/init.d; then
     init_dir="/sbin/init.d"
 fi
+
+BASE_URL=${PKG_NAME}
+
+# Check whether --with-base-url was given.
+if test "${with_base_url+set}" = set; then
+  withval=$with_base_url; BASE_URL=$withval
+else
+  BASE_URL=/${PKG_NAME}
+fi
+
+
 
 
 # Check whether --with-init_dir was given.
@@ -6623,6 +6634,7 @@ PERFDATA_DIR!$PERFDATA_DIR$ac_delim
 PERFDATA_SPOOL_DIR!$PERFDATA_SPOOL_DIR$ac_delim
 DEBUG!$DEBUG$ac_delim
 HTTPD_CONF!$HTTPD_CONF$ac_delim
+BASE_URL!$BASE_URL$ac_delim
 init_dir!$init_dir$ac_delim
 pnpsender_name!$pnpsender_name$ac_delim
 npcd_name!$npcd_name$ac_delim
@@ -6633,7 +6645,7 @@ RRDS!$RRDS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 89; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 90; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

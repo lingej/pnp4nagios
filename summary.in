@@ -48,7 +48,7 @@ printf ("  Perfdata files (NPCD) stored in:  %s\n","@PERFDATA_SPOOL_DIR@");
 printf ("\n");
 printf ("  Web Interface Options:");
 printf ("  -------------------------         -------------------\n");
-printf ("  HTML URL:                         %s\n","http://localhost/@PKG_NAME@/");
+printf ("  HTML URL:                         %s\n","http://localhost@BASE_URL@");
 printf ("  Apache Config File:               %s\n","@HTTPD_CONF@/@PKG_NAME@.conf");
 printf ("\n\n"); 
 printf ("  Review the options above for accuracy.  If they look okay,\n");

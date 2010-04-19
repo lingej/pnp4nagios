@@ -33,6 +33,7 @@ my $XML_STRUCTURE_VERSION="@XML_STRUCTURE_VERSION@";
 my $PKG_REL_DATE="@PKG_REL_DATE@";
 my $PKG_VERSION="@PKG_VERSION@";
 my $PKG_NAME="@PKG_NAME@";
+my $BASE_URL="@BASE_URL@";
 my $HTTPD_CONF="@HTTPD_CONF@";
 my $init_dir="@init_dir@";
 my $npcd_name="@npcd_name@";
@@ -94,6 +95,7 @@ while ($f = shift @ARGV) {
 		s|\@PKG_REL_DATE\@|$PKG_REL_DATE|g;
 		s|\@PKG_VERSION\@|$PKG_VERSION|g;
 		s|\@PKG_NAME\@|$PKG_NAME|g;
+		s|\@BASE_URL\@|$BASE_URL|g;
 		s|\@HTTPD_CONF\@|$HTTPD_CONF|g;
 		s|\@npcd_name\@|$npcd_name|g;
 		s|\@pp_pl_name\@|$pp_pl_name|g;
