@@ -18,6 +18,7 @@ class System_Controller extends Template_Controller {
 
         $this->config->read_config();
         Kohana::config_set('locale.language',$this->config->conf['lang']);
+        Kohana::config_set('core.site_domain',$this->config->conf['base_url']);
         // Check for mod_rewrite
         $this->check_mod_rewrite();
 
