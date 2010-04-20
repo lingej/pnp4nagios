@@ -3,7 +3,7 @@
 <script type="text/javascript">
 $(function() {
     $("#query").autocomplete({
-        source: "/pnp4nagios/index.php/ajax/search",
+        source: "<?php echo url::base('true')?>/index.php/ajax/search",
         select: function(event, ui) { window.location = "graph?host=" + ui.item.value  }
     });
 });
