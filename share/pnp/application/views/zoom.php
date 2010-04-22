@@ -3,7 +3,8 @@
 <?php echo html::stylesheet('media/css/common.css') ?>
 <?php echo html::stylesheet('media/css/ui-'.$this->config->conf['ui-theme'].'/jquery-ui.css') ?>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body>
+<div class="pagebody">
 <div class="ui-widget">
 <div class="ui-widget-header ui-corner-top">
 <?php echo Kohana::lang('common.zoom-header') ?>
@@ -18,6 +19,7 @@
 </STYLE>
 <img id="zoomGraphImage" src="image?source=<?php echo $source?>&host=<?php echo $host?>&srv=<?php echo $srv?>&view=<?php echo $view?>&start=<?php echo $start?>&end=<?php echo $end?>&graph_height=<?php echo $graph_height?>&graph_width=<?php echo $graph_width?>&title_font_size=10">
 <?php include("media/js/zoom.js")?>
+</div>
 </div>
 </body>
 </html>
