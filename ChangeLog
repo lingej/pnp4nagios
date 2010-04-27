@@ -3,6 +3,7 @@
   * Update: jQuery Update to 1.4.2
   * Update: jQuery-ui Update to 1.8
   * Feature: New configure Option --with-base-url
+  * Template: New template check_ntp_time.php (Mathias Kettner)
 
 **pnp-0.6.3 03/16/2010**
 
