@@ -1,7 +1,7 @@
 #!@PERL@
 # nagios: -epn
 ## @PKG_NAME@–@PKG_VERSION@
-## Copyright (c) 2006-2009 Joerg Linge (http://www.pnp4nagios.org)
+## Copyright (c) 2005-2010 Joerg Linge (http://www.pnp4nagios.org)
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License
@@ -202,7 +202,7 @@ sub process_perfdata {
         print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
         if ( !$opt_b ) {
             print_log( "PNP exiting ...", 1 );
-            exit 1;
+            exit 3;
         }
     }
 
@@ -228,7 +228,7 @@ sub process_perfdata {
 #
 sub process_perfdata_file {
     if ( $opt_b =~ /-PID-(\d+)/ ) {
-        print_log( "Oops: $opt_b already performed by $1 - please check timeout settings", 0 );
+        print_log( "Oops: $opt_b already processed by $1 - please check timeout settings", 0 );
     }
 
     print_log( "searching for $opt_b", 2 );
@@ -237,7 +237,7 @@ sub process_perfdata_file {
         print_log( "renaming $opt_b to $pdfile for bulk update", 2 );
         unless ( rename "$opt_b", "$pdfile" ) {
             print_log( "ERROR: rename $opt_b to $pdfile failed", 1 );
-            exit 1;
+            exit 4;
         }
 
         print_log( "reading $pdfile for bulk update", 2 );
@@ -262,7 +262,7 @@ sub process_perfdata_file {
             }
         }
 
-        print_log( "$count Lines processed", 1 );
+        print_log( "$count lines processed", 1 );
 
         if ( unlink("$pdfile") == 1 ) {
             print_log( "$pdfile deleted", 1 );
@@ -297,7 +297,7 @@ sub data2rrd {
         unless ( mkdir "$conf{RRDPATH}" ) {
             print_log( "mkdir $conf{RRDPATH}, permission denied ", 1 );
             print_log( "PNP exiting ...",                          1 );
-            exit 1;
+            exit 5;
         }
     }
 
@@ -305,7 +305,7 @@ sub data2rrd {
         unless ( mkdir "$conf{RRDPATH}/$NAGIOS{HOSTNAME}" ) {
             print_log( "mkdir $conf{RRDPATH}/$NAGIOS{HOSTNAME}, permission denied ", 1 );
             print_log( "PNP exiting ...",                                            1 );
-            exit 1;
+            exit 6;
         }
     }
 
@@ -322,7 +322,7 @@ sub data2rrd {
         my $DS = $i + 1;
 
         #
-        # Pro Datasource
+        # for each datasource
         #
         for my $job ( sort keys %{ $data[$i] } ) {
             if ( defined $data[$i]{$job} ) {
@@ -496,7 +496,7 @@ sub open_template {
             $delayed_write = 1;
             return;
         }
-        print_log( "DEBUG: XML File is $age Seconds old. UPDATE!", 3 );
+        print_log( "DEBUG: XML File is $age seconds old. UPDATE!", 3 );
     }
     open( XML, "> $xmlfile.$$" ) or die "Cant create temporary XML file ", $!;
     print XML "<?xml version=\"1.0\" encoding=\"" . $conf{XML_ENC} . "\" standalone=\"yes\"?>\n";
@@ -1075,7 +1075,7 @@ sub init_signals {
 sub handle_signal {
     my ($signal) = (@_);
     if ( $signal eq "ALRM" ) {
-        print_log( "*** TIMEOUT: Timeout after $opt_t Sec. ****", 0 );
+        print_log( "*** TIMEOUT: Timeout after $opt_t secs. ***", 0 );
         if ( $opt_b && !$opt_n ) {
             print_log( "*** TIMEOUT: Deleting current file to avoid loops",   0 );
             print_log( "*** TIMEOUT: Please check your process_perfdata.cfg", 0 );
@@ -1103,7 +1103,7 @@ sub handle_signal {
     $t1 = [gettimeofday];
     $rt = tv_interval $t0, $t1;
     $stats{runtime} = $rt;
-    exit 1;
+    exit 7;
 }
 #
 # Store some internal runtime infos
@@ -1196,7 +1196,7 @@ sub process_internals {
 #
 #
 sub print_help {
-    print "Copyright (c) 2005-2008 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
+    print "Copyright (c) 2005-2010 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
     print "Use process_perfdata.pl to store Nagios Plugin Performance Data into RRD Databases\n";
     print "\n";
     print "Options:\n";
@@ -1224,7 +1224,7 @@ sub print_help {
 #
 sub print_version {
     print "Version: process_perfdata.pl $const{VERSION}\n";
-    print "Copyright (c) 2005-2007 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
+    print "Copyright (c) 2005-2010 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
     exit 0;
 }
 
