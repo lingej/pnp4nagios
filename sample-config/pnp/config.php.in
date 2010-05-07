@@ -116,7 +116,7 @@ $conf['popup-width'] = "300px";
 $conf['ui-theme'] = 'smoothness';
 
 # Language definitions to use.
-# valid options are en_US, de_DE, es_ES 
+# valid options are en_US, de_DE, es_ES, ru_RU, fr_FR 
 #
 $conf['lang'] = "en_US";
 #

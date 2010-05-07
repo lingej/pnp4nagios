@@ -4,6 +4,7 @@
   * Update: jQuery-ui Update to 1.8
   * Feature: New configure Option --with-base-url
   * Template: New template check_ntp_time.php (Mathias Kettner)
+  * Feature: New i18n files for fr_FR (Yannig Parre)
 
 **pnp-0.6.3 03/16/2010**
 
