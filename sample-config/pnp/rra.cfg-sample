@@ -1,4 +1,10 @@
 #
+# Define the default RRA Step in seconds
+# More Infos on
+# http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
+#
+STEP=60
+#
 # PNP default RRA config
 #
 # you will get 400kb of data per datasource

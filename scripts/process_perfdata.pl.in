@@ -736,7 +736,10 @@ sub parse_rra_config {
             next if /^#/;
             next if /^$/;
             s/#.*//;
-
+            if(/^RRA_STEP=(\d+)/i){
+                $conf{'RRA_STEP'} = $1;
+                next;
+            }
             chomp;
             push @rrd_create, "$_";
         }
