@@ -3,7 +3,7 @@
 # More Infos on
 # http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
 #
-STEP=60
+RRA_STEP=60
 #
 # PNP default RRA config
 #
