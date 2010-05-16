@@ -13,6 +13,7 @@ $lang = array
     'basket-box-header' => 'My basket',
     'timerange-box-header' => 'Time ranges',
     'service-box-header' => 'Services',
+    'special-templates-box-header' => 'Special Templates',
     'pages-box-header' => 'Pages',
     'nagios-summary-link-title' => 'Most recent alerts for this time range',
     'nagios-avail-link-title'   => 'Nagios availability report for this time range',

@@ -14,6 +14,12 @@ class Special_Controller extends System_Controller  {
         $this->template->graph = $this->add_view('graph');
         $this->tpl             = $this->input->get('tpl');
         $this->view            = $this->input->get('view');
+        $this->templates = $this->data->getSpecialTemplates();
+        if($this->tpl == ''){
+            if($this->templates)
+                $this->tpl = $this->templates[0];
+                url::redirect('special?tpl='.$this->tpl, 302);
+        }
     }
 
     public function index(){
@@ -22,13 +28,21 @@ class Special_Controller extends System_Controller  {
         $this->template->graph->graph_content->timerange_select = $this->add_view('timerange_select');
         $this->template->graph->header        = $this->add_view('header');
         $this->template->graph->search_box    = $this->add_view('search_box');
-        $this->template->graph->service_box   = $this->add_view('service_box');
-        $this->template->graph->status_box    = $this->add_view('status_box');
-        $this->template->graph->basket_box    = $this->add_view('basket_box');
+        $this->template->graph->service_box   = $this->add_view('special_templates_box');
+        #$this->template->graph->status_box    = $this->add_view('status_box');
+        #$this->template->graph->basket_box    = $this->add_view('basket_box');
         $this->template->graph->widget_menu   = $this->add_view('widget_menu');
         $this->template->graph->graph_content->widget_graph  = $this->add_view('widget_graph');
-        $this->template->graph->header->title        = "Special Template $this->tpl";
         #print Kohana::debug($services);
         $this->data->buildDataStruct('__special',$this->tpl,$this->view);
+        $this->template->graph->icon_box      = $this->add_view('icon_box');
+        $this->template->graph->icon_box->position = "graph";
+        $this->template->graph->logo_box      = $this->add_view('logo_box');
+        // Timerange Box Vars
+        $this->template->graph->timerange_box = $this->add_view('timerange_box');
+        $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
+        $this->template->graph->header->title        = $this->data->MACRO['TITLE'];
+        //print Kohana::debug($this->data);
     }
+
 }

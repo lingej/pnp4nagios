@@ -24,6 +24,30 @@ class Data_Model extends Model
         $this->config->read_config();
     }
 
+    /*
+    * Get All Special Templates
+    *
+    */
+    public function getSpecialTemplates(){
+        $conf = $this->config->conf;
+        $templates = array();
+        if (is_dir($conf['template_dir'].'/templates.special') ){
+            if ($dh = opendir($conf['template_dir'].'/templates.special')) {
+                while (($file = readdir($dh)) !== false) {
+                    if ($file == "." || $file == "..")
+                        continue;
+                    if (!preg_match("/(.*)\.php$/", $file, $template))
+                        continue;
+                    $templates[] = $template[1];
+                }
+            }
+        }
+        if(sizeof($templates > 0)){
+            return $templates;
+        }else{
+            return false;
+        }
+    }
 
     /*
     * 
@@ -265,7 +289,9 @@ class Data_Model extends Model
                 }else{
                      $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
                 }
-                $tmp_struct['DS']      = $this->DS[$i];
+                if($this->DS){
+                    $tmp_struct['DS']      = $this->DS[$i];
+                }
                 $tmp_struct['MACRO']   = $this->MACRO;
                 if(isset($this->XML->XML->VERSION)){
                     $tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
@@ -296,7 +322,9 @@ class Data_Model extends Model
                             $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
                     }
                     $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$v];
-                    $tmp_struct['DS']            = $this->DS[$i];
+                    if($this->DS){
+                        $tmp_struct['DS']            = $this->DS[$i];
+                    }
                     $tmp_struct['MACRO']         = $this->MACRO;
                     if(isset($this->XML->XML->VERSION)){
                         $tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
@@ -326,7 +354,9 @@ class Data_Model extends Model
                 }else{
                      $tmp_struct['ds_name']  = $this->DS[$i]['NAME'];
                 }
-                $tmp_struct['DS']            = $this->DS[$i];
+                if($this->DS){
+                    $tmp_struct['DS']            = $this->DS[$i];
+                }
                 $tmp_struct['MACRO']         = $this->MACRO;
                 if(isset($this->XML->XML->VERSION)){
                     $tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);

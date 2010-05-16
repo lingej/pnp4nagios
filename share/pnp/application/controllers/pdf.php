@@ -36,9 +36,11 @@ class Pdf_Controller extends System_Controller  {
 
         $this->host      = $this->input->get('host');
         $this->service   = $this->input->get('srv');
+        $this->tpl       = $this->input->get('tpl');
         $this->start     = $this->input->get('start');
         $this->end       = $this->input->get('end');
         $this->view      = "";
+        $this->type      = "normal";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
             $this->view = pnp::clean($_GET['view']);
@@ -63,6 +65,10 @@ class Pdf_Controller extends System_Controller  {
                 if($service['state'] == 'active')
                        $this->data->buildDataStruct($this->host,$service['name'],$this->view);
             }
+        // Special Templates
+        }elseif($this->tpl != ""){
+            $this->data->buildDataStruct('__special',$this->tpl,$this->view);
+            $this->type = 'special';
         }else{
             $this->host = $this->data->getFirstHost();
             if(isset($this->host)){
@@ -92,9 +98,16 @@ class Pdf_Controller extends System_Controller  {
                 $pdf->AddPage();
                 if($this->use_bg){$pdf->useTemplate($tplIdx);}
             }
-            if($data['LEVEL'] == 1){
+            if($data['LEVEL'] == 0 && $this->type == 'normal'){
                 $pdf->SetFont('Arial', '', 12);
                 $pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
+                $pdf->SetFont('Arial', '', 8);
+                $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+			}elseif($data['LEVEL'] == 0 && $this->type == 'special'){
+                $pdf->SetFont('Arial', '', 12);
+                $pdf->CELL(120, 10, $data['MACRO']['TITLE'], 0, 1);
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
                 $pdf->SetFont('Arial', '', 8);
