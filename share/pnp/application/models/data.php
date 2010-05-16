@@ -232,13 +232,21 @@ class Data_Model extends Model
         if($host === false && $service === false){
             return false;
         }
-
         $conf = $this->config->conf;
-        if( $this->readXML($host,$service) == FALSE ){
-            throw new Kohana_Exception('error.xml-not-found', "WARUM ist das FALSE?");
-            return false;
+
+        /*
+         * Special Templates without Host/Service
+         */
+        if($host == '__special' ){
+            // $service contains the Template name
+            $this->includeTemplate($service,'special');
+        }else{
+            if( $this->readXML($host,$service) == FALSE ){
+                throw new Kohana_Exception('error.xml-not-found', "Undefined error");
+                return false;
+            }
+            $this->includeTemplate($this->DS[0]['TEMPLATE']);
         }
-        $this->includeTemplate($this->DS[0]['TEMPLATE']);
         if(isset($this->TIMERANGE['type']) && $this->TIMERANGE['type'] == "start-end"){
             $view = intval($view);
             $i=0;
@@ -280,7 +288,7 @@ class Data_Model extends Model
                     $tmp_struct = array();
                     $tmp_struct['LEVEL']         = $i;
                     $tmp_struct['VIEW']          = $view_key;
-                        $tmp_struct['SOURCE']        = $key;
+                    $tmp_struct['SOURCE']        = $key;
                     $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                     if(array_key_exists('ds_name',$this->RRD) ){
                             $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
@@ -314,14 +322,14 @@ class Data_Model extends Model
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
                 if(array_key_exists('ds_name',$this->RRD) ){
-                     $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
+                     $tmp_struct['ds_name']  = $this->RRD['ds_name'][$key];
                 }else{
-                     $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
+                     $tmp_struct['ds_name']  = $this->DS[$i]['NAME'];
                 }
-                $tmp_struct['DS']      = $this->DS[$i];
-                   $tmp_struct['MACRO']         = $this->MACRO;
+                $tmp_struct['DS']            = $this->DS[$i];
+                $tmp_struct['MACRO']         = $this->MACRO;
                 if(isset($this->XML->XML->VERSION)){
-                       $tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
+                    $tmp_struct['VERSION']   = pnp::xml_version_check( (string) $this->XML->XML->VERSION);
                 }else{
                     $tmp_struct['VERSION']   = pnp::xml_version_check("0");
                 }
@@ -346,15 +354,23 @@ class Data_Model extends Model
     * 
     *
     */
-    private function includeTemplate($template=FALSE){
+    private function includeTemplate($template=FALSE,$type='normal'){
         if($template===FALSE){
             return FALSE;
         }
         $this->RRD = array();
-        $template_file = $this->findTemplate( $template );
-        $hostname      = $this->MACRO['HOSTNAME'];
-        $servicedesc   = $this->MACRO['SERVICEDESC'];
-        $TIMERANGE     = $this->TIMERANGE;
+        /*
+        * Normal PNP Templates
+        */
+        if($type == 'normal'){
+            $template_file = $this->findTemplate( $template );
+            $hostname      = $this->MACRO['HOSTNAME'];
+            $servicedesc   = $this->MACRO['SERVICEDESC'];
+            $TIMERANGE     = $this->TIMERANGE;
+        }elseif($type == 'special'){
+            $template_file = $this->findTemplate( $template, $type );
+            $TIMERANGE     = $this->TIMERANGE;
+        }
         $def     = FALSE;
         $opt     = FALSE;
         $ds_name = FALSE;
@@ -370,7 +386,9 @@ class Data_Model extends Model
         foreach($this->MACRO as $key=>$val ){
             ${"NAGIOS_".$key} = $val;
         }
-        $rrdfile = $RRDFILE[1];
+        if(isset($RRDFILE[1])){
+            $rrdfile = $RRDFILE[1];
+        }
         ob_start();
         include($template_file);
         ob_end_clean();
@@ -409,25 +427,41 @@ class Data_Model extends Model
     * 
     *
     */
-    public function findTemplate($template){
+    public function findTemplate($template,$type='normal'){
         $conf = $this->config->conf;
-        $r_template = $this->findRecursiveTemplate($template,"templates");
-        $r_template_dist = $this->findRecursiveTemplate($template,"templates.dist");
+        /*
+         * Normal Templates
+         */
+        if($type == 'normal'){
+            $r_template = $this->findRecursiveTemplate($template,"templates");
+            $r_template_dist = $this->findRecursiveTemplate($template,"templates.dist");
 
-        if (is_readable($conf['template_dir'].'/templates/' . $template . '.php')) {
-            $template_file = $conf['template_dir'].'/templates/' . $template . '.php';
-        }elseif (is_readable($conf['template_dir'].'/templates.dist/' . $template . '.php')) {
-            $template_file = $conf['template_dir'].'/templates.dist/' . $template . '.php';
-        }elseif($r_template != "" ){
-            $template_file = $conf['template_dir'].'/templates/'. $r_template . '.php';
-        }elseif($r_template_dist != "" ){
-            $template_file = $conf['template_dir'].'/templates.dist/'. $r_template_dist . '.php';
-        }elseif (is_readable($conf['template_dir'].'/templates/default.php')) {
-            $template_file = $conf['template_dir'].'/templates/default.php';
-        }else {
-            $template_file = $conf['template_dir'].'/templates.dist/default.php';
+            if (is_readable($conf['template_dir'].'/templates/' . $template . '.php')) {
+                $template_file = $conf['template_dir'].'/templates/' . $template . '.php';
+            }elseif (is_readable($conf['template_dir'].'/templates.dist/' . $template . '.php')) {
+                $template_file = $conf['template_dir'].'/templates.dist/' . $template . '.php';
+            }elseif($r_template != "" ){
+                $template_file = $conf['template_dir'].'/templates/'. $r_template . '.php';
+            }elseif($r_template_dist != "" ){
+                $template_file = $conf['template_dir'].'/templates.dist/'. $r_template_dist . '.php';
+            }elseif (is_readable($conf['template_dir'].'/templates/default.php')) {
+                $template_file = $conf['template_dir'].'/templates/default.php';
+            }else {
+                $template_file = $conf['template_dir'].'/templates.dist/default.php';
+            }
+            return $template_file;
         }
-    return $template_file;
+        /*
+         * Special Templates
+         */
+        if($type == 'special'){
+            if (is_readable($conf['template_dir'].'/templates.special/' . $template . '.php')) {
+                $template_file = $conf['template_dir'].'/templates.special/' . $template . '.php';
+            }else{
+                throw new Kohana_Exception("Special Template '$template' not found");
+            }
+            return $template_file;
+        }
     }
 
     /*
