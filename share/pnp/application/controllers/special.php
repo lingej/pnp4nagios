@@ -15,6 +15,7 @@ class Special_Controller extends System_Controller  {
         $this->tpl             = $this->input->get('tpl');
         $this->view            = $this->input->get('view');
         $this->templates = $this->data->getSpecialTemplates();
+        $this->data->GRAPH_TYPE = 'special';
         if($this->tpl == ''){
             if($this->templates)
                 $this->tpl = $this->templates[0];
