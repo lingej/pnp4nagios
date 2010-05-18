@@ -16,7 +16,7 @@ $ds_name[0] = "RTA Times";
 $opt[0]     = "--title \"Stacked RTA Times\"";
 $def[0]     = "";
 #
-# Iterate through the list of host
+# Iterate through the list of hosts
 foreach($hosts as $key=>$host){
     #
     # get the data for a given Host/Service
