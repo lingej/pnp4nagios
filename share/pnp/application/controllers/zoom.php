@@ -15,6 +15,7 @@ class Zoom_Controller extends System_Controller  {
         $this->template          = $this->add_view('zoom');
         $this->host              = $this->input->get('host');
         $this->service           = $this->input->get('srv');
+        $this->tpl               = $this->input->get('tpl');
     }
 
     public function index()
@@ -33,7 +34,19 @@ class Zoom_Controller extends System_Controller  {
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
-        if(isset($this->host) && isset($this->service)){
+        if(isset($this->tpl)){
+            if($this->start && $this->end ){
+                    $this->session->set("start", $this->start);
+                    $this->session->set("end", $this->end);
+            }
+            $this->template->tpl     = $this->tpl;
+            $this->template->view    = $this->view;
+            $this->template->source  = $this->source;
+            $this->template->end     = $this->end;
+            $this->template->start   = $this->start;
+            $this->template->graph_height = $this->config->conf['graph_height'];
+            $this->template->graph_width  = $this->config->conf['graph_width'];
+        }elseif(isset($this->host) && isset($this->service)){
             if($this->start && $this->end ){
                     $this->session->set("start", $this->start);
                     $this->session->set("end", $this->end);

@@ -18,12 +18,17 @@ foreach($this->data->STRUCT as $key=>$value){
 		echo "<strong>".$value['TIMERANGE']['title']. "</strong> " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "\n";
 		$count = 0;
 	}
-
     echo "<div class=\"ui-widget-header ui-corner-top\">";
     echo "<table border=0 width=100%><tr>\n";
     echo "<td width=100% align=left>";
 	echo Kohana::lang('common.datasource',$value['ds_name'])."</td>\n";
-	echo "<td align=right>";
+    echo "<td align=right>";
+    echo pnp::zoom_icon_special($this->tpl,
+         $value['TIMERANGE']['start'],
+         $value['TIMERANGE']['end'],
+         $value['SOURCE'],
+         $value['VIEW'])."</td>\n";
+
     echo "</tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";

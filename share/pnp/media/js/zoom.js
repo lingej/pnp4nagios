@@ -578,14 +578,14 @@ function onMouseUpEvent(e) {
 		var urlBase = cURLBase;
 		var host = gUrlObj.getUrlParameterValue("host");
 		var srv = gUrlObj.getUrlParameterValue("srv");
-		var special = gUrlObj.getUrlParameterValue("special");
+		var tpl = gUrlObj.getUrlParameterValue("tpl");
 		var graphWidth = gUrlObj.getUrlParameterValue("_width");
 		var graphHeight = gUrlObj.getUrlParameterValue("graph_height");
 		var view = gUrlObj.getUrlParameterValue("view");
 		var source = gUrlObj.getUrlParameterValue("source");
 		var titleFontSize = gUrlObj.getUrlParameterValue("title_font_size");
 
-		open(urlBase + "special=" + special +"&host=" + host + "&srv=" + srv + "&view=" + view + "&source=" + source + "&start=" + newGraphStart + "&end=" + newGraphEnd + "&graph_height=" + graphHeight + "&graph_width=" + graphWidth + "&title_font_size=" + titleFontSize, "_self");
+		open(urlBase + "tpl=" + tpl +"&host=" + host + "&srv=" + srv + "&view=" + view + "&source=" + source + "&start=" + newGraphStart + "&end=" + newGraphEnd + "&graph_height=" + graphHeight + "&graph_width=" + graphWidth + "&title_font_size=" + titleFontSize, "_self");
 	}
 
 	// zoom in action
@@ -638,14 +638,14 @@ function onMouseUpEvent(e) {
 				var urlBase = cURLBase;
 				var host = gUrlObj.getUrlParameterValue("host");
 				var srv = gUrlObj.getUrlParameterValue("srv");
-				var special = gUrlObj.getUrlParameterValue("special");
+				var tpl = gUrlObj.getUrlParameterValue("tpl");
 				var graphWidth = gUrlObj.getUrlParameterValue("graph_width");
 				var graphHeight = gUrlObj.getUrlParameterValue("graph_height");
 				var view = gUrlObj.getUrlParameterValue("view");
 				var source = gUrlObj.getUrlParameterValue("source");
 				var titleFontSize = gUrlObj.getUrlParameterValue("title_font_size");
 
-				open(urlBase + "&special=" + special + "&host=" + host + "&srv=" + srv + "&view=" + view + "&source=" + source + "&start=" + newGraphStart + "&end=" + newGraphEnd + "&graph_height=" + graphHeight + "&graph_width=" + graphWidth + "&title_font_size=" + titleFontSize, "_self");
+				open(urlBase + "&tpl=" + tpl + "&host=" + host + "&srv=" + srv + "&view=" + view + "&source=" + source + "&start=" + newGraphStart + "&end=" + newGraphEnd + "&graph_height=" + graphHeight + "&graph_width=" + graphWidth + "&title_font_size=" + titleFontSize, "_self");
 			}
 		}
 	}
