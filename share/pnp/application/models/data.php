@@ -98,7 +98,7 @@ class Data_Model extends Model
     * 
     *
     */
-    function getServices($hostname) {
+    function getRawServices($hostname) {
         $services = array ();
         $host     = array();
         $conf     = $this->config->conf;
@@ -107,51 +107,69 @@ class Data_Model extends Model
         if (is_dir($path)) {
             if ($dh = opendir($path)) {
                 while ( ($file = readdir($dh) ) !== false) {
-                    $NAGIOS_SERVICEDESC = "";
                     if ($file == "." || $file == "..")
                         continue;
+
                     if (!preg_match("/(.*)\.xml$/", $file, $servicedesc))
                         continue;
+
                     $fullpath = $path . "/" . $file;
                     $stat = stat("$fullpath");
                     $age = (time() - $stat['mtime']);
-                    if(!$this->readXML($hostname, $servicedesc[1], FALSE)){
-                        continue;
-                    }
-    
+                    
                     $state = "active";    
                     if ($age > $conf['max_age']) { # 6Stunden
                         $state = "inactive";
                     }
-        
-                    if($servicedesc[1] == "_HOST_"){
-                        $host[0]['name']             = "_HOST_";
-                        $host[0]['hostname']         = (string) $this->XML->NAGIOS_HOSTNAME;
-                        $host[0]['state']            = $state;
-                        $host[0]['servicedesc']      = "Host Perfdata";
-                        $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
-                    }else{
-                        $services[$i]['name']        = $servicedesc[1];
-                        // Sorting check_multi
-                         if( (string) $this->XML->NAGIOS_MULTI_PARENT == ""){
-                             $services[$i]['sort']        = strtoupper($servicedesc[1]);
-                        }else{
-                            $services[$i]['sort']       = strtoupper((string) $this->XML->NAGIOS_MULTI_PARENT);
-                            $services[$i]['sort']       .= (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
-                             $services[$i]['sort']       .= strtoupper($servicedesc[1]);
-                        }
-                        $services[$i]['state']       = $state;
-                        $services[$i]['hostname']    = (string) $this->XML->NAGIOS_DISP_HOSTNAME;
-                        $services[$i]['servicedesc'] = (string) $this->XML->NAGIOS_DISP_SERVICEDESC;
-                        $services[$i]['is_multi']    = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
-                    }
-                $i++;
+                    $services[$i]['state'] = $state;
+                    $services[$i]['name'] = $servicedesc[1]; 
+                    $i++;
                 }
-                closedir($dh);
             }
-        } else {
+        }
+        return $services;
+    }
+    /*
+    * 
+    *
+    */
+    function getServices($hostname) {
+        $services     = array ();
+        $host         = array();
+        $i            = 0;
+        $service_list = $this->getRawServices($hostname);
+        if(sizeof($service_list) == 0 ){ 
             throw new Kohana_Exception('error.perfdata-dir-for-host', $path, $hostname);
         }
+        foreach( $service_list as $s ){
+            if(!$this->readXML($hostname, $s['name'], FALSE)){
+                continue;
+            }
+    
+            if($s['name'] == "_HOST_"){
+                $host[0]['name']             = "_HOST_";
+                $host[0]['hostname']         = (string) $this->XML->NAGIOS_HOSTNAME;
+                $host[0]['state']            = $s['state'];
+                $host[0]['servicedesc']      = "Host Perfdata";
+                $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
+            }else{
+                $services[$i]['name']        = $s['name'];
+                // Sorting check_multi
+                if( (string) $this->XML->NAGIOS_MULTI_PARENT == ""){
+                    $services[$i]['sort']        = strtoupper($s['name']);
+                }else{
+                    $services[$i]['sort']        = strtoupper((string) $this->XML->NAGIOS_MULTI_PARENT);
+                    $services[$i]['sort']       .= (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
+                    $services[$i]['sort']       .= strtoupper($s['name']);
+                }
+                $services[$i]['state']       = $s['state'];
+                $services[$i]['hostname']    = (string) $this->XML->NAGIOS_DISP_HOSTNAME;
+                $services[$i]['servicedesc'] = (string) $this->XML->NAGIOS_DISP_SERVICEDESC;
+                $services[$i]['is_multi']    = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
+            }
+            $i++;
+        }
+        #print Kohana::debug($services);
         if( is_array($services) && sizeof($services) > 0){
             # Obtain a list of columns
             foreach ($services as $key => $row) {
@@ -160,10 +178,7 @@ class Data_Model extends Model
             # Sort the data with volume descending, edition ascending
             # Add $data as the last parameter, to sort by the common key
             array_multisort($sort, SORT_STRING, $services);
-        //}else{
-        //    throw new Kohana_Exception('error.host-perfdata-dir-empty', $path );
         }        
-        #print Kohana::debug($services);
         if(is_array($host) && sizeof($host) > 0 ){
             array_unshift($services, $host[0]);
         }
@@ -912,7 +927,47 @@ class Data_Model extends Model
     * 
     * Used in Special Templates to gather data
     */
-    public function tplGetServices ($hostregex=FALSE, $serviceregex = '//', $check_command=FALSE){
-    
+    public function tplGetServices ($hostregex=FALSE, $serviceregex = ''){
+        if($hostregex === FALSE){
+            throw new Kohana_Exception('error.tpl-no-hostregex');
+        }
+        $hostregex    = sprintf("/%s/",$hostregex);
+        $serviceregex = sprintf("/%s/",$serviceregex);
+        $hosts = $this->getHosts();
+        $new_hosts = array();
+        foreach( $hosts as $host){
+            if(preg_match($hostregex,$host['name'])){
+                $new_hosts[] = $host['name'];
+            }
+        }
+
+        if(sizeof($new_hosts) == 0){
+            throw new Kohana_Exception('error.tpl-no-hosts-found', $hostregex);
+        }
+
+        $i = 0;
+        $new_services = array();
+        foreach($new_hosts as $host){
+            $services = $this->getRawServices($host);
+            if(sizeof($services) == 0){
+                throw new Kohana_Exception('error.tpl-no-services-found', $serviceregex);
+            }
+            foreach($services as $service){
+                if(preg_match($serviceregex, $service['name'])){
+                    $new_services[$i]['hostname'] = $host;
+                    $new_services[$i]['host']     = $host;
+                    $new_services[$i]['service_description'] = $service['name'];
+                    $new_services[$i]['service']             = $service['name'];
+                    $i++;
+                }
+            }
+        }
+
+        if(sizeof($new_services) == 0){
+            throw new Kohana_Exception('error.tpl-no-services-found', $serviceregex);
+        }
+
+        return $new_services;
+            
     }
 } 
