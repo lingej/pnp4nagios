@@ -43,10 +43,10 @@ class Data_Model extends Model
                 }
             }
         }
-        if(sizeof($templates > 0)){
+        if(sizeof($templates) > 0){
             return $templates;
         }else{
-            return false;
+            return FALSE;
         }
     }
 
