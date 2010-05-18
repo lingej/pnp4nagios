@@ -37,7 +37,7 @@ class Special_Controller extends System_Controller  {
         #print Kohana::debug($services);
         $this->data->buildDataStruct('__special',$this->tpl,$this->view);
         $this->template->graph->icon_box      = $this->add_view('icon_box');
-        $this->template->graph->icon_box->position = "graph";
+        $this->template->graph->icon_box->position = "special";
         $this->template->graph->logo_box      = $this->add_view('logo_box');
         // Timerange Box Vars
         $this->template->graph->timerange_box = $this->add_view('timerange_box');
