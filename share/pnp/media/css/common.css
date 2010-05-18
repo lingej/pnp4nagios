@@ -26,8 +26,13 @@ a.active { color: #88cc00; }
 }
 
 
+img.icon {
+    width: 32px;
+    height: 32px;
+}
+
 div.right {
-	width: 200px;
+	width: 240px;
 	margin-top: 4px;
 	padding: 4px;
 }

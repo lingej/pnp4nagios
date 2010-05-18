@@ -32,4 +32,5 @@ $lang = array
 	'title-xml-link' => 'Extraction XML',
 	'title-statistics-link' => 'Voir statistiques internes sur PNP',
 	'title-calendar-link' => 'Définir une plage de temps',
+    'title-special-templates-link' => 'View Special Temlates',
 );

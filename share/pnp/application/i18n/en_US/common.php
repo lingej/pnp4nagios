@@ -31,4 +31,5 @@ $lang = array
 	'title-xml-link' => 'View XML',
 	'title-statistics-link' => 'View PNP internal statistics',
 	'title-calendar-link' => 'Define a custom time range',
+	'title-special-templates-link' => 'View Special Temlates',
 );

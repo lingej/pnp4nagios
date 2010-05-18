@@ -50,6 +50,14 @@ class Data_Model extends Model
         }
     }
 
+    public function getFirstSpecialTemplate(){
+        $templates = $this->getSpecialTemplates();
+        if($templates === FALSE){
+            return FALSE;
+        }else{
+            return $templates[0];
+        }
+    }
     /*
     * 
     *
