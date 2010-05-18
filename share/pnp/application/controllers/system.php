@@ -31,7 +31,7 @@ class System_Controller extends Template_Controller {
             $this->view = pnp::clean($_GET['view']);
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
-        if(Router::$controller != "image"){
+        if(Router::$controller != "image" && Router::$controller != "image_special"){
             $this->session = Session::instance();
 
             if($this->start && $this->end ){
