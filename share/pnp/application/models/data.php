@@ -251,43 +251,6 @@ class Data_Model extends Model
 
     /*
     * 
-    * Used in Special Templates to gather data
-    */
-    public function getData ($hostname, $servicedesc, $throw_exception=TRUE){
-        $conf        = $this->config->conf;
-        $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
-        $data = array();
-        if (file_exists($xmlfile)) {
-            $xml = simplexml_load_file($xmlfile);
-            // Throw excaption without a valid structure version
-            if(!isset($xml->XML->VERSION) && $throw_exception == TRUE){
-                throw new Kohana_Exception('error.xml-structure-without-version-tag',$xmlfile);
-            }
-            if(!isset($xml->XML->VERSION) && $throw_exception == FALSE){
-                return FALSE;
-            }
-            foreach ( $xml as $key=>$val ){
-                if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
-                    $key = $match[1];
-                    $data['MACRO'][$key] = (string) $val;
-                }
-            }
-            $i=0;
-            foreach ( $xml->DATASOURCE as $datasource ){
-                foreach ( $datasource  as $key=>$val){
-                    $data['DS'][$i][$key] = (string) $val;
-                }
-                $i++; 
-            }
-            return $data;
-        }else{
-            throw new Kohana_Exception('error.xml-not-found', $xmlfile);
-        }
-    }
-
-
-    /*
-    * 
     *
     */
     public function buildDataStruct ($host = FALSE, $service = FALSE, $view = "", $source = ""){
@@ -909,4 +872,47 @@ class Data_Model extends Model
         }
         return $csv;    
     }
-}
+
+    /*
+    * 
+    * Used in Special Templates to gather data
+    */
+    public function tplGetData ($hostname, $servicedesc, $throw_exception=TRUE){
+        $conf        = $this->config->conf;
+        $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
+        $data = array();
+        if (file_exists($xmlfile)) {
+            $xml = simplexml_load_file($xmlfile);
+            // Throw excaption without a valid structure version
+            if(!isset($xml->XML->VERSION) && $throw_exception == TRUE){
+                throw new Kohana_Exception('error.xml-structure-without-version-tag',$xmlfile);
+            }
+            if(!isset($xml->XML->VERSION) && $throw_exception == FALSE){
+                return FALSE;
+            }
+            foreach ( $xml as $key=>$val ){
+                if(preg_match('/^NAGIOS_(.*)$/', $key, $match)){
+                    $key = $match[1];
+                    $data['MACRO'][$key] = (string) $val;
+                }
+            }
+            $i=0;
+            foreach ( $xml->DATASOURCE as $datasource ){
+                foreach ( $datasource  as $key=>$val){
+                    $data['DS'][$i][$key] = (string) $val;
+                }
+                $i++; 
+            }
+            return $data;
+        }else{
+            throw new Kohana_Exception('error.xml-not-found', $xmlfile);
+        }
+    }
+    /*
+    * 
+    * Used in Special Templates to gather data
+    */
+    public function tplGetServices ($hostregex=FALSE, $serviceregex = '//', $check_command=FALSE){
+    
+    }
+} 

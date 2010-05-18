@@ -20,7 +20,7 @@ $def[0]     = "";
 foreach($hosts as $key=>$host){
     #
     # get the data for a given Host/Service
-    $a = $this->getData($host,$service);
+    $a = $this->tplGetData($host,$service);
     $def[0]    .= "DEF:$key=".$a['DS'][0]['RRDFILE'].":".$a['DS'][0]['DS'].":AVERAGE ";
     $def[0]    .= "AREA:$key".rrd::color($key).":\"".$a['MACRO']['HOSTNAME']." \\n\":STACK ";
 }
