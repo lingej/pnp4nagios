@@ -18,6 +18,7 @@ class Image_Controller extends System_Controller  {
         // Disable auto-rendering
         $this->auto_render = FALSE;
     
+        $tpl     = $this->input->get('tpl');
         $host    = $this->input->get('host');
         $service = $this->input->get('srv');
         $start   = $this->input->get('start');
@@ -33,10 +34,15 @@ class Image_Controller extends System_Controller  {
 
         $this->data->getTimeRange($start,$end,$view);
 
-        if(isset($host) && isset($service)){
+        if(isset($tpl)){
+            $tpl    = pnp::clean($tpl);
+            $this->data->buildDataStruct('__special',$tpl,$view,$source);
+            #print Kohana::debug($this->data->STRUCT);
+            $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);
+            $this->rrdtool->streamImage($image);
+        }elseif(isset($host) && isset($service)){
             $service = pnp::clean($service);
             $host    = pnp::clean($host);
-            #$services = $this->data->getServices($host);
             $this->data->buildDataStruct($host,$service,$view,$source);
             #print Kohana::debug($this->data->STRUCT);
             $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);

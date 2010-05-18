@@ -28,7 +28,7 @@ foreach($this->data->STRUCT as $key=>$value){
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
     echo "<a href=\"".url::base(TRUE)."special?tpl=" . $this->tpl . "\">\n";
-	echo "<img src=\"".url::base(TRUE)."image_special?tpl=" . $this->tpl . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\">\n";
+	echo "<img src=\"".url::base(TRUE)."image?tpl=" . $this->tpl . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\">\n";
     echo "</a></div><p>\n";
 }
 echo "</div>\n";
