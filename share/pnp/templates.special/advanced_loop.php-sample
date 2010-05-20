@@ -22,6 +22,11 @@ foreach($services as $key=>$val){
     #
     # get the data for a given Host/Service
     $a = $this->tplGetData($val['host'],$val['service']);
+    #
+    # Throw an exception to debug the content of $a
+    # Just to get Infos about the Array Structure
+    #
+    #throw new Kohana_exception(print_r($a,TRUE));
     $def[0]    .= "DEF:$key=".$a['DS'][0]['RRDFILE'].":".$a['DS'][0]['DS'].":AVERAGE ";
     $def[0]    .= "AREA:$key".rrd::color($key).":\"".$a['MACRO']['HOSTNAME']." \\n\":STACK ";
 }
