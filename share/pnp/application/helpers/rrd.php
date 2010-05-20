@@ -7,12 +7,22 @@ class rrd_Core {
     /*
     * 
     */
-    public static function color($num=0, $row='normal'){
-        $colors['normal'] = array('#003399','#00ccff','#00ff99','#009900','#ffff66','#ff6600','#cc3399','#6600cc','#660066');
-        if($colors[$row][$num] != ""){
-            return $colors[$row][$num];
+    public static function color($num=0 , $alpha='FF'){
+        $r = array('99','66','ff','CC','00','33');
+        $colors = array();
+        $num   = intval($num);
+        foreach($r as $ri){
+            foreach($r as $gi){
+                foreach($r as $bi){
+                    $colors[] = sprintf("#%s%s%s%s",$ri,$gi,$bi,$alpha);
+                }
+            }
+        }
+
+        if(array_key_exists($num, $colors)){
+            return $colors[$num];
         }else{
-            return $colors['normal'][0];
+            return $colors[0];
         }
     }
     public static function cut($string, $length=10, $align='left'){
@@ -24,4 +34,5 @@ class rrd_Core {
         $s = sprintf($format,$string);
         return $s;
     }
+
 } 
