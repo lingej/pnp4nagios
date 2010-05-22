@@ -135,6 +135,15 @@ class Data_Model extends Model
                 }
             }
         }
+        if( is_array($services) && sizeof($services) > 0){
+            # Obtain a list of columns
+            foreach ($services as $key => $row) {
+                $sort[$key]  = $row['name'];
+            }
+            # Sort the data with volume descending, edition ascending
+            # Add $data as the last parameter, to sort by the common key
+            array_multisort($sort, SORT_STRING, $services);
+        }        
         return $services;
     }
     /*
