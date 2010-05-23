@@ -20,4 +20,6 @@ $lang = array
     'page-config-dir' => 'Keine page-Konfigurationsdatei in "%s" gefunden <a href="http://docs.pnp4nagios.org/faq/17">FAQ online lesen</a>',
     'xport-host-service' => 'Xport-Controller benötigt "host"- und "srv"-URL-Parameter. <a href="http://docs.pnp4nagios.org/faq/18">FAQ online lesen</a>',
 	'mod-rewrite' => 'Apache Rewrite Module ist nicht aktiviert. <a href="http://docs.pnp4nagios.org/faq/19">Read FAQ online</a>',
+    'tpl-no-services-found' => 'TODO',
+    'tpl-no-hosts-found' => 'TODO',
 );

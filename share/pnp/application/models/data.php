@@ -946,7 +946,7 @@ class Data_Model extends Model
     */
     public function tplGetServices ($hostregex=FALSE, $serviceregex = ''){
         if($hostregex === FALSE){
-            throw new Kohana_Exception('error.tpl-no-hostregex');
+            return FALSE; 
         }
         $hostregex    = sprintf("/%s/",$hostregex);
         $serviceregex = sprintf("/%s/",$serviceregex);
