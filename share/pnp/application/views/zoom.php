@@ -17,7 +17,7 @@
   div#zoomBox, div#zoomSensitiveZone {display: none}
   #why {position: static; width: auto}
 </STYLE>
-<?php if($this->tpl){ ?>
+<?php if(!empty($tpl)){ ?>
 <img id="zoomGraphImage" src="image?source=<?php echo $source?>&tpl=<?php echo $tpl?>&view=<?php echo $view?>&start=<?php echo $start?>&end=<?php echo $end?>&graph_height=<?php echo $graph_height?>&graph_width=<?php echo $graph_width?>&title_font_size=10">
 <?php }else{ ?>
 <img id="zoomGraphImage" src="image?source=<?php echo $source?>&host=<?php echo $host?>&srv=<?php echo $srv?>&view=<?php echo $view?>&start=<?php echo $start?>&end=<?php echo $end?>&graph_height=<?php echo $graph_height?>&graph_width=<?php echo $graph_width?>&title_font_size=10">

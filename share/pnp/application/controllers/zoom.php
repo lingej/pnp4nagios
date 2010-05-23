@@ -34,7 +34,7 @@ class Zoom_Controller extends System_Controller  {
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
-        if(isset($this->tpl)){
+        if(isset($this->tpl) && $this->tpl != 'undefined' ){
             if($this->start && $this->end ){
                     $this->session->set("start", $this->start);
                     $this->session->set("end", $this->end);
