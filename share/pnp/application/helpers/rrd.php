@@ -25,6 +25,36 @@ class rrd_Core {
             return $colors[0];
         }
     }
+
+    public static function spline($vname, $start_color='#0000a0', $end_color='#f0f0f0', $steps=10){
+        $r1=hexdec(substr($start_color,1,2));
+        $g1=hexdec(substr($start_color,3,2));
+        $b1=hexdec(substr($start_color,5,2));
+
+        $r2=hexdec(substr($end_color,1,2));
+        $g2=hexdec(substr($end_color,3,2));
+        $b2=hexdec(substr($end_color,5,2));
+
+        $diff_r=$r2-$r1;
+        $diff_g=$g2-$g1;
+        $diff_b=$b2-$b1;
+        $spline =  "";
+        $spline_vname = "var".substr(sha1(time()),1,4);
+        
+        for ($i=$steps; $i>0; $i--){
+            $spline .=  sprintf("CDEF:%s%d=%s,100,/,%d,* ",$spline_vname,$i,$vname,round((100 / $steps) * $i) );
+        }    
+        for ($i=$steps; $i>0; $i--){
+            $factor=$i / $steps;
+            $r=round($r1 + $diff_r * $factor);
+            $g=round($g1 + $diff_g * $factor);
+            $b=round($b1 + $diff_b * $factor);
+            $spline .=  sprintf("AREA:%s%d#%02X%02X%02X ", $spline_vname,$i,$r,$g,$b);
+        }
+        return $spline;
+    }
+
+
     public static function cut($string, $length=10, $align='left'){
         if($align == 'left'){
             $format = "%-".$length."s";
