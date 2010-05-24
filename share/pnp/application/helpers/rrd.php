@@ -76,25 +76,59 @@ class rrd_Core {
         return $s;
     }
     
-    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
-        $line1 = "";
+    public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
+        $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("First Paramter 'vname' is missing");   
         }else{
-            $line1 .= "LINE1:".$vname;
+            $line .= "LINE".$type.":".$vname;
         }
         if($color === FALSE){
             throw new Kohana_exception("Second Paramter 'color' is missing");   
         }else{
-            $line1 .= $color;
+            $line .= $color;
         }
         if($text != FALSE){
-            $line1 .= ":\"$text\"";
+            $line .= ":\"$text\"";
         }
         if($cf != FALSE){
-            $line1 .= ":".$cf;
+            $line .= ":".$cf;
         }
-        $line1 .= " ";
-        return $line1;
+        $line .= " ";
+        return $line;
+    }
+
+    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
+        return rrd::line(1,$vname, $color,$text, $cf);
+    }
+
+    public static function line2($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
+        return rrd::line(2,$vname, $color,$text, $cf);
+    }
+
+    public static function line3($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
+        return rrd::line(3,$vname, $color,$text, $cf);
+    }
+
+    public static function gprint($vname=FALSE, $cf="AVERAGE", $text=FALSE){
+        $line = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }
+        
+        if(is_array($cf)){
+            foreach($cf as $key => $val){
+                $line .= sprintf("GPRINT:%s:%s:",$vname,$val);
+                if($key == sizeof($cf)-1){
+                    $line .= '"'.$text.' '.ucfirst(strtolower($val)).'\\l" ';
+                }else{
+                    $line .= '"'.$text.' '.ucfirst(strtolower($val)).'" ';
+                }
+            }
+        }else{
+            $line .= sprintf("GPRINT:%s:%s:",$vname,$cf);
+            $line .= '"'.$text.'" ';
+        }
+        return $line; 
     }
 } 
