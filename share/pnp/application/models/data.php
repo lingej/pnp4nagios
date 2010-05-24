@@ -155,9 +155,6 @@ class Data_Model extends Model
         $host         = array();
         $i            = 0;
         $service_list = $this->getRawServices($hostname);
-        if(sizeof($service_list) == 0 ){ 
-            throw new Kohana_Exception('error.perfdata-dir-for-host', $path, $hostname);
-        }
         foreach( $service_list as $s ){
             if(!$this->readXML($hostname, $s['name'], FALSE)){
                 continue;
