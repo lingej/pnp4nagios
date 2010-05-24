@@ -75,5 +75,26 @@ class rrd_Core {
         $s = sprintf($format,$string);
         return $s;
     }
-
+    
+    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
+        $line1 = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }else{
+            $line1 .= "LINE1:".$vname;
+        }
+        if($color === FALSE){
+            throw new Kohana_exception("Second Paramter 'color' is missing");   
+        }else{
+            $line1 .= $color;
+        }
+        if($text != FALSE){
+            $line1 .= ":\"$text\"";
+        }
+        if($cf != FALSE){
+            $line1 .= ":".$cf;
+        }
+        $line1 .= " ";
+        return $line1;
+    }
 } 
