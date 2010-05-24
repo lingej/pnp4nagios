@@ -26,14 +26,25 @@ class rrd_Core {
         }
     }
 
-    public static function spline($vname, $start_color='#0000a0', $end_color='#f0f0f0', $steps=10){
-        $r1=hexdec(substr($start_color,1,2));
-        $g1=hexdec(substr($start_color,3,2));
-        $b1=hexdec(substr($start_color,5,2));
+    public static function gradient($vname=FALSE, $start_color='#0000a0', $end_color='#f0f0f0', $steps=10){
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }
+        if(preg_match('/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i',$start_color,$matches)){
+            $r1=hexdec($matches[1]);
+            $g1=hexdec($matches[2]);
+            $b1=hexdec($matches[3]);
+        }else{
+            throw new Kohana_exception("Wrong Color Format: '".$start_color."'");   
+        }            
 
-        $r2=hexdec(substr($end_color,1,2));
-        $g2=hexdec(substr($end_color,3,2));
-        $b2=hexdec(substr($end_color,5,2));
+        if(preg_match('/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i',$end_color,$matches)){
+            $r2=hexdec($matches[1]);
+            $g2=hexdec($matches[2]);
+            $b2=hexdec($matches[3]);
+        }else{
+            throw new Kohana_exception("Wrong Color Format: '".$end_color."'");   
+        }            
 
         $diff_r=$r2-$r1;
         $diff_g=$g2-$g1;
