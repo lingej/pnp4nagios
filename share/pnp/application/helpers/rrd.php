@@ -66,7 +66,10 @@ class rrd_Core {
     }
 
 
-    public static function cut($string, $length=10, $align='left'){
+    public static function cut($string, $length=18, $align='left'){
+        if(strlen($string) > $length){
+            $string = substr($string,0,($length-3))."...";
+        }
         if($align == 'left'){
             $format = "%-".$length."s";
         }else{
