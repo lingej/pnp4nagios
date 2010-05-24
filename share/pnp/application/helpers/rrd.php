@@ -50,7 +50,7 @@ class rrd_Core {
         $diff_g=$g2-$g1;
         $diff_b=$b2-$b1;
         $spline =  "";
-        $spline_vname = "var".substr(sha1(time()),1,4);
+        $spline_vname = "var".substr(sha1(rand()),1,4);
         
         for ($i=$steps; $i>0; $i--){
             $spline .=  sprintf("CDEF:%s%d=%s,100,/,%d,* ",$spline_vname,$i,$vname,round((100 / $steps) * $i) );
