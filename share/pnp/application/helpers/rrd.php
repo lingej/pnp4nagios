@@ -134,4 +134,12 @@ class rrd_Core {
         }
         return $line; 
     }
+    public static function def($vname=FALSE, $file=FALSE, $cf="AVERAGE", $text=FALSE){
+        // TODO
+        $line = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }
+        return $line;
+    }
 } 
