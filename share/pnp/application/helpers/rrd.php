@@ -87,6 +87,28 @@ class rrd_Core {
         return $s;
     }
     
+    public static function area($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
+        $line = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }else{
+            $line .= "AREA:".$vname;
+        }
+        if($color === FALSE){
+            throw new Kohana_exception("Second Paramter 'color' is missing");   
+        }else{
+            $line .= $color;
+        }
+        if($text != FALSE){
+            $line .= ":\"$text\"";
+        }
+        if($stack != FALSE){
+            $line .= ":STACK";
+        }
+        $line .= " ";
+        return $line;
+    }
+    
     public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
         $line = "";
         if($vname === FALSE){
