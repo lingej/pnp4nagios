@@ -87,7 +87,7 @@ class rrd_Core {
         return $s;
     }
     
-    public static function area($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
+    public static function area($vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
         $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("First Paramter 'vname' is missing");   
@@ -99,9 +99,7 @@ class rrd_Core {
         }else{
             $line .= $color;
         }
-        if($text != FALSE){
-            $line .= ":\"$text\"";
-        }
+        $line .= ":\"$text\"";
         if($stack != FALSE){
             $line .= ":STACK";
         }
@@ -109,7 +107,7 @@ class rrd_Core {
         return $line;
     }
     
-    public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
+    public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
         $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("First Paramter 'vname' is missing");   
@@ -121,12 +119,7 @@ class rrd_Core {
         }else{
             $line .= $color;
         }
-        if($text != FALSE){
-            $line .= ":\"$text\"";
-        }
-        if($cf != FALSE){
-            $line .= ":".$cf;
-        }
+        $line .= ":\"$text\"";
         if($stack != FALSE){
             $line .= ":STACK";
         }
@@ -134,16 +127,16 @@ class rrd_Core {
         return $line;
     }
 
-    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
-        return rrd::line(1,$vname, $color,$text, $cf, $stack);
+    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
+        return rrd::line(1,$vname, $color,$text, $stack);
     }
 
-    public static function line2($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
-        return rrd::line(2,$vname, $color,$text, $cf, $stack);
+    public static function line2($vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
+        return rrd::line(2,$vname, $color,$text, $stack);
     }
 
-    public static function line3($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
-        return rrd::line(3,$vname, $color,$text, $cf, $stack);
+    public static function line3($vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
+        return rrd::line(3,$vname, $color,$text, $stack);
     }
 
     public static function gprint($vname=FALSE, $cf="AVERAGE", $text=FALSE){
