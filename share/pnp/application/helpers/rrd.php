@@ -144,7 +144,6 @@ class rrd_Core {
     }
 
     public static function def($vname=FALSE, $rrdfile=FALSE, $ds=FALSE, $cf="AVERAGE"){
-        // TODO
         $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("First Paramter 'vname' is missing");   
@@ -156,6 +155,29 @@ class rrd_Core {
             throw new Kohana_exception("Third Paramter 'ds' is missing");   
         }
         $line = sprintf("DEF:%s=%s:%s:%s ",$vname,$rrdfile,$ds,$cf);
+        return $line;
+    }
+
+    public static function cdef($vname=FALSE, $rpn=FALSE){
+        $line = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }
+        if($rrdfile === FALSE){
+            throw new Kohana_exception("Second Paramter 'rpn' is missing");   
+        }
+        $line = sprintf("CDEF:%s=%s ",$vname,$rpn);
+        return $line;
+
+    public static function vdef($vname=FALSE, $rpn=FALSE){
+        $line = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("First Paramter 'vname' is missing");   
+        }
+        if($rrdfile === FALSE){
+            throw new Kohana_exception("Second Paramter 'rpn' is missing");   
+        }
+        $line = sprintf("VDEF:%s=%s ",$vname,$rpn);
         return $line;
     }
 } 
