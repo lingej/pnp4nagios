@@ -87,7 +87,7 @@ class rrd_Core {
         return $s;
     }
     
-    public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
+    public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
         $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("First Paramter 'vname' is missing");   
@@ -105,20 +105,23 @@ class rrd_Core {
         if($cf != FALSE){
             $line .= ":".$cf;
         }
+        if($stack != FALSE){
+            $line .= ":STACK";
+        }
         $line .= " ";
         return $line;
     }
 
-    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
-        return rrd::line(1,$vname, $color,$text, $cf);
+    public static function line1($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
+        return rrd::line(1,$vname, $color,$text, $cf, $stack);
     }
 
-    public static function line2($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
-        return rrd::line(2,$vname, $color,$text, $cf);
+    public static function line2($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
+        return rrd::line(2,$vname, $color,$text, $cf, $stack);
     }
 
-    public static function line3($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE){
-        return rrd::line(3,$vname, $color,$text, $cf);
+    public static function line3($vname=FALSE, $color=FALSE, $text=FALSE, $cf=FALSE, $stack=FALSE){
+        return rrd::line(3,$vname, $color,$text, $cf, $stack);
     }
 
     public static function gprint($vname=FALSE, $cf="AVERAGE", $text=FALSE){
