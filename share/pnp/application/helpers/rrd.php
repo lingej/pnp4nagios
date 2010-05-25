@@ -142,12 +142,20 @@ class rrd_Core {
         }
         return $line; 
     }
-    public static function def($vname=FALSE, $file=FALSE, $cf="AVERAGE", $text=FALSE){
+
+    public static function def($vname=FALSE, $rrdfile=FALSE, $ds=FALSE, $cf="AVERAGE"){
         // TODO
         $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("First Paramter 'vname' is missing");   
         }
+        if($rrdfile === FALSE){
+            throw new Kohana_exception("Second Paramter 'rrdfile' is missing");   
+        }
+        if($rrdfile === FALSE){
+            throw new Kohana_exception("Third Paramter 'ds' is missing");   
+        }
+        $line = sprintf("DEF:%s=%s:%s:%s ",$vname,$rrdfile,$ds,$cf);
         return $line;
     }
 } 
