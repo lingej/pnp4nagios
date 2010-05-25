@@ -65,7 +65,7 @@ class rrd_Core {
             $g=round($g1 + $diff_g * $factor);
             $b=round($b1 + $diff_b * $factor);
             if (($i==$steps) and ($label!=FALSE)){
-                $spline .=  sprintf("AREA:%s%d#%02X%02X%02X:%s ", $spline_vname,$i,$r,$g,$b,$label);
+                $spline .=  sprintf("AREA:%s%d#%02X%02X%02X:\"%s\" ", $spline_vname,$i,$r,$g,$b,$label);
             }else{
                 $spline .=  sprintf("AREA:%s%d#%02X%02X%02X ", $spline_vname,$i,$r,$g,$b);
             }
