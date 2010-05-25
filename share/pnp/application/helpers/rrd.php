@@ -168,6 +168,7 @@ class rrd_Core {
         }
         $line = sprintf("CDEF:%s=%s ",$vname,$rpn);
         return $line;
+    }
 
     public static function vdef($vname=FALSE, $rpn=FALSE){
         $line = "";
