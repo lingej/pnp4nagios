@@ -32,14 +32,14 @@ class rrd_Core {
      */
     public static function gradient($vname=FALSE, $start_color='#0000a0', $end_color='#f0f0f0', $label=FALSE, $steps=10){
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }
         if(preg_match('/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i',$start_color,$matches)){
             $r1=hexdec($matches[1]);
             $g1=hexdec($matches[2]);
             $b1=hexdec($matches[3]);
         }else{
-            throw new Kohana_exception("Wrong Color Format: '".$start_color."'");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Wrong Color Format: '".$start_color."'");   
         }            
 
         if(preg_match('/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i',$end_color,$matches)){
@@ -47,7 +47,7 @@ class rrd_Core {
             $g2=hexdec($matches[2]);
             $b2=hexdec($matches[3]);
         }else{
-            throw new Kohana_exception("Wrong Color Format: '".$end_color."'");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Wrong Color Format: '".$end_color."'");   
         }            
 
         $diff_r=$r2-$r1;
@@ -90,12 +90,12 @@ class rrd_Core {
     public static function area($vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
         $line = "";
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }else{
             $line .= "AREA:".$vname;
         }
         if($color === FALSE){
-            throw new Kohana_exception("Second Paramter 'color' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'color' is missing");   
         }else{
             $line .= $color;
         }
@@ -110,12 +110,12 @@ class rrd_Core {
     public static function line($type=1,$vname=FALSE, $color=FALSE, $text=FALSE, $stack=FALSE){
         $line = "";
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }else{
             $line .= "LINE".$type.":".$vname;
         }
         if($color === FALSE){
-            throw new Kohana_exception("Second Paramter 'color' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'color' is missing");   
         }else{
             $line .= $color;
         }
@@ -142,7 +142,7 @@ class rrd_Core {
     public static function gprint($vname=FALSE, $cf="AVERAGE", $text=FALSE){
         $line = "";
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }
         
         if(is_array($cf)){
@@ -164,13 +164,13 @@ class rrd_Core {
     public static function def($vname=FALSE, $rrdfile=FALSE, $ds=FALSE, $cf="AVERAGE"){
         $line = "";
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }
         if($rrdfile === FALSE){
-            throw new Kohana_exception("Second Paramter 'rrdfile' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'rrdfile' is missing");   
         }
         if($rrdfile === FALSE){
-            throw new Kohana_exception("Third Paramter 'ds' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Third Paramter 'ds' is missing");   
         }
         $line = sprintf("DEF:%s=%s:%s:%s ",$vname,$rrdfile,$ds,$cf);
         return $line;
@@ -179,10 +179,10 @@ class rrd_Core {
     public static function cdef($vname=FALSE, $rpn=FALSE){
         $line = "";
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }
         if($rpn === FALSE){
-            throw new Kohana_exception("Second Paramter 'rpn' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'rpn' is missing");   
         }
         $line = sprintf("CDEF:%s=%s ",$vname,$rpn);
         return $line;
@@ -191,10 +191,10 @@ class rrd_Core {
     public static function vdef($vname=FALSE, $rpn=FALSE){
         $line = "";
         if($vname === FALSE){
-            throw new Kohana_exception("First Paramter 'vname' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");   
         }
         if($rrdfile === FALSE){
-            throw new Kohana_exception("Second Paramter 'rpn' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'rpn' is missing");   
         }
         $line = sprintf("VDEF:%s=%s ",$vname,$rpn);
         return $line;
@@ -203,10 +203,10 @@ class rrd_Core {
     public static function hrule($value=FALSE, $color=FALSE, $text=FALSE){
         $line = "";
         if($value === FALSE){
-            throw new Kohana_exception("First Paramter 'value' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ ."() First Paramter 'value' is missing");   
         }
         if($color === FALSE){
-            throw new Kohana_exception("Second Paramter 'color' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'color' is missing");   
         }
         $line = sprintf("HRULE:%s%s:\"%s\" ",$value,$color,$text);
         return $line;
@@ -219,10 +219,10 @@ class rrd_Core {
 
     public static function tick($vname=FALSE, $color=FALSE, $fraction=FALSE, $label=FALSE){
         if($value === FALSE){
-            throw new Kohana_exception("First Paramter 'value' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'value' is missing");   
         }
         if($color === FALSE){
-            throw new Kohana_exception("Second Paramter 'color' is missing");   
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'color' is missing");   
         }
         $line = sprintf("TICK:%s%s",$vname,$color);
         if($fraction != FALSE)
