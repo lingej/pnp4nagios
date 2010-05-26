@@ -49,16 +49,16 @@ foreach ($this->DS as $KEY=>$VAL) {
 	$opt[$KEY] = '--vertical-label "' . $vlabel . '" --title "' . $this->MACRO['DISP_HOSTNAME'] . ' / ' . $this->MACRO['DISP_SERVICEDESC'] . '"' . $upper . $lower;
 	$ds_name[$KEY] = $VAL['LABEL'];
 	$def[$KEY]  = rrd::def     ("var1", $VAL['RRDFILE'], $VAL['DS'], "AVERAGE");
-	$def[$KEY] .= rrd::gradient("var1", "FFFFFF", "0000FF", rrd::cut($VAL['NAME'],16) , 20);
+	$def[$KEY] .= rrd::gradient("var1", "FFFFFF", "0000FF", rrd::cut($VAL['NAME'],16), 20);
 	$def[$KEY] .= rrd::line1   ("var1", $_LINE );
-	$def[$KEY] .= rrd::gprint  ("var1", array("LAST","MAX","AVERAGE"), "%3.4lf ".$VAL['UNIT']);
+	$def[$KEY] .= rrd::gprint  ("var1", array("LAST","MAX","AVERAGE"), "%3.4lf %S".$VAL['UNIT']);
 	if ($warning != "") {
-		$def[$KEY] .= "HRULE:" . $warning . $_WARNRULE . ':"Warning  ' . $warning . '\n" ';
+		$def[$KEY] .= rrd::hrule($warning, $_WARNRULE, "Warning  $warning \\n");
 	}
 	if ($critical != "") {
-		$def[$KEY] .= "HRULE:" . $critical . $_CRITRULE . ':"Critical ' . $critical . '\n" ';
+		$def[$KEY] .= rrd::hrule($critical, $_CRITRULE, "Critical $critical \\n");
 	}
-	$def[$KEY] .= 'COMMENT:"Default Template\r" ';
-	$def[$KEY] .= 'COMMENT:"Check Command ' . $VAL['TEMPLATE'] . '\r" ';
+	$def[$KEY] .= rrd::comment("Default Template\\r");
+	$def[$KEY] .= rrd::comment("Command " . $VAL['TEMPLATE'] . "\\r");
 }
 ?>

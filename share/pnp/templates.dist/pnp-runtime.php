@@ -14,10 +14,10 @@ $ds_name[1] = "Runtime";
 $def[1] =  rrd::def("var1", $RRDFILE[1], $DS[1], "AVERAGE") ;
 $def[1] .= rrd::cdef("t_var1","var1,14400,TREND");
 if ($WARN[1] != "") {
-	$def[1] .= "HRULE:$WARN[1]#FFFF00 ";
+	$def[1] .= rrd::hrule($WARN[1], "#FFFF00");
 }
 if ($CRIT[1] != "") {
-	$def[1] .= "HRULE:$CRIT[1]#FF0000 ";
+	$def[1] .= rrd::hrule($CRIT[1], "#FF0000");
 }
 $def[1] .= rrd::gradient("var1", "ffffff", "#33cccc", rrd::cut("Runtime",10));
 $def[1] .= rrd::line1("var1","#339999");

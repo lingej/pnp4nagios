@@ -199,4 +199,21 @@ class rrd_Core {
         $line = sprintf("VDEF:%s=%s ",$vname,$rpn);
         return $line;
     }
+
+    public static function hrule($value=FALSE, $color=FALSE, $text=FALSE){
+        $line = "";
+        if($value === FALSE){
+            throw new Kohana_exception("First Paramter 'value' is missing");   
+        }
+        if($color === FALSE){
+            throw new Kohana_exception("Second Paramter 'color' is missing");   
+        }
+        $line = sprintf("HRULE:%s%s:\"%s\" ",$value,$color,$text);
+        return $line;
+    }
+    
+    public static function comment($text=FALSE){
+        $line = sprintf("COMMENT:\"%s\" ", $text);
+        return $line;
+    }
 } 
