@@ -216,4 +216,22 @@ class rrd_Core {
         $line = sprintf("COMMENT:\"%s\" ", $text);
         return $line;
     }
+
+    public static function tick($vname=FALSE, $color=FALSE, $fraction=FALSE, $label=FALSE){
+        if($value === FALSE){
+            throw new Kohana_exception("First Paramter 'value' is missing");   
+        }
+        if($color === FALSE){
+            throw new Kohana_exception("Second Paramter 'color' is missing");   
+        }
+        $line = sprintf("TICK:%s%s",$vname,$color);
+        if($fraction != FALSE)
+            $line .= ":$fraction";
+
+        if($label != FALSE)
+            $line .= ":$label";
+        
+        $line .= " ";
+        return $line;
+    }
 } 
