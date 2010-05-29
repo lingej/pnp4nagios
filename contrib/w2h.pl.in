@@ -86,7 +86,7 @@ foreach my $lng (keys %lang) {
 		conv ($pg[$page],$lng); # unless (-f "$pg[$page].html");
 	}
 	for my $page (0..$#pg) {
-#		unlink $pg[$page];
+		unlink $pg[$page];
 	}
 	chdir ("..");
 }
