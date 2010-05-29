@@ -218,7 +218,7 @@ class rrd_Core {
     }
 
     public static function tick($vname=FALSE, $color=FALSE, $fraction=FALSE, $label=FALSE){
-        if($value === FALSE){
+        if($vname === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'value' is missing");   
         }
         if($color === FALSE){
@@ -234,4 +234,92 @@ class rrd_Core {
         $line .= " ";
         return $line;
     }
+
+
+	public static function alerter($vname=FALSE, \
+									$label=FALSE, \
+									$warning=FALSE, \
+									$critical=FALSE, \
+									$unit, \
+									$color_green = '#00ff00', \
+									$color_btw   = '#ffff00', \
+									$color_red   = '#ff0000', \
+									$opacity     = 'ff', \
+									$line_col    = '#ffffff') {
+	
+		if($vname === FALSE){
+			throw new Kohana_exception("First Paramter 'vname' is missing");
+		}
+		if($label === FALSE){
+			throw new Kohana_exception("Second Paramter 'label' is missing");
+		}
+		if($warning === FALSE){
+			throw new Kohana_exception("Third Paramter 'warning' is missing");
+		}
+		if($critical === FALSE){
+			throw new Kohana_exception("Fourth Paramter 'critical' is missing");
+		}
+		$line = "";
+		$line .= "CDEF:green=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
+		$line .= "CDEF:btw=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+		$line .= "CDEF:blue=btw,".$warning.",GT,btw,UNKN,IF ";
+		$line .= "CDEF:red=".$vname.",".$critical.",GT,".$vname.",UNKN,IF ";
+		$line .= rrd::area("green", $color_green.$opacity, $label);
+		$line .= rrd::area("blue", $color_btw.$opacity);
+		$line .= rrd::area("red", $color_red.$opacity);
+		$line .= rrd::line1($vname,$line_col,$label);
+	
+	    return $line;
+    }
+
+	public static function ticker($vname=FALSE, \
+									$label=FALSE, \
+									$warning=FALSE, \
+									$critical=FALSE, \
+									$unit, \
+									$color_green = '#00ff00', \
+									$color_btw   = '#ffff00', \
+									$color_red   = '#ff0000', \
+									$opacity     = '55', \
+									$line_col    = '#000000', \
+									$fraction    = 1.0){
+
+		if($vname === FALSE){
+			throw new Kohana_exception("First Paramter 'vname' is missing");
+		}
+		if($label === FALSE){
+			throw new Kohana_exception("Second Paramter 'label' is missing");
+		}
+		if($warning === FALSE){
+			throw new Kohana_exception("Third Paramter 'warning' is missing");
+		}
+		if($critical === FALSE){
+			throw new Kohana_exception("Fourth Paramter 'critical' is missing");
+		}
+		$line = "";
+		$line .= "CDEF:green=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
+		$line .= "CDEF:btw=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+		$line .= "CDEF:blue=btw,".$warning.",GT,btw,UNKN,IF ";
+		$line .= "CDEF:red=".$vname.",".$critical.",GT,".$vname.",UNKN,IF ";
+		$line .= rrd::tick("green", $color_green.$opacity, $fraction);
+		$line .= rrd::tick("blue", $color_btw.$opacity, $fraction);
+		$line .= rrd::tick("red", $color_red.$opacity, $fraction);
+		$line .= rrd::line1($vname,$line_col,$label);
+	
+	    return $line;
+    }
+
+	public static function darkteint(){
+		$line = '';
+		$line .= '--color=BACK#000000 ';
+		$line .= '--color=FONT#F7F7F7 ';
+		$line .= '--color=SHADEA#ffffff ';
+		$line .= '--color=SHADEB#ffffff ';
+		$line .= '--color=CANVAS#000000 ';
+		$line .= '--color=GRID#00991A ';
+		$line .= '--color=MGRID#00991A ';
+		$line .= '--color=ARROW#00FF00 ';
+
+		return $line;
+	}
 } 
