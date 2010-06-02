@@ -112,7 +112,7 @@ $conf['popup-width'] = "300px";
 #
 # jQuery UI Theme
 # http://jqueryui.com/themeroller/
-# Possible values are: lightness, smoothness, redmond
+# Possible values are: lightness, smoothness, redmond, multisite
 $conf['ui-theme'] = 'smoothness';
 
 # Language definitions to use.
