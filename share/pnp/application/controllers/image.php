@@ -39,7 +39,11 @@ class Image_Controller extends System_Controller  {
             #$services = $this->data->getServices($host);
             $this->data->buildDataStruct($host,$service,$view,$source);
             #print Kohana::debug($this->data->STRUCT);
-            $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);
+            if(sizeof($this->data->STRUCT) > 0){
+                $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);
+            }else{
+                $image = FALSE;
+            }
             $this->rrdtool->streamImage($image); 
         }else{
             print "ERROR";
