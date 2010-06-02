@@ -139,6 +139,14 @@ class Rrdtool_Model extends Model
     }
 
     public function streamImage($data = FALSE){
+        if ( $data === FALSE ){
+            header("Content-type: image/png");
+            echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
+                /wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kCCAoDKSKZ0rEAAAAZdEVYdENv
+                bW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAADUlEQVQI12NgYGBgAAAABQABXvMqOgAAAABJ
+                RU5ErkJggg==');
+            return;       
+        }
         if (preg_match('/^ERROR/', $data)) {
             $data .= $this->format_rrd_debug( $this->config->conf['rrdtool'] . $this->RRD_CMD) ;
             // Set font size
