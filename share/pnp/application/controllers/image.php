@@ -23,7 +23,7 @@ class Image_Controller extends System_Controller  {
         $service = $this->input->get('srv');
         $start   = $this->input->get('start');
         $end     = $this->input->get('end');
-        $view    = 0; //fake value
+        $view    = $this->config->conf['overview-range']; //default value
         $source  = "";
 
         if($this->input->get('view') != "" )
