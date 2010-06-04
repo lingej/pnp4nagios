@@ -236,16 +236,7 @@ class rrd_Core {
     }
 
 
-	public static function alerter($vname=FALSE, \
-									$label=FALSE, \
-									$warning=FALSE, \
-									$critical=FALSE, \
-									$unit, \
-									$color_green = '#00ff00', \
-									$color_btw   = '#ffff00', \
-									$color_red   = '#ff0000', \
-									$opacity     = 'ff', \
-									$line_col    = '#ffffff') {
+	public static function alerter($vname=FALSE, $label=FALSE, $warning=FALSE, $critical=FALSE, $opacity = 'ff', $unit, $color_green = '#00ff00', $color_btw   = '#ffff00', $color_red   = '#ff0000', $line_col = '#ffffff') {
 	
 		if($vname === FALSE){
 			throw new Kohana_exception("First Paramter 'vname' is missing");
@@ -272,17 +263,7 @@ class rrd_Core {
 	    return $line;
     }
 
-	public static function ticker($vname=FALSE, \
-									$label=FALSE, \
-									$warning=FALSE, \
-									$critical=FALSE, \
-									$unit, \
-									$color_green = '#00ff00', \
-									$color_btw   = '#ffff00', \
-									$color_red   = '#ff0000', \
-									$opacity     = '55', \
-									$line_col    = '#000000', \
-									$fraction    = 1.0){
+	public static function ticker($vname=FALSE, $label=FALSE, $warning=FALSE, $critical=FALSE, $fraction = 1.0, $opacity = '55', $color_green = '#00ff00', $color_btw = '#ffff00', $color_red = '#ff0000', $line_col = '#000000') {
 
 		if($vname === FALSE){
 			throw new Kohana_exception("First Paramter 'vname' is missing");
