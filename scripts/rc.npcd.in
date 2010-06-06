@@ -24,23 +24,26 @@ status_npcd ()
         return 0
     else
         if test -f $NpcdLockDir/$NpcdLockFile; then
-                   return 2
+            return 2
         else
             return 1
         fi
-        fi
+    fi
 
-        return 1
+    return 1
 }
 
 printstatus_npcd()
 {
     if status_npcd $1 $2; then
         echo "$servicename (pid $NpcdPID) is running..."
+        exit 0
     elif test $? == 2; then
         echo "$servicename is not running but subsystem locked"
+        exit 2
     else
         echo "$servicename is not running"
+        exit 1
     fi
 }
 
@@ -150,8 +153,8 @@ case "$1" in
         ;;
 
         status)
-        printstatus_npcd
-                ;;
+            printstatus_npcd
+        ;;
 
     restart)
         $0 stop
