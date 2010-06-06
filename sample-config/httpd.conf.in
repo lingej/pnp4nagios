@@ -11,7 +11,8 @@ Alias @BASE_URL@ "@datarootdir@"
    	#
    	AuthName "Nagios Access"
    	AuthType Basic
-   	AuthUserFile /usr/local/nagios/etc/htpasswd.users
+   	#AuthUserFile /usr/local/nagios/etc/htpasswd.users
+   	AuthUserFile /usr/local/icinga/etc/htpasswd.users
    	Require valid-user
 	<IfModule mod_rewrite.c>
 		# Turn on URL rewriting

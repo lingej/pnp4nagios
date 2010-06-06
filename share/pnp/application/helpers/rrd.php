@@ -239,16 +239,16 @@ class rrd_Core {
 	public static function alerter($vname=FALSE, $label=FALSE, $warning=FALSE, $critical=FALSE, $opacity = 'ff', $unit, $color_green = '#00ff00', $color_btw   = '#ffff00', $color_red   = '#ff0000', $line_col = '#ffffff') {
 	
 		if($vname === FALSE){
-			throw new Kohana_exception("First Paramter 'vname' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");
 		}
 		if($label === FALSE){
-			throw new Kohana_exception("Second Paramter 'label' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'label' is missing");
 		}
 		if($warning === FALSE){
-			throw new Kohana_exception("Third Paramter 'warning' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() Third Paramter 'warning' is missing");
 		}
 		if($critical === FALSE){
-			throw new Kohana_exception("Fourth Paramter 'critical' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() Fourth Paramter 'critical' is missing");
 		}
 		$line = "";
 		$line .= "CDEF:green=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
@@ -263,19 +263,16 @@ class rrd_Core {
 	    return $line;
     }
 
-	public static function ticker($vname=FALSE, $label=FALSE, $warning=FALSE, $critical=FALSE, $fraction = 1.0, $opacity = '55', $color_green = '#00ff00', $color_btw = '#ffff00', $color_red = '#ff0000', $line_col = '#000000') {
+	public static function ticker($vname=FALSE, $warning=FALSE, $critical=FALSE, $fraction = -0.05, $opacity = 'ff', $color_green = '#00ff00', $color_btw = '#ffff00', $color_red = '#ff0000') {
 
 		if($vname === FALSE){
-			throw new Kohana_exception("First Paramter 'vname' is missing");
-		}
-		if($label === FALSE){
-			throw new Kohana_exception("Second Paramter 'label' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Paramter 'vname' is missing");
 		}
 		if($warning === FALSE){
-			throw new Kohana_exception("Third Paramter 'warning' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Paramter 'warning' is missing");
 		}
 		if($critical === FALSE){
-			throw new Kohana_exception("Fourth Paramter 'critical' is missing");
+			throw new Kohana_exception("rrd::". __FUNCTION__ . "() Third Paramter 'critical' is missing");
 		}
 		$line = "";
 		$line .= "CDEF:green=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
@@ -285,7 +282,6 @@ class rrd_Core {
 		$line .= rrd::tick("green", $color_green.$opacity, $fraction);
 		$line .= rrd::tick("blue", $color_btw.$opacity, $fraction);
 		$line .= rrd::tick("red", $color_red.$opacity, $fraction);
-		$line .= rrd::line1($vname,$line_col,$label);
 	
 	    return $line;
     }
