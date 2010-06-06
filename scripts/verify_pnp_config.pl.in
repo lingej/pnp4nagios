@@ -28,13 +28,14 @@
 # 2009.12.27:        bugfix (mod-php detection)
 # 2010.03.12:        bugfix user/group-directive
 # 2010.03.19: 0.1.19 bugfix: stats_dir
+# 2010.06.06: 0.1.20 bugfix: base_url
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.19";
+my $version = "0.1.20";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -1137,6 +1138,7 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'refresh\']'} = 'n;^\d+$;';
     $CPcfg{'$conf[\'max_age\']'} = 'n;^\(?[\d\* ]+\)?$';   
     $CPcfg{'$conf[\'temp\']'} = 'd;;';
+    $CPcfg{'$conf[\'base_url\']'} = "S;.+;";
     $CPcfg{'$conf[\'nagios_base\']'} = "S;.+;";
     $CPcfg{'$conf[\'allowed_for_service_links\']'} = 'S;[\S,]+;';
     $CPcfg{'$conf[\'allowed_for_host_search\']'} = 'S;[\S,]+;';

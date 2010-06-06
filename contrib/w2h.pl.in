@@ -85,6 +85,7 @@ foreach my $lng (keys %lang) {
 		}
 		conv ($pg[$page],$lng); # unless (-f "$pg[$page].html");
 	}
+	push @pg, "start";
 	for my $page (0..$#pg) {
 		unlink $pg[$page];
 	}
@@ -139,6 +140,7 @@ sub conv {
 		s/“/"/g;
 		s/”/"/g;
 		s/„/"/g;
+		s/→/&rarr;/g;
 		s/…/&hellip;/g;
 
 		# convert links 
@@ -153,7 +155,7 @@ sub conv {
 				($img) =~ s/.*\///;
 				chdir "../_media/";
 				$res = `wget $base/$pic` unless (-f $img);
-				chdir "../$lng";
+				chdir "../$lang{$lng}";
 				$_ = "<a href=\"../_media/$img\"><img src=\"../_media/$img\" /></a>";
 			}
 		}
