@@ -7,7 +7,7 @@
 <meta http-equiv="refresh" content="<?php echo $this->config->conf['refresh'] ?>"; URL="<?php echo $_SERVER['REQUEST_URI'] ?>">
 <title><?php if (isset($this->title)) echo html::specialchars($this->title) ?></title>
 <?php echo html::stylesheet('media/css/common.css') ?>
-<?php echo html::stylesheet('media/css/ui-'.$this->config->conf['ui-theme'].'/jquery-ui.css') ?>
+<?php echo html::stylesheet('media/css/ui-'.$this->theme.'/jquery-ui.css') ?>
 <?php echo html::link('media/images/favicon.ico','icon','image/ico') ?>
 <?php echo html::script('media/js/jquery-min.js')?>
 <?php echo html::script('media/js/jquery-ui.min.js')?>

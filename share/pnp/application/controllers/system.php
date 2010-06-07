@@ -23,9 +23,11 @@ class System_Controller extends Template_Controller {
         $this->check_mod_rewrite();
 
 
-        $this->start   = $this->input->get('start',FALSE);
-        $this->end     = $this->input->get('end',FALSE);
-        $this->view    = "";
+        $this->start      = $this->input->get('start',FALSE);
+        $this->end        = $this->input->get('end',FALSE);
+        $this->theme   = $this->input->get('theme',FALSE);
+        $this->view       = "";
+        $this->controller = Router::$controller;
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
             $this->view = pnp::clean($_GET['view']);
@@ -33,6 +35,17 @@ class System_Controller extends Template_Controller {
         $this->data->getTimeRange($this->start,$this->end,$this->view);
         if(Router::$controller != "image" && Router::$controller != "image_special"){
             $this->session = Session::instance();
+
+            if($this->theme){
+                $this->session->set('theme', $this->theme );
+            }
+            # New session
+            if($this->session->get("theme","new") == "new"){
+                $this->theme = $this->config->conf['theme'];
+                $this->session->set("theme", $this->theme);
+            }else{
+                $this->theme = $this->session->get('theme');
+            }
 
             if($this->start && $this->end ){
                 if($this->session->get('timerange-reset',0) == 0){
