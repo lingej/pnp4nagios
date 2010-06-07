@@ -279,7 +279,8 @@ class rrd_Core {
 		$line .= "CDEF:btw=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
 		$line .= "CDEF:blue=btw,".$warning.",GT,btw,UNKN,IF ";
 		$line .= "CDEF:red=".$vname.",".$critical.",GT,".$vname.",UNKN,IF ";
-		$line .= rrd::tick("green", $color_green.$opacity, $fraction);
+		$line .= "CDEF:green2=green,0,EQ,0.000001,green,IF ";
+		$line .= rrd::tick("green2", $color_green.$opacity, $fraction);
 		$line .= rrd::tick("blue", $color_btw.$opacity, $fraction);
 		$line .= rrd::tick("red", $color_red.$opacity, $fraction);
 	
