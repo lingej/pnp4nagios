@@ -25,7 +25,7 @@ class System_Controller extends Template_Controller {
 
         $this->start      = $this->input->get('start',FALSE);
         $this->end        = $this->input->get('end',FALSE);
-        $this->theme   = $this->input->get('theme',FALSE);
+        $this->theme      = $this->input->get('theme',FALSE);
         $this->view       = "";
         $this->controller = Router::$controller;
 
@@ -41,7 +41,7 @@ class System_Controller extends Template_Controller {
             }
             # New session
             if($this->session->get("theme","new") == "new"){
-                $this->theme = $this->config->conf['theme'];
+                $this->theme = $this->config->conf['ui-theme'];
                 $this->session->set("theme", $this->theme);
             }else{
                 $this->theme = $this->session->get('theme');
