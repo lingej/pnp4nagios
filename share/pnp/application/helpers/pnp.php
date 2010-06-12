@@ -57,6 +57,20 @@ class pnp_Core {
         print "<span id=\"basket_action_add\"><a title=\"Add This Item\" id=\"".$host."::".$service."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span><br>\n";
 }
 
+    /*
+    *
+    */
+    public static function multisite_link($base_url=FALSE,$site=FALSE,$host=FALSE,$service=FALSE){
+        if($host && $service){
+            $link = sprintf("'%s/view.py?view_name=service&site=%s&host=%s&service=%s'", $base_url,$site,urlencode($host),urlencode($service));
+            return $link;
+        }
+        if($host){
+            $link = sprintf("'%s/view.py?view_name=host&site=%s&host=%s'", $base_url,$site,urlencode($host));
+            return $link;
+        }
+    }
+
     public static function addToUri($fields,$base = True){
         if(!is_array($fields)){
             return false;

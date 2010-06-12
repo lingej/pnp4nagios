@@ -8,6 +8,7 @@ $lang = array
     'page-basket' => 'Страница: Мой набор',
     'zoom-header' => 'Детализация',
     'status-box-header' => 'Статус',
+    'multisite-box-header' => 'Multisite links',
     'search-box-header' => 'Поиск',
     'icon-box-header' => 'Действия',
     'basket-box-header' => 'Мой набор',

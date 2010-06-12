@@ -8,6 +8,7 @@ $lang = array
     'page-basket' => 'Page : Panier',
     'zoom-header' => 'Zoom',
     'status-box-header' => 'État',
+    'multisite-box-header' => 'Multisite links',
     'search-box-header' => 'Recherche',
     'icon-box-header' => 'Actions',
     'basket-box-header' => 'Mon panier',

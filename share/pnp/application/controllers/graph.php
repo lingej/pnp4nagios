@@ -24,11 +24,17 @@ class Graph_Controller extends System_Controller  {
         $this->template->graph->header        = $this->add_view('header');
         $this->template->graph->search_box    = $this->add_view('search_box');
         $this->template->graph->service_box   = $this->add_view('service_box');
-        $this->template->graph->status_box    = $this->add_view('status_box');
         $this->template->graph->basket_box    = $this->add_view('basket_box');
         $this->template->graph->widget_menu   = $this->add_view('widget_menu');
         $this->template->graph->graph_content->widget_graph  = $this->add_view('widget_graph');
-
+        // Change the status box while multisite theme is in use
+        if($this->theme == "multisite"){
+            $this->template->graph->status_box = $this->add_view('multisite_box');
+            $this->template->graph->status_box->base_url = $this->config->conf['multisite_base_url'];
+            $this->template->graph->status_box->site     = $this->config->conf['multisite_site'];
+        }else{
+            $this->template->graph->status_box = $this->add_view('status_box');
+        }
         // Service Details
         if($this->host != "" && $this->service != ""){
             $this->service = pnp::clean($this->service);

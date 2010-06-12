@@ -8,6 +8,7 @@ $lang = array
     'page-basket' => 'Page: Basket',
     'zoom-header' => 'Zoom',
     'status-box-header' => 'Status',
+    'multisite-box-header' => 'Multisite links',
     'search-box-header' => 'Search',
     'icon-box-header' => 'Actions',
     'basket-box-header' => 'My basket',

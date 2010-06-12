@@ -28,6 +28,10 @@
      		echo $status_box;
 	} ?>
 
+	<?php if (!empty($multisite_box)) {
+     		echo $multisite_box;
+	} ?>
+
 	<?php if (!empty($widget_menu)) {
      		echo $widget_menu;
 	} ?>
