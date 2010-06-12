@@ -1164,16 +1164,6 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'template_dir\']'} = 'd;;607';
     $CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';    
     $CPcfg{'$conf[\'html_dir-links\']'} = 'd;;235-237';    
-    $CPcfg{'$views[0]["title"]'} = 'S;[\S,]+;173';
-    $CPcfg{'$views[0]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-    $CPcfg{'$views[1]["title"]'} = 'S;[\S,]+;173';
-    $CPcfg{'$views[1]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-    $CPcfg{'$views[2]["title"]'} = 'S;[\S,]+;173';
-    $CPcfg{'$views[2]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-    $CPcfg{'$views[3]["title"]'} = 'S;[\S,]+;173';
-    $CPcfg{'$views[3]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
-    $CPcfg{'$views[4]["title"]'} = 'S;[\S,]+;173';
-    $CPcfg{'$views[4]["start"]'} = 'n;^\(?[\d\* ]+\)?$;173';
     $err = 0;
 
 # try to set a file name if variable is unset
