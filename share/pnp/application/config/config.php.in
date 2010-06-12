@@ -65,7 +65,7 @@ $config['log_threshold'] = 0;
 /**
  * Message logging directory.
  */
-$config['log_directory'] = APPPATH.'logs';
+$config['log_directory'] = '@localstatedir@/kohana';
 
 /**
  * Enable or disable displaying of Kohana error pages. This will not affect
