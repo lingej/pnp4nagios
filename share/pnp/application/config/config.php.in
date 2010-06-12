@@ -109,3 +109,14 @@ $config['modules'] = array
  */
 $config['pnp_etc_path'] = '@sysconfdir@';
 
+#
+# Define default views with title and start timerange in seconds 
+#
+# remarks: required escape on " with backslash
+#
+$views[] = array('title' => 'One Hour',   'start' => (60*60) );
+$views[] = array('title' => '4 Hours',   'start' => (60*60*4) );
+$views[] = array('title' => '25 Hours',  'start' => (60*60*25) );
+$views[] = array('title' => 'One Week',  'start' => (60*60*25*7) );
+$views[] = array('title' => 'One Month', 'start' => (60*60*24*32) );
+$views[] = array('title' => 'One Year',  'start' => (60*60*24*380) );
