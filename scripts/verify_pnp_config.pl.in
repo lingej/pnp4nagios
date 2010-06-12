@@ -1140,7 +1140,7 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'temp\']'} = 'd;;';
     $CPcfg{'$conf[\'base_url\']'} = "S;.+;";
     $CPcfg{'$conf[\'nagios_base\']'} = "S;.+;";
-    $CPcfg{'$conf[\'multisite_base\']'} = "S;.?;";
+    $CPcfg{'$conf[\'multisite_base_url\']'} = "S;.?;";
     $CPcfg{'$conf[\'multisite_site\']'} = "S;.?;";
     $CPcfg{'$conf[\'allowed_for_service_links\']'} = 'S;[\S,]+;';
     $CPcfg{'$conf[\'allowed_for_host_search\']'} = 'S;[\S,]+;';

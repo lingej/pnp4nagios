@@ -82,7 +82,7 @@ $conf['nagios_base'] = "/nagios/cgi-bin";
 #
 # Link back to check_mk´s multisite ( http://mathias-kettner.de/checkmk_multisite.html )
 #
-$conf['multisite_base'] = "/check_mk";
+$conf['multisite_base_url'] = "/check_mk";
 #
 # Multisite Site ID this PNP installation is linked to
 # This is the same value as defined in etc/multisite.mk
