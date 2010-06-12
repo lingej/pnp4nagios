@@ -26,6 +26,58 @@ class rrd_Core {
         }
     }
 
+	public static function color_inverse($color){
+		$color = str_replace('#', '', $color);
+		if (strlen($color) != 6){ return '000000'; }
+			$rgb = '';
+			for ($x=0;$x<3;$x++){
+				$c = 255 - hexdec(substr($color,(2*$x),2));
+				$c = ($c < 0) ? 0 : dechex($c);
+				$rgb .= (strlen($c) < 2) ? '0'.$c : $c;
+			}
+			return '#'.$rgb;
+	}
+
+	public static function color2($num=0 , $alpha='FF'){
+		$colors = array();
+		$value = array('cc','ff','99','66');
+		$num   = intval($num);
+		foreach($value as $ri){
+			for ($z=1;$z<8;$z++) {
+				$color = "#";
+				if ( ($z & 4) >= 1 ){
+					$color .= "$ri";
+				} else {
+					$color .= "00";
+				}
+				if ( ($z & 2) >= 1 ){
+					$color .= "$ri";
+				} else {
+					$color .= "00";
+				}
+				if ( ($z & 1) >= 1 ){
+					$color .= "$ri";
+				} else {
+					$color .= "00";
+				}
+				$icolor = rrd::color_inverse($color);
+				$pos = array_search($color,$colors);
+				$ipos = array_search($icolor,$colors);
+				if ( $pos == false ) {
+					$colors[] = $color . $alpha;
+				}
+				if ( $ipos == false ) {
+					$colors[] = $icolor . $alpha;
+				}
+			}
+		}
+		if (array_key_exists($num, $colors)) {
+			return $colors[$num];
+		} else {
+			return $colors[0];
+		}
+	}
+
     /*
      * Gradient Function
      * Concept by Stefan Triep
