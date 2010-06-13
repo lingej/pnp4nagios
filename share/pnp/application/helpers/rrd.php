@@ -4,27 +4,6 @@
 * RRDTool Helper Class 
 */
 class rrd_Core {
-    /*
-    * 
-    */
-    public static function color($num=0 , $alpha='FF'){
-        $r = array('99','66','ff','CC','00','33');
-        $colors = array();
-        $num   = intval($num);
-        foreach($r as $ri){
-            foreach($r as $gi){
-                foreach($r as $bi){
-                    $colors[] = sprintf("#%s%s%s%s",$ri,$gi,$bi,$alpha);
-                }
-            }
-        }
-
-        if(array_key_exists($num, $colors)){
-            return $colors[$num];
-        }else{
-            return $colors[0];
-        }
-    }
 
 	public static function color_inverse($color){
 		$color = str_replace('#', '', $color);
@@ -38,7 +17,11 @@ class rrd_Core {
 			return '#'.$rgb;
 	}
 
-	public static function color2($num=0 , $alpha='FF'){
+    /*
+     * Color Function
+     * Concept by Stefan Triep
+     */
+	public static function color($num=0 , $alpha='FF'){
 		$colors = array();
 		$value = array('cc','ff','99','66');
 		$num   = intval($num);
