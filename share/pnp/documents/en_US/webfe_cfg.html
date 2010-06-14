@@ -1,0 +1,144 @@
+
+
+
+<h1><a name="pnp_web_frontend" id="pnp_web_frontend">PNP Web Frontend</a></h1>
+<div class="level1">
+
+<p>
+
+The behaviour of the PNP Web-Frontend can be controlled through the config file <code>etc/config.php</code>. This file will be overwritten during updates of PNP as the paths and options are detected during <code>./configure</code>.
+</p>
+
+<p>
+Own adjustments should be made in <code>etc/config_local.php</code>. If this file does not exist the file config.php can be taken as a guideline.
+</p>
+
+</div>
+<!-- SECTION "PNP Web Frontend" [1-385] -->
+<h2><a name="etcconfigphp" id="etcconfigphp">etc/config.php</a></h2>
+<div class="level2">
+
+<p>
+
+Following the most important parameters:
+</p>
+
+<p>
+The path to the RRDtool binary. Will be detected by <code>./configure</code>
+
+</p>
+<pre class="code"> $conf[&#039;rrdtool&#039;] = &quot;/usr/bin/rrdtool&quot;;</pre>
+
+<p>
+
+Height and width of the RRD graphs
+
+</p>
+<pre class="code"> $conf[&#039;graph_width&#039;] = &quot;500&quot;;
+ $conf[&#039;graph_height&#039;] = &quot;100&quot;;</pre>
+
+<p>
+
+Screen sizes may vary, pages sizes won&#039;t. The following two directives enable you to specify different sizes for the creation of PDFs. If they aren&#039;t specified the values of the graph sizes are taken.
+
+</p>
+<pre class="code"> $conf[&#039;pdf_width&#039;] = &quot;675&quot;;
+ $conf[&#039;pdf_height&#039;] = &quot;100&quot;;</pre>
+
+<p>
+
+Additional options passed with every call of RRDTool, for example <code>—-slope-mode</code> to smooth the graphs
+
+</p>
+<pre class="code"> $conf[&#039;graph_opt&#039;] = &quot;&quot;;</pre>
+
+<p>
+
+The path to the RRD and <acronym title="Extensible Markup Language">XML</acronym> files created by <code>process_perfdata.pl</code>
+
+</p>
+<pre class="code"> $conf[&#039;rrdbase&#039;] = &quot;/usr/local/pnp4nagios/var/perfdata/&quot;;</pre>
+
+<p>
+
+The path to the config file for the <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a>.
+
+</p>
+<pre class="code"> $conf[&#039;page_dir&#039;] = &quot;/usr/local/pnp4nagios/etc/pages/&quot;;</pre>
+<hr />
+
+<p>
+PNP pages will be refreshed every n seconds
+
+</p>
+<pre class="code"> $conf[&#039;refresh&#039;] = &quot;90&quot;;</pre>
+<hr />
+
+<p>
+Max. age of RRD files in seconds. After reaching this value links to the graphs will be marked as inactive
+
+</p>
+<pre class="code"> $conf[&#039;max_age&#039;] = 60*60*6;</pre>
+<hr />
+
+<p>
+
+Base <acronym title="Uniform Resource Locator">URL</acronym> to the Nagios CGIs
+
+</p>
+<pre class="code"> $conf[&#039;nagios_base&#039;] = &quot;/nagios/cgi-bin&quot;;</pre>
+<hr />
+
+<p>
+
+List of users who are allowed to view links to the services of the current host
+
+</p>
+<pre class="code"> $conf[&#039;allowed_for_service_links&#039;] = &quot;EVERYONE&quot;;</pre>
+<hr />
+
+<p>
+List of users who can view/access the host search field
+
+</p>
+<pre class="code"> $conf[&#039;allowed_for_host_search&#039;] = &quot;EVERYONE&quot;;</pre>
+<hr />
+
+<p>
+If PNP is called with a host only ( index.php?host=&lt;myserver&gt; ), the defined user is shown an overview of all services related to this host
+
+</p>
+<pre class="code"> $conf[&#039;allowed_for_host_overview&#039;] = &quot;EVERYONE&quot;;</pre>
+<hr />
+
+<p>
+The periods of time the RRD graphs will show are determined using the array $views[]. The title and number of graphs can be specified globally in this place
+</p>
+<pre class="code">$views[0][&quot;title&quot;] = &quot;4 Hours&quot;;
+$views[0][&quot;start&quot;] = ( 60*60*4 );
+
+$views[1][&quot;title&quot;] = &quot;24 Hours&quot;;
+$views[1][&quot;start&quot;] = ( 60*60*24 );
+
+$views[2][&quot;title&quot;] = &quot;One Week&quot;;
+$views[2][&quot;start&quot;] = ( 60*60*24*7 );
+
+$views[3][&quot;title&quot;] = &quot;One Month&quot;;
+$views[3][&quot;start&quot;] = ( 60*60*24*30 );
+
+$views[4][&quot;title&quot;] = &quot;One Year&quot;;
+$views[4][&quot;start&quot;] = ( 60*60*24*365 );
+</pre>
+
+<p>
+
+You can add more views ($views[5], …) but please keep in mind that under normal circumstances ALL views you defined are shown.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/timeranges" class="wikilink1" title="pnp-0.6:timeranges">timeranges</a>
+
+</p>
+
+</div>
+<!-- SECTION "etc/config.php" [386-] -->

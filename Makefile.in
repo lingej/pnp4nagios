@@ -13,6 +13,7 @@ SRC_SCRIPTS=@srcdir@/scripts
 SRC_CONFIG=@srcdir@/sample-config
 SRC_MAN=@srcdir@/man
 SRC_CONTRIB=@srcdir@/contrib
+SRC_HELPERS=@srcdir@/helpers
 
 CC=@CC@
 CFLAGS=@CFLAGS@ @DEFS@
@@ -44,6 +45,7 @@ all:
 	cd $(SRC_SHARE) && $(MAKE)
 	cd $(SRC_SCRIPTS) && $(MAKE)
 	chmod a+r $(SRC_CONTRIB)/ssi/status-header.ssi
+	chmod a+xr $(SRC_HELPERS)/w2h.pl
 
 	@echo ""
 	@echo "*** Compile finished ***"

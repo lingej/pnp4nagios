@@ -1,0 +1,92 @@
+
+
+
+<h1><a name="timeranges" id="timeranges">Timeranges</a></h1>
+<div class="level1">
+
+<p>
+
+In der Übersicht zeigt PNP fünf Zeitbereiche, die frei in der config.php definiert werden können.
+</p>
+
+<p>
+Es gibt aber auch die Möglichkeit, die Zeitbereiche über die <acronym title="Uniform Resource Locator">URL</acronym> zu beeinflussen. Dies ist hilfreich, wenn z.B. automatisch <acronym title="Portable Document Format">PDF</acronym>-Dokumente erstellt werden sollen
+</p>
+
+<p>
+Die Zeitbereiche werden über die Optionen <code>start</code> und <code>end</code> definiert.
+</p>
+
+<p>
+Beispiel:
+
+</p>
+<pre class="code"> pnp4nagios/graph?host=&lt;hostname&gt;&amp;srv=&lt;servicedesc&gt;&amp;start=-1week</pre>
+
+<p>
+
+Der Startzeitpunkt der Graphen wird somit, ausgehend vom aktuellen Datum, um eine Woche nach hinten verschoben. Der Endzeitpunkt bleibt auf dem aktuellen Zeitstempel. Aber auch <code>end</code> lässt sich über diesen Weg beeinflussen, wobei beide Optionen auch einzeln manipuliert werden dürfen.
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0"> start </th><th class="col1"> end </th><th class="col2"> view </th><th class="col3"> Ergebnis </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign">       </td><td class="col1 leftalign">     </td><td class="col2 leftalign">     </td><td class="col3">Alle Ansichten enden mit der aktuellen Zeit </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 centeralign">  x    </td><td class="col1 leftalign">     </td><td class="col2 leftalign">     </td><td class="col3">Alle Ansichten beginnen mit dem angegebenen Datum </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">       </td><td class="col1 centeralign">  x  </td><td class="col2 leftalign">     </td><td class="col3">Alle Ansichten enden mit dem angegebenen Datum </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 centeralign">  x    </td><td class="col1 centeralign">  x  </td><td class="col2 leftalign">     </td><td class="col3">Eine Ansicht zwischen den beiden Zeitangaben </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">       </td><td class="col1 leftalign">     </td><td class="col2 centeralign">  x  </td><td class="col3">Eine Ansicht endet mit der aktuellen Zeit </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 centeralign">  x    </td><td class="col1 leftalign">     </td><td class="col2 centeralign">  x  </td><td class="col3">Eine Ansicht beginnt mit dem angegebenen Datum </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">       </td><td class="col1 centeralign">  x  </td><td class="col2 centeralign">  x  </td><td class="col3">Eine Ansicht endet mit dem angegebenen Datum </td>
+	</tr>
+</table>
+
+<p>
+
+Beispiele zur Datumsangabe:
+
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0 centeralign">  Format   </th><th class="col1 leftalign"> Beschreibung      </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign"> 2009W04   </td><td class="col1"> 4. KW 2009 </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"> 1.5.2009  </td><td class="col1"> 1. Mai 2009 </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign"> -1 day    </td><td class="col1"> Einen Tag zurück </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign"> -3 weeks  </td><td class="col1 leftalign"> 3 Wochen zurück  </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign"> -1 year   </td><td class="col1 leftalign"> Ein Jahr zurück  </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0"> yesterday </td><td class="col1"> Gestern </td>
+	</tr>
+</table>
+
+<p>
+
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/pages" class="wikilink1" title="de:pnp-0.6:pages">Pages</a>
+
+</p>
+
+</div>

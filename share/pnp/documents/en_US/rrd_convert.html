@@ -1,0 +1,88 @@
+
+
+
+<h1><a name="rrd_storage_type_multiple" id="rrd_storage_type_multiple">RRD_STORAGE_TYPE = MULTIPLE</a></h1>
+<div class="level1">
+
+<p>
+
+<strong>available starting with PNP 0.6.3</strong>
+</p>
+
+<p>
+Since PNP version 0.6 it is possible to store performance data into multiple RRD databases instead of a single RRD database.
+</p>
+
+<p>
+After creation of an RRD file you cannot alter the number of data sources. This may lead to problems if Nagios plugins change the number of data sources dynamically.
+</p>
+
+<p>
+An example might be <code>check_disk</code> if you monitor all available file systems using one service. If a file system is added the RRD database cannot be updated anymore because the internal would be changed.
+</p>
+
+<p>
+Per default PNP uses the option <code>RRD_STORAGE_TYPE = SINGLE</code> which is defined in <code>process_perfdata.pl</code> and might be changed using the config file <code>process_perfdata.cfg</code>.
+This setting should <strong>not</strong> be changed globally because PNP will start creating new RRD files immediately after changing to MULTIPLE. Old data will get lost!
+</p>
+
+<p>
+Additionally it is not advisable to activate <code>RRD_STORAGE_TYPE = MULTIPLE</code> globally in regard to performance. The number of RRD databases and the disk I/O will increase significantly. That means that you should carefully select which Nagios check commands should be altered. 
+</p>
+
+<p>
+The section <a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">Custom Templates</a> contains information about how the settings should be altered.    
+</p>
+
+</div>
+<!-- SECTION "RRD_STORAGE_TYPE = MULTIPLE" [1-1305] -->
+<h2><a name="a_converter" id="a_converter">A converter</a></h2>
+<div class="level2">
+
+<p>
+
+The script <code>libexec/rrd_convert.pl</code> will be used to switch <code>RRD_STORAGE_TYPE</code> to <code>MULTIPLE</code> and to migrate the RRD databases.
+</p>
+
+<p>
+Significant as always with PNP is the Nagios check command.
+</p>
+<pre class="code">rrd_convert.pl --check_command=&lt;nagios_check_command&gt; | --list_commands [ --dry-run ] [ --tmp_dir=&lt;temp-directory ]
+[ --no_structure_check ]</pre>
+
+<p>
+You have to specify at least one of ”–check_command” or ”–list_commands”, respectively.
+Using the open <code>–check-command=</code> you tell the script which check command should be searched for.
+</p>
+
+<p>
+<code>rrd_convert.pl</code> will now browse all PNP <acronym title="Extensible Markup Language">XML</acronym> files for this command and output some statistics. 
+</p>
+
+<p>
+After confirmation from the user the conversion of the appropriate RRD databases will start displaying the progress. Pressing &lt;ENTER&gt; as an answer will terminate the script so please enter a letter.
+</p>
+
+<p>
+If you are unsure then use <code>–list_commands</code> to get a list of the check commands used in the <acronym title="Extensible Markup Language">XML</acronym> files.
+</p>
+
+<p>
+The option <code>–dry-run</code> will convert the RRD databases but they will be stored in /tmp/rrd_convert in separate folders per host instead. This way you&#039;ll get a feeling about the runtime and the amount of data.
+</p>
+
+<p>
+If you want to change the temporary directory you can use <code>–tmp_dir=&lt;alternative temp dir&gt;</code>.
+</p>
+
+<p>
+Sometimes the number of datasources in the RRD files doesn&#039;t match the number in the <acronym title="Extensible Markup Language">XML</acronym> files. This might happen if a plugin suddenly returns more datasources than usual (like check_disk as mentioned above). Using the option <code>–no_structure_check</code> these RRD files will be converted as well.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/npcd" class="wikilink1" title="pnp-0.6:npcd">NPCD details</a>
+
+</p>
+
+</div>
+<!-- SECTION "A converter" [1306-] -->

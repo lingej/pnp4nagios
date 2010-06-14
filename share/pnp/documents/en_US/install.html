@@ -1,0 +1,151 @@
+
+
+
+<h1><a name="installation" id="installation">Installation</a></h1>
+<div class="level1">
+
+<p>
+The installation of PNP will be described in more detail. It is expected that nagios was compiled from source and is located in /usr/local/nagios.<br/>
+
+<strong>Attention:</strong> The description applies to the developer version PNP 0.6.0.<br/>
+
+Please note that PNP has to be configured after the installation.
+</p>
+
+</div>
+<!-- SECTION "Installation" [1-322] -->
+<h2><a name="make_and_more" id="make_and_more">Make and more</a></h2>
+<div class="level2">
+
+<p>
+The installation of PNP is controlled by <a href="http://de.wikipedia.org/wiki/makefile" class="interwiki iw_wpde" title="http://de.wikipedia.org/wiki/makefile">makefile</a>s. The system is analyzed after invocation of ./configure and the detected values are tranferred to makefiles.
+</p>
+
+<p>
+Please unpack PNP as user root:
+
+</p>
+<pre class="code">
+tar -xvzf pnp4nagios-HEAD.tar.gz
+cd pnp4nagios
+</pre>
+
+<p>
+./configure is to be called from the directory pnp4nagios.
+</p>
+<pre class="code">
+./configure
+</pre>
+
+<p>
+
+<strong>Note:</strong> Without specifying any options user and group will be “nagios”. If you have different values then please use the parameters ”–with-nagios-user” and ”–with-nagios-group”, respectively. Using  Icinga the call might be
+
+</p>
+<pre class="code">
+./configure --with-nagios-user=icinga --with-nagios-group=icinga
+</pre>
+
+<p>
+
+Some lines run across the screen. The output at the end is important.
+</p>
+<pre class="code">
+*** Configuration summary for pnp4nagios-0.6.2 23-12-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/pnp4nagios
+  HTML Dir:                         /usr/local/pnp4nagios/share
+  Config Dir:                       /usr/local/pnp4nagios/etc
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.2.12
+  RRDs Perl Modules:                FOUND (Version 1.2012)
+  RRD Files stored in:              /usr/local/pnp4nagios/var/perfdata
+  process_perfdata.pl Logfile:      /usr/local/pnp4nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/pnp4nagios/var/spool
+
+  Web Interface Options:  -------------------------         -------------------
+  HTML URL:                         http://localhost/pnp4nagios/
+  Apache Config File:               /etc/apache2/conf.d/pnp4nagios.conf
+
+
+  Review the options above for accuracy.  If they look okay,
+  type &#039;make all&#039; to compile.</pre>
+
+<p>
+The paths shown should be checked. If the displayed values aren&#039;t correct you can change them calling ./configure with appropriate options.<br/>
+
+<strong>Attention:</strong> “Location of rrdtool binary” means path including name of binary! If necessary it can be specified using the following syntax:
+
+</p>
+<pre class="code"> ./configure --with-rrdtool=/usr/local/rrdtool-1.2.xx/bin/rrdtool</pre>
+<pre class="code"> ./configure --help </pre>
+
+<p>
+
+shows the supported options.<br/>
+<br/>
+
+</p>
+
+<p>
+Invoking
+</p>
+<pre class="code"> make all</pre>
+
+<p>
+
+compiles the components like NPCD which are written in C
+
+</p>
+<pre class="code"> make install</pre>
+
+<p>
+
+copies everything to the right places in the file system. The paths were already shows during ./configure.
+</p>
+
+<p>
+After the installation of the program and <acronym title="HyperText Markup Language">HTML</acronym> files you can copy a sample Apache configuration file to your web-server config directory
+
+</p>
+<pre class="code"> make install-webconf</pre>
+
+<p>
+
+You can call
+
+</p>
+<pre class="code"> make install-config</pre>
+
+<p>
+
+optionally. This way config files for process_perfdata.pl and npcd are copied to etc/pnp.
+</p>
+
+<p>
+To install the NPCD Init script call
+
+</p>
+<pre class="code"> make install-init</pre>
+
+<p>
+
+All these steps are combined in
+
+</p>
+<pre class="code"> make fullinstall</pre>
+
+<p>
+
+<strong>Attention:</strong> After copying the configuration file for the web server you have to restart the web server (<code>service httpd restart</code> or <code>/etc/init.d/apache2 restart</code>, respectively).
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/config" class="wikilink1" title="pnp-0.6:config">configuration</a>
+
+</p>
+
+</div>
+<!-- SECTION "Make and more" [323-] -->

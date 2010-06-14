@@ -1,0 +1,61 @@
+
+<p>
+2.6. Performance data
+</p>
+
+<p>
+Performance data is defined by Nagios as “everything after the | of the plugin output” - please refer to Nagios documentation for information on capturing this data to logfiles. However, it is the responsibility of the plugin writer to ensure the performance data is in a “Nagios plugins” format. This is the expected format:
+</p>
+
+<p>
+&#039;label&#039;=value[UOM];[warn];[crit];[min];[max]
+</p>
+
+<p>
+Notes:
+
+</p>
+<ol>
+<li class="level1"><div class="li"> space separated list of label/value pairs</div>
+</li>
+<li class="level1"><div class="li"> <em>label</em> can contain any characters</div>
+</li>
+<li class="level1"><div class="li"> the single quotes for the label are optional. Required if spaces, = or &#039; are in the label</div>
+</li>
+<li class="level1"><div class="li"> label length is arbitrary, but ideally the first 19 characters are unique (due to a limitation in RRD). Be aware of a limitation in the amount of data that NRPE returns to Nagios</div>
+</li>
+<li class="level1"><div class="li">  to specify a quote character, use two single quotes</div>
+</li>
+<li class="level1"><div class="li">  <em>warn</em>, <em>crit</em>, <em>min/ or </em>max/ may be null (for example, if the threshold is not defined or min and max do not apply). Trailing unfilled semicolons can be dropped</div>
+</li>
+<li class="level1"><div class="li"> min and max are not required if UOM=%</div>
+</li>
+<li class="level1"><div class="li"> value, min and max in class [-0-9.]. Must all be the same UOM</div>
+</li>
+<li class="level1"><div class="li"> warn and crit are in the range format (see Section 2.5). Must be the same UOM</div>
+</li>
+<li class="level1"><div class="li"> UOM (unit of measurement) is one of:</div>
+<ul>
+<li class="level3"><div class="li"> no unit specified - assume a number (int or float) of things (eg, users, processes, load averages)</div>
+</li>
+<li class="level3"><div class="li"> s - seconds (also us, ms)</div>
+</li>
+<li class="level3"><div class="li"> % - percentage</div>
+</li>
+<li class="level3"><div class="li"> B - bytes (also KB, <acronym title="Megabyte">MB</acronym>, TB, <acronym title="Gigabyte">GB</acronym>?)</div>
+</li>
+<li class="level3"><div class="li"> c - a continous counter (such as bytes transmitted on an interface)</div>
+</li>
+</ul>
+</li>
+</ol>
+
+<p>
+
+It is up to third party programs to convert the Nagios plugins performance data into graphs.
+</p>
+
+<p>
+Origin: <a href="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201" class="urlextern" title="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201"  rel="nofollow">http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201</a>
+
+</p>

@@ -128,3 +128,40 @@ div.logo {
 	text-align: center;
 	vertical-align: center;
 }
+
+ul {
+    line-height:1.5em;
+    list-style-type:square;
+    margin:0 0 0.5em 1.5em;
+    padding:0;
+}
+
+img.medialeft {
+    border: 0;
+    float: left;
+    margin: 0 1.5em 0 0;
+}
+
+img.mediaright {
+    border: 0;
+    float: right;
+    margin: 0 0 0 1.5em;
+}
+
+h1,h2,h3,h4,h5 {
+    border-bottom: 1px solid;
+    clear: left;
+    margin: 0 0 1em 0;
+    padding: 0.5em 0 0 0;
+}
+
+/* code blocks by indention */
+pre.code, pre.file {
+    width: auto !important;
+    width: 98%;
+    padding: 0.5em;
+    border: 1px dashed;
+    border-left: 3px solid;
+    overflow: auto;
+}
+

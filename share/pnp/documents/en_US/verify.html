@@ -1,0 +1,96 @@
+
+
+
+<h1><a name="checking_the_installation" id="checking_the_installation">Checking the installation</a></h1>
+<div class="level1">
+
+<p>
+
+If everything went well until now you can try to call PNP using your web browser.
+When using the installation with default values PNP should be called using <a href="http://%3Cserver name%3E/pnp4nagios/" class="urlextern" title="http://&lt;server name&gt;/pnp4nagios/"  rel="nofollow">http://&lt;server name&gt;/pnp4nagios/</a>.
+The first time you will see a page “PNP4Nagios Environment Tests” which includes different checks of necessary components. Obviously all checks have to be passed successfully before you can proceed. Please follow the instructions given on that page.<br/>
+
+If you receive the message “<acronym title="Hypertext Preprocessor">PHP</acronym> magic_quotes_gpc is deprecated” then please locate your <code>php.ini</code> and set the value to <code>Off</code>.
+</p>
+
+<p>
+Called without any arguments PNP looks for RRD and <acronym title="Extensible Markup Language">XML</acronym> files in var/perfdata and shows all graphs of the first host.
+</p>
+
+<p>
+ATTENTION: Immediately after (re-)starting Nagios after you enabled the processing of performance data you will get error messages in your browser because performance data has to be collected and stored in RRD files. Depending on the check interval you are using you have to wait some time before you can view the graphs.
+</p>
+
+</div>
+<!-- SECTION "Checking the installation" [1-1061] -->
+<h2><a name="debug_logfile" id="debug_logfile">Debug Logfile</a></h2>
+<div class="level2">
+
+<p>
+
+Calling <code>make install-config</code> during installation will create a sample config file <code>etc/process_perfdata.cfg-sample</code>. The values in the sample file will correspond to the defaults used by <code>process_perfdata.pl</code> so normally you do not have a file called <code>process_perfdata.cfg</code> while running the procedure.<br/>
+
+However you can influence the way <code>process_perfdata.pl</code> works by changing options which have to be specified in <code>process_perfdata.<strong>cfg</strong></code>. 
+</p>
+
+<p>
+The most important options launching PNP are LOG_LEVEL and LOG_FILE. We recommend setting the <code>LOG_LEVEL</code> value to “2” so you can track what process_perfdata.pl will do.
+Most likely we will ask for excerpts from perfdata.log if you open a <a href="/pnp-0.6/about#support" class="wikilink1" title="pnp-0.6:about">support request</a> on the mailing lists as well as the output of the <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config</a> script so please provide them <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
+</p>
+
+<p>
+During normal operation the debug level should be set to 0 to avoid performance issues due to unnecessary entries in the log file.
+</p>
+
+</div>
+<!-- SECTION "Debug Logfile" [1062-2064] -->
+<h2><a name="something_went_wrong" id="something_went_wrong">Something went wrong</a></h2>
+<div class="level2">
+
+<p>
+
+Some basic settings should be checked
+</p>
+
+<p>
+1. Have any RRD and <acronym title="Extensible Markup Language">XML</acronym> files been created?
+<code>process_perfdata.pl</code> will create a new directory under pnp/perfdata for every host. In this directory an RRD database and an <acronym title="Extensible Markup Language">XML</acronym> file will be created for every service. The host data will be stored in <code>_HOST_.xml</code> and <code>_HOST_.rrd</code> respectively.<br/>
+
+Sometimes you have to specify additional options so that performance data is produced. In some cases a <a href="/pnp-0.6/wrapper" class="wikilink1" title="pnp-0.6:wrapper">wrapper script</a> might help.<br/>
+
+However not all checks provide performance data. That applies - among others - to “check_ping” in contrast to “check_icmp” which does provide data (starting with Nagios plugin version 1.4.12 check_ping does provide performance data).<br/>
+
+Using the web interface the detail information of hosts/services shows a field “Performance Data”. If it is empty there is no data available so no files are written to the appropriate directory and that is why PNP does not provide you with graphs!<br/>
+
+The following image shows the information of a “PING” service. The output of the plugin is surrounded by a blue border, the performance data by a red one.<br/>
+
+<a href="/_detail/srv_info.png?id=pnp-0.6%3Averify" class="media" title="srv_info.png"><img src="/_media/srv_info.png?w=350" class="media" title="status information" alt="status information" width="350" /></a>
+</p>
+
+<p>
+2. Has nagios called <code>process_perfdata.pl</code>?
+In the config file for process_perfdata.pl (<code>etc/process_perfdata.<strong>cfg</strong></code>) you can increase the debug level. Data processing will be logged in <code>var/perfdata.log</code>.
+</p>
+
+<p>
+3. Graphs are shown without text?
+Have a look at the <a href="/pnp-0.6/about#system_requirements" class="wikilink1" title="pnp-0.6:about">requirements</a>.
+</p>
+
+<p>
+4. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> in the <code>scripts</code> directory of the installation folder or the <code>libexec</code> folder after installation to check your settings and if performance data is present and/or valid. The syntax is quite simple for that:
+
+</p>
+<pre class="code">./verify_pnp_config.pl -m &lt;mode&gt;</pre>
+
+<p>
+ whereas <code>&lt;mode&gt;</code> is one of “sync”, “bulk” or “npcd” (without quotes). Please note that using “default” will select “npcd” which is different from the behaviour in PNP 0.4.x.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a>
+
+</p>
+
+</div>
+<!-- SECTION "Something went wrong" [2065-] -->

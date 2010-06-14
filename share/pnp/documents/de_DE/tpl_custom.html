@@ -1,0 +1,191 @@
+
+
+
+<h1><a name="custom_templates" id="custom_templates">Custom Templates</a></h1>
+<div class="level1">
+
+<p>
+
+Wie bereits unter ”<a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">Was sind Templates ?</a>” beschrieben, ist die Darstellung der Graphen abhängig vom verwendeten Check-Command.
+</p>
+
+<p>
+Es gibt jedoch Situationen, in denen dieses Verhalten übersteuert werden muss.
+</p>
+
+</div>
+<!-- SECTION "Custom Templates" [1-249] -->
+<h2><a name="custom_template" id="custom_template">CUSTOM_TEMPLATE</a></h2>
+<div class="level2">
+
+<p>
+
+Notwendig wird dies, wenn allgemeingültige Commands definiert wurden.
+</p>
+
+<p>
+Beispiel:
+
+</p>
+<pre class="code">
+define command {
+  command_name check_nrpe
+  command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -C $ARG1$ -a &quot;$ARG2$&quot;
+}
+</pre>
+
+<p>
+Die Folge wäre, dass immer das Template check_nrpe.php verwendet werden würde, auch wenn auf dem zu überwachenden Server via NRPE ein ganz anderes Plugin aufgerufen wurde.
+</p>
+
+<p>
+PNP, speziell process_perfdata.pl, sucht zur Laufzeit für jedes check_command im Verzeichnis etc/check_commands nach einer Config-Datei ( &lt;check_command&gt;.cfg ) und liest diese, wenn vorhanden, ein.
+</p>
+
+<p>
+Da unser Beispiel-Command check_nrpe lautet, wird nach etc/check_commands/check_nrpe.cfg gesucht.
+</p>
+
+<p>
+Eine Beispiel-Config wird bereits während der Installation mit der Dateierweiterung .cfg-sample in etc/check_commands gespeichert.
+</p>
+
+<p>
+In diesen Config-Files können zwei Optionen gesetzt werden.
+</p>
+<pre class="code">
+# check_command check_nrpe!load!-w 4,4,4 -c 5,5,5
+# ________0__________|       |       |
+# ________1__________________|       |
+# ________2__________________________|
+#
+CUSTOM_TEMPLATE = 1
+</pre>
+
+<p>
+<code>CUSTOM_TEMPLATE = 1</code> sorgt dafür, dass nur der Inhalt von $ARG1$ als Template-Name verwendet wird. Da in diesem Beispiel $ARG1$ mit dem Wert “load” gefüllt ist, ergibt sich als Template-Name “load.php”
+</p>
+
+<p>
+<code>CUSTOM_TEMPLATE = 0,1</code> ergibt → “check_nrpe_load.php”
+</p>
+
+<p>
+<code>CUSTOM_TEMPLATE = 1,0</code> ergibt → “load_check_nrpe.php”
+</p>
+
+</div>
+<!-- SECTION "CUSTOM_TEMPLATE" [250-1697] -->
+<h2><a name="datatype" id="datatype">DATATYPE</a></h2>
+<div class="level2">
+
+<p>
+
+Über die Option “DATATYPE” kann beeinflusst werden, mit welchem Datentyp die RRD-Datenbank angelegt werden soll.
+Default ist in diesem Fall “GAUGE”. Für fortlaufende Werte wird aber hier der Datentyp COUNTER benötigt.
+Normalerweise sollten Plugin-Entwickler für Daten von Typ Counter die Einheit “c” verwenden. Dies ist jedoch nicht immer der Fall.
+</p>
+
+<p>
+Alle Datenreihen auf Typ COUNTER einstellen.
+
+</p>
+<pre class="code">DATATYPE = COUNTER</pre>
+
+<p>
+Einzelnen Datenreihen spezielle Datentypen zuweisen
+
+</p>
+<pre class="code">DATATYPE = GAUGE,GAUGE,COUNTER,COUNTER</pre>
+
+<p>
+Diese Option hat nur Einfluss, wenn die RRD Datenbank neu erstellt wird.
+</p>
+
+<p>
+
+Weitere Datentypen sind in der RRDTool-Dokumentation unter <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">rrdcreate</a> erklärt.
+</p>
+
+</div>
+<!-- SECTION "DATATYPE" [1698-2467] -->
+<h2><a name="min_und_max" id="min_und_max">MIN und MAX</a></h2>
+<div class="level2">
+
+<p>
+
+In einigen wenigen Situationen ist es notwendig, die für RRDTool gültigen Daten zu begrenzen.
+</p>
+
+<p>
+RRD-Datenbanken lassen sich mit definierten Minimum- und Maximum-Werten anlegen.
+Weitere Infos unter <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html</a>
+</p>
+
+<p>
+Berücksichtigen des Maximum-Wertes aus den Performance-Daten
+
+</p>
+<pre class="code">USE_MAX_ON_CREATE = 1</pre>
+
+<p>
+Berücksichtigen des Minimum-Wertes aus den Performance-Daten
+
+</p>
+<pre class="code">USE_MIN_ON_CREATE = 1</pre>
+
+</div>
+<!-- SECTION "MIN und MAX" [2468-2939] -->
+<h2><a name="rrd_storage_type" id="rrd_storage_type">RRD_STORAGE_TYPE</a></h2>
+<div class="level2">
+<pre class="code">RRD_STORAGE_TYPE = SINGLE</pre>
+
+<p>
+
+Die Option RRD_STORAGE_TYPE definiert die Art der Datenhaltung.
+</p>
+
+<p>
+Mögliche Werte sind MULTIPLE und SINGLE
+</p>
+
+<p>
+SINGLE: Eine RRD-Datenbank pro Service
+</p>
+
+<p>
+MULTIPLE: Ein oder mehrere RRD-Datenbanken pro Service. Für jede Datenreihe wird eine eigene RRD-Datenbank erstellt.
+</p>
+
+<p>
+<strong>ACHTUNG:</strong> Daten werden nicht automatisch migriert!<br/>
+
+Ein Konvertierungs-Script finden Sie <a href="/de/pnp-0.6/rrd_convert" class="wikilink1" title="de:pnp-0.6:rrd_convert">hier</a>.
+</p>
+
+</div>
+<!-- SECTION "RRD_STORAGE_TYPE" [2940-3392] -->
+<h2><a name="rrd_heartbeat" id="rrd_heartbeat">RRD_HEARTBEAT</a></h2>
+<div class="level2">
+
+<p>
+
+<strong>Gültig ab PNP 0.6.1</strong>
+</p>
+<pre class="code">RRD_HEARTBEAT = 305</pre>
+
+<p>
+Nach &lt;RRD_HEARTBEAT&gt; Sekunden erwartet RRDtool neue Daten.
+</p>
+
+<p>
+Mehr dazu unter <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html</a>
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/advanced" class="wikilink1" title="de:pnp-0.6:advanced">PNP in verteilten Umgebungen</a>
+
+</p>
+
+</div>
+<!-- SECTION "RRD_HEARTBEAT" [3393-] -->

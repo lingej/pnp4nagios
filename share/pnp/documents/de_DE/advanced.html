@@ -1,0 +1,81 @@
+
+
+
+<h1><a name="advanced" id="advanced">Advanced</a></h1>
+<div class="level1">
+
+</div>
+<!-- SECTION "Advanced" [1-24] -->
+<h2><a name="verteilte_systeme" id="verteilte_systeme">Verteilte Systeme</a></h2>
+<div class="level2">
+
+<p>
+Ist Nagios als verteiltes System implementiert, stellt sich die Frage, wo PNP installiert wird.
+</p>
+
+<p>
+Rein technisch ist diese Frage nicht wichtig. PNP kann auf den Slaves sowie auf dem Master-Server installiert sein. Oder nur auf dem Master? 
+</p>
+
+<p>
+Wird PNP auf dem Master betrieben, ist jedoch bei der Übergabe der Daten via send_nsca von den Slave-Servern zum Master darauf zu achten, dass auch die Performance-Daten übergeben werden. Weiterhin kommt auf dem Master oft nicht das Original-Check-Command zum Einsatz. 
+</p>
+
+<p>
+Damit nun aber PNP auf dem Master noch erkennen kann, welches Check-Command auf den Slaves die Daten ermittelt hat, reagiert process_perfdata.pl auf ein zusätzliches Feld am Ende der Performance-Daten.
+</p>
+<pre class="code">OK - 127.0.0.1: rta 2.687ms, lost 0% | rta=2.687ms;3000.000;5000.000;0; pl=0%;80;100;; [check_icmp]</pre>
+
+<p>
+Findet PNP am Ende der Performance Daten einen in eckigen Klammern eingeschlossenen Text, so wird dieser als Check-Command und somit als PNP-Template verwendet.
+</p>
+
+<p>
+Die Nagios-Dokumentation zu diesem Thema ist <a href="http://www.nagios-wiki.de/nagios/doku3/distributed" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/distributed"  rel="nofollow">hier</a> zu finden. Das in der Doku verwendete Command ist leicht anzupassen.
+</p>
+
+<p>
+Aus 
+</p>
+<pre class="code">
+define command{
+	command_name	submit_check_result
+	command_line	/usr/local/nagios/libexec/eventhandlers/submit_check_result $HOSTNAME$ &#039;$SERVICEDESC$&#039; $SERVICESTATE$ &#039;$SERVICEOUTPUT$&#039;
+	}
+</pre>
+
+<p>
+wird
+</p>
+<pre class="code">
+define command{
+	command_name	submit_check_result
+	command_line	/usr/local/nagios/libexec/eventhandlers/submit_check_result $HOSTNAME$ &#039;$SERVICEDESC$&#039; $SERVICESTATE$ &#039;$SERVICEOUTPUT$ | $SERVICEPERFDATA$ [$SERVICECHECKCOMMAND$]&#039;
+	}
+</pre>
+
+</div>
+<!-- SECTION "Verteilte Systeme" [25-1689] -->
+<h2><a name="das_check_multi-plugin" id="das_check_multi-plugin">Das check_multi-Plugin</a></h2>
+<div class="level2">
+
+<p>
+
+Das Plugin <a href="http://my-plugin.de/wiki/projects/check_multi/start" class="urlextern" title="http://my-plugin.de/wiki/projects/check_multi/start"  rel="nofollow">check_multi</a> ist eines der ersten Plugins, das die Funktionen von Nagios 3.0 richtig ausschöpft. Check_Multi ist in der Lage, mehrere Nagios-Plugins auszuführen, aber für Nagios als einen Service darzustellen. Die Ausgabe von check_multi erfolgt über mehrere Zeilen, um die Masse an Informationen wieder darstellen zu können.
+</p>
+
+<p>
+Daraus ergaben sich jedoch einige Schwierigkeiten für PNP. PNP muss aus den Performance-Daten wieder die Daten der einzelnen Plugins ermitteln können. Zusammen mit Matthias Flacke, dem Entwickler von check_multi, haben wir jedoch recht schnell eine Möglichkeit gefunden, die Daten wieder sauber den einzelnen Plugins zuzuordnen.
+</p>
+
+<p>
+<a href="/lib/exe/fetch.php?hash=a9e001&amp;media=http%3A%2F%2Fmy-plugin.de%2Fwiki%2F_media%2Fcheck_multi%2Fperformance%2Fmulti_labels.png" class="media" title="http://my-plugin.de/wiki/_media/check_multi/performance/multi_labels.png"><img src="/lib/exe/fetch.php?hash=a9e001&amp;w=300&amp;media=http%3A%2F%2Fmy-plugin.de%2Fwiki%2F_media%2Fcheck_multi%2Fperformance%2Fmulti_labels.png" class="media" alt="" width="300" /></a>
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/rrdcached" class="wikilink1" title="de:pnp-0.6:rrdcached">rrdcached-Unterstützung</a>
+
+</p>
+
+</div>
+<!-- SECTION "Das check_multi-Plugin" [1690-] -->

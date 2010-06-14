@@ -1,0 +1,83 @@
+
+
+
+<h1><a name="pages" id="pages">Pages</a></h1>
+<div class="level1">
+
+<p>
+
+„pages“ bieten die Möglichkeit, Grafiken von verschiedenen Hosts/Services auf einer Seite zusammenzufassen. Auf diese Weise können z.B. die Übertragungsraten der Netzwerk-Interfaces aller Tape-Libraries dargestellt werden. Innerhalb der Definitionen sind reguläre Ausdrücke möglich, so dass – entsprechende Namen vorausgesetzt - mit wenig Aufwand viel erreicht werden kann.
+Das Verzeichnis, das in <code>config.php</code> durch den Konfigurationseintrag „$conf[&#039;page_dir&#039;]“ angegeben wurde, enthält ein oder mehrere Dateien mit der Endung „.cfg“.
+</p>
+
+<p>
+Kommentare beginnen mit einem &#039;#&#039; und sind auch innerhalb einer Zeile möglich.
+Jede Datei enthält eine „page“-Definition, die neben dem Namen der Seite festlegt, ob die nachfolgenden Grafikdefinitionen reguläre Ausdrücke enthalten.<br/>
+
+Die Bezeichnung hinter <code>page_name</code> erscheint in der Liste der verfügbaren Seiten und wird als Titel im Browser angezeigt.
+<strong>Achtung:</strong> “host_name” und “service_desc” beziehen sich auf die Namen der Dateien im perfdata-Ordner, nicht auf die Nagios-Bezeichnungen. Leerzeichen werden durch Unterstriche (“_”) ersetzt.
+</p>
+<pre class="code">define  page  {
+        use_regex 1		# 0 = keine regulären Ausdrücke, 1 = reguläre Ausdrücke
+        page_name Test-Seite	# Beschreibung der Seite
+}</pre>
+
+<p>
+Danach folgen ein oder mehrere „graph“-Definitionen:
+</p>
+<pre class="code">define graph {
+        host_name       host1,host2,host3
+        service_desc    Current_Load
+}</pre>
+
+<p>
+
+<strong>Achtung:</strong> Damit die oben gezeigte Liste von Host-Namen funktioniert, muss <code>use_regex 0</code> gesetzt sein!
+</p>
+<pre class="code">define graph {
+        host_name       host4
+        service_desc    Current_Users
+}</pre>
+
+<p>
+Und jetzt mit regulären Ausdrücken. Zuerst alle Hosts, deren Name mit „Tape“ beginnen:
+
+</p>
+<pre class="code">define graph {
+        host_name       ^Tape
+        service_desc    Traffic
+}</pre>
+
+<p>
+alle Hosts, deren Namen mit “00” enden
+
+</p>
+<pre class="code">define graph {
+        host_name       00$
+        service_desc    Load
+}</pre>
+
+<p>
+alle Services des localhost, deren Namen ein „a“ oder „o“ enthalten:
+
+</p>
+<pre class="code">define graph {
+        host_name       localhost
+        service_desc    a|o
+}</pre>
+
+<p>
+alle Services, die im Namen nach einem „_“  (mindestens) drei Ziffern haben auf allen Hosts, deren Namen mit „UX“ beginnen:
+
+</p>
+<pre class="code">define graph {
+        host_name       ^UX
+        service_desc    _\d{3}
+}</pre>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/xport" class="wikilink1" title="de:pnp-0.6:xport">Datenexport</a>
+
+</p>
+
+</div>

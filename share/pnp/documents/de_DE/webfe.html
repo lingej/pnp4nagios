@@ -1,0 +1,149 @@
+
+
+
+<h1><a name="das_nagios_web_frontend" id="das_nagios_web_frontend">Das Nagios Web Frontend</a></h1>
+<div class="level1">
+
+<p>
+
+PNP soll natürlich schnell erreichbar sein. Man möchte nicht lange nach den richtigen Graphen suchen.
+</p>
+
+<p>
+Nagios selbst bietet die Möglichkeit, externe URLs über die sogenannte Extended Info Config einzubinden.
+Da es in diesem Bereich eine Änderung zwischen Nagios 2.x und der Version 3.0 gibt, wird anschließend auf beide Versionen getrennt eingegangen.
+</p>
+
+</div>
+<!-- SECTION "Das Nagios Web Frontend" [1-398] -->
+<h2><a name="nagios_2x" id="nagios_2x">Nagios 2.x</a></h2>
+<div class="level2">
+
+<p>
+
+Bis Nagios 2.x erfolgt die Einbindung externer URLs in das Nagios-Web-Interface über die <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo"  rel="nofollow">Extended-Info-Objekte</a>. Für PNP verwenden wir die Option action_url, um das PNP-Web-Frontend mit den passenden Optionen aufzurufen.
+</p>
+<pre class="code">
+define serviceextinfo {
+   name                  srv-pnp
+   action_url            /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   register              0
+}
+</pre>
+
+<p>
+Dieses Template kann nun über “use srv-pnp” in der serviceextinfo-Definition verwendet werden. Wenn Sie die Schnellstart-Installationsanleitungen benutzt haben, können Sie beispielsweise in der Datei localhost.cfg die Definitionen wie folgt erweitern:
+</p>
+<pre class="code">
+define serviceextinfo {
+   use                     srv-pnp   ; Name of service templates to use
+   host_name               localhost
+   service_description     load
+}
+</pre>
+
+</div>
+<!-- SECTION "Nagios 2.x" [399-1338] -->
+<h2><a name="nagios_3x" id="nagios_3x">Nagios 3.x</a></h2>
+<div class="level2">
+
+<p>
+
+Seit Nagios 3.0 ist die Direktive action_url in die <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#host" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#host"  rel="nofollow">Host</a>- bzw. <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#service" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#service"  rel="nofollow">Service</a>-Definition verschoben worden. Die <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo"  rel="nofollow">serviceextinfo</a>- und <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#hostextinfo" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#hostextinfo"  rel="nofollow">hostextinfo</a>-Definitionen sind entfallen. Damit wird die Definition der URLs zum PNP-Interface wesentlich vereinfacht.
+</p>
+
+<p>
+Zuerst definieren wir zwei Nagios-Templates. Falls Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die folgenden Zeilen der Datei templates.cfg hinzufügen:
+</p>
+<pre class="code">
+define host {
+   name       host-pnp
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=_HOST_
+   register   0
+}
+
+define service {
+   name       srv-pnp
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   register   0
+}
+</pre>
+
+<p>
+Diese beiden Templates können nun über “use srv-pnp” in der Service-Definition oder “use host-pnp” in der Host-Definition verwendet werden. Wenn Sie die Schnellstart-Installationsanleitungen benutzt haben, können Sie beispielsweise in der Datei localhost.cfg die Definitionen wie folgt erweitern:
+
+</p>
+<pre class="code">define host{
+        use                     linux-server,host-pnp    ; Name of host templates to use
+                                                         ; This host definition will inherit all variables that are defined
+                                                         ; in (or inherited by) the linux-server host template definition.
+        host_name               localhost
+        alias                   localhost
+        address                 127.0.0.1
+        }
+</pre>
+<pre class="code">define service{
+        use                     local-service,srv-pnp   ; Name of service templates to use
+        host_name               localhost
+        service_description     PING
+        check_command           check_ping!100.0,20%!500.0,60%
+        }
+</pre>
+
+<p>
+
+Die Links auf die richtigen URLs werden automagisch erstellt.
+</p>
+
+</div>
+<!-- SECTION "Nagios 3.x" [1339-3529] -->
+<h2><a name="preview_popup" id="preview_popup">Preview Popup</a></h2>
+<div class="level2">
+
+<p>
+
+Außerdem gibt es die Möglichkeit, die Graphen bereits in der Statusübersicht beim Überfahren des “Action Url Icons” mit der Maus einzublenden.
+</p>
+
+<p>
+Ermöglicht wird dies durch die <a href="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html"  rel="nofollow">CGI Includes</a>, die es uns erlauben, Javascript-Code an geeigneter Stelle im Seitenkopf der Statusübersicht einzubinden ( status.cgi ). 
+</p>
+
+<p>
+In den PNP-Quellen ist die Datei <code>contrib/ssi/status-header.ssi</code> bereits enthalten, die verwendeten URLs müssen aber unter Umständen angepasst werden. Wir gehen hier davon aus, dass PNP über <code>/pnpnagios/index.php</code> erreichbar ist.
+</p>
+
+<p>
+Die besagte Datei muss in das Verzeichnis <code>/usr/local/nagios/share/ssi/</code> kopiert werden und darf <strong>NICHT</strong> ausführbar sein. Nagios würde die Datei sonst wirklich wie ein <acronym title="Common Gateway Interface">CGI</acronym> behandeln und ausführen, was aber in diesem Fall zu Fehlern führen würde. Die Apache-Admins mögen bitte “Nagios <acronym title="Server Side Includes">SSI</acronym>” nicht mit “Apache <acronym title="Server Side Includes">SSI</acronym>” in Verbindung bringen. Beides hat nichts miteinander zu tun. 
+</p>
+
+<p>
+Die action_url ist entsprechend anzupassen: 
+</p>
+<pre class="code">
+define host {
+   name       host-pnp
+   register   0
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=_HOST_
+}
+
+define service {
+   name       srv-pnp
+   register   0
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+}
+</pre>
+
+<p>
+Nach einem Restart von Nagios (nach Anpassung der Definitionen) sieht das Ergebnis ungefähr so aus:<br/>
+
+<a href="/_detail/popup.png?id=de%3Apnp-0.6%3Awebfe" class="media" title="popup.png"><img src="/_media/popup.png?w=200" class="media" alt="" width="200" /></a>
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/webfe_cfg" class="wikilink1" title="de:pnp-0.6:webfe_cfg">Konfiguration Web-Frontend</a>
+
+</p>
+
+</div>
+<!-- SECTION "Preview Popup" [3530-] -->

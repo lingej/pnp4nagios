@@ -1,0 +1,190 @@
+
+
+
+<h1><a name="ueber_pnp" id="ueber_pnp">Über PNP</a></h1>
+<div class="level1">
+
+</div>
+<!-- SECTION "Über PNP" [1-26] -->
+<h2><a name="anforderungen_an_plugins" id="anforderungen_an_plugins">Anforderungen an Plugins</a></h2>
+<div class="level2">
+
+<p>
+
+PNP benötigt zwingend gültige Performancedaten von Nagios-Plugins.
+</p>
+
+<p>
+Was sind also diese Performancedaten?
+</p>
+
+<p>
+Die Ausgabe eines Nagios Plugins darf bis Nagios 2.x maximal eine Zeile betragen. Diese Ausgabe wird, wenn das Plugin Performancedaten liefert, in zwei Teile zerlegt. Als Trennzeichen dient dabei das Pipe “|” Symbol.
+</p>
+
+<p>
+<strong>Beispiel check_icmp :</strong>
+
+</p>
+<pre class="code"> OK - 127.0.0.1: rta 2.687ms, lost 0% | rta=2.687ms;3000.000;5000.000;0; pl=0%;80;100;;</pre>
+
+<p>
+
+daraus ergibt sich der Output auf der linken Seite des Pipe-Symbols
+
+</p>
+<pre class="code"> OK - 127.0.0.1: rta 2.687ms, lost 0%</pre>
+
+<p>
+
+und die Performancedaten
+
+</p>
+<pre class="code">  rta=2.687ms;3000.000;5000.000;0; pl=0%;80;100;;</pre>
+
+<p>
+
+Wie man unschwer erkennt, sind die Performancedaten auf die maschinelle Verarbeitung ausgelegt. Das Format ist in den
+ <a href="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203" class="urlextern" title="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203"  rel="nofollow">Developer Guidelines</a>
+festgelegt (einen Auszug davon gibt es <a href="/de/pnp-0.6/perfdata_format" class="wikilink1" title="de:pnp-0.6:perfdata_format">an dieser Stelle</a>), es soll aber hier noch einmal kurz erläutert werden.
+
+</p>
+<pre class="code">  rta=2.687ms;3000.000;5000.000;0;
+   |    |  |    |         |     | |
+   |----|--|----|---------|-----|-|----- * Label 
+        |--|----|---------|-----|-|----- * Aktueller Wert
+           |----|---------|-----|-|----- Einheit ( UOM = UNIT of Measurement ) 
+                |---------|-----|-|----- Warning Schwellwert
+                          |-----|-|----- Critical Schwellwert 
+                                |-|----- Minimum Wert 
+                                  |----- Maximum Wert
+                                  </pre>
+
+<p>
+Mit * gekennzeichnete Werte müssen vorhanden sein. Alle anderen Werte sind optional.
+</p>
+
+<p>
+Mehrere Datenreihen werden durch Leerzeichen getrennt. Die eigentlichen Daten dürfen also keine Leerzeichen enthalten. Soll das Label Leerzeichen enthalten, so müssen diese in einfache Hochkomma eingeschlossen werden.
+</p>
+
+</div>
+<!-- SECTION "Anforderungen an Plugins" [27-1903] -->
+<h2><a name="benoetigte_software" id="benoetigte_software">Benötigte Software</a></h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> <acronym title="Practical Extraction and Report Language">Perl</acronym> &gt;= 5.x ohne besondere Module</div>
+</li>
+<li class="level1"><div class="li"> RRDtool ab 1.x; besser 1.2, aber nicht zwingend.<br/>
+Achtung: wird RRDtool ohne Paket-Manager installiert, fehlen anschließend möglicherweise die dejavu-Fonts. Das äußert sich z.B. durch fehlende Schriften in den Grafiken</div>
+</li>
+<li class="level1"><div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym> &gt;= 5.2 für das Webfrontend basierend auf <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a></div>
+<ul>
+<li class="level2"><div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym> Erweiterung zlib, session und GD.</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Nagios &gt;= 2.x oder Icinga</div>
+</li>
+<li class="level1"><div class="li"> für Kohana muss außerdem das Modul “mod_rewrite” in der Web-Server-Konfiguration aktiviert sein. Einzelheiten sind in der Web-Server-Dokumentation der entsprechenden Distribution nachzulesen.</div>
+</li>
+</ul>
+
+</div>
+<!-- SECTION "Benötigte Software" [1904-2561] -->
+<h2><a name="lizenz" id="lizenz">Lizenz</a></h2>
+<div class="level2">
+
+<p>
+
+PNP ist unter der <a href="http://www.gnu.de/documents/gpl-2.0.de.html" class="urlextern" title="http://www.gnu.de/documents/gpl-2.0.de.html"  rel="nofollow">GPL 2</a> lizensiert.
+</p>
+
+</div>
+<!-- SECTION "Lizenz" [2562-2667] -->
+<h2><a name="download" id="download">Download</a></h2>
+<div class="level2">
+
+<p>
+
+Die Entwicklung von PNP wird auf <a href="http://sourceforge.net/projects/pnp4nagios" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios"  rel="nofollow">Sourceforge.Net</a> organisiert. PNP ist dort unter dem Projektnamen “PNP4Nagios” registriert.
+</p>
+
+<p>
+Die jeweils aktuelle (stabile) Version findet ihr im <a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadbereich</a>.
+</p>
+
+<p>
+Wer noch aktueller sein möchte, kann auch die jeweils letzte Entwickler-Version benutzen.
+</p>
+
+<p>
+Mit der Version 0.6.x wurde von SVN auf GIT zum Verwalten des Sourcecodes gewechselt.
+</p>
+
+<p>
+Die aktuelle Entwicklung ist jederzeit unter <a href="http://pnp4nagios.git.sourceforge.net/" class="urlextern" title="http://pnp4nagios.git.sourceforge.net/"  rel="nofollow">http://pnp4nagios.git.sourceforge.net/</a> einzusehen. Beim Klicken auf <a href="http://pnp4nagios.git.sourceforge.net/git/gitweb.cgi?p=pnp4nagios/pnp4nagios;a=snapshot;h=HEAD;sf=tgz" class="urlextern" title="http://pnp4nagios.git.sourceforge.net/git/gitweb.cgi?p=pnp4nagios/pnp4nagios;a=snapshot;h=HEAD;sf=tgz"  rel="nofollow">PNP Devel Version</a> wird ein Archiv mit der letzten Version heruntergeladen.
+</p>
+
+</div>
+<!-- SECTION "Download" [2668-3471] -->
+<h2><a name="support" id="support">Support</a></h2>
+<div class="level2">
+
+<p>
+
+VOR dem Stellen von Support-Anfragen sollte sichergestellt werden, dass die unter <a href="http://docs.pnp4nagios.org/de/pnp-0.6/verify" class="urlextern" title="http://docs.pnp4nagios.org/de/pnp-0.6/verify"  rel="nofollow">http://docs.pnp4nagios.org/de/pnp-0.6/verify</a> genannten Punkte geprüft wurden.
+</p>
+
+<p>
+Die Entwickler und Helfer sind im Nagios-Portal unter <a href="http://www.nagios-portal.org" class="urlextern" title="http://www.nagios-portal.org"  rel="nofollow">http://www.nagios-portal.org</a> vertreten.
+Dort gibt es einen eigenen Bereich zum Thema PNP.<br/>
+
+Bei Support-Anfragen bitte das Betriebssystem und die PNP-Version angeben. Außerdem ist es wichtig, ob PNP aus den Sourcen erstellt oder ein vorgefertigtes Paket verwendet wurde.
+</p>
+
+<p>
+Erfolgreich gelöste Probleme bitte mit einem [solved] in der Betreffzeile des ersten Beitrags kennzeichnen. Auf diese Weise erleichtern wir anderen Benutzern das Finden von Lösungen zu einem Problem.
+</p>
+
+<p>
+Weiterhin können die Mailinglisten auf Sourceforge verwendet werden. Dort ist es jedoch üblich, Fragen auf Englisch zu stellen.
+</p>
+
+<p>
+<a href="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-users" class="urlextern" title="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-users"  rel="nofollow">pnp4nagios-users</a>: Die Users-Liste für allgemeine Fragen zur Konfiguration.
+</p>
+
+<p>
+<a href="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-devel" class="urlextern" title="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-devel"  rel="nofollow">pnp4nagios-devel</a>: Die Devel-Liste für Anregungen und Fehler Reports.
+</p>
+
+<p>
+<a href="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-checkins" class="urlextern" title="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-checkins"  rel="nofollow">pnp4nagios-checkins</a>: Auf der Checkins-Liste werden Änderungen im SVN-Repository automatisch veröffentlicht. 
+</p>
+
+</div>
+<!-- SECTION "Support" [3472-4786] -->
+<h2><a name="datenhaltung" id="datenhaltung">Datenhaltung</a></h2>
+<div class="level2">
+
+<p>
+
+Die Performance-Daten werden mit Hilfe von <a href="http://www.rrdtool.org" class="urlextern" title="http://www.rrdtool.org"  rel="nofollow">RRDtool</a> in sogenannten Round-Robin-Datenbanken gespeichert, die wie ein Ringpuffer funktionieren. Das bedeutet, dass nach einer gewissen Zeit die ältesten Daten “hinten” herausfallen und “vorne” durch neue ersetzt werden.
+</p>
+
+<p>
+Verschiedene Zeitintervalle innerhalb der Datei sorgen für unterschiedliche Auflösungen. In der Standardeinstellung können die Daten für die letzten zwei Tage im Minutenabstand abgelegt werden, für zehn Tage im 5-Minutenabstand, für 90 Tage im 30-Minutenabstand und für 4 Jahre im 6-Stundenabstand. Die Vergrößerung des Intervalls bewirkt, dass auch die Daten über das jeweils größere Intervall hinweg gemittelt werden. Das führt automatisch dazu, dass Spitzen nicht mehr so deutlich zu sehen sind. Das ist kein Fehler von PNP, sondern eine Eigenheit von RRDtool. Dazu gibt es auch einen <a href="http://www.linux-magazin.de/Heft-Abo/Ausgaben/2004/06/Daten-ausgesiebt" class="urlextern" title="http://www.linux-magazin.de/Heft-Abo/Ausgaben/2004/06/Daten-ausgesiebt"  rel="nofollow">Artikel im Linux-Magazin</a>.
+</p>
+
+<p>
+Durch die Speicherung in diesem Format ändert sich die Dateigröße nach dem Anlegen nicht mehr. Pro Datenreihe werden ca. 400 KB benötigt.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">PNP-Modi</a>
+
+</p>
+
+</div>
+<!-- SECTION "Datenhaltung" [4787-] -->

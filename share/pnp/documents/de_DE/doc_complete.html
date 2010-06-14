@@ -1,0 +1,918 @@
+
+
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:new-features">
+
+
+
+<h1><a name="neues_in_pnp_06x" id="neues_in_pnp_06x" href="/de/pnp-0.6/new-features" title="Neues in PNP 0.6.x">Neues in PNP 0.6.x</a></h1>
+<div class="level1">
+
+<p>
+<a href="/_detail/pnp-0.6/gallery/pnp-preview-05-08-2009.png?id=de%3Apnp-0.6%3Adoc_complete" class="media" title="pnp-0.6:gallery:pnp-preview-05-08-2009.png"><img src="/_media/pnp-0.6/gallery/pnp-preview-05-08-2009.png?w=200" class="mediaright" align="right" title="PNP 0.6.x Preview " alt="PNP 0.6.x Preview " width="200" /></a>
+</p>
+
+<p>
+Die Arbeit an der Version 0.6.x ist in vollem Gange. 
+</p>
+
+<p>
+Mit Version 0.6.x steigen wir von Subversion auf GIT um. Der Sourcecode ist bereits auf Sourceforge erhältlich.
+</p>
+
+<p>
+<a href="http://pnp4nagios.git.sourceforge.net" class="urlextern" title="http://pnp4nagios.git.sourceforge.net"  rel="nofollow">http://pnp4nagios.git.sourceforge.net</a>
+</p>
+
+<p>
+
+<strong>Bisher umgesetzte Funktionen:</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Webfrontend basiert auf <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a></div>
+</li>
+<li class="level1"><div class="li"> Webfrontend basiert auf <a href="http://jqueryui.com/themeroller/" class="urlextern" title="http://jqueryui.com/themeroller/"  rel="nofollow">jQuery Themes</a></div>
+</li>
+<li class="level1"><div class="li"> Javascript-Funktionen über <a href="http://jquery.com/" class="urlextern" title="http://jquery.com/"  rel="nofollow">jQuery</a> Plugins  </div>
+</li>
+<li class="level1"><div class="li"> process_perfdata.pl wird in der Lage sein, pro Datenreihe eine eigene RRD-Datenbank zu verwenden.</div>
+</li>
+<li class="level1"><div class="li"> Installer weiter verbessert. Angabe von Directory-Layouts über –with-layout</div>
+</li>
+<li class="level1"><div class="li"> RRDtool-Fehler werden als Bild dargestellt. Keine fehlenden Bilder mehr.</div>
+</li>
+<li class="level1"><div class="li"> PNP-Templates können keine internen Variablen mehr überschreiben.</div>
+</li>
+<li class="level1"><div class="li"> PNP-Templates der Version 0.4.x können weiter verwendet werden.</div>
+</li>
+<li class="level1"><div class="li"> <acronym title="Portable Document Format">PDF</acronym>-Funktionen neu umgesetzt.</div>
+</li>
+<li class="level1"><div class="li"> Template default.php optimiert.</div>
+</li>
+<li class="level1"><div class="li"> Export aus den RRD-Datenbanken im <acronym title="Extensible Markup Language">XML</acronym>,CSV und JSON Format über die RRDtool “xport” Funktion.</div>
+</li>
+<li class="level1"><div class="li"> Page-Funktionen neu umgesetzt.</div>
+</li>
+<li class="level1"><div class="li"> Fehlerseiten verweisen auf online <a href="http://docs.pnp4nagios.org/de/faq" class="urlextern" title="http://docs.pnp4nagios.org/de/faq"  rel="nofollow">FAQ-Artikel</a>.</div>
+</li>
+<li class="level1"><div class="li"> Mouseover Popup im Nagios-Frontend über jQuery.clueTip Plugin</div>
+</li>
+<li class="level1"><div class="li"> Volle Unterstützung des rrdcached.</div>
+</li>
+</ul>
+
+<p>
+
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/about#anforderungen" class="wikilink1" title="de:pnp-0.6:about">Anforderungen</a>
+
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/new-features" class="wikilink1 permalink" title="de:pnp-0.6:new-features" rel="bookmark">de:pnp-0.6:new-features</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:about">
+
+
+
+<h1><a name="ueber_pnp" id="ueber_pnp" href="/de/pnp-0.6/about" title="Über PNP">Über PNP</a></h1>
+<div class="level1">
+
+<p>
+<a href="/de/pnp-0.6/about" class="wikilink1" title="de:pnp-0.6:about">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/about" class="wikilink1 permalink" title="de:pnp-0.6:about" rel="bookmark">de:pnp-0.6:about</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:modes">
+
+
+
+<h1><a name="die_kunst_daten_zu_sammeln" id="die_kunst_daten_zu_sammeln" href="/de/pnp-0.6/modes" title="Die Kunst Daten zu sammeln">Die Kunst Daten zu sammeln</a></h1>
+<div class="level1">
+
+<p>
+
+PNP unterstützt mehrere Arten, die Performance-Daten zu verarbeiten. Die einzelnen Modi unterscheiden sich durch ihre Komplexität und die zu erwartende Performance.
+</p>
+
+<p>
+Das folgende Bild zeigt die Verbindungen zwischen Nagios, PNP und RRDtool
+</p>
+
+<p>
+Nagios führt für jeden Host- und jeden Service, dessen Performance-Daten gesammelt werden sollen, einen Befehl aus. Abhängig vom gewählten Modus werden die Daten entweder direkt an ein <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script übergeben oder in temporäre Dateien geschrieben und später verarbeitet. process_perfdata.pl legt die Datei in <acronym title="Extensible Markup Language">XML</acronym>-Dateien ab und speichert sie mit Hilfe von RRDtool in RRD-Dateien.<br/>
+
+</p>
+
+<p>
+Bevor Ihr euch auf einen Modus festlegt, lest euch alles durch und entscheidet selbst, welcher Weg für eure Installation der Beste ist.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/modes" class="wikilink1 permalink" title="de:pnp-0.6:modes" rel="bookmark">de:pnp-0.6:modes</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:upgrade">
+
+
+
+<h1><a name="upgrade_auf_version_06x" id="upgrade_auf_version_06x" href="/de/pnp-0.6/upgrade" title="Upgrade auf Version 0.6.x">Upgrade auf Version 0.6.x</a></h1>
+<div class="level1">
+
+<p>
+
+Das Web-Frontend ist komplett neu geschrieben worden und basiert nun auf dem <acronym title="Hypertext Preprocessor">PHP</acronym> MVC Framework <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a>. Somit ergeben sich grundlegend andere Abhängigkeiten, die dringend vor der Installation geprüft werden müssen.
+</p>
+
+<p>
+Anmerkung: Ein Upgrade läuft zuerst wie eine Neuinstallation. Anschließend sind einige Anpassungen durchzuführen, die weiter unten beschrieben sind.
+</p>
+
+<p>
+PNP 0.4.x wurde ohne weitere Angabe von Optionen beim Aufruf von <code>./configure</code> unterhalb einer Nagios-Installation unter <code>/usr/local/nagios</code> installiert.
+</p>
+
+<p>
+PNP 0.6.x wird bei Angabe keiner weiteren Optionen unter <code>/usr/local/pnp4nagios</code> installiert, ist also wie Nagios als eigenständige Applikation zu sehen.
+</p>
+
+<p>
+Anmerkung: Es reicht aus, die *.rrd-Dateien vom alten ins neue Verzeichnis zu kopieren. Die *.xml-Dateien werden neu angelegt, wenn Performance-Daten verarbeitet werden. Außerdem hat sich die interne Struktur geändert, so dass sie sowieso nicht nutzbar sind.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/upgrade" class="wikilink1" title="de:pnp-0.6:upgrade">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/upgrade" class="wikilink1 permalink" title="de:pnp-0.6:upgrade" rel="bookmark">de:pnp-0.6:upgrade</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:install">
+
+
+
+<h1><a name="installation" id="installation" href="/de/pnp-0.6/install" title="Installation">Installation</a></h1>
+<div class="level1">
+
+<p>
+
+Im Folgenden wird die Installation von PNP beschrieben. Dabei wird davon ausgegangen, dass Nagios aus den Sourcen übersetzt und im Verzeichnis /usr/local/pnpnagios installiert wurde.<br/>
+
+<strong>Achtung:</strong> Die Beschreibung bezieht sich auf die Developer-Version PNP 0.6.0.<br/>
+
+Bitte vergessen Sie nicht, dass PNP nach der Installation noch konfiguriert werden muss.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/install" class="wikilink1" title="de:pnp-0.6:install">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/install" class="wikilink1 permalink" title="de:pnp-0.6:install" rel="bookmark">de:pnp-0.6:install</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:config">
+
+
+
+<h1><a name="konfiguration" id="konfiguration" href="/de/pnp-0.6/config" title="Konfiguration">Konfiguration</a></h1>
+<div class="level1">
+
+<p>
+
+Im folgenden wird die Konfiguration der bereits erwähnten <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">Arten der Performance-Daten Verarbeitung</a> genauer erklärt.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/config" class="wikilink1 permalink" title="de:pnp-0.6:config" rel="bookmark">de:pnp-0.6:config</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:verify">
+
+
+
+<h1><a name="pruefen_der_installation" id="pruefen_der_installation" href="/de/pnp-0.6/verify" title="Prüfen der Installation">Prüfen der Installation</a></h1>
+<div class="level1">
+
+<p>
+
+Wenn bis jetzt alles sauber funktioniert hat, kann PNP zum ersten Mal im Browser aufgerufen werden.
+Bei der Installation mit den Standardeinstellungen erfolgt der Aufruf über <a href="http://%3CServername%3E/pnp4nagios/" class="urlextern" title="http://&lt;Servername&gt;/pnp4nagios/"  rel="nofollow">http://&lt;Servername&gt;/pnp4nagios/</a>.
+Beim ersten Aufruf sieht man die Seite “PNP4Nagios Environment Tests”, die verschiedene Tests von notwendigen Komponenten enthält. Offenkundig sollten alle Tests erfolgreich verlaufen, bevor es weitergehen kann. Bitte beachten Sie die Hinweise auf der Seite.<br/>
+
+Falls die Meldung “<acronym title="Hypertext Preprocessor">PHP</acronym> magic_quotes_gpc is deprecated” zu sehen ist, dann setzen Sie in der <code>php.ini</code> den Wert auf <code>Off</code>.
+</p>
+
+<p>
+Ohne weitere Optionen sucht PNP nach RRD- und <acronym title="Extensible Markup Language">XML</acronym>-Dateien in var/perfdata/ und zeigt alle Graphen des ersten Hosts in der Übersicht an.
+</p>
+
+<p>
+ACHTUNG: Direkt nach dem (Neu-)Start von Nagios nach dem Aktivieren der Verarbeitung von Performance-Daten wird der Aufruf im Browser zu Fehlermeldungen führen, weil zunächst Performance-Daten gesammelt und in den RRD-Dateien abgelegt werden müssen. Abhängig vom Check-Intervall kann es einige Zeit dauern, bis Graphen angezeigt werden können.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/verify" class="wikilink1 permalink" title="de:pnp-0.6:verify" rel="bookmark">de:pnp-0.6:verify</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:verify_pnp_config">
+
+
+
+<h1><a name="verify_pnp_config" id="verify_pnp_config" href="/de/pnp-0.6/verify_pnp_config" title="verify_pnp_config">verify_pnp_config</a></h1>
+<div class="level1">
+
+<p>
+Bei Problemen kann das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <code>verify_pnp_config.pl</code> im <code>scripts</code>-Verzeichnis helfen, mit dem neben der Konfiguration auch die Performance-Daten von Hosts und Services geprüft werden können. Es kann sowohl vor als auch während des Betriebs von PNP genutzt werden.
+</p>
+
+<p>
+<strong>* Hinweis </strong>*: Die Angaben beziehen sich auf verify_pnp_config v0.1.19, das über <a href="http://www.pnp4nagios.org/pnp/dwnld" class="urlextern" title="http://www.pnp4nagios.org/pnp/dwnld"  rel="nofollow">http://www.pnp4nagios.org/pnp/dwnld</a> in der aktuellen Version 0.6.4 zu finden ist.
+Ältere Versionen haben teilweise weniger Optionen, so dass es in den Beschreibungen der einzelnen Optionen Hinweise auf die PNP-Version gibt.<br/>
+
+</p>
+
+<p>
+<strong>* Hinweis </strong>*: Eine Zeile fehlt im Script, was zu einem Fehler führt, so dass Sie vorher diese Zeile einfügen sollten:
+
+</p>
+<pre class="code">     $CPcfg{&#039;$conf[\&#039;max_age\&#039;]&#039;} = &#039;n;^\(?[\d\* ]+\)?$&#039;;
+     $CPcfg{&#039;$conf[\&#039;temp\&#039;]&#039;} = &#039;d;;&#039;;
+     $CPcfg{&#039;$conf[\&#039;base_url\&#039;]&#039;} = &quot;S;.+;&quot;;   # &lt;-- add this line
+     $CPcfg{&#039;$conf[\&#039;nagios_base\&#039;]&#039;} = &quot;S;.+;&quot;;
+     $CPcfg{&#039;$conf[\&#039;allowed_for_service_links\&#039;]&#039;} = &#039;S;[\S,]+;&#039;;</pre>
+
+<p>
+<strong>* Hinweis </strong>*: die “langen” Optionen beginnen immer mit zwei ”-”. Leider ist das im Text nicht zu erkennen.<br/>
+
+</p>
+
+<p>
+Die einfachste Form des Aufrufs zur Überprüfung der Konfiguration lautet: 
+</p>
+<pre class="code">./verify_pnp_config.pl -m &lt;Modus&gt;</pre>
+
+<p>
+wobei &lt;Modus&gt; durch den benutzen PNP-Modus zu ersetzen ist (sync, bulk oder NPCD).
+</p>
+
+<p>
+Das Script liefert beim Aufruf mit der Option <code>–h</code> bzw <code>–help</code> u.a. die folgende Ausgabe:
+
+</p>
+<pre class="code">
+-h, --help        print these lines
+-b, --basedir=s   Nagios Base directory (default: /usr/local/nagios)
+-B, --binary=s    Nagios binary (default: nagios)
+-c, --config=s    Nagios main config file (default: /usr/local/nagios/etc/nagios.cfg)
+-m, --mode=s      PNP mode (&quot;sync&quot;, &quot;bulk&quot;, &quot;NPCD&quot;)
+-l, --logfile=s   check configure log file
+-D, --pnpdir=s    PNP root dir
+-N, --npcdcfg=s   PNP config file for NPCD mode (default: /usr/local/pnp4nagios/etc/npcd.cfg)
+-P, --ppcfg=s     process_perfdata config file (default: /usr/local/pnp4nagios/etc/process_perfdata.cfg)
+-C, --cpcfg=s     PNP config file (config.php)
+-p, --precheck    use config files instead of objects cache
+-r, --rrdtool=s   specify the location of the RRDtool binary
+-R, --RRDpath=s   specify the perfdata directory (default: /usr/local/pnp4nagios/var/perfdata) or &quot;no&quot; for no check
+-U, --resource=s  location of the resource config file (default: /usr/local/nagios/etc/resource.cfg)
+-M, --monitor=s   specify the monitoring product (default: nagios, may be &quot;icinga&quot;)
+-L, --layout=s    specify a layout (Nagios2, Nagios3, SuSE, Fedora)
+-T, --template=s  specify the path to the templates directory (default /usr/local/pnp4nagios/share/templates.dist)
+-u, --user=s      user of the perfdata directory
+-g, --group=s     group of the perfdata directory 	
+-q, --quiet       quiet mode, non-zero return code will indicate errors
+-o, --object=s    Nagios object (host name, service description)
+-t, --time        show warnings if RRDfiles are too old
+-s, --skip        skip check of installed packages
+-n, --native      show messages in native language (so far &quot;es&quot; or &quot;de&quot;)
+-e, --english     show english messages/links
+-d, --debug       some debugging output
+</pre>
+
+<p>
+
+Das Nagios-Programm und der Zugriff auf die Hauptkonfigurationsdatei <code>nagios.cfg</code> werden immer benötigt. Bei vom Standard abweichenden Pfaden für Nagios gibt es daher die Möglichkeit, über die Option -L ein anderes Layout vorzugeben. Je nach Distribution bzw. Version sollte einer der Werte “suse” oder “fedora” bzw. “nagios2” oder “nagios3” funktionieren (u.a. bei Debian und Ubuntu).<br/>
+
+Falls das alles nichts hilft, kann man sowohl das Basisverzeichnis (-b bzw. <code>–basedir</code>), den Namen des Programms (-B bzw. <code>–binary</code>) als auch den Standort der Hauptkonfigurationsdatei (-c bzw. <code>–config</code>) und der Ressource-Datei (-U bzw. –resource) mit Hilfe von Optionen anzugeben. Wenn der Name des Programms mit einem ”/” beginnt, dann wird dieser Wert als absolute Angabe betrachtet und unverändert übernommen. Ohne ”/” ergibt sich der Pfad aus dem Basisverzeichnis mit angehängtem “bin” und dem Binary-Namen.<br/>
+
+</p>
+
+<p>
+Ohne Angabe von Optionen wird die Hilfeseite ausgegeben, so dass entweder der Modus oder ein Objekt als Parameter anzugeben sind.
+</p>
+
+<p>
+Mit der Option <code>-m</code> (<code>–mode</code>) wird dabei der PNP-Modus angegeben, dessen Einstellungen untersucht werden. Dabei erlaubt die Option <code>-l &lt;Dateiname&gt;</code> bzw. <code>–logfile=&lt;Dateiname&gt;</code> die Prüfung der Konfiguration während der Installationsphase. Sie müssen bereits <code>./configure</code> (ggf. mit zusätzlichen Optionen) ausgeführt haben. Dadurch wird die Datei <code>config.log</code> erstellt, deren Name als Parameter übergeben wird. Das Script prüft, ob die Software-Voraussetzungen erfüllt werden bzw. ob verschiedene Einstellungen korrekt vorgenommen wurden. Dazu gehört auch ein Aufruf des RRDtool-Programms, so dass ggf. die Option <code>-r</code> (<code>–rrdtool</code>) benutzt werden muss, wenn es nicht unter /usr/bin/rrdtool zu finden ist.
+</p>
+
+<p>
+Das Script prüft, ob für Dateien/Verzeichnisse im perfdata-Verzeichnis Benutzer und Gruppe mit den Werten übereinstimmen, die in der nagios.cfg eingetragen sind. Außerdem wird geprüft, ob innerhalb der xml-Dateien Return-Codes des RRDtools gefunden werden, die auf einen Fehler hinweisen.
+Dabei kann mit der Option -R (–RRDpath) das Verzeichnis angegeben werden, unter dem die RRD-Dateien abgelegt sind, falls es vom Standard abweicht. Falls keine Prüfung gewünscht wird, ist “no” als Verzeichnis anzugeben. Mit den Optionen -u (–user) und -g (–group) können Benutzer und Gruppe des Perfdata-Verzeichnisses angegeben werden, falls diese vom Nagios-Benutzer abweichen sollten.
+</p>
+
+<p>
+Nach der Installation können die Änderungen in der nagios.cfg mit der Option <code>–p (–precheck)</code> überprüft werden, bevor ein Neustart erfolgt ist. Das ist sinnvoll, um ggf. fehlerhafte Einträge zu korrigieren, ohne Nagios jeweils neu starten zu müssen.
+</p>
+
+<p>
+Beim Aufruf mit der Option <code>-o</code>, der als Parameter eine Zeichenkette folgt, werden alle Hosts bzw. Services mit diesem Namen sowie die Informationen zu Performance-Daten ausgegeben. Die Zeichenkette sollte in Anführungszeichen gesetzt werden. Falls keine bzw. fehlerhafte Performance-Daten vorhanden sind, gibt es entsprechende Meldungen.
+</p>
+
+<p>
+Durch das Anhängen eines Semikolons werden nur Hosts mit der angegebenen Zeichenkette untersucht, durch Voranstellen nur Services. Enthält die Zeichenkette mittendrin ein Semikolon, dann wird der erste Teil als Hostname und der zweite als Servicebeschreibung betrachtet und die Auswertung auf diesen Host mit dem entsprechenden Service beschränkt:
+</p>
+<ul>
+<li class="level1"><div class="li"> Hostname/Servicebeschreibung ⇒ Zeichenkette in Hostname oder Servicebeschreibung</div>
+</li>
+<li class="level1"><div class="li"> Hostname; ⇒ Einschränkung auf Hostnamen</div>
+</li>
+<li class="level1"><div class="li"> ;Servicebeschreibung ⇒ Einschränkung auf Servicebeschreibung</div>
+</li>
+<li class="level1"><div class="li"> Hostname;Servicebeschreibung ⇒ Einschränkung auf Hostname und Servicebeschreibung</div>
+</li>
+</ul>
+
+<p>
+
+Ab PNP-Version 0.6 hat sich die Verzeichnisstruktur geändert, so dass alle Dateien unter einem separaten Verzeichnis liegen.
+Mit der Option -D (–pnpdir) kann man einen von /usr/local/pnp4nagios abweichenden Pfad für das PNP-Basisverzeichnis angeben. Diese Einstellung wirkt sich auch auf die Optionen ”-N”, ”-P” und ”-C” aus, so dass dort ggf. keine Werte angegeben werden müssen.
+</p>
+
+<p>
+Im NPCD-Modus kann durch die Option <code>-N</code> (<code>–npcdcfg</code>) der Name der Konfigurationsdatei angegeben werden, falls Name oder Ort nicht dem Standard entspricht (/usr/local/pnp4nagios/etc/npcd.cfg).
+</p>
+
+<p>
+Mit der Option <code>-P</code> (<code>–ppcfg</code>) wird der Name der Konfigurationsdatei für process_perfdata.pl angegeben, falls Name oder Ort vom Standard abweicht (/usr/local/pnp4nagios/etc/process_data.cfg).
+</p>
+
+<p>
+Mit der Option -C (–cpcfg) wird der Name der Konfigurationsdatei config.php angegeben, falls Name oder Ort vom Standard abweicht (/usr/local/pnp4nagios/etc/config.php).
+</p>
+
+<p>
+Durch die Option -M (–monitor) kann das Produkt angegeben werden, von dem PNP die Daten bekommt. Per Default ist das Nagios, inzwischen wird auch Icinga unterstützt. Teilweise müssen auch die Optionen -b, -B und -c benutzt werden.
+</p>
+
+<p>
+Teilweise entstehen beim Aendern von Templates Fehler, die man in der Web-<acronym title="Graphical User Interface">GUI</acronym> nicht so schnell findet. Mit der Option -T werden die Template-Dateien auf Fehler geprüft. Als Parameter ist der Pfad zum Template-Directory anzugeben.
+</p>
+
+<p>
+Normalerweise wird geprüft, ob bestimmte Pakete installiert sind. Falls es dabei Schwierigkeiten gibt (oder man sicher ist, dass alle benötigten Pakete vorhanden sind), kann man die Prüfung durch die Option -s (–skip) überspringen. 
+</p>
+
+<p>
+Mit der Option -n (–native) gefolgt von “es” or “de” können spanische oder deutsche Meldungen gewählt werden.
+</p>
+
+<p>
+Die Option <code>-e</code> (<code>–english</code>) erzwingt die Anzeige von englischen Meldungen, selbst wenn abweichende Spracheinstellungen erkannt werden.
+</p>
+
+<p>
+Durch Angabe der Option <code>-d</code> bzw. <code>–debug</code> werden zusätzliche Zeilen ausgegeben, die bei der Fehlersuche helfen können, <code>-q</code> bzw. <code>–quiet</code> unterdrückt sämtliche Ausgaben.
+</p>
+
+<p>
+Die Ausgaben selbst beginnen mit einem Buchstaben, der genauere Informationen
+ueber die Art der Ausgaben gibt:
+</p>
+
+<p>
+<code>[I] </code>Informationen zu Einstellungen, …<br/>
+
+<code>[A] </code>durchzuführende Aktionen<br/>
+
+<code>[W] </code>Warnung: beeinträchtigt nicht die Arbeitsweise von PNP<br/>
+
+<code>[E] </code>Fehlermeldung: PNP wird nicht korrekt arbeiten, solange das Problem besteht<br/>
+
+<code>[H] </code>Hinweis: es ist ratsam, die angegebene Dokumentation zu lesen<br/>
+
+<code>[D] </code>Debugging-Meldung, die hoffentlich zur Fehlerbehebung führt<br/>
+
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/webfe" class="wikilink1" title="de:pnp-0.6:webfe">das Web-Frontend</a>
+
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1 permalink" title="de:pnp-0.6:verify_pnp_config" rel="bookmark">de:pnp-0.6:verify_pnp_config</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:webfe">
+
+
+
+<h1><a name="das_nagios_web_frontend" id="das_nagios_web_frontend" href="/de/pnp-0.6/webfe" title="Das Nagios Web Frontend">Das Nagios Web Frontend</a></h1>
+<div class="level1">
+
+<p>
+
+PNP soll natürlich schnell erreichbar sein. Man möchte nicht lange nach den richtigen Graphen suchen.
+</p>
+
+<p>
+Nagios selbst bietet die Möglichkeit, externe URLs über die sogenannte Extended Info Config einzubinden.
+Da es in diesem Bereich eine Änderung zwischen Nagios 2.x und der Version 3.0 gibt, wird anschließend auf beide Versionen getrennt eingegangen.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/webfe" class="wikilink1" title="de:pnp-0.6:webfe">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/webfe" class="wikilink1 permalink" title="de:pnp-0.6:webfe" rel="bookmark">de:pnp-0.6:webfe</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:webfe_cfg">
+
+
+
+<h1><a name="pnp_web_frontend" id="pnp_web_frontend" href="/de/pnp-0.6/webfe_cfg" title="PNP Web Frontend">PNP Web Frontend</a></h1>
+<div class="level1">
+
+<p>
+
+Das Verhalten des PNP-Web-Frontend lässt sich über die Config-Datei <code>etc/config.php</code> beeinflussen.
+Diese Datei wird bei Updates von PNP immer wieder überschrieben, da die meisten Pfade und Optionen bereits durch <code>./configure</code> ermittelt werden.
+</p>
+
+<p>
+Eigene Anpassungen sollten daher in der Datei etc/config_local.php erfolgen. Sollte die Datei noch nicht existieren, kann die config.php als Vorlage verwendet werden.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/webfe_cfg" class="wikilink1" title="de:pnp-0.6:webfe_cfg">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/webfe_cfg" class="wikilink1 permalink" title="de:pnp-0.6:webfe_cfg" rel="bookmark">de:pnp-0.6:webfe_cfg</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:timeranges">
+
+
+
+<h1><a name="timeranges" id="timeranges" href="/de/pnp-0.6/timeranges" title="Timeranges">Timeranges</a></h1>
+<div class="level1">
+
+<p>
+
+In der Übersicht zeigt PNP fünf Zeitbereiche, die frei in der config.php definiert werden können.
+</p>
+
+<p>
+Es gibt aber auch die Möglichkeit, die Zeitbereiche über die <acronym title="Uniform Resource Locator">URL</acronym> zu beeinflussen. Dies ist hilfreich, wenn z.B. automatisch <acronym title="Portable Document Format">PDF</acronym>-Dokumente erstellt werden sollen
+</p>
+
+<p>
+Die Zeitbereiche werden über die Optionen <code>start</code> und <code>end</code> definiert.
+</p>
+
+<p>
+Beispiel:
+
+</p>
+<pre class="code"> pnp4nagios/graph?host=&lt;hostname&gt;&amp;srv=&lt;servicedesc&gt;&amp;start=-1week</pre>
+
+<p>
+
+Der Startzeitpunkt der Graphen wird somit, ausgehend vom aktuellen Datum, um eine Woche nach hinten verschoben. Der Endzeitpunkt bleibt auf dem aktuellen Zeitstempel. Aber auch <code>end</code> lässt sich über diesen Weg beeinflussen, wobei beide Optionen auch einzeln manipuliert werden dürfen.
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0"> start </th><th class="col1"> end </th><th class="col2"> view </th><th class="col3"> Ergebnis </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign">       </td><td class="col1 leftalign">     </td><td class="col2 leftalign">     </td><td class="col3">Alle Ansichten enden mit der aktuellen Zeit </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 centeralign">  x    </td><td class="col1 leftalign">     </td><td class="col2 leftalign">     </td><td class="col3">Alle Ansichten beginnen mit dem angegebenen Datum </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">       </td><td class="col1 centeralign">  x  </td><td class="col2 leftalign">     </td><td class="col3">Alle Ansichten enden mit dem angegebenen Datum </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 centeralign">  x    </td><td class="col1 centeralign">  x  </td><td class="col2 leftalign">     </td><td class="col3">Eine Ansicht zwischen den beiden Zeitangaben </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">       </td><td class="col1 leftalign">     </td><td class="col2 centeralign">  x  </td><td class="col3">Eine Ansicht endet mit der aktuellen Zeit </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 centeralign">  x    </td><td class="col1 leftalign">     </td><td class="col2 centeralign">  x  </td><td class="col3">Eine Ansicht beginnt mit dem angegebenen Datum </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">       </td><td class="col1 centeralign">  x  </td><td class="col2 centeralign">  x  </td><td class="col3">Eine Ansicht endet mit dem angegebenen Datum </td>
+	</tr>
+</table>
+
+<p>
+
+Beispiele zur Datumsangabe:
+
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0 centeralign">  Format   </th><th class="col1 leftalign"> Beschreibung      </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign"> 2009W04   </td><td class="col1"> 4. KW 2009 </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"> 1.5.2009  </td><td class="col1"> 1. Mai 2009 </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign"> -1 day    </td><td class="col1"> Einen Tag zurück </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign"> -3 weeks  </td><td class="col1 leftalign"> 3 Wochen zurück  </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign"> -1 year   </td><td class="col1 leftalign"> Ein Jahr zurück  </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0"> yesterday </td><td class="col1"> Gestern </td>
+	</tr>
+</table>
+
+<p>
+
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/pages" class="wikilink1" title="de:pnp-0.6:pages">Pages</a>
+
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/timeranges" class="wikilink1 permalink" title="de:pnp-0.6:timeranges" rel="bookmark">de:pnp-0.6:timeranges</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:pages">
+
+
+
+<h1><a name="pages" id="pages" href="/de/pnp-0.6/pages" title="Pages">Pages</a></h1>
+<div class="level1">
+
+<p>
+
+„pages“ bieten die Möglichkeit, Grafiken von verschiedenen Hosts/Services auf einer Seite zusammenzufassen. Auf diese Weise können z.B. die Übertragungsraten der Netzwerk-Interfaces aller Tape-Libraries dargestellt werden. Innerhalb der Definitionen sind reguläre Ausdrücke möglich, so dass – entsprechende Namen vorausgesetzt - mit wenig Aufwand viel erreicht werden kann.
+Das Verzeichnis, das in <code>config.php</code> durch den Konfigurationseintrag „$conf[&#039;page_dir&#039;]“ angegeben wurde, enthält ein oder mehrere Dateien mit der Endung „.cfg“.
+</p>
+
+<p>
+Kommentare beginnen mit einem &#039;#&#039; und sind auch innerhalb einer Zeile möglich.
+Jede Datei enthält eine „page“-Definition, die neben dem Namen der Seite festlegt, ob die nachfolgenden Grafikdefinitionen reguläre Ausdrücke enthalten.<br/>
+
+Die Bezeichnung hinter <code>page_name</code> erscheint in der Liste der verfügbaren Seiten und wird als Titel im Browser angezeigt.
+<strong>Achtung:</strong> “host_name” und “service_desc” beziehen sich auf die Namen der Dateien im perfdata-Ordner, nicht auf die Nagios-Bezeichnungen. Leerzeichen werden durch Unterstriche (“_”) ersetzt.
+</p>
+<pre class="code">define  page  {
+        use_regex 1		# 0 = keine regulären Ausdrücke, 1 = reguläre Ausdrücke
+        page_name Test-Seite	# Beschreibung der Seite
+}</pre>
+
+<p>
+Danach folgen ein oder mehrere „graph“-Definitionen:
+</p>
+<pre class="code">define graph {
+        host_name       host1,host2,host3
+        service_desc    Current_Load
+}</pre>
+
+<p>
+
+<strong>Achtung:</strong> Damit die oben gezeigte Liste von Host-Namen funktioniert, muss <code>use_regex 0</code> gesetzt sein!
+</p>
+<pre class="code">define graph {
+        host_name       host4
+        service_desc    Current_Users
+}</pre>
+
+<p>
+Und jetzt mit regulären Ausdrücken. Zuerst alle Hosts, deren Name mit „Tape“ beginnen:
+
+</p>
+<pre class="code">define graph {
+        host_name       ^Tape
+        service_desc    Traffic
+}</pre>
+
+<p>
+alle Hosts, deren Namen mit “00” enden
+
+</p>
+<pre class="code">define graph {
+        host_name       00$
+        service_desc    Load
+}</pre>
+
+<p>
+alle Services des localhost, deren Namen ein „a“ oder „o“ enthalten:
+
+</p>
+<pre class="code">define graph {
+        host_name       localhost
+        service_desc    a|o
+}</pre>
+
+<p>
+alle Services, die im Namen nach einem „_“  (mindestens) drei Ziffern haben auf allen Hosts, deren Namen mit „UX“ beginnen:
+
+</p>
+<pre class="code">define graph {
+        host_name       ^UX
+        service_desc    _\d{3}
+}</pre>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/xport" class="wikilink1" title="de:pnp-0.6:xport">Datenexport</a>
+
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/pages" class="wikilink1 permalink" title="de:pnp-0.6:pages" rel="bookmark">de:pnp-0.6:pages</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:xport">
+
+
+
+<h1><a name="datenexport" id="datenexport" href="/de/pnp-0.6/xport" title="Datenexport">Datenexport</a></h1>
+<div class="level1">
+
+<p>
+
+PNP bietet über den <code>xport</code> Controller Zugriff auf die RRD-Daten. Dabei kann das Ausgabeformat gewählt werden. Zur Zeit sind die Formate <code>xml</code>, <code>json</code> und <code>csv</code> realisiert.
+</p>
+
+<p>
+Aufgerufen wird der Controller über die <acronym title="Uniform Resource Locator">URL</acronym>
+
+</p>
+<pre class="code">/pnp4nagios/xport/&lt;format&gt;?host=&lt;hostname&gt;&amp;srv=&lt;servicedesc&gt;</pre>
+
+<p>
+
+wobei &lt;format&gt; durch das jeweils gewünschte Format zu ersetzen ist.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">Templates</a>
+
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/xport" class="wikilink1 permalink" title="de:pnp-0.6:xport" rel="bookmark">de:pnp-0.6:xport</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:tpl">
+
+
+
+<h1><a name="was_sind_templates" id="was_sind_templates" href="/de/pnp-0.6/tpl" title="Was sind Templates ?">Was sind Templates ?</a></h1>
+<div class="level1">
+
+<p>
+
+PNP benutzt Templates, um das Aussehen der RRD-Graphen zu beeinflussen.
+</p>
+
+<p>
+Dabei bestimmt das verwendete check_command, welches Template zur Darstellung herangezogen wird. Im Folgenden wird beschrieben, wo Templates gespeichert werden und wie die Entscheidung für das “richtige” Template getroffen wird.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/tpl" class="wikilink1 permalink" title="de:pnp-0.6:tpl" rel="bookmark">de:pnp-0.6:tpl</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:tpl_custom">
+
+
+
+<h1><a name="custom_templates" id="custom_templates" href="/de/pnp-0.6/tpl_custom" title="Custom Templates">Custom Templates</a></h1>
+<div class="level1">
+
+<p>
+
+Wie bereits unter ”<a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">Was sind Templates ?</a>” beschrieben, ist die Darstellung der Graphen abhängig vom verwendeten Check-Command.
+</p>
+
+<p>
+Es gibt jedoch Situationen, in denen dieses Verhalten übersteuert werden muss.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/tpl_custom" class="wikilink1" title="de:pnp-0.6:tpl_custom">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/tpl_custom" class="wikilink1 permalink" title="de:pnp-0.6:tpl_custom" rel="bookmark">de:pnp-0.6:tpl_custom</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:advanced">
+
+
+
+<h1><a name="advanced" id="advanced" href="/de/pnp-0.6/advanced" title="Advanced">Advanced</a></h1>
+<div class="level1">
+
+<p>
+<a href="/de/pnp-0.6/advanced" class="wikilink1" title="de:pnp-0.6:advanced">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/advanced" class="wikilink1 permalink" title="de:pnp-0.6:advanced" rel="bookmark">de:pnp-0.6:advanced</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:rrdcached">
+
+
+
+<h1><a name="rrdtool_cache_daemon" id="rrdtool_cache_daemon" href="/de/pnp-0.6/rrdcached" title="RRDtool Cache Daemon">RRDtool Cache Daemon</a></h1>
+<div class="level1">
+
+<p>
+
+In großen Installationen wird man über kurz oder lang feststellen, dass die Verarbeitung der Performance-Daten eine recht hohe I/O-Last zur Folge hat. RRDtool muss extrem viele Updates auf Disk schreiben, kann dabei jedoch den Disk-Cache nicht optimal ausnutzen.
+</p>
+
+<p>
+Eine Optimierung stellt das Sammeln und Sortieren der Daten dar. Es ist für das System effektiver, viele Updates im Block in eine RRD-Datenbank zu schreiben. Der Disk-Cache kann dabei effektiver genutzt werden.
+</p>
+
+<p>
+In der aktuellen RRDtool-Version ( <a href="http://oss.oetiker.ch/rrdtool-trac/browser/trunk/program" class="urlextern" title="http://oss.oetiker.ch/rrdtool-trac/browser/trunk/program"  rel="nofollow">SVN trunk 1550+</a> ) ist der rrdcached enthalten, der genau diese Situation verbessern soll.
+</p>
+
+<p>
+An dieser Stelle möchte ich mich bei Florian octo Forster, Kevin Brintnall und Tobi Oetiker bedanken. Die Entwicklung dieses Daemons wurde vorbildlich auf der <a href="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html" class="urlextern" title="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html"  rel="nofollow">rrd-developers</a> Mailingliste koordiniert.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/rrdcached" class="wikilink1" title="de:pnp-0.6:rrdcached">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/rrdcached" class="wikilink1 permalink" title="de:pnp-0.6:rrdcached" rel="bookmark">de:pnp-0.6:rrdcached</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:npcd">
+
+
+
+<h1><a name="npcd" id="npcd" href="/de/pnp-0.6/npcd" title="NPCD">NPCD</a></h1>
+<div class="level1">
+
+<p>
+
+NPCD (Nagios-Perfdata-C-Daemon) wurde geschrieben, um die asynchrone Bearbeitung von Nagios Performance-Daten zu ermöglichen.
+</p>
+
+<p>
+<a href="/de/pnp-0.6/npcd" class="wikilink1" title="de:pnp-0.6:npcd">→ Read more...</a>
+</p>
+
+</div>
+<div class="inclmeta level1">
+	<a href="/de/pnp-0.6/npcd" class="wikilink1 permalink" title="de:pnp-0.6:npcd" rel="bookmark">de:pnp-0.6:npcd</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:wrapper">
+
+<p>
+check_procs ist ein Beispiel für ein Plugin, das keine Performance-Daten ausgibt:
+</p>
+<pre class="code">./check_procs -a ndo2db -w 1: -c 0:
+PROCS OK: 2 processes with args &#039;ndo2db&#039;</pre>
+
+<p>
+Mit dem folgenden Wrapper-Script kann das geändert werden
+</p>
+
+<p>
+<strong>check_procs.sh</strong>
+
+</p>
+<pre class="code">#!/bin/bash
+LINE=`/usr/local/nagios/libexec/check_procs $*`
+RC=$?
+COUNT=`echo $LINE | awk &#039;{print $3}&#039;`
+echo $LINE \| procs=$COUNT
+exit $RC</pre>
+
+<p>
+Nun wird die Zahl zusammen mit einer Bezeichnung ausgegeben.
+
+</p>
+<pre class="code">./check_procs.sh -a ndo2db -w 1: -c 0:
+PROCS OK: 2 processes with args &#039;ndo2db&#039;| procs=2</pre>
+<div class="inclmeta level">
+	<a href="/de/pnp-0.6/wrapper" class="wikilink1 permalink" title="de:pnp-0.6:wrapper" rel="bookmark">de:pnp-0.6:wrapper</a>
+</div>
+</div>
+<div class="plugin_include_content" id="plugin_include__de:pnp-0.6:perfdata_format">
+
+<p>
+2.6. Performance-Daten
+</p>
+
+<p>
+Performance-Daten von Nagios sind definiert als “alles hinter dem | des Plugin-Outputs” - nähere Einzelheiten dazu, wie diese Daten in Logfiles umgeleitet werden, gibt es in der <a href="http://www.nagios-wiki.de/nagios/doku3/perfdata" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/perfdata"  rel="nofollow">Nagios-Dokumentation</a>. Trotz allem ist es die Aufgabe des Plugin-Schreibers, dass die Performance-Daten in einem “Nagios-Plugin”-Format vorliegen. Dies ist das erwartete Format:
+</p>
+
+<p>
+&#039;Bezeichnung&#039;=Wert[UOM];[warn];[crit];[min];[max]
+</p>
+
+<p>
+Anmerkungen:
+
+</p>
+<ol>
+<li class="level1"><div class="li"> Leerzeichen trennen Listen von Bezeichnung/Werte-Paaren</div>
+</li>
+<li class="level1"><div class="li"> Bezeichnungen können beliebige Zeichen enthalten</div>
+</li>
+<li class="level1"><div class="li"> die Bezeichnung muss in Apostrophs eingeschlossen sein, wenn diese = oder Leerzeichen enthält, ansonsten sind die Apostrophs optional</div>
+</li>
+<li class="level1"><div class="li"> die Länge der Bezeichnung ist beliebig, aber idealerweise sind die ersten 19 Zeichen eindeutig (aufgrund einer Beschränkung in RRD). Bitte beachten Sie, dass es eine Längenbegrenzung bei der Menge von Daten gibt, die von NRPE an Nagios geliefert werden kann</div>
+</li>
+<li class="level1"><div class="li"> um ein Apostroph darzustellen, nutzen Sie zwei einzelne Apostrophs</div>
+</li>
+<li class="level1"><div class="li"> <em>warn</em>, <em>crit</em>, <em>min</em> und/oder <em>max</em> können leer sein (z.B. wenn der Schwellwert nicht definiert ist oder wenn min oder max nicht zutreffen). Nachfolgende, nicht gefüllte Semikola können entfallen</div>
+</li>
+<li class="level1"><div class="li"> <em>min</em> und <em>max</em> sind nicht erforderlich, wenn UOM = %</div>
+</li>
+<li class="level1"><div class="li"> <em>Wert</em>, <em>min</em> und <em>max</em> sind aus der Klasse [-0-9.] (Ziffern, Minuszeichen und Dezimalpunkt). Alle müssen das gleiche UOM benutzen</div>
+</li>
+<li class="level1"><div class="li"> <em>warn</em> und <em>crit</em> sind im “Range”-Format (siehe Abschnitt 2.5 der Original-Dokumentation). Alle müssen das gleiche UOM benutzen.</div>
+</li>
+<li class="level1"><div class="li"> UOM (unit of measurement, Maßeinheit) ist eins von:</div>
+<ul>
+<li class="level3"><div class="li"> keine Einheit angegeben - angenommen wird eine Zahl (int oder float) von Dingen (z.B. Benutzer, Prozesse, Load)</div>
+</li>
+<li class="level3"><div class="li"> s - Sekunden (auch us, ms)</div>
+</li>
+<li class="level3"><div class="li"> % - Prozent</div>
+</li>
+<li class="level3"><div class="li"> B - Bytes (auch KB, <acronym title="Megabyte">MB</acronym>, TB; <acronym title="Gigabyte">GB</acronym>?)</div>
+</li>
+<li class="level3"><div class="li"> c - ein fortlaufender Zähler (z.B. Bytes, die über ein Interface übertragen werden)</div>
+</li>
+</ul>
+</li>
+</ol>
+
+<p>
+
+Es bleibt Drittanbietern überlassen, aus den Performance-Daten Graphen zu erzeugen.
+</p>
+
+<p>
+Quelle: <a href="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201" class="urlextern" title="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201"  rel="nofollow">http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201</a>
+
+</p>
+<div class="inclmeta level">
+	<a href="/de/pnp-0.6/perfdata_format" class="wikilink1 permalink" title="de:pnp-0.6:perfdata_format" rel="bookmark">de:pnp-0.6:perfdata_format</a>
+</div>
+</div>

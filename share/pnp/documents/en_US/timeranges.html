@@ -1,0 +1,87 @@
+
+
+
+<h1><a name="timeranges" id="timeranges">Timeranges</a></h1>
+<div class="level1">
+
+<p>
+
+In the overview PNP shows five timeranges which can be defined in config.php.
+</p>
+
+<p>
+Additionally you can influence the timeranges via the <acronym title="Uniform Resource Locator">URL</acronym>. This can be useful to automatically create <acronym title="Portable Document Format">PDF</acronym> documents. The ranges can be defined using the options “start” and “end”.
+</p>
+
+<p>
+Example:
+
+</p>
+<pre class="code"> pnp4nagios/graph?host=&lt;hostname&gt;&amp;srv=&lt;servicedesc&gt;&amp;start=-1week</pre>
+
+<p>
+
+The graph will start one week prior to the current date and time. It will end at the current timestamp.
+
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0"> start </th><th class="col1"> end </th><th class="col2"> view </th><th class="col3"> result </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign">       </td><td class="col1 leftalign">     </td><td class="col2 leftalign">      </td><td class="col3">all views ending at current timestamp </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 centeralign">  x    </td><td class="col1 leftalign">     </td><td class="col2 leftalign">      </td><td class="col3">all views starting at defined date </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">       </td><td class="col1 centeralign">  x  </td><td class="col2 leftalign">      </td><td class="col3">all views ending at defined date </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 centeralign">  x    </td><td class="col1 centeralign">  x  </td><td class="col2 leftalign">      </td><td class="col3">one view between the two dates </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">       </td><td class="col1 leftalign">     </td><td class="col2 centeralign">  x   </td><td class="col3">one view ending at current timestamp </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 centeralign">  x    </td><td class="col1 leftalign">     </td><td class="col2 centeralign">  x   </td><td class="col3">one view starting at defined date </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">       </td><td class="col1 centeralign">  x  </td><td class="col2 centeralign">  x   </td><td class="col3">one view ending at defined date </td>
+	</tr>
+</table>
+
+<p>
+Examples of different specifications
+
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0 centeralign">  format   </th><th class="col1"> description </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign"> 2009W04   </td><td class="col1"> 4. week of 2009 </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"> 1.5.2009  </td><td class="col1"> May, 1st 2009 </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign"> -1 day    </td><td class="col1"> one day back </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign"> -3 weeks  </td><td class="col1"> 3 weeks back </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign"> -1 year   </td><td class="col1 leftalign"> one year back  </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0"> yesterday </td><td class="col1"> yesterday </td>
+	</tr>
+</table>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a>
+
+</p>
+
+</div>

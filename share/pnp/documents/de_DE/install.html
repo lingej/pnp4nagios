@@ -1,0 +1,159 @@
+
+
+
+<h1><a name="installation" id="installation">Installation</a></h1>
+<div class="level1">
+
+<p>
+
+Im Folgenden wird die Installation von PNP beschrieben. Dabei wird davon ausgegangen, dass Nagios aus den Sourcen übersetzt und im Verzeichnis /usr/local/pnpnagios installiert wurde.<br/>
+
+<strong>Achtung:</strong> Die Beschreibung bezieht sich auf die Developer-Version PNP 0.6.0.<br/>
+
+Bitte vergessen Sie nicht, dass PNP nach der Installation noch konfiguriert werden muss.
+</p>
+
+</div>
+<!-- SECTION "Installation" [1-388] -->
+<h2><a name="make_und_co" id="make_und_co">Make und Co</a></h2>
+<div class="level2">
+
+<p>
+
+Die Installation von PNP wird wie bei Nagios auch über <a href="http://de.wikipedia.org/wiki/Makefile" class="interwiki iw_wpde" title="http://de.wikipedia.org/wiki/Makefile">Makefile</a>s gesteuert. Dabei wird durch den Aufruf von ./configure das System analysiert und die ermittelten Werte in Makefiles übernommen.
+</p>
+
+<p>
+Als User root wird PNP in /usr/local/src entpackt.
+
+</p>
+<pre class="code">
+tar -xvzf pnp4nagios-HEAD.tar.gz
+cd pnp4nagios
+</pre>
+
+<p>
+Im Verzeichnis pnp4nagios wird nun ./configure aufgerufen.
+</p>
+<pre class="code">
+./configure
+</pre>
+
+<p>
+
+<strong>Hinweis:</strong> Ohne weitere Optionen werden als Benutzer und Gruppe “nagios” verwendet. Bei abweichenden Werten sind die Parameter ”–with-nagios-user” und ”–with-nagios-group” zu benutzen. Im Falle von Icinga könnte der Aufruf so aussehen
+
+</p>
+<pre class="code">
+./configure --with-nagios-user=icinga --with-nagios-group=icinga
+</pre>
+
+<p>
+Es laufen einige Zeilen über den Bildschirm. Wichtig ist die Ausgabe zum Schluss.
+</p>
+<pre class="code">
+*** Configuration summary for pnp4nagios-0.6.2 23-12-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/pnp4nagios
+  HTML Dir:                         /usr/local/pnp4nagios/share
+  Config Dir:                       /usr/local/pnp4nagios/etc
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.2.12
+  RRDs Perl Modules:                FOUND (Version 1.2012)
+  RRD Files stored in:              /usr/local/pnp4nagios/var/perfdata
+  process_perfdata.pl Logfile:      /usr/local/pnp4nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/pnp4nagios/var/spool
+
+  Web Interface Options:  -------------------------         -------------------
+  HTML URL:                         http://localhost/pnp4nagios/
+  Apache Config File:               /etc/apache2/conf.d/pnp4nagios.conf
+
+
+  Review the options above for accuracy.  If they look okay,
+  type &#039;make all&#039; to compile.</pre>
+
+<p>
+Die angezeigten Pfade sollten nun geprüft werden. Falls die gezeigten Werte nicht passen, kann durch einen erneuten Aufruf von ./configure mit den passenden Optionen Abhilfe geschaffen werden.<br/>
+
+<strong>ACHTUNG:</strong> Nachdem es immer wieder Schwierigkeiten gibt: “Location of rrdtool binary” bedeutet inkl. Namen des Binary! Bei Bedarf kann man das beim ./configure als Parameter angeben:
+
+</p>
+<pre class="code"> ./configure --with-rrdtool=/usr/local/rrdtool-1.2.xx/bin/rrdtool</pre>
+<pre class="code"> ./configure --help </pre>
+
+<p>
+
+zeigt, welche Optionen möglich sind.<br/>
+<br/>
+
+Ein
+
+</p>
+<pre class="code"> make all</pre>
+
+<p>
+
+kompiliert nun die in C geschriebenen Komponenten wie NPCD
+
+</p>
+<pre class="code"> make install</pre>
+
+<p>
+
+kopiert alles an die richtige Stelle im Filesystem. Die Pfade wurden ja beim ./configure bereits gezeigt.
+</p>
+
+<p>
+Nach der Installation der Programm- und <acronym title="HyperText Markup Language">HTML</acronym>-Dateien wird mit 
+
+</p>
+<pre class="code"> make install-webconf</pre>
+
+<p>
+
+eine Konfigurationsdatei in das Konfigurationsverzeichnis des Apache-Web-Servers kopiert.
+</p>
+
+<p>
+Optional kann noch
+
+</p>
+<pre class="code"> make install-config</pre>
+
+<p>
+
+aufgerufen werden. Damit werden Config-Files für process_perfdata.pl und npcd nach etc/pnp kopiert. 
+</p>
+
+<p>
+Wird das INIT Script für den NPCD benötigt, so sorgt
+
+</p>
+<pre class="code"> make install-init</pre>
+
+<p>
+
+für die Installation nach /etc/init.d 
+</p>
+
+<p>
+Zusammenfassen lassen sich diese einzelnen Commands durch
+</p>
+
+<p>
+   make fullinstall
+</p>
+
+<p>
+<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei für den Web-Server ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
+</p>
+
+<p>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">Konfiguration</a>
+
+</p>
+
+</div>
+<!-- SECTION "Make und Co" [389-] -->

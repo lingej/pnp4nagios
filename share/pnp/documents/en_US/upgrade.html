@@ -1,0 +1,220 @@
+
+
+
+<h1><a name="upgrade_to_version_06x" id="upgrade_to_version_06x">Upgrade to version 0.6.x</a></h1>
+<div class="level1">
+
+<p>
+
+The web-frontend has been completely rewritten and is now based on the <acronym title="Hypertext Preprocessor">PHP</acronym> MVC framework <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a>. This leads to changed dependencies which must be checked prior to installation.
+</p>
+
+<p>
+Note: At first an upgrade is like a new installation. Afterwards some changes should be made which are described further down.
+</p>
+
+<p>
+Without specifying any options during <code>./configure</code> PNP 0.4.x was installed below an existing Nagios-Installation at <code>/usr/local/nagios</code>.
+</p>
+
+<p>
+Without specifying any options during <code>./configure</code> PNP 0.6.x will be installed in a separate directory at <code>/usr/local/pnp4nagios</code>, i.e. it should be viewed as an independent application.
+</p>
+
+<p>
+Note: It is sufficient to copy the *.rrd files from the old to the new location. The *.xml files are recreated as new performance data arrives. The internal structure of the xml files has changed so you wouldn&#039;t be able to use them either way.
+</p>
+
+</div>
+<!-- SECTION "Upgrade to version 0.6.x" [1-957] -->
+<h2><a name="comparison_of_the_structure" id="comparison_of_the_structure">Comparison of the structure</a></h2>
+<div class="level2">
+
+<p>
+
+Summary of a PNP 0.4.14 installation
+</p>
+<pre class="code">
+./configure
+...
+*** Configuration summary for pnp 0.4.14 05-02-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/nagios
+  HTML Dir:                         /usr/local/nagios/share/pnp
+  Config Dir:                       /usr/local/nagios/etc/pnp
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.3.1
+  RRDs Perl Modules:                FOUND (Version 1.3001)
+  RRD Files stored in:              /usr/local/nagios/share/perfdata
+  process_perfdata.pl Logfile:      /usr/local/nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/nagios/var/spool/perfdata/
+</pre>
+
+<p>
+Summary of a PNP 0.6.0 installation
+</p>
+<pre class="code">
+./configure
+...
+*** Configuration summary for pnp4nagios-0.6.0 07-30-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/pnp4nagios
+  HTML Dir:                         /usr/local/pnp4nagios/share
+  Config Dir:                       /usr/local/pnp4nagios/etc
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.3.1
+  RRDs Perl Modules:                FOUND (Version 1.3001)
+  RRD Files stored in:              /usr/local/pnp4nagios/var/perfdata
+  process_perfdata.pl Logfile:      /usr/local/pnp4nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/pnp4nagios/var/spool
+
+  Web Interface Options:  -------------------------         -------------------
+  HTML URL:                         http://localhost/pnp4nagios/
+  Apache Config File:               /etc/apache2/conf.d/pnp4nagios.conf
+</pre>
+
+<p>
+Looking at these lines result in the parameters to be changed and the upgrade strategy.
+</p>
+
+</div>
+<!-- SECTION "Comparison of the structure" [958-2859] -->
+<h2><a name="adjustments" id="adjustments">Adjustments</a></h2>
+<div class="level2">
+
+<p>
+
+The templates of the action_url definitions have changed. Instead of ”/nagios/pnp” the <acronym title="Uniform Resource Locator">URL</acronym> should be ”/pnp4nagios” and instead of “index.php” now “graph” will be used.
+</p>
+<pre class="code">define host {
+  name       host-pnp
+  register   0
+  action_url /pnp4nagios/graph?host=$HOSTNAME$
+}
+
+define service {
+  name       srv-pnp
+  register   0
+  action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+}</pre>
+
+<p>
+The definitions for the preview popup function are similar
+
+</p>
+<pre class="code">define host {
+   name       host-pnp
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$
+   register   0
+}
+
+define service {
+   name       srv-pnp
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   register   0
+}</pre>
+
+<p>
+
+<strong>Attention</strong>: It is <em>not</em> an error that the strings in front and after “class” contain only one quote.
+</p>
+
+<p>
+Other than described in the 0.4.x documentation these templates can be used for Nagios 2.x and 3.x.
+</p>
+
+<p>
+The variables in the files in the templates folder have to be initialised before first use. Example
+</p>
+<pre class="code">$lower = &quot;&quot;</pre>
+
+<p>
+
+Earlier you were able to append to variables which weren&#039;t initialised before first use. Example: 
+
+</p>
+<pre class="code">foreach ($DS as $i) {
+    $def[1] .= &quot;DEF:var$i=$rrdfile:$DS[$i]:AVERAGE &quot; ;</pre>
+
+<p>
+
+Now you have to change that to
+
+</p>
+<pre class="code">
+$def[1] = &quot;&quot;;
+foreach ($DS as $i) {
+    $def[1] .= &quot;DEF:var$i=$rrdfile:$DS[$i]:AVERAGE &quot; ;</pre>
+
+<p>
+
+<br/>
+
+Constants in template files don&#039;t work anymore, so that they have to be converted to variables. 
+</p>
+<pre class="code">define(&quot;_WARNRULE&quot;, &#039;#FFFF00&#039;);</pre>
+
+<p>
+may be changed to
+</p>
+<pre class="code"> $WARNRULE = &#039;#FFFF00&#039;;</pre>
+
+<p>
+Please keep in mind that all occurrences have to be changed <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
+</p>
+
+</div>
+<!-- SECTION "Adjustments" [2860-4611] -->
+<h2><a name="upgrade_scenario_using_npcd" id="upgrade_scenario_using_npcd">Upgrade scenario using NPCD</a></h2>
+<div class="level2">
+<ol>
+<li class="level1"><div class="li"> planning the new setup</div>
+</li>
+<li class="level1"><div class="li"> perform test installation and acquaint oneself with the new system</div>
+</li>
+<li class="level1"><div class="li"> create backup of the old installation</div>
+</li>
+<li class="level1"><div class="li"> install PNP 0.6.x at <code>/usr/local/pnp4nagios</code></div>
+</li>
+<li class="level1"><div class="li"> make install-config</div>
+</li>
+<li class="level1"><div class="li"> make install-webconf</div>
+</li>
+<li class="level1"><div class="li"> reload Apache</div>
+</li>
+<li class="level1"><div class="li"> test Apache-config </div>
+<ol>
+<li class="level2"><div class="li"> call of <code>/pnp4nagios</code> has to report an empty perfdata directory</div>
+</li>
+</ol>
+</li>
+<li class="level1"><div class="li"> create <code>/usr/local/pnp4nagios/etc/npcd.cfg</code> from <code>npcd.cfg-sample</code></div>
+<ol>
+<li class="level2"><div class="li"> check paths and adapt changes from 0.4.x if necessary</div>
+</li>
+</ol>
+</li>
+<li class="level1"><div class="li"> adjust all paths in nagios.cfg to the new PNP installation </div>
+</li>
+<li class="level1"><div class="li"> adjust all paths in the command definitions</div>
+</li>
+<li class="level1"><div class="li"> stop npcd using <code>/etc/init.d/npcd stop</code></div>
+</li>
+<li class="level1"><div class="li"> <code>make install-init</code> installs the new init script for npcd</div>
+</li>
+<li class="level1"><div class="li"> <code>/etc/init.d/nagios stop</code></div>
+</li>
+<li class="level1"><div class="li"> copy <code>/usr/local/nagios/share/perfdata</code> to <code>/usr/local/pnp4nagios/var/perfdata</code>. Attention: check the permissions</div>
+</li>
+<li class="level1"><div class="li"> <code>/etc/init.d/npcd start</code></div>
+</li>
+<li class="level1"><div class="li"> <code>/etc/init.d/nagios start</code></div>
+</li>
+</ol>
+
+</div>
+<!-- SECTION "Upgrade scenario using NPCD" [4612-] -->

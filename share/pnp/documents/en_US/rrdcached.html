@@ -1,0 +1,154 @@
+
+
+
+<h1><a name="rrdtool_cache_daemon" id="rrdtool_cache_daemon">RRDtool Cache Daemon</a></h1>
+<div class="level1">
+
+<p>
+
+In large installations sooner or later one will recognize that processing the performance data will result in a relatively high I/O load. RRDtool has to do very much disk updates but cannot use the disk cache in an optimal way.
+</p>
+
+<p>
+One improvement is made by collecting and sorting the data. It is more effective to write many updates to an RRD database in one block. The disk cache can be used more effectively that way. 
+</p>
+
+<p>
+The current RRDtool ( <a href="http://oss.oetiker.ch/rrdtool-trac/browser/trunk/program" class="urlextern" title="http://oss.oetiker.ch/rrdtool-trac/browser/trunk/program"  rel="nofollow">SVN trunk 1550+</a> ) contains rrdcached which should improve exactly this situation.
+</p>
+
+<p>
+At this point I&#039;d like to thank Florian octo Forster, Kevin Brintnall and Tobi Oetiker. The development of this daemon has been coordinated exemplary on the <a href="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html" class="urlextern" title="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html"  rel="nofollow">rrd-developers</a> mailing list.
+</p>
+
+</div>
+<!-- SECTION "RRDtool Cache Daemon" [1-885] -->
+<h2><a name="mode_of_operation" id="mode_of_operation">Mode of operation</a></h2>
+<div class="level2">
+
+<p>
+
+The rrdcached is working as a daemon in the background and opens a UNIX or TCP socket to wait for requests of rrdtool. Due to security reasons newer versions of rrdcached cannot use absolute paths for network access anymore so the only possible way are unix sockets.
+</p>
+
+</div>
+<!-- SECTION "Mode of operation" [886-1184] -->
+<h3><a name="rrdcached" id="rrdcached">rrdcached</a></h3>
+<div class="level3">
+
+<p>
+
+rrdcached recognizes some important options which are passed during startup.
+</p>
+
+<p>
+Option -l defines the socket the daemon will listen for update requests. The default TCP port will be 42217.
+</p>
+<pre class="code">
+-l unix:/path/to/rrdcached.sock
+-l /path/to/rrdcached.sock
+-l 127.0.0.1
+-l 127.0.0.1:8888
+</pre>
+
+<p>
+Option -P specifies which commands are usable with the RRD data bases
+
+</p>
+<pre class="code">-P FLUSH,PENDING</pre>
+
+<p>
+Option -s allows to change the group ownership of the unix socket
+</p>
+<pre class="code">-s nagios</pre>
+
+<p>
+Option -m sets the permissions of the unix socket in the usual octal format
+</p>
+<pre class="code">-m 0660</pre>
+
+<p>
+Option -w specifies the interval (in seconds) the data will be written to disk.
+</p>
+<pre class="code">-w 1800</pre>
+
+<p>
+Option -z defines a maximum delay which will be used to spread the write cycles over a certain range [0-delay] to avoid parallel write accesses. The value of option -z must not be larger than -w.
+</p>
+<pre class="code">-z 1800</pre>
+
+<p>
+Option -p defines a PID file
+</p>
+<pre class="code">-p /var/run/rrdcached.pid</pre>
+
+<p>
+Option -j defines the path to a journaling directory. All requests will be logged there so that they can be processed after a restart in case the daemon crashes.
+</p>
+<pre class="code">-j /var/cache/rrdcached</pre>
+
+<p>
+These options may result in a call of rrdcached with the following parameters
+</p>
+<pre class="code"> rrdcached -w 1800 -z 1800 -p /tmp/rrdcached.pid -j /tmp  -s nagios -m 0660 -l unix:/tmp/rrdcached.sock</pre>
+
+</div>
+<!-- SECTION "rrdcached" [1185-2580] -->
+<h3><a name="rrdtool" id="rrdtool">rrdtool</a></h3>
+<div class="level3">
+
+<p>
+
+RRDtool itself will be informed about the daemon using the option –daemon=&lt;socket&gt;.
+
+</p>
+<pre class="code"> rrdtool --daemon=unix:/tmp/rrdcached.sock update ...</pre>
+
+<p>
+
+Of course this has to correspond with the options of rrdcached!
+</p>
+
+</div>
+<!-- SECTION "rrdtool" [2581-2807] -->
+<h2><a name="integration_into_pnp" id="integration_into_pnp">Integration into PNP</a></h2>
+<div class="level2">
+
+<p>
+
+Because two components of PNP have to prepared for the use of rrdcached there are changes in two config files.
+</p>
+
+<p>
+1. Adjustment of process_perfdata.cfg for the data collector process_perfdata.pl 
+</p>
+<pre class="code">
+# EXPERIMENTAL rrdcached Support
+# Use only with rrdtool svn revision 1511+
+#
+RRD_DAEMON_OPTS = unix:/var/run/rrdcached.sock
+</pre>
+
+<p>
+2. Adjustment of config_local.php (or config.php) for the web interface
+</p>
+<pre class="code">
+#
+# EXPERIMENTAL rrdcached Support
+# Use only with rrdtool svn revision 1511+
+#
+# $conf[&#039;RRD_DAEMON_OPTS&#039;] = &#039;unix:/tmp/rrdcached.sock&#039;;
+$conf[&#039;RRD_DAEMON_OPTS&#039;] = &#039;unix:/var/run/rrdcached.sock&#039;;
+</pre>
+
+<p>
+The sample files contain the relevant options.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">migrating RRD files</a>
+
+</p>
+
+</div>
+<!-- SECTION "Integration into PNP" [2808-] -->

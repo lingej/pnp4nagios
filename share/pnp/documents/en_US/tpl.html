@@ -1,0 +1,240 @@
+
+
+
+<h1><a name="what_are_templates" id="what_are_templates">What are templates?</a></h1>
+<div class="level1">
+
+<p>
+
+PNP uses templates to influence the appearance of RRD graphs.
+</p>
+
+<p>
+The selected check_command determines which template will be used to control the graph. Following will be described where templates are stored and how the decision for the “right” template is made.
+</p>
+
+</div>
+<!-- SECTION "What are templates?" [1-297] -->
+<h2><a name="what_template_will_be_used_when" id="what_template_will_be_used_when">What template will be used when?</a></h2>
+<div class="level2">
+
+<p>
+
+Templates are stored at two places in the file system.
+
+</p>
+<ul>
+<li class="level1"><div class="li"> share/templates.dist - for templates included in the PNP package</div>
+</li>
+<li class="level1"><div class="li"> share/templates - for custom made templates which are not changed during updates</div>
+</li>
+</ul>
+
+<p>
+
+If the graph for the service “http” on host “localhost” should be shown, PNP will look for the <acronym title="Extensible Markup Language">XML</acronym> file <code>perfdata/localhost/http.xml</code> and read its contents. The <acronym title="Extensible Markup Language">XML</acronym> files are created automatically and contain information about the particular host and service. The header contains information about the plugin and the performance data. The <acronym title="Extensible Markup Language">XML</acronym> tag <code>&lt;TEMPLATE&gt;</code> identifies which PNP template will be used for this graph.
+</p>
+
+<p>
+<code><strong>/localhost/http.xml</strong></code>
+
+</p>
+<pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;DATASOURCE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;TEMPLATE<span class="re2">&gt;</span></span></span>check_http<span class="sc3"><span class="re1">&lt;/TEMPLATE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;DS<span class="re2">&gt;</span></span></span>1<span class="sc3"><span class="re1">&lt;/DS<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;NAME<span class="re2">&gt;</span></span></span>time<span class="sc3"><span class="re1">&lt;/NAME<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;UNIT<span class="re2">&gt;</span></span></span>s<span class="sc3"><span class="re1">&lt;/UNIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;ACT<span class="re2">&gt;</span></span></span>0.006721<span class="sc3"><span class="re1">&lt;/ACT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;WARN<span class="re2">&gt;</span></span></span>1.000000<span class="sc3"><span class="re1">&lt;/WARN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;CRIT<span class="re2">&gt;</span></span></span>2.000000<span class="sc3"><span class="re1">&lt;/CRIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MIN<span class="re2">&gt;</span></span></span>0.000000<span class="sc3"><span class="re1">&lt;/MIN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MAX<span class="re2">&gt;</span></span><span class="re1">&lt;/MAX<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;/DATASOURCE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;DATASOURCE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;TEMPLATE<span class="re2">&gt;</span></span></span>check_http<span class="sc3"><span class="re1">&lt;/TEMPLATE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;DS<span class="re2">&gt;</span></span></span>2<span class="sc3"><span class="re1">&lt;/DS<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;NAME<span class="re2">&gt;</span></span></span>size<span class="sc3"><span class="re1">&lt;/NAME<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;UNIT<span class="re2">&gt;</span></span></span>B<span class="sc3"><span class="re1">&lt;/UNIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;ACT<span class="re2">&gt;</span></span></span>263<span class="sc3"><span class="re1">&lt;/ACT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;WARN<span class="re2">&gt;</span></span><span class="re1">&lt;/WARN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;CRIT<span class="re2">&gt;</span></span><span class="re1">&lt;/CRIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MIN<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/MIN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MAX<span class="re2">&gt;</span></span><span class="re1">&lt;/MAX<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;/DATASOURCE<span class="re2">&gt;</span></span></span>
+...
+<span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
+
+<p>
+PNP will look for a template with the name <code>check_http.php</code> in the following sequence:
+
+</p>
+<ol>
+<li class="level1"><div class="li"> templates/check_http.php</div>
+</li>
+<li class="level1"><div class="li"> templates.dist/check_http.php</div>
+</li>
+<li class="level1"><div class="li"> templates/default.php</div>
+</li>
+<li class="level1"><div class="li"> templates.dist/default.php</div>
+</li>
+</ol>
+
+<p>
+
+The template default.php takes an exceptional position as it is used every time no other applicable template is found.
+</p>
+
+</div>
+<!-- SECTION "What template will be used when?" [298-1835] -->
+<h2><a name="creating_own_templates" id="creating_own_templates">Creating own templates</a></h2>
+<div class="level2">
+
+<p>
+
+PNP templates are <acronym title="Hypertext Preprocessor">PHP</acronym> files which are included during execution of PNP using the <acronym title="Hypertext Preprocessor">PHP</acronym> function include(). This means that every <acronym title="Hypertext Preprocessor">PHP</acronym> code in templates will be interpreted so manipulation of all values is possible.
+</p>
+
+<p>
+PNP template must have the following characteristics:
+
+</p>
+<ol>
+<li class="level1"><div class="li"> templates must contain valid <acronym title="Hypertext Preprocessor">PHP</acronym> code.</div>
+</li>
+<li class="level1"><div class="li"> templates must not create any output.</div>
+</li>
+<li class="level1"><div class="li"> the two arrays $opt[] and $def[] have to be filled</div>
+</li>
+</ol>
+
+<p>
+
+These two arrays are used to call <code>&#039;rrdtool graph</code>&#039; so every option is possible that RRDtool supports. All options of RRDtool are described very thoroughly on the <a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html"  rel="nofollow">RRDtool Homepage</a>.
+</p>
+
+<p>
+If both arrays contain more than one set of data graphs will be created for every set.
+</p>
+
+<p>
+Inside the templates the data from the related <acronym title="Extensible Markup Language">XML</acronym> files can be used.
+</p>
+
+<p>
+Using the relatively simple template response.php we will describe the most important options.
+</p>
+<pre class="code php"><span class="kw2">&lt;?php</span>
+<span class="co2">#
+</span><span class="re0">$opt</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;--title <span class="es1">\&quot;</span>Response Time For <span class="es4">$hostname</span> / <span class="es4">$servicedesc</span><span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="co2">#
+</span><span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">=</span>  <span class="st0">&quot;DEF:var1=<span class="es4">$RRDFILE[1]</span>:<span class="es4">$DS[1]</span>:AVERAGE &quot;</span> <span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;AREA:var1#00FF00:<span class="es1">\&quot;</span>Response Times <span class="es1">\&quot;</span> &quot;</span> <span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;LINE1:var1#000000 &quot;</span> <span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;GPRINT:var1:LAST:<span class="es1">\&quot;</span>%3.4lg <span class="es6">%s</span><span class="es4">$UNIT[1]</span> LAST <span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;GPRINT:var1:MAX:<span class="es1">\&quot;</span>%3.4lg <span class="es6">%s</span><span class="es4">$UNIT[1]</span> MAX <span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;GPRINT:var1:AVERAGE:<span class="es1">\&quot;</span>%3.4lg <span class="es6">%s</span><span class="es4">$UNIT[1]</span> AVERAGE <span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="sy1">?&gt;</span></pre>
+
+<p>
+Note: as the number (1) and the letter “L” look alike in this listing: the format ”%3.4lg” contains a small letter.
+</p>
+
+<p>
+<strong><code>$opt[1] = ”–title …</code></strong> sets RRDtool options for the first set of data, here the title as you can see. Embedded quotes are masked using a backslash (\). The variables <code>$hostname</code> and <code>$servicedesc</code> were determined through the call of PNP and are available for the template as well.
+</p>
+
+<p>
+<strong><code>$def[1] =  “DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE ”;</code></strong> defines which data is to be read from which RRD file. $RRDFILE[1] contains the path to the RRD file of this service. $DS[1] refers to the first data series from the RRD file.
+</p>
+
+<p>
+<strong><code>$def[1] .= “AREA:var1#00FF00:\”Response Times \” ”;</code></strong> the operator ”.=” appends more data to the array $def[1]. An area will be drawn using data from the variable <code>var1</code>. The color is defined in HEX notation #00FF00 (red, green, blue). The label is “Response Times”.
+</p>
+
+<p>
+<strong><code>$def[1] .= “LINE1:var1#000000 ”;</code></strong> As completion of the just drawn area a line (LINE1) will be drawn in black (#000000).
+</p>
+
+<p>
+<strong><code>$def[1] .= “GPRINT:var1:LAST:\”%3.4lg %s$UNIT[1] LAST \” ”; <br/>
+
+$def[1] .= “GPRINT:var1:MAX:\”%3.4lg %s$UNIT[1] MAX \” ”; <br/>
+
+$def[1] .= “GPRINT:var1:AVERAGE:\”%3.4lg %s$UNIT[1] AVERAGE \” ”;</code></strong>
+</p>
+
+<p>
+The three GPRINT lines build up the caption for the graph. The current values are formatted using the <a href="http://en.wikipedia.org/wiki/printf" class="interwiki iw_wp" title="http://en.wikipedia.org/wiki/printf">printf</a> syntax.
+</p>
+
+</div>
+<!-- SECTION "Creating own templates" [1836-4573] -->
+<h2><a name="available_variables" id="available_variables">Available variables</a></h2>
+<div class="level2">
+
+<p>
+
+Using the data collector <code>process_perfdata.pl</code> PNP stores not only performance data but other values exported by Nagios. These values are stored in the <acronym title="Extensible Markup Language">XML</acronym> file associated to the appropriate service.
+</p>
+
+<p>
+In the first part of the <acronym title="Extensible Markup Language">XML</acronym> file the performance data is stored in separate components.
+</p>
+<pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;DATASOURCE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;TEMPLATE<span class="re2">&gt;</span></span></span>check_http<span class="sc3"><span class="re1">&lt;/TEMPLATE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;DS<span class="re2">&gt;</span></span></span>1<span class="sc3"><span class="re1">&lt;/DS<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;NAME<span class="re2">&gt;</span></span></span>time<span class="sc3"><span class="re1">&lt;/NAME<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;UNIT<span class="re2">&gt;</span></span></span>s<span class="sc3"><span class="re1">&lt;/UNIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;ACT<span class="re2">&gt;</span></span></span>0.006721<span class="sc3"><span class="re1">&lt;/ACT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;WARN<span class="re2">&gt;</span></span></span>1.000000<span class="sc3"><span class="re1">&lt;/WARN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;CRIT<span class="re2">&gt;</span></span></span>2.000000<span class="sc3"><span class="re1">&lt;/CRIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MIN<span class="re2">&gt;</span></span></span>0.000000<span class="sc3"><span class="re1">&lt;/MIN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MAX<span class="re2">&gt;</span></span><span class="re1">&lt;/MAX<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;/DATASOURCE<span class="re2">&gt;</span></span></span>
+....
+<span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
+
+<p>
+The field &lt;DS&gt; designates the data source and is used to identify the data series of the RRD files and is the key of the following arrays as well.
+</p>
+
+<p>
+The array <code>$UNIT[1]</code> contains the unit of measurement of the first data series.
+</p>
+
+<p>
+The <acronym title="Extensible Markup Language">XML</acronym> file contains other information. When process_perfdata.pl is used in default mode all available macros are at hand with the current values. For the benefit of readability the following lines show only an extract. 
+</p>
+<pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
+...
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICENOTIFICATIONID<span class="re2">&gt;</span></span></span>8418<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICENOTIFICATIONID<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICENOTIFICATIONNUMBER<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICENOTIFICATIONNUMBER<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEOUTPUT<span class="re2">&gt;</span></span></span>HTTP OK HTTP/1.1 200 OK - 10087 bytes in 0.125 seconds<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEOUTPUT<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPERCENTCHANGE<span class="re2">&gt;</span></span></span>0.00<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEPERCENTCHANGE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPERFDATA<span class="re2">&gt;</span></span></span>time=0.124811s;;;0.000000 size=10087B;;;0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEPERFDATA<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPERFDATAFILE<span class="re2">&gt;</span></span><span class="re1">&lt;/NAGIOS_SERVICEPERFDATAFILE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPROBLEMID<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEPROBLEMID<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICESTATE<span class="re2">&gt;</span></span></span>OK<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICESTATE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICESTATEID<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICESTATEID<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICESTATETYPE<span class="re2">&gt;</span></span></span>HARD<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICESTATETYPE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SHORTDATETIME<span class="re2">&gt;</span></span></span>27-12-2007 13:51:23<span class="sc3"><span class="re1">&lt;/NAGIOS_SHORTDATETIME<span class="re2">&gt;</span></span></span>
+...
+<span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
+
+<p>
+The various <acronym title="Extensible Markup Language">XML</acronym> fields can be used as variables in the PNP templates. Each field is available as a variable with the same name.
+</p>
+
+<p>
+The value of the field <code>&lt;NAGIOS_SERVICEOUTPUT&gt;</code> is available as the variable <code>$NAGIOS_SERVICEOUTPUT</code>.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">custom templates</a>
+
+</p>
+
+</div>
+<!-- SECTION "Available variables" [4574-] -->

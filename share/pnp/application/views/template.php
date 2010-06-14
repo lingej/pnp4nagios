@@ -76,5 +76,8 @@ function Gzoom (url) {
 <?php if (!empty($page)) {
      echo $page;
 } ?>
+<?php if (!empty($docs)) {
+     echo $docs;
+} ?>
 </body>
 </html>
