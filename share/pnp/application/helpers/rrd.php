@@ -271,7 +271,7 @@ class rrd_Core {
     }
 
 
-	public static function alerter($vname=FALSE, $label=FALSE, $warning=FALSE, $critical=FALSE, $opacity = 'ff', $unit, $color_green = '#00ff00', $color_btw   = '#ffff00', $color_red   = '#ff0000', $line_col = '#ffffff') {
+	public static function alerter($vname=FALSE, $label=FALSE, $warning=FALSE, $critical=FALSE, $opacity = 'ff', $unit, $color_green = '#00ff00', $color_btw   = '#ffff00', $color_red   = '#ff0000', $line_col = '#0000ff') {
 	
 		if($vname === FALSE){
 			throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");
@@ -290,7 +290,7 @@ class rrd_Core {
 		$line .= "CDEF:btw=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
 		$line .= "CDEF:blue=btw,".$warning.",GT,btw,UNKN,IF ";
 		$line .= "CDEF:red=".$vname.",".$critical.",GT,".$vname.",UNKN,IF ";
-		$line .= rrd::area("green", $color_green.$opacity, $label);
+		$line .= rrd::area("green", $color_green.$opacity);
 		$line .= rrd::area("blue", $color_btw.$opacity);
 		$line .= rrd::area("red", $color_red.$opacity);
 		$line .= rrd::line1($vname,$line_col,$label);
