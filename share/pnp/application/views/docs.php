@@ -1,10 +1,6 @@
 <div class="pagebody">
-    <table class="body"><tr valign="top"><td colspan="2">
-	<?php if (!empty($header)) {
-     		echo $header;
-	} ?>
-	</td></tr>
-	<tr valign="top"><td>
+    <table class="body"><tr valign="top"><td>
+    <tr valign="top"><td>
     <div class="left ui-widget-content ui-corner-all" style="width: <?php echo $this->graph_width ?>px">
 	<?php if (!empty($this->content)) {
      		echo $this->content;

@@ -1,0 +1,211 @@
+
+
+
+<h1><a name="template_helper_functions" id="template_helper_functions">Template Helper Functions</a></h1>
+<div class="level1">
+
+<p>
+
+Helper Funktionen sind dazu gedacht die Templates zu vereinfachen und Fehler abzufangen.
+</p>
+
+</div>
+<!-- SECTION "Template Helper Functions" [1-131] -->
+<h2><a name="rrddef" id="rrddef">rrd::def</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::def</strong> ( $vname, $rrdfile, $ds, [ $cf=&#039;AVERAGE&#039; ] )
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">def</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="re0">$RRDFILE</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$DS</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="st_h">'MAX'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+<a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::def" [132-350] -->
+<h2><a name="rrdcdef" id="rrdcdef">rrd::cdef</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::cdef</strong> ( $vname, $rpn, )
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">cdef</span><span class="br0">&#40;</span><span class="st_h">'var1_bits'</span><span class="sy0">,</span> <span class="st_h">'var1,8,*'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+<a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::cdef" [351-535] -->
+<h2><a name="rrdvdef" id="rrdvdef">rrd::vdef</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::vdef</strong> ( $vname, $rpn, )
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">vdef</span><span class="br0">&#40;</span><span class="st_h">'var1_avg'</span><span class="sy0">,</span> <span class="st_h">'var1,AVERAGE'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+<a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdgraph_data.en.html</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::vdef" [536-723] -->
+<h2><a name="rrdline_1-3" id="rrdline_1-3">rrd::line[1-3]</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::line[1-3]</strong> ( $vname, $color, [ $text ], [ $stack ] )
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">line1</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="co2">#ff00ff );</span></pre>
+
+<p>
+Eine einfache Linie mit ein Pixel Breite ohne Label Text
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">line3</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="st_h">'#ff00ff'</span><span class="sy0">,</span> <span class="st_h">'Load'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Eine Linie mit drei Pixel Breite und dem Label “Load”
+</p>
+
+<p>
+<a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::line[1-3]" [724-1119] -->
+<h2><a name="rrdarea" id="rrdarea">rrd::area</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::area</strong> ( $vname, $color, [ $text ], [ $stack ] )
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">area</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="st_h">'#ff00ff'</span><span class="sy0">,</span> <span class="st_h">'Load'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Eine Fläche mit dem Label “Load”
+</p>
+
+<p>
+<a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::area" [1120-1367] -->
+<h2><a name="rrdgprint" id="rrdgprint">rrd::gprint</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::gprint</strong> ( $vname, $cf, [ $text ] )
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">gprint</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="st_h">'MAX'</span><span class="sy0">,</span> <span class="st_h">'%4.2lf %s Max'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">gprint</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <a href="http://www.php.net/array"><span class="kw3">array</span></a><span class="br0">&#40;</span><span class="st_h">'MIN'</span><span class="sy0">,</span> <span class="st_h">'MAX'</span><span class="sy0">,</span> <span class="st_h">'AVERAGE'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="st_h">'%4.2lf %s'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Ist $cf ein Array, so wir automatisch eine Legende formatiert ausgegeben.
+</p>
+
+<p>
+<a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdgraph_graph.en.html</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::gprint" [1368-1747] -->
+<h2><a name="rrdcolor" id="rrdcolor">rrd::color</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::color</strong> ( $num )
+</p>
+
+<p>
+Liefert eine Farbe aus der <acronym title="HyperText Markup Language">HTML</acronym> Farbtabelle
+</p>
+
+</div>
+<!-- SECTION "rrd::color" [1748-1848] -->
+<h2><a name="rrdgradient" id="rrdgradient">rrd::gradient</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::gradient</strong> ( $vname, [$start_color], [$end_color], [$label], [$steps] )
+</p>
+
+<p>
+Erzeugt einen Farbverlauf von $start_color nach $end_color
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">gradient</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="st_h">'#ff0000'</span><span class="sy0">,</span> <span class="st_h">'#ffff00'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+
+<a href="/templates/gradient" class="wikilink1" title="templates:gradient">Beispiel</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::gradient" [1849-2129] -->
+<h2><a name="rrdcut" id="rrdcut">rrd::cut</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::cut</strong> ( $text, $length )
+</p>
+<pre class="code php"><span class="re0">$label</span> <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">cut</span><span class="br0">&#40;</span><span class="re0">$LABEL</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> 18<span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Schneidet einen Text auf eine gegebene Länge $length ab oder füllt wenn nötig auf $length auf.
+Diese Funktion ist hilfreich wenn die Legende ausgerichtet werden soll, aber die länge des Labels nicht bekannt ist.
+</p>
+
+</div>
+<!-- SECTION "rrd::cut" [2130-2463] -->
+<h2><a name="rrdticker" id="rrdticker">rrd::ticker</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::ticker</strong> ( $vname, $warning, $critical, [$fraction], [$opacity], [$color_OK], [$color_WARN], [$color_CRIT] )
+</p>
+
+<p>
+Erzeugt einen farbigen Balken am oberen Rand des Grafen, der je nach OK, WARNING &amp; CRITICAL unterschiedliche Farben annimmt
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">ticker</span><span class="br0">&#40;</span> <span class="st0">&quot;var1&quot;</span><span class="sy0">,</span> <span class="re0">$LABEL</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$WARN</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$CRIT</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$UNIT</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+
+<a href="/templates/ticker" class="wikilink1" title="templates:ticker">Beispiel</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::ticker" [2464-2860] -->
+<h2><a name="rrdalerter" id="rrdalerter">rrd::alerter</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::alerter</strong> ( $vname, $label, $warning, $critical, [$opacity], [$unit], [$color_OK], [$color_WARN], [$color_CRIT], [$line_col] )
+</p>
+
+<p>
+Erzeugt Areas, die entsprechend der Werte OK, WARNING &amp; CRITICAL unterschiedliche Farben annehmen
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">alerter</span><span class="br0">&#40;</span> <span class="st0">&quot;var1&quot;</span><span class="sy0">,</span> <span class="re0">$LABEL</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$WARN</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$CRIT</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$UNIT</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+<a href="/templates/alerter" class="wikilink1" title="templates:alerter">Beispiel</a>
+
+</p>
+
+</div>
+<!-- SECTION "rrd::alerter" [2861-] -->
