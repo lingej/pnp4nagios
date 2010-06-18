@@ -33,4 +33,9 @@ $lang = array
     'title-statistics-link' => 'Просмотр внутренней статистики PNP',
     'title-calendar-link' => 'Установка собственного временного интервала',
     'title-special-templates-link' => 'View Special Templates',
+    'title-docs-link' => 'View Documentation',
+    'title-home-link' => 'View Graphs',
+    'docs-home' => 'Home',
+    'docs-box-header' => 'Menu',
+    'docs-header' => 'Documentation Version %s',
 );

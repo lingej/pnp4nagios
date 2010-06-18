@@ -33,4 +33,9 @@ $lang = array
 	'title-statistics-link' => 'View PNP internal statistics',
 	'title-calendar-link' => 'Define a custom time range',
 	'title-special-templates-link' => 'View Special Templates',
+	'title-docs-link' => 'View Documentation',
+	'title-home-link' => 'View Graphs',
+	'docs-home' => 'Home',
+	'docs-box-header' => 'Menu',
+	'docs-header' => 'Documentation Version %s',
 );

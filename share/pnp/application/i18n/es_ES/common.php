@@ -32,4 +32,9 @@ $lang = array
     'title-statistics-link' => 'Ver estadísticas internas de PNP',
     'title-calendar-link' => 'Definir un intervalo de tiempo personalizado',
     'title-special-templates-link' => 'View Special Templates',
+    'title-docs-link' => 'View Documentation',
+    'title-home-link' => 'View Graphs',
+    'docs-home' => 'Home',
+    'docs-box-header' => 'Menu',
+    'docs-header' => 'Documentation Version %s',
 );
