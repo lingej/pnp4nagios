@@ -31,6 +31,8 @@ echo "<a title=\"".Kohana::lang('common.title-statistics-link')."\" href=\"".url
 if($this->data->getFirstSpecialTemplate() ){
 	echo "<a title=\"".Kohana::lang('common.title-special-templates-link')."\" href=\"".url::base(TRUE)."special\"><img class=\"icon\" src=\"".url::base()."media/images/special.png\"></a>\n";
 }
+
+echo "<a title=\"".Kohana::lang('common.title-docs-link')."\" href=\"".url::base(TRUE)."docs\"><img class=\"icon\" src=\"".url::base()."media/images/docs.png\"></a>\n";
 ?>
 </div>
 </div><p>

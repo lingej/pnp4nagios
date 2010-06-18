@@ -28,11 +28,15 @@ class Docs_Controller extends System_Controller  {
 
         $this->page = $page;
         $this->lang = $this->config->conf['lang'];
-        if($this->lang != "de_DE" || $this->lang != "en_US" ){
+        $lang_keys = array("de_DE","en_US");
+        if(!in_array($this->lang,$lang_keys) ){
             $this->lang = "en_US";
         }
         $file = sprintf("documents/%s/%s.html", $this->lang, $this->page);
         $file_toc  = sprintf("documents/%s/start.html", $this->lang);
+        if(!file_exists($file)){
+            url::redirect("docs/view/start");
+        }
         $this->content = file_get_contents($file);
         $toc = file( $file_toc );
         $this->toc = "";
@@ -55,7 +59,7 @@ class Docs_Controller extends System_Controller  {
         #
         $this->toc         = str_replace("/de/pnp-0.6/", "", $this->toc);
         $this->toc         = str_replace("/pnp-0.6/", "", $this->toc);
-        $this->toc         = preg_replace("/<h2>.*<\/h2>/", "<h2><a href='start'>Home</a></h2>" , $this->toc);
+        $this->toc         = preg_replace("/<h2>.*<\/h2>/", "" , $this->toc);
         $this->content     = str_replace("/de/pnp-0.6/", "", $this->content);
         $this->content     = str_replace("/pnp-0.6/", "", $this->content);
         $this->content     = str_replace("/_media", "../../documents/_media", $this->content);

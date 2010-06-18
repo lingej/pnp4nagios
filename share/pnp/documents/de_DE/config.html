@@ -16,7 +16,7 @@ Im folgenden wird die Konfiguration der bereits erwähnten <a href="/de/pnp-0.6/
 
 <p>
 
-Der Synchronous-Mode ist die einfachste Art, den Datensammler <code>process_perfdata.pl</code> in Nagios zu integrieren. Hierbei wird bei jedem Ereignis ein gesondertes Command <code>process-service-perfdata</code> (bzw. <code>process-host-perfdata</code>) ausgeführt.
+<a href="/_detail/synchronous.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Der Synchronous-Mode ist die einfachste Art, den Datensammler <code>process_perfdata.pl</code> in Nagios zu integrieren. Hierbei wird bei jedem Ereignis ein gesondertes Command <code>process-service-perfdata</code> (bzw. <code>process-host-perfdata</code>) ausgeführt.
 </p>
 
 <p>
@@ -86,13 +86,13 @@ define command {
 </p>
 
 </div>
-<!-- SECTION "Synchronous Mode" [159-2776] -->
+<!-- SECTION "Synchronous Mode" [159-2802] -->
 <h2><a name="bulk_mode" id="bulk_mode">Bulk Mode</a></h2>
 <div class="level2">
 
 <p>
 
-Der Bulk-Mode ist etwas komplizierter als der Synchronous-Mode, reduziert die Last auf dem Nagios Server jedoch merklich, da nun nicht mehr für jeden Service bzw. Host zusätzlich der Datensammler <code>process_perfdata.pl</code> gestartet werden muss.
+<a href="/_detail/bulk.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Der Bulk-Mode ist etwas komplizierter als der Synchronous-Mode, reduziert die Last auf dem Nagios Server jedoch merklich, da nun nicht mehr für jeden Service bzw. Host zusätzlich der Datensammler <code>process_perfdata.pl</code> gestartet werden muss.
 </p>
 
 <p>
@@ -179,13 +179,13 @@ define command{
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode" [2777-6216] -->
+<!-- SECTION "Bulk Mode" [2803-6261] -->
 <h2><a name="bulk_mode_with_npcd" id="bulk_mode_with_npcd">Bulk Mode with NPCD</a></h2>
 <div class="level2">
 
 <p>
 
-Die Konfiguration ist identisch mit dem “Bulk Mode”, einzig das verwendete Command ist leicht abgewandelt. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
+<a href="/_detail/bulk-npcd.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Die Konfiguration ist identisch mit dem “Bulk Mode”, einzig das verwendete Command ist leicht abgewandelt. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
 </p>
 <pre class="code">
 define command{
@@ -231,4 +231,4 @@ Weitere Informationen zu NPCD findet Ihr <a href="/de/pnp-0.6/npcd" class="wikil
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD" [6217-] -->
+<!-- SECTION "Bulk Mode with NPCD" [6262-] -->

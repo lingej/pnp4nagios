@@ -8,6 +8,9 @@
  * @see http://kohanaphp.com
  */
 
+define('PNP_VERSION','@PKG_VERSION@');
+define('PNP_REL_DATE','@PKG_REL_DATE@');
+
 /**
  * Define the website environment status. When this flag is set to TRUE, some
  * module demonstration controllers will result in 404 errors. For more information
