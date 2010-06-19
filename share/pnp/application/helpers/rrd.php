@@ -65,7 +65,7 @@ class rrd_Core {
      * Gradient Function
      * Concept by Stefan Triep
      */
-    public static function gradient($vname=FALSE, $start_color='#0000a0', $end_color='#f0f0f0', $label=FALSE, $steps=10){
+    public static function gradient($vname=FALSE, $start_color='#0000a0', $end_color='#f0f0f0', $label=FALSE, $steps=20){
         if($vname === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");   
         }
@@ -174,7 +174,7 @@ class rrd_Core {
         return rrd::line(3,$vname, $color,$text, $stack);
     }
 
-    public static function gprint($vname=FALSE, $cf="AVERAGE", $text=FALSE){
+    public static function gprint($vname=FALSE, $cf="AVERAGE", $text="%6.2lf %s"){
         $line = "";
         if($vname === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");   
