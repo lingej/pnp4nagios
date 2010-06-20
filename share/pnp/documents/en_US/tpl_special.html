@@ -6,8 +6,182 @@
 
 <p>
 
-To be written …
+“special templates” (starting with PNP 0.6.5) are used to combine data from arbitrary hosts and services and thus are not connected directly to a host or service.
+</p>
+
+<p>
+Often it is desired to show data from several services in one graph. Every time the <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">&quot;pages&quot;</a> will not be sufficient the special templates may come into play.
+</p>
+
+</div>
+<!-- SECTION "Special templates" [1-365] -->
+<h2><a name="basics" id="basics">Basics</a></h2>
+<div class="level2">
+
+<p>
+
+“Special templates” will be searched in <code>pnp4nagios/share/templates.special</code> and must have the extension <code>.php</code>.
+</p>
+
+<p>
+They are called via the controller “special” using 
+
+</p>
+<pre class="code">http://&lt;your-nagios-server&gt;/pnp4nagios/special?tpl=&lt;template&gt;</pre>
+
+<p>
+
+<code>&lt;template&gt;</code> is to be replaced with the particular template without the extension .php.
+</p>
+
+<p>
+An appropriate link will be shown in the PNP interface if at least one “special template” was found. 
+</p>
+
+</div>
+<!-- SECTION "Basics" [366-815] -->
+<h2><a name="example" id="example">Example</a></h2>
+<div class="level2">
+
+<p>
+
+The task is to show the response times of all web servers with hostnames websrv, websrv02, and websrv03 in one graph. The data is provided by the service “<acronym title="Hyper Text Transfer Protocol">HTTP</acronym>”.
+</p>
+
+<p>
+Step 1: create a template “websrv_response_times.php” in the folder <code>pnp4nagios/share/templates.special</code>
+</p>
+
+<p>
+“Special templates” always start with the definition of a title and a comment.
+</p>
+<pre class="code php"><span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">MACRO</span><span class="br0">&#91;</span><span class="st_h">'TITLE'</span><span class="br0">&#93;</span>   <span class="sy0">=</span> <span class="st0">&quot;HTTP Response Times&quot;</span><span class="sy0">;</span>
+<span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">MACRO</span><span class="br0">&#91;</span><span class="st_h">'COMMENT'</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;HTTP Response Times for all Cluster Nodes&quot;</span><span class="sy0">;</span></pre>
+
+<p>
+Step 2: create a list of all hosts/services which come into question. PNP provides a function <code>tplGetServices()</code> to accomplish this task. 
+</p>
+
+<p>
+tplGetServices() expects two parameters. 
+</p>
+
+<p>
+Parameter 1 is a regular expression for the host(s), parameter 2 a regular expression for the service(s).
+</p>
+<pre class="code php"><span class="re0">$services</span> <span class="sy0">=</span> <span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">tplGetServices</span><span class="br0">&#40;</span><span class="st0">&quot;websrv&quot;</span><span class="sy0">,</span><span class="st0">&quot;HTTP&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+$services now is an array with all services found.
+</p>
+
+<p>
+To ease template development and to give an insight on the data structures you can force Kohana to stop processing using an exception.
+</p>
+
+<p>
+To show the data of $services you just need the following line:
+</p>
+<pre class="code php">throw <span class="kw2">new</span> Kohana_exception<span class="br0">&#40;</span><a href="http://www.php.net/print_r"><span class="kw3">print_r</span></a><span class="br0">&#40;</span><span class="re0">$services</span><span class="sy0">,</span><span class="kw4">TRUE</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Output of pnp4nagios/special?tpl=websrv_response_times
+</p>
+<pre class="code">
+Array ( 
+  [0] =&gt; Array ( 
+     [host] =&gt; websrv01 
+     [service] =&gt; HTTP 
+  ) 
+  [1] =&gt; Array ( 
+     [host] =&gt; websrv02
+     [service] =&gt; HTTP 
+  ) 
+  [2] =&gt; Array ( 
+     [host] =&gt; websrv03
+     [service] =&gt; HTTP 
+  ) 
+)
+</pre>
+
+<p>
+The variable $services contains an array with all services found, in this case three hosts with the service “<acronym title="Hyper Text Transfer Protocol">HTTP</acronym>”.
+</p>
+
+<p>
+Step 3: Iterating the array $services and creating the graph definitions
+</p>
+<pre class="code php"><span class="kw1">foreach</span><span class="br0">&#40;</span><span class="re0">$services</span> <span class="kw1">as</span> <span class="re0">$key</span><span class="sy0">=&gt;</span><span class="re0">$val</span><span class="br0">&#41;</span><span class="br0">&#123;</span>
+    <span class="re0">$data</span>      <span class="sy0">=</span> <span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">tplGetData</span><span class="br0">&#40;</span><span class="re0">$val</span><span class="br0">&#91;</span><span class="st_h">'host'</span><span class="br0">&#93;</span><span class="sy0">,</span><span class="re0">$val</span><span class="br0">&#91;</span><span class="st_h">'service'</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$hostname</span>  <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">cut</span><span class="br0">&#40;</span><span class="re0">$data</span><span class="br0">&#91;</span><span class="st_h">'MACRO'</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="st_h">'HOSTNAME'</span><span class="br0">&#93;</span><span class="sy0">,</span> 15<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>   <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">def</span><span class="br0">&#40;</span><span class="st0">&quot;var<span class="es4">$key</span>&quot;</span> <span class="sy0">,</span> <span class="re0">$data</span><span class="br0">&#91;</span><span class="st_h">'DS'</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="st_h">'RRDFILE'</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$data</span><span class="br0">&#91;</span><span class="st_h">'DS'</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="st_h">'DS'</span><span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>   <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">line1</span><span class="br0">&#40;</span><span class="st0">&quot;var<span class="es4">$key</span>&quot;</span><span class="sy0">,</span> rrd<span class="sy0">::</span><span class="me2">color</span><span class="br0">&#40;</span><span class="re0">$key</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="re0">$hostname</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>   <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">gprint</span><span class="br0">&#40;</span><span class="st0">&quot;var<span class="es4">$key</span>&quot;</span><span class="sy0">,</span> <a href="http://www.php.net/array"><span class="kw3">array</span></a><span class="br0">&#40;</span><span class="st0">&quot;MAX&quot;</span><span class="sy0">,</span> <span class="st0">&quot;AVERAGE&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre>
+
+<p>
+Inside the loop the function <code>tplGetData</code> is used to read the particular <acronym title="Extensible Markup Language">XML</acronym> file. The data is returned as an array called $data.
+</p>
+
+<p>
+In this example some other little PNP helpers are used recognisable by the extension <code>rrd::</code>.
+</p>
+
+<p>
+The function <a href="/pnp-0.6/tpl_helper#rrdcut" class="wikilink1" title="pnp-0.6:tpl_helper">rrd::cut()</a> cuts a string to a specific length or fills up to this length. This might be helpful to align the legend.
+</p>
+
+<p>
+The function <a href="/pnp-0.6/tpl_helper#rrdgprint" class="wikilink1" title="pnp-0.6:tpl_helper">rrd::gprint()</a> creates the legend below the graph.
+</p>
+
+<p>
+The function <a href="/pnp-0.6/tpl_helper#rrdcolor" class="wikilink1" title="pnp-0.6:tpl_helper">rrd::color()</a> returns a colour from a predefined list of colours.
+</p>
+
+<p>
+You will find more information on the PNP helpers <a href="/pnp-0.6/tpl_helper" class="wikilink1" title="pnp-0.6:tpl_helper">here</a>.
+</p>
+<pre class="code php"><span class="kw2">&lt;?php</span>
+<span class="co2">#
+</span><span class="co2"># Special Template websrv_response_times.php
+</span><span class="co2">#
+</span><span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">MACRO</span><span class="br0">&#91;</span><span class="st_h">'TITLE'</span><span class="br0">&#93;</span>   <span class="sy0">=</span> <span class="st0">&quot;HTTP Response Times&quot;</span><span class="sy0">;</span>
+<span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">MACRO</span><span class="br0">&#91;</span><span class="st_h">'COMMENT'</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;HTTP Response Times for all Cluster Nodes&quot;</span><span class="sy0">;</span>
+<span class="co2">#
+</span><span class="co2"># Get a List of Services by regex 
+</span><span class="co2"># Option 1 = 'Host Regex'
+</span><span class="co2"># Option 2 = 'Service Regex'
+</span><span class="co2">#
+</span><span class="re0">$services</span> <span class="sy0">=</span> <span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">tplGetServices</span><span class="br0">&#40;</span><span class="st0">&quot;websrv&quot;</span><span class="sy0">,</span><span class="st0">&quot;HTTP&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co2">#throw new Kohana_exception(print_r($services,TRUE));
+</span><span class="co2">#
+</span><span class="co2"># The Datasource Name for Graph 0
+</span><span class="re0">$ds_name</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;Response Times&quot;</span><span class="sy0">;</span>
+<span class="re0">$opt</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>     <span class="sy0">=</span> <span class="st0">&quot;--title <span class="es1">\&quot;</span>Response Times<span class="es1">\&quot;</span>&quot;</span><span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>     <span class="sy0">=</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span>
+<span class="co2">#
+</span><span class="co2"># Iterate through the list of hosts
+</span><span class="kw1">foreach</span><span class="br0">&#40;</span><span class="re0">$services</span> <span class="kw1">as</span> <span class="re0">$key</span><span class="sy0">=&gt;</span><span class="re0">$val</span><span class="br0">&#41;</span><span class="br0">&#123;</span>
+    <span class="co2">#
+</span>    <span class="co2"># get the data for a given Host/Service
+</span>    <span class="re0">$data</span> <span class="sy0">=</span> <span class="re0">$this</span><span class="sy0">-&gt;</span><span class="me1">tplGetData</span><span class="br0">&#40;</span><span class="re0">$val</span><span class="br0">&#91;</span><span class="st_h">'host'</span><span class="br0">&#93;</span><span class="sy0">,</span><span class="re0">$val</span><span class="br0">&#91;</span><span class="st_h">'service'</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="co2">#
+</span>    <span class="co2"># Throw an exception to debug the content of $a
+</span>    <span class="co2"># Just to get Infos about the Array Structure
+</span>    <span class="co2">#
+</span>    <span class="co2">#throw new Kohana_exception(print_r($a,TRUE));
+</span>    <span class="re0">$hostname</span>   <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">cut</span><span class="br0">&#40;</span><span class="re0">$data</span><span class="br0">&#91;</span><span class="st_h">'MACRO'</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="st_h">'HOSTNAME'</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>    <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">def</span><span class="br0">&#40;</span><span class="st0">&quot;var<span class="es4">$key</span>&quot;</span> <span class="sy0">,</span> <span class="re0">$data</span><span class="br0">&#91;</span><span class="st_h">'DS'</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="st_h">'RRDFILE'</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$data</span><span class="br0">&#91;</span><span class="st_h">'DS'</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#91;</span><span class="st_h">'DS'</span><span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>    <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">line1</span><span class="br0">&#40;</span><span class="st0">&quot;var<span class="es4">$key</span>&quot;</span><span class="sy0">,</span> rrd<span class="sy0">::</span><span class="me2">color</span><span class="br0">&#40;</span><span class="re0">$key</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="re0">$hostname</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>    <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">gprint</span><span class="br0">&#40;</span><span class="st0">&quot;var<span class="es4">$key</span>&quot;</span><span class="sy0">,</span> <a href="http://www.php.net/array"><span class="kw3">array</span></a><span class="br0">&#40;</span><span class="st0">&quot;MAX&quot;</span><span class="sy0">,</span> <span class="st0">&quot;AVERAGE&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+<span class="sy1">?&gt;</span></pre>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a>
 
 </p>
 
 </div>
+<!-- SECTION "Example" [816-] -->

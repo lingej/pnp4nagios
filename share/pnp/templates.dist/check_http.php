@@ -16,12 +16,10 @@ if ($WARN[1] != "") {
 if ($CRIT[1] != "") {
 	$def[1] .= "HRULE:$CRIT[1]#FF0000 ";
 }
-$def[1] .= "AREA:var1#EACC00:\"$NAME[1] \" " ;
-$def[1] .= "LINE1:var1#000000 " ;
-$def[1] .= "GPRINT:var1:LAST:\"%6.2lf$UNIT[1] last\" " ;
-$def[1] .= "GPRINT:var1:AVERAGE:\"%6.2lf$UNIT[1] avg\" " ;
-$def[1] .= "GPRINT:var1:MAX:\"%6.2lf$UNIT[1] max\\n\" ";
-
+#$def[1] .= "AREA:var1#EACC00:\"$NAME[1] \" " ;
+$def[1] .= rrd::gradient("var1", "66CCFF", "0000ff", "$NAME[1]"); 
+$def[1] .= "LINE1:var1#666666 " ;
+$def[1] .= rrd::gprint("var1", array("LAST","MAX","AVERAGE"), "%6.2lf $UNIT[1]");
 
 #
 # Filesize
@@ -37,11 +35,8 @@ if ($WARN[2] != "") {
 if ($CRIT[2] != "") {
 	$def[2] .= "HRULE:$CRIT[2]#FF0000 ";
 }
-$def[2] .= "AREA:var1#EACC00:\"$NAME[2] \" " ;
-$def[2] .= "LINE1:var1#000000 " ;
-$def[2] .= "GPRINT:var1:LAST:\"%6.2lf$UNIT[2] last\" " ;
-$def[2] .= "GPRINT:var1:AVERAGE:\"%6.2lf$UNIT[2] avg\" " ;
-$def[2] .= "GPRINT:var1:MAX:\"%6.2lf$UNIT[2] max\\n\" ";
-
+$def[2] .= rrd::gradient("var1", "66CCFF", "0000ff", "$NAME[2]"); 
+$def[2] .= "LINE1:var1#333333 " ;
+$def[2] .= rrd::gprint("var1", array("LAST","MAX","AVERAGE"), "%6.2lf $UNIT[1]");
 
 ?>
