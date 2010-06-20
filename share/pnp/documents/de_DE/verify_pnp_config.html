@@ -15,12 +15,12 @@ Bei Problemen kann das <acronym title="Practical Extraction and Report Language"
 </p>
 
 <p>
-<strong>* Hinweis </strong>*: Eine Zeile fehlt im Script, was zu einem Fehler führt, so dass Sie vorher diese Zeile einfügen sollten:
+<strong>* Hinweis </strong>*: In PNP 0.6.4 fehlt eine Zeile im Script, was zu einem Fehler führt, so dass Sie vorher diese Zeile einfügen sollten:
 
 </p>
 <pre class="code">     $CPcfg{&#039;$conf[\&#039;max_age\&#039;]&#039;} = &#039;n;^\(?[\d\* ]+\)?$&#039;;
      $CPcfg{&#039;$conf[\&#039;temp\&#039;]&#039;} = &#039;d;;&#039;;
-     $CPcfg{&#039;$conf[\&#039;base_url\&#039;]&#039;} = &quot;S;.+;&quot;;   # &lt;-- add this line
+     $CPcfg{&#039;$conf[\&#039;base_url\&#039;]&#039;} = &quot;S;.+;&quot;;   # &lt;-- diese Zeile einfügen
      $CPcfg{&#039;$conf[\&#039;nagios_base\&#039;]&#039;} = &quot;S;.+;&quot;;
      $CPcfg{&#039;$conf[\&#039;allowed_for_service_links\&#039;]&#039;} = &#039;S;[\S,]+;&#039;;</pre>
 
