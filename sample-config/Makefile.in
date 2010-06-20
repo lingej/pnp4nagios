@@ -2,6 +2,7 @@ prefix=@prefix@
 SYSCONFDIR=@sysconfdir@
 BINDIR=@bindir@
 LIBEXECDIR=@libexecdir@
+LIBDIR=@libdir@
 CGIDIR=@sbindir@
 HTMLDIR=@datadir@
 INSTALL=@INSTALL@

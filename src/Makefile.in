@@ -35,6 +35,7 @@ LOGDIR=@localstatedir@
 CFGDIR=@sysconfdir@
 BINDIR=@bindir@
 LIBEXECDIR=@libexecdir@
+LIBDIR=@libdir@
 CGIDIR=@sbindir@
 INSTALL=@INSTALL@
 INSTALL_OPTS=@INSTALL_OPTS@
@@ -128,7 +129,7 @@ install-basic:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATA_DIR)
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATA_SPOOL_DIR)
 	$(INSTALL) -m 754 $(INSTALL_OPTS) @npcd_name@ $(DESTDIR)$(BINDIR)
-	$(INSTALL) -m 754 $(INSTALL_OPTS) npcdmod.o $(DESTDIR)$(BINDIR)
+	$(INSTALL) -m 754 $(INSTALL_OPTS) npcdmod.o $(DESTDIR)$(LIBDIR)
 
 strip-post-install:
 	$(STRIP) $(DESTDIR)$(BINDIR)/@npcd_name@

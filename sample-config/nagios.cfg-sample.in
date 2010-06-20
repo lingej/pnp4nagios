@@ -40,4 +40,4 @@ host_perfdata_file_processing_command=process-host-perfdata-file
 
 process_performance_data=1
 
-broker_module=@bindir@/npcdmod.o config_file=@sysconfdir@/npcd.cfg
+broker_module=@libdir@/npcdmod.o config_file=@sysconfdir@/npcd.cfg
