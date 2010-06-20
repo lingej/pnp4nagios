@@ -29,13 +29,14 @@
 # 2010.03.12:        bugfix user/group-directive
 # 2010.03.19: 0.1.19 bugfix: stats_dir
 # 2010.06.06: 0.1.20 bugfix: base_url
+# 2010.06.20: 0.1.21 skip views directive
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.20";
+my $version = "0.1.21";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -47,7 +48,7 @@ my $crit = 0;
 my $product = lc("nagios");
 my $pnp_version = '@PKG_VERSION@';
 my $install_opts = '@INSTALL_OPTS@';
-my $doc_version = '0.4';
+my $doc_version = '0.6';
 # 
 # please remove the hash sign (#) on the following line if you're using Icinga
 # or specify "-M icinga"
@@ -80,6 +81,7 @@ my $CPcfg = "";    # config.php
 my %CPcfg = ();
 my $RFcfg = "";    # resource.cfg
 my %RFcfg = ();
+my @skip = ();
 my $nFile = "";
 my @CfgFiles = ();
 my %commands = ();
@@ -1188,6 +1190,9 @@ sub chk_cpcfg {
         return;
     }
 
+# skip views directive
+    push @skip, '^\$views';
+
 # process file
     procFile ("config.php","$CPcfg",\%CPcfg,27);
 # show doc link if needed    
@@ -1221,6 +1226,11 @@ sub procFile {
             info ("invEOL","$_");
             next;
         }
+        my $skip_item = 0;
+        for (0..$#skip) {
+            $skip_item = 1 if ($par =~ /$skip[$_]/);
+        }
+        next if ($skip_item);
         $val =~ s/;$//;
         $val =~ s/\s*$//;
         if ((($val =~ /^\"/) and ($val !~ /\"$/)) or
@@ -1240,6 +1250,7 @@ sub procFile {
         }
     }
     close (PFILE);
+    @skip = ();
 }
 
 # examine option and value
