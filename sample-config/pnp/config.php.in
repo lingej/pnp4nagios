@@ -166,20 +166,12 @@ $conf['use_calendar'] = 1;
 #
 # remarks: required escape on " with backslash
 #
-$views[0]["title"] = "4 Hours";
-$views[0]["start"] = ( 60*60*4 );
-
-$views[1]["title"] = "24 Hours";
-$views[1]["start"] = ( 60*60*24 );
-
-$views[2]["title"] = "One Week";
-$views[2]["start"] = ( 60*60*24*7 );
-
-$views[3]["title"] = "One Month";
-$views[3]["start"] = ( 60*60*24*30 );
-
-$views[4]["title"] = "One Year";
-$views[4]["start"] = ( 60*60*24*365 );
+#$views[] = array('title' => 'One Hour',  'start' => (60*60) );
+$views[] = array('title' => '4 Hours',   'start' => (60*60*4) );
+$views[] = array('title' => '25 Hours',  'start' => (60*60*25) );
+$views[] = array('title' => 'One Week',  'start' => (60*60*25*7) );
+$views[] = array('title' => 'One Month', 'start' => (60*60*24*32) );
+$views[] = array('title' => 'One Year',  'start' => (60*60*24*380) );
 
 #
 # EXPERIMENTAL rrdcached Support
