@@ -134,4 +134,4 @@ install-basic:
 
 strip-post-install:
 	$(STRIP) $(DESTDIR)$(BINDIR)/@npcd_name@
-	$(STRIP) $(DESTDIR)$(BINDIR)/npcdmod.o
+	$(STRIP) $(DESTDIR)$(LIBDIR)/npcdmod.o
