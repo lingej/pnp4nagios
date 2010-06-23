@@ -6,6 +6,10 @@
  <div class="p4 ui-widget-content ui-corner-bottom" >
 <?php echo "<a title=\"".Kohana::lang('common.title-home-link')."\" href=\"".url::base(TRUE)."graph\"><img class=\"icon\" src=\"".url::base()."media/images/home.png\"></a>\n";?>
 <?php echo "<a title=\"".Kohana::lang('common.title-docs-link')."\" href=\"".url::base(TRUE)."docs\"><img class=\"icon\" src=\"".url::base()."media/images/docs.png\"></a>\n";?>
+<?php
+foreach ( $this->doc_language as $lang ){
+    echo "<a href=\"".url::base(TRUE)."docs/view/".$lang."/start\">".$lang."</a> \n";
+}?>
  </div>
 </div>
 <p>
