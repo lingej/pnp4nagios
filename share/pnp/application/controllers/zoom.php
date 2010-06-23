@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Debug controller.
+ * Zoom controller.
  *
  * @package    PNP4Nagios
  * @author     Joerg Linge 

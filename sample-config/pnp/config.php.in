@@ -25,7 +25,7 @@
 # Default "/pnp4nagios"
 #
 $conf['base_url'] = "@BASE_URL@";
-# URL rewriting is used by default to create fiendly URLs. 
+# URL rewriting is used by default to create friendly URLs. 
 # Set this value to '0' if URL rewriting is not available on your system.
 #
 $conf['use_url_rewriting'] = 1;

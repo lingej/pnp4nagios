@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Graph controller.
+ * Docs controller.
  *
  * @package    PNP4Nagios
  * @author     Joerg Linge
@@ -12,8 +12,8 @@ class Docs_Controller extends System_Controller  {
     {
         parent::__construct();
 
-        $this->template->docs   = $this->add_view('docs');
-        $this->template->docs->search_box    = $this->add_view('search_box');
+        $this->template->docs              = $this->add_view('docs');
+        $this->template->docs->search_box  = $this->add_view('search_box');
         $this->template->docs->docs_box    = $this->add_view('docs_box');
         $this->template->docs->logo_box    = $this->add_view('logo_box');
         $this->doc_language = $this->config->conf['doc_language']; 
@@ -39,8 +39,9 @@ class Docs_Controller extends System_Controller  {
             }
         }
         
-        if($page == FALSE)
+        if($page == FALSE){
             url::redirect("docs/view/".$this->lang."/start"); 
+        }
 
         $this->page = $page;
         $file = sprintf("documents/%s/%s.html", $this->lang, $this->page);
@@ -53,12 +54,8 @@ class Docs_Controller extends System_Controller  {
         $this->toc = "";
         $in = FALSE; 
         foreach($toc as $t){
-            if(preg_match("/SECTION/", $t) && $in == FALSE){
-                $in = TRUE;
-                continue;
-            }
-            if(preg_match("/SECTION/", $t) && $in == TRUE){
-                $in = FALSE;
+            if(preg_match("/SECTION/", $t) ){
+                $in = ! $in;
                 continue;
             }
             if($in == TRUE){
@@ -66,7 +63,7 @@ class Docs_Controller extends System_Controller  {
             }
         }
         #
-        # Some String replacements
+        # some string replacements
         #
         $this->toc         = str_replace("/de/pnp-0.6/", "", $this->toc);
         $this->toc         = str_replace("/pnp-0.6/", "", $this->toc);

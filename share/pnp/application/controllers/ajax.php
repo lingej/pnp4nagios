@@ -46,7 +46,7 @@ class Ajax_Controller extends System_Controller  {
         $this->auto_render = FALSE;
         $host     = false;
         $service  = false;
-           $basket   = array();
+        $basket   = array();
 
         if($action == "list"){
             $basket = $this->session->get("basket");
