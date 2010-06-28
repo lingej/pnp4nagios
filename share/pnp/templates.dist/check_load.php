@@ -7,25 +7,20 @@ $opt[1] = "--vertical-label Load -l0  --title \"CPU Load for $hostname / $servic
 #
 #
 #
-$def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
-$def[1] .= "DEF:var2=$RRDFILE[2]:$DS[2]:AVERAGE " ;
-$def[1] .= "DEF:var3=$RRDFILE[3]:$DS[3]:AVERAGE " ;
+$def[1] = rrd::def("var1", $RRDFILE[1], $DS[1], "AVERAGE");
+$def[1] .= rrd::def("var2", $RRDFILE[1], $DS[2], "AVERAGE");
+$def[1] .= rrd::def("var3", $RRDFILE[1], $DS[3], "AVERAGE");
+
 if ($WARN[1] != "") {
     $def[1] .= "HRULE:$WARN[1]#FFFF00 ";
 }
 if ($CRIT[1] != "") {
     $def[1] .= "HRULE:$CRIT[1]#FF0000 ";       
 }
-$def[1] .= "AREA:var3#FF0000:\"Load 15\" " ;
-$def[1] .= "GPRINT:var3:LAST:\"%6.2lf last\" " ;
-$def[1] .= "GPRINT:var3:AVERAGE:\"%6.2lf avg\" " ;
-$def[1] .= "GPRINT:var3:MAX:\"%6.2lf max\\n\" " ;
-$def[1] .= "AREA:var2#EA8F00:\"Load 5 \" " ;
-$def[1] .= "GPRINT:var2:LAST:\"%6.2lf last\" " ;
-$def[1] .= "GPRINT:var2:AVERAGE:\"%6.2lf avg\" " ;
-$def[1] .= "GPRINT:var2:MAX:\"%6.2lf max\\n\" " ;
-$def[1] .= "AREA:var1#EACC00:\"load 1 \" " ;
-$def[1] .= "GPRINT:var1:LAST:\"%6.2lf last\" " ;
-$def[1] .= "GPRINT:var1:AVERAGE:\"%6.2lf avg\" " ;
-$def[1] .= "GPRINT:var1:MAX:\"%6.2lf max\\n\" ";
+$def[1] .= rrd::area("var3", "#ff0000", "load 15") ;
+$def[1] .= rrd::gprint("var3", array("LAST", "AVERAGE", "MAX"), "%6.2lf");
+$def[1] .= rrd::area("var2", "#EA8F00", "Load 5 ") ;
+$def[1] .= rrd::gprint("var2", array("LAST", "AVERAGE", "MAX"), "%6.2lf");
+$def[1] .= rrd::area("var1", "#EACC00", "load 1 ") ;
+$def[1] .= rrd::gprint("var1", array("LAST", "AVERAGE", "MAX"), "%6.2lf");
 ?>
