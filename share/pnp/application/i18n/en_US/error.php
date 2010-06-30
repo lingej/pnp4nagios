@@ -20,6 +20,6 @@ $lang = array
 	'page-config-dir' => 'No page config file found in "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
 	'xport-host-service' => 'Xport controller needs "host" and "srv" URL parameters. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
 	'mod-rewrite' => 'Apache Rewrite Module is not enabled. <a href="http://docs.pnp4nagios.org/faq/19">Read FAQ online</a>',
-    'tpl-no-services-found' => 'TODO',
-    'tpl-no-hosts-found' => 'TODO',
+    'tpl-no-services-found' => 'No services could be found "%s" <a href="http://docs.pnp4nagios.org/faq/20">Read FAQ online</a>',
+    'tpl-no-hosts-found' => 'No Hosts could be found "%s" <a href="http://docs.pnp4nagios.org/faq/21">Read FAQ online</a>',
 );
