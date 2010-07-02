@@ -68,6 +68,7 @@ class Docs_Controller extends System_Controller  {
         $this->toc         = str_replace("/de/pnp-0.6/", "", $this->toc);
         $this->toc         = str_replace("/pnp-0.6/", "", $this->toc);
         $this->toc         = preg_replace("/<h2>.*<\/h2>/", "" , $this->toc);
+        $this->content     = str_replace("/templates/", "http://docs.pnp4nagios.org/templates/", $this->content);
         $this->content     = str_replace("/de/pnp-0.6/", "", $this->content);
         $this->content     = str_replace("/pnp-0.6/", "", $this->content);
         $this->content     = str_replace("/_media", url::base(TRUE)."documents/_media", $this->content);
