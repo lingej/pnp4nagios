@@ -77,6 +77,7 @@ class Pdf_Controller extends System_Controller  {
                 throw new Kohana_User_Exception('Hostname not set ;-)', "RTFM my Friend, RTFM!");
             }            
         }
+        #throw new Kohana_Exception(print_r($this->data->STRUCT,TRUE));
         /*
         * PDF Output
         */
@@ -93,28 +94,41 @@ class Pdf_Controller extends System_Controller  {
         $pdf->SetCreator('Created with PNP');
         $pdf->SetFont('Arial', '', 10);
         // Title
-        foreach($this->data->STRUCT as $data){
+        $header = TRUE;
+        foreach($this->data->STRUCT as $key=>$data){
+            if($key != 0){
+                $header = FALSE;
+            } 
             if ($pdf->GetY() > 200) {
                 $pdf->AddPage();
                 if($this->use_bg){$pdf->useTemplate($tplIdx);}
             }
-            if($data['LEVEL'] == 0 && $this->type == 'normal'){
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
-                $pdf->SetFont('Arial', '', 10);
-                $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
-			}elseif($data['LEVEL'] == 0 && $this->type == 'special'){
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->CELL(120, 10, $data['MACRO']['TITLE'], 0, 1);
-                $pdf->SetFont('Arial', '', 10);
-                $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
-            }else{
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+            if($this->type == 'normal'){
+                if($data['LEVEL'] == 0){
+                    $pdf->SetFont('Arial', '', 12);
+                    $pdf->CELL(120, 10, $data['MACRO']['DISP_HOSTNAME']." -- ".$data['MACRO']['DISP_SERVICEDESC'], 0, 1);
+                    $pdf->SetFont('Arial', '', 10);
+                    $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
+                    $pdf->SetFont('Arial', '', 8);
+                    $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+                }else{
+                    $pdf->SetFont('Arial', '', 8);
+                    $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+                }
+            }elseif($this->type == 'special'){ 
+                if($header){
+                    $pdf->SetFont('Arial', '', 12);
+                    $pdf->CELL(120, 10, $data['MACRO']['TITLE'], 0, 1);
+                    $pdf->SetFont('Arial', '', 10);
+                    $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
+                    $pdf->SetFont('Arial', '', 8);
+                    $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+                }else{
+                    $pdf->SetFont('Arial', '', 10);
+                    $pdf->CELL(120, 5, $data['TIMERANGE']['title']." (".$data['TIMERANGE']['f_start']." - ".$data['TIMERANGE']['f_end'].")", 0, 1);
+                    $pdf->SetFont('Arial', '', 8);
+                    $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
+                }
             }
             $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
             $img = $this->rrdtool->saveImage($image);
