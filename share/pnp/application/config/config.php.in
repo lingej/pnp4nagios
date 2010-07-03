@@ -109,7 +109,10 @@ $config['modules'] = array
  */
 $config['pnp_etc_path'] = '@sysconfdir@';
 /*
- *
  * Available Doc Languages
  */
 $config['doc_language'] = array("en_US", "de_DE");
+/*
+ * Default template dirs
+ */
+$config['template_dirs'] = array("@datarootdir@/templates","@datarootdir@/templates.dist");

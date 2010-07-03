@@ -15,6 +15,7 @@ class Data_Model extends Model
     public  $PAGE_DEF   = array();    
     public  $PAGE_GRAPH = array();
     public  $XPORT = "";
+    public  $TEMPLATE_FILE = "";
     public  $GRAPH_TYPE = 'normal';
     /*
     * 
@@ -32,8 +33,8 @@ class Data_Model extends Model
     public function getSpecialTemplates(){
         $conf = $this->config->conf;
         $templates = array();
-        if (is_dir($conf['template_dir'].'/templates.special') ){
-            if ($dh = opendir($conf['template_dir'].'/templates.special')) {
+        if (is_dir($conf['special_template_dir'])){
+            if ($dh = opendir($conf['special_template_dir'])) {
                 while (($file = readdir($dh)) !== false) {
                     if ($file == "." || $file == "..")
                         continue;
@@ -311,6 +312,7 @@ class Data_Model extends Model
                 $tmp_struct = array();
                 $tmp_struct['LEVEL']         = $i;
                 $tmp_struct['VIEW']          = $view;
+                $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE;
@@ -344,6 +346,7 @@ class Data_Model extends Model
                     $tmp_struct = array();
                     $tmp_struct['LEVEL']         = $i;
                     $tmp_struct['VIEW']          = $view_key;
+                    $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                     $tmp_struct['SOURCE']        = $key;
                     $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                     if(array_key_exists('ds_name',$this->RRD) ){
@@ -376,6 +379,7 @@ class Data_Model extends Model
                 $tmp_struct = array();
                 $tmp_struct['LEVEL']         = $i;
                 $tmp_struct['VIEW']          = $view;
+                $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
@@ -424,6 +428,7 @@ class Data_Model extends Model
         */
         if($type == 'normal'){
             $template_file = $this->findTemplate( $template );
+            $this->TEMPLATE_FILE = $template_file;
             $hostname      = $this->MACRO['HOSTNAME'];
             $servicedesc   = $this->MACRO['SERVICEDESC'];
             $TIMERANGE     = $this->TIMERANGE;
@@ -493,30 +498,34 @@ class Data_Model extends Model
          * Normal Templates
          */
         if($type == 'normal'){
-            $r_template = $this->findRecursiveTemplate($template,"templates");
-            $r_template_dist = $this->findRecursiveTemplate($template,"templates.dist");
-
-            if (is_readable($conf['template_dir'].'/templates/' . $template . '.php')) {
-                $template_file = $conf['template_dir'].'/templates/' . $template . '.php';
-            }elseif (is_readable($conf['template_dir'].'/templates.dist/' . $template . '.php')) {
-                $template_file = $conf['template_dir'].'/templates.dist/' . $template . '.php';
-            }elseif($r_template != "" ){
-                $template_file = $conf['template_dir'].'/templates/'. $r_template . '.php';
-            }elseif($r_template_dist != "" ){
-                $template_file = $conf['template_dir'].'/templates.dist/'. $r_template_dist . '.php';
-            }elseif (is_readable($conf['template_dir'].'/templates/default.php')) {
-                $template_file = $conf['template_dir'].'/templates/default.php';
-            }else {
-                $template_file = $conf['template_dir'].'/templates.dist/default.php';
+            $template_dirs = $this->config->conf['template_dirs'];
+            foreach(Kohana::config('core.template_dirs') as $dir){
+                $template_dirs[] = $dir;
             }
-            return $template_file;
+            #throw new Kohana_Exception(print_r($template_dirs,TRUE));
+            foreach($template_dirs as $dir){
+                $match = $this->findRecursiveTemplate($template,$dir);
+                if($match != FALSE){
+                    return $match;
+                }
+            }
+            /*
+             * Fallback to default templates
+             */
+            foreach($template_dirs as $dir){
+                $match = $this->findRecursiveTemplate('default',$dir);
+                if($match != FALSE){
+                    return $match;
+                }
+            }
+            return FALSE;
         }
         /*
          * Special Templates
          */
         if($type == 'special'){
-            if (is_readable($conf['template_dir'].'/templates.special/' . $template . '.php')) {
-                $template_file = $conf['template_dir'].'/templates.special/' . $template . '.php';
+            if (is_readable($conf['special_template_dir'] . '/' . $template . '.php')) {
+                $template_file = $conf['special_template_dir'].'/' . $template . '.php';
             }else{
                 throw new Kohana_Exception("Special Template '$template' not found");
             }
@@ -528,12 +537,15 @@ class Data_Model extends Model
     * 
     *
     */
-    function findRecursiveTemplate($template, $dir="templates") {
-    $conf = $this->config->conf;
+    function findRecursiveTemplate($template, $dir) {
+        if(!is_readable($dir)){
+            return FALSE;
+        }
         $template_file = "";
+        $r_template_file = "";
         $r_template = "";
         $recursive = explode("_", $template);
-        if($conf['enable_recursive_template_search'] == 1){
+        if($this->config->conf['enable_recursive_template_search'] == 1){
             $i = 0;
             foreach ($recursive as $value) {
                 if ($i == 0) {
@@ -541,13 +553,25 @@ class Data_Model extends Model
                 } else {
                     $r_template = $r_template . '_' . $value;
                 }
-                if (is_readable($conf['template_dir']. '/' . $dir . '/' . $r_template . '.php')) {
-                    $template_file = $r_template;
+                $file = $dir . '/' . $r_template . '.php';
+                if (is_readable($file)) {
+                    $r_template_file = $file;
                 }
                 $i++;
             }
+            if($r_template_file != ""){
+                return $r_template_file;
+            }else{
+                return FALSE;
+            }
+        }else{
+            $file = $dir . '/' . $template . '.php';
+            if (is_readable($file)) {
+                return $file;
+            }else{
+                return FALSE;
+            }
         }
-        return $template_file;
     }
 
     public function getTimeRange($start=FALSE ,$end=FALSE ,$view="") {
