@@ -13,10 +13,10 @@ if($this->config->conf['use_fpdf'] == 1 && ( $position == "graph" || $position =
 	echo "<a title=\"".Kohana::lang('common.title-pdf-link')."\" href=\"".url::base(TRUE)."pdf".$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/pdf.png\"></a>\n";
 }
 if($this->config->conf['use_fpdf'] == 1 && $position == "basket"){
-	echo "<a title=\"".Kohana::lang('common.title-pdf-link')."\" href=\"".url::base(TRUE)."pdf/basket/".$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/PDF_32.png\"></a>\n";
+	echo "<a title=\"".Kohana::lang('common.title-pdf-link')."\" href=\"".url::base(TRUE)."pdf/basket/".$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/pdf.png\"></a>\n";
 }
 if($this->config->conf['use_fpdf'] == 1 && $position == "page"){
-	echo "<a title=\"".Kohana::lang('common.title-pdf-link')."\" href=\"".url::base(TRUE)."pdf/page/".$this->page.$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/PDF_32.png\"></a>\n";
+	echo "<a title=\"".Kohana::lang('common.title-pdf-link')."\" href=\"".url::base(TRUE)."pdf/page/".$this->page.$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/pdf.png\"></a>\n";
 }
 if($this->config->conf['show_xml_icon'] == 1 && $position == "graph"){
 	$qsa  = pnp::addToUri(array(), False);
