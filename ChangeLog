@@ -2,6 +2,8 @@
 
   * Feature: Special Templates are back [[tpl_special]]
   * Feature: New rrdtool helper functions makes template design easier [[tpl_helper]]
+  * Feature: config.php -> 'recursive_template_search' is enabled by default
+  * Feature: config.php -> 'template_dirs' is now an array of directorys to search for PNP templates
 
 **pnp-0.6.4 06/03/2010**
 
