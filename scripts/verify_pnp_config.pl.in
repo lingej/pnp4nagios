@@ -30,6 +30,7 @@
 # 2010.03.19: 0.1.19 bugfix: stats_dir
 # 2010.06.06: 0.1.20 bugfix: base_url
 # 2010.06.20: 0.1.21 skip views directive
+# 2010.07.03: 0.1.22 template_dirs; multiple directives
 
 use strict;
 use Getopt::Long;
@@ -100,6 +101,7 @@ my $layout = "";
 my $TemplPath = "";
 my $pkg_mgr = "";
 my $skip = 0;
+my $mult = undef;	# 0.1.22
 my $language = "";
 my $english = "";
 my $valLang = '^en$|^de$|^es$';
@@ -1150,7 +1152,7 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'allowed_for_pages\']'} = 'S;[\S,]+;381';
     $CPcfg{'$conf[\'overview-range\']'} = 'v;0|1;';
     $CPcfg{'$conf[\'popup-width\']'} = 'v;\d+px;607';
-    $CPcfg{'$conf[\'ui-theme\']'} = 'v;lightness|smoothness|redmond;656';
+    $CPcfg{'$conf[\'ui-theme\']'} = 'v;lightness|smoothness|redmond|multisite;656';
     $CPcfg{'$conf[\'lang\']'} = 'v;en|de|fr|se|nl|es;';
     if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
         $CPcfg{'$conf[\'lang\']'} = 'v;en_US|de_DE|fr_FR|se_SE|nl_NL|es_ES;';
@@ -1164,6 +1166,7 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'use_url_rewriting\']'} = 'v;0|1;';    
     $CPcfg{'$conf[\'show_xml_icon\']'} = 'v;0|1;607';
     $CPcfg{'$conf[\'template_dir\']'} = 'd;;607';
+    $CPcfg{'$conf[\'template_dirs\']'} = 'd;;;m';
     $CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';    
     $CPcfg{'$conf[\'html_dir-links\']'} = 'd;;235-237';    
     $err = 0;
@@ -1226,6 +1229,7 @@ sub procFile {
             info ("invEOL","$_");
             next;
         }
+	($par) =~ s/\[\]$//;	# 0.1.22
         my $skip_item = 0;
         for (0..$#skip) {
             $skip_item = 1 if ($par =~ /$skip[$_]/);
@@ -1246,7 +1250,7 @@ sub procFile {
         if (examine ($ptr,$par,$val)) {
             delete $ptr->{$par};
         } else {
-            $ptr->{$par} = $val;
+            $ptr->{$par} = $val unless (defined $mult);	# 0.1.22: unless ...
         }
     }
     close (PFILE);
@@ -1271,7 +1275,7 @@ sub examine {
             
     info ("keyValue","$par","$val") if ($debug);
     my ($act,$patt) = $var =~ /(.*?);(.*)/;
-    ($patt,$rev) = $patt =~ /(.*);(\d*?-?\d*?)$/ if ($patt =~ /;/);
+    ($patt,$rev,$mult) = $patt =~ /(.*);(\d*?-?\d*?)(;.?)?$/ if ($patt =~ /;/);
     if (defined $curr_rev) {
         my ($min_rev,$max_rev) = $rev =~ /(\d*)[-]?(\d*)/;
         $min_rev = 0 unless (defined($min_rev) and ($min_rev ne ""));
