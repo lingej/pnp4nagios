@@ -8,21 +8,31 @@
 
 Wenn bis jetzt alles sauber funktioniert hat, kann PNP zum ersten Mal im Browser aufgerufen werden.
 Bei der Installation mit den Standardeinstellungen erfolgt der Aufruf über <a href="http://%3CServername%3E/pnp4nagios/" class="urlextern" title="http://&lt;Servername&gt;/pnp4nagios/"  rel="nofollow">http://&lt;Servername&gt;/pnp4nagios/</a>.
+</p>
+
+<p>
 Beim ersten Aufruf sieht man die Seite “PNP4Nagios Environment Tests”, die verschiedene Tests von notwendigen Komponenten enthält. Offenkundig sollten alle Tests erfolgreich verlaufen, bevor es weitergehen kann. Bitte beachten Sie die Hinweise auf der Seite.<br/>
 
-Falls die Meldung “<acronym title="Hypertext Preprocessor">PHP</acronym> magic_quotes_gpc is deprecated” zu sehen ist, dann setzen Sie in der <code>php.ini</code> den Wert auf <code>Off</code>.
 </p>
 
 <p>
-Ohne weitere Optionen sucht PNP nach RRD- und <acronym title="Extensible Markup Language">XML</acronym>-Dateien in var/perfdata/ und zeigt alle Graphen des ersten Hosts in der Übersicht an.
+Sind alle Tests erfolgreich verlaufen, so kann die Datei <code>pnp4nagios/share/install.php</code> gelöscht oder umbenannt werden. Erst dann ist das Webinterface erreichbar.
 </p>
 
 <p>
-ACHTUNG: Direkt nach dem (Neu-)Start von Nagios nach dem Aktivieren der Verarbeitung von Performance-Daten wird der Aufruf im Browser zu Fehlermeldungen führen, weil zunächst Performance-Daten gesammelt und in den RRD-Dateien abgelegt werden müssen. Abhängig vom Check-Intervall kann es einige Zeit dauern, bis Graphen angezeigt werden können.
+Alternativ kann eine Datei <code>pnp4nagios/share/install.ignore</code> angelegt werden umm den Aufruf der Installers nach weiteren Updates zu ignorieren. 
+</p>
+
+<p>
+Ohne weitere Optionen sucht PNP nach RRD- und <acronym title="Extensible Markup Language">XML</acronym>-Dateien in <code>pnp4nagios/var/perfdata/</code> und zeigt alle Graphen des ersten Hosts in der Übersicht an.
+</p>
+
+<p>
+ACHTUNG: Direkt nach dem (Neu-)Start von Nagios nach dem Aktivieren der Verarbeitung von Performance-Daten wird der Aufruf im Browser zu Fehlermeldungen führen, weil zunächst Performance-Daten gesammelt und in den RRD-Dateien abgelegt werden müssen. Abhängig vom Check-Intervall kann es einige Zeit dauern, bis die ersten Graphen angezeigt werden können.
 </p>
 
 </div>
-<!-- SECTION "Prüfen der Installation" [1-1131] -->
+<!-- SECTION "Prüfen der Installation" [1-1347] -->
 <h2><a name="logfile" id="logfile">Logfile</a></h2>
 <div class="level2">
 
@@ -52,7 +62,7 @@ Spätestens bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:
 </p>
 
 </div>
-<!-- SECTION "Logfile" [1132-2545] -->
+<!-- SECTION "Logfile" [1348-2761] -->
 <h2><a name="was_aber_wenn_nicht" id="was_aber_wenn_nicht">Was aber wenn nicht ?</a></h2>
 <div class="level2">
 
@@ -114,4 +124,4 @@ Das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Scr
 </p>
 
 </div>
-<!-- SECTION "Was aber wenn nicht ?" [2546-] -->
+<!-- SECTION "Was aber wenn nicht ?" [2762-] -->

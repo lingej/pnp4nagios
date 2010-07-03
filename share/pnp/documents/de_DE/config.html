@@ -9,8 +9,12 @@
 Im folgenden wird die Konfiguration der bereits erwähnten <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">Arten der Performance-Daten Verarbeitung</a> genauer erklärt.
 </p>
 
+<p>
+Die bevorzugte Methode der PNP Entwickler ist der “Bulk Mode mit NPCD und npcdmod”.
+</p>
+
 </div>
-<!-- SECTION "Konfiguration" [1-158] -->
+<!-- SECTION "Konfiguration" [1-243] -->
 <h2><a name="synchronous_mode" id="synchronous_mode">Synchronous Mode</a></h2>
 <div class="level2">
 
@@ -86,7 +90,7 @@ define command {
 </p>
 
 </div>
-<!-- SECTION "Synchronous Mode" [159-2802] -->
+<!-- SECTION "Synchronous Mode" [244-2887] -->
 <h2><a name="bulk_mode" id="bulk_mode">Bulk Mode</a></h2>
 <div class="level2">
 
@@ -179,7 +183,7 @@ define command{
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode" [2803-6261] -->
+<!-- SECTION "Bulk Mode" [2888-6346] -->
 <h2><a name="bulk_mode_with_npcd" id="bulk_mode_with_npcd">Bulk Mode with NPCD</a></h2>
 <div class="level2">
 
@@ -209,6 +213,7 @@ Somit sammeln sich Dateien im Verzeichnis /usr/local/pnp4nagios/var/spool/, die 
 
 <p>
 NPCD überwacht das Spool-Verzeichnis und übergibt wiederum alle gefundenen Dateien an <code>process_perfdata.pl</code>. Damit ist die Verarbeitung der Performancedaten komplett von Nagios entkoppelt. Wir müssen nur noch den NPCD starten.
+
 </p>
 <pre class="code"> /usr/local/pnp4nagios/bin/npcd -d -f /usr/local/pnp4nagios/etc/npcd.cfg</pre>
 
@@ -218,6 +223,13 @@ Die Option <code>-d</code> veranlasst NPCD im Hintergund als Daemon seinen Diens
 </p>
 
 <p>
+Das Init Script für den NPCD wir während der Installation über “make install-init” installiert und kann somit auch für den Start verwendet werden.
+
+</p>
+<pre class="code"> /etc/init.d/npcd start</pre>
+
+<p>
+
 In der Config-Datei des NPCD, der <code>npcd.cfg</code>, ist vor dem ersten Start zu prüfen, ob die Pfade zum Spool-Verzeichnis und zu <code>process_perfdata.pl</code> richtig gesetzt sind.
 </p>
 
@@ -225,10 +237,62 @@ In der Config-Datei des NPCD, der <code>npcd.cfg</code>, ist vor dem ersten Star
 Weitere Informationen zu NPCD findet Ihr <a href="/de/pnp-0.6/npcd" class="wikilink1" title="de:pnp-0.6:npcd">hier</a>.
 </p>
 
+</div>
+<!-- SECTION "Bulk Mode with NPCD" [6347-8483] -->
+<h2><a name="bulk_mode_with_npcd_und_npcdmod" id="bulk_mode_with_npcd_und_npcdmod">Bulk Mode with NPCD und npcdmod</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata Routinen von Nagios, welche über die “*_perf_data_*” Optionen in der nagios.cfg konfigurtiert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o kümmert sich um die für PNP nötige Aufbereitung der Daten.
+</p>
+
+<p>
+Vorteil:
+</p>
+<ul>
+<li class="level1"><div class="li"> Die Perfdata Routinen innerhalb von Nagios stehen wieder für andere Addons zur Verfügung.</div>
+</li>
+<li class="level1"><div class="li"> Die Konfiguration reduziert sich.</div>
+</li>
+<li class="level1"><div class="li"> Die bevorzugte Methode der PNP Entwickler.</div>
+</li>
+</ul>
+
+<p>
+
+Anpassung in der nagios.cfg:
+</p>
+<pre class="code">
+process_performance_data=1
+broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nagios/etc/npcd.cfg
+</pre>
+
+<p>
+Alle anderen auf dieser Seite verwendeten Optionen dürfen für diesen Mode <strong>NICHT</strong> mehr verwendet werden.
+</p>
+
+<p>
+Nach dem Neustart von Nagios werden Informationen zum Ladevorgang des Moduls protokolliert.
+</p>
+
+<p>
+Auszug aus den nagios.log
+
+</p>
+<pre class="code">
+[1277545053] npcdmod: Copyright (c) 2008-2009 Hendrik Baecker (andurin@process-zero.de) - http://www.pnp4nagios.org
+[1277545053] npcdmod: /usr/local/pnp4nagios/etc/npcd.cfg initialized
+[1277545053] npcdmod: spool_dir = &#039;/usr/local/pnp4nagios/var/spool/&#039;.
+[1277545053] npcdmod: perfdata file &#039;/usr/local/pnp4nagios/var/perfdata.dump&#039;.
+[1277545053] npcdmod: Ready to run to have some fun!
+[1277545053] Event broker module &#039;/usr/local/pnp4nagios/lib/npcdmod.o&#039; initialized successfully.
+</pre>
+
 <p>
 <a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion prüfen</a>
 
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD" [6262-] -->
+<!-- SECTION "Bulk Mode with NPCD und npcdmod" [8484-] -->
