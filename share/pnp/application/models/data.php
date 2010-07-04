@@ -503,7 +503,7 @@ class Data_Model extends Model
          * Normal templates
          */
         if($type == 'normal'){
-            // Build a list of directorys to search for templates 
+            // Build a list of directories to search for templates 
             $template_dirs = array();
             if(array_key_exists('template_dirs', $this->config->conf)){
                 foreach($this->config->conf['template_dirs'] as $dir){

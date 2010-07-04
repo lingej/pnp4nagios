@@ -66,26 +66,23 @@ mkdir ("_media") unless (-d "_media");
 foreach my $lng (keys %lang) {
 	next unless ($lng eq lc($ARGV[0]));
 	@pg = ();
+	push @pg, 'start';
 	mkdir ($lang{$lng}) unless (-d $lang{$lng});
 	chdir ($lang{$lng}) || return;
 	my $lng2 = ($lng eq 'en' ? "" : $lng);
-	my $iFile = "start";
-#	next if (-f $iFile);
-	my $url = "$base/$lng2/$tag/$iFile";
-	$res = `wget -nv $url`;
-	conv ($iFile,$lng);
-	for my $page (0..$#pg) {
+	my $page = 0;
+	while ($page <= $#pg) {
 		$pg[$page] =~ s/\?.*//;
 		if ($pg[$page] =~ /(.*)\//) {
 			`mkdir -p $1`;
 		}
 		unless (-f $pg[$page]) {
-			$url = "$base/$lng2/$tag/$pg[$page]";
+			my $url = "$base/$lng2/$tag/$pg[$page]";
 			$res = `wget -nv $url`;
+			conv ($pg[$page],$lng) unless ($!);
 		}
-		conv ($pg[$page],$lng); # unless (-f "$pg[$page].html");
+		$page++;
 	}
-	push @pg, "start";
 	for my $page (0..$#pg) {
 		unlink $pg[$page];
 	}
