@@ -454,10 +454,15 @@ class Data_Model extends Model
         if(isset($RRDFILE[1])){
             $rrdfile = $RRDFILE[1];
         }
-        ob_start();
-        include($template_file);
-        ob_end_clean();
-        // Compatibility for very old Templates
+        // Include template
+        if($template_file == FALSE){
+            throw new Kohana_Exception('error.no-templates-found');
+        }else{
+            ob_start();
+            include($template_file);
+            ob_end_clean();
+        }
+       // Compatibility for very old Templates
         if(!is_array($def) && $def != FALSE){
             $tmp[1] = $def;
             $def = $tmp;
@@ -495,10 +500,16 @@ class Data_Model extends Model
     public function findTemplate($template,$type='normal'){
         $conf = $this->config->conf;
         /*
-         * Normal Templates
+         * Normal templates
          */
         if($type == 'normal'){
-            $template_dirs = $this->config->conf['template_dirs'];
+            // Build a list of directorys to search for templates 
+            $template_dirs = array();
+            if(array_key_exists('template_dirs', $this->config->conf)){
+                foreach($this->config->conf['template_dirs'] as $dir){
+                    $template_dirs[] = $dir;
+                }
+            }    
             foreach(Kohana::config('core.template_dirs') as $dir){
                 $template_dirs[] = $dir;
             }
@@ -581,7 +592,6 @@ class Data_Model extends Model
                 $timestamp = strtotime($end);
                 if(!$timestamp){
                     throw new Kohana_User_Exception('Wrong Format', "$end");
-                    #$debug->doCheck('print_r',"wrong fmt $timestamp");
                 }else{
                     $end = $timestamp;
                 }
@@ -595,7 +605,6 @@ class Data_Model extends Model
                 $timestamp = strtotime($start);
                 if(!$timestamp){
                     throw new Kohana_User_Exception('Wrong Format', "Start -> $start");
-                    #$debug->doCheck('print_r',"wrong fmt $timestamp");
                 }else{
                     $start = $timestamp;
                 }

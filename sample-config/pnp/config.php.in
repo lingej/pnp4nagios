@@ -174,7 +174,7 @@ $views[] = array('title' => 'One Month', 'start' => (60*60*24*32) );
 $views[] = array('title' => 'One Year',  'start' => (60*60*24*380) );
 
 #
-# rdcached Support
+# rrdcached support
 # Use only with rrdtool svn revision 1511+
 #
 # $conf['RRD_DAEMON_OPTS'] = 'unix:/tmp/rrdcached.sock';
@@ -183,7 +183,7 @@ $conf['RRD_DAEMON_OPTS'] = '';
 # A list of directorys to search for templates
 # @datarootdir@/templates.dist is always the last directory to search for templates
 #
-# Add your own Template Directorys here
+# Add your own template directorys here
 # First match wins!
 $conf['template_dirs'][] = '/usr/local/check_mk/pnp-templates';
 $conf['template_dirs'][] = '@datarootdir@/templates';
