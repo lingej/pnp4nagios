@@ -234,7 +234,7 @@ In der Config-Datei des NPCD, der <code>npcd.cfg</code>, ist vor dem ersten Star
 </p>
 
 <p>
-Weitere Informationen zu NPCD findet Ihr <a href="/de/pnp-0.6/npcd" class="wikilink1" title="de:pnp-0.6:npcd">hier</a>.
+Weitere Informationen zu NPCD findet ihr <a href="/de/pnp-0.6/npcd" class="wikilink1" title="de:pnp-0.6:npcd">hier</a>.
 </p>
 
 </div>
@@ -244,24 +244,24 @@ Weitere Informationen zu NPCD findet Ihr <a href="/de/pnp-0.6/npcd" class="wikil
 
 <p>
 
-<a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata Routinen von Nagios, welche über die “*_perf_data_*” Optionen in der nagios.cfg konfigurtiert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o kümmert sich um die für PNP nötige Aufbereitung der Daten.
+<a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker-Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata-Routinen von Nagios, die über die “*_perf_data_*” Optionen in der <code>nagios.cfg</code> konfiguriert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o kümmert sich um die für PNP nötige Aufbereitung der Daten.
 </p>
 
 <p>
 Vorteil:
 </p>
 <ul>
-<li class="level1"><div class="li"> Die Perfdata Routinen innerhalb von Nagios stehen wieder für andere Addons zur Verfügung.</div>
+<li class="level1"><div class="li"> Die Perfdata-Routinen innerhalb von Nagios stehen wieder für andere Addons zur Verfügung.</div>
 </li>
 <li class="level1"><div class="li"> Die Konfiguration reduziert sich.</div>
 </li>
-<li class="level1"><div class="li"> Die bevorzugte Methode der PNP Entwickler.</div>
+<li class="level1"><div class="li"> Die bevorzugte Methode der PNP-Entwickler.</div>
 </li>
 </ul>
 
 <p>
 
-Anpassung in der nagios.cfg:
+Anpassung in der <code>nagios.cfg</code>:
 </p>
 <pre class="code">
 process_performance_data=1
@@ -269,7 +269,7 @@ broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nag
 </pre>
 
 <p>
-Alle anderen auf dieser Seite verwendeten Optionen dürfen für diesen Mode <strong>NICHT</strong> mehr verwendet werden.
+Alle anderen auf dieser Seite gezeigten Optionen dürfen für diesen Modus <strong>NICHT</strong> mehr verwendet werden.
 </p>
 
 <p>

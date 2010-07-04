@@ -212,10 +212,62 @@ The only thing that remains is to start NPCD.
 The option <code>-d</code> starts NPCD as a daemon in the background.
 </p>
 
+</div>
+<!-- SECTION "Bulk Mode with NPCD" [5803-7480] -->
+<h2><a name="bulk_mode_with_npcd_and_npcdmod" id="bulk_mode_with_npcd_and_npcdmod">Bulk Mode with NPCD and npcdmod</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk-npcdmod.png?id=pnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> This mode uses the event broker module npcdmod.o. The flow of data is identical to “bulk mode with NPCD”. The internal perfdata routines of Nagios activated by the “*_perf_data_*” directives in nagios.cfg are *NOT* used anymore. The module npcdmod.o takes over the task of processing the data required by PNP.
+</p>
+
+<p>
+Pro:
+</p>
+<ul>
+<li class="level1"><div class="li"> The perfdata routines can now be used for other addons.</div>
+</li>
+<li class="level1"><div class="li"> The configuration is easier.</div>
+</li>
+<li class="level1"><div class="li"> It is the preferred mode of the PNP developers.</div>
+</li>
+</ul>
+
+<p>
+
+Adjustments in nagios.cfg:
+</p>
+<pre class="code">
+process_performance_data=1
+broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nagios/etc/npcd.cfg
+</pre>
+
+<p>
+All other directives mentioned on this page must <strong>NOT</strong> be used.
+</p>
+
+<p>
+After restarting Nagios information regarding the start of the module will be logged.
+</p>
+
+<p>
+Excerpt from nagios.log
+
+</p>
+<pre class="code">
+[1277545053] npcdmod: Copyright (c) 2008-2009 Hendrik Baecker (andurin@process-zero.de) - http://www.pnp4nagios.org
+[1277545053] npcdmod: /usr/local/pnp4nagios/etc/npcd.cfg initialized
+[1277545053] npcdmod: spool_dir = &#039;/usr/local/pnp4nagios/var/spool/&#039;.
+[1277545053] npcdmod: perfdata file &#039;/usr/local/pnp4nagios/var/perfdata.dump&#039;.
+[1277545053] npcdmod: Ready to run to have some fun!
+[1277545053] Event broker module &#039;/usr/local/pnp4nagios/lib/npcdmod.o&#039; initialized successfully.
+</pre>
+
 <p>
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/verify" class="wikilink1" title="pnp-0.6:verify">checking the functionality</a>
 
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD" [5803-] -->
+<!-- SECTION "Bulk Mode with NPCD and npcdmod" [7481-] -->
