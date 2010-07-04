@@ -20,6 +20,7 @@ $lang = array
     'page-config-dir' => 'No hay fichero de configuración de página en "%s" <a href="http://docs.pnp4nagios.org/es/faq/17">Leer FAQ en línea</a>',
     'xport-host-service' => 'El controlador Xport necesita los parámetros de URL "host" y "srv". <a href="http://docs.pnp4nagios.org/es/faq/18">Leer FAQ en línea</a>',
 	'mod-rewrite' => 'El módulo Apache Rewrite no está habilitado. <a href="http://docs.pnp4nagios.org/es/faq/19">Leer FAQ en línea</a>',
-    'tpl-no-services-found' => 'TODO',
-    'tpl-no-hosts-found' => 'TODO',
+    'tpl-no-services-found' => 'No services could be found "%s". <a href="http://docs.pnp4nagios.org/faq/20">Read FAQ online</a>',
+    'tpl-no-hosts-found' => 'No hosts could be found "%s". <a href="http://docs.pnp4nagios.org/faq/21">Read FAQ online</a>',
+    'no-templates-found' => 'No templates counld be found. <a href="http://docs.pnp4nagios.org/faq/22">Read FAQ online</a>',
 );

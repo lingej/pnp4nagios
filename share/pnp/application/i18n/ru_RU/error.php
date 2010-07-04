@@ -20,6 +20,7 @@ $lang = array
 	'page-config-dir' => 'Файл конфигурации "страниц" не найден в "%s" <a href="http://docs.pnp4nagios.org/faq/17">Read FAQ online</a>',
 	'xport-host-service' => 'Контроллер Xport требует параметры "host" и "srv" в URL. <a href="http://docs.pnp4nagios.org/faq/18">Read FAQ online</a>',
 	'mod-rewrite' => 'Модуль Rewrite для Apache не включен. <a href="http://docs.pnp4nagios.org/faq/19">Read FAQ online</a>',
-    'tpl-no-services-found' => 'TODO',
-    'tpl-no-hosts-found' => 'TODO',
+    'tpl-no-services-found' => 'No services could be found "%s". <a href="http://docs.pnp4nagios.org/faq/20">Read FAQ online</a>',
+    'tpl-no-hosts-found' => 'No hosts could be found "%s". <a href="http://docs.pnp4nagios.org/faq/21">Read FAQ online</a>',
+    'no-templates-found' => 'No templates could be found. <a href="http://docs.pnp4nagios.org/faq/22">Read FAQ online</a>',
 );
