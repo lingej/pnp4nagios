@@ -228,15 +228,26 @@ If everything went well until now you can try to call PNP using your web browser
 When using the installation with default values PNP should be called using <a href="http://%3Cserver name%3E/pnp4nagios/" class="urlextern" title="http://&lt;server name&gt;/pnp4nagios/"  rel="nofollow">http://&lt;server name&gt;/pnp4nagios/</a>.
 The first time you will see a page “PNP4Nagios Environment Tests” which includes different checks of necessary components. Obviously all checks have to be passed successfully before you can proceed. Please follow the instructions given on that page.<br/>
 
+</p>
+
+<p>
+If all tests have passed *successfully* the file pnp4nagios/share/install.php can be deleted or renamed. Not till then the web interface is reachable.
+</p>
+
+<p>
+Alternatively you can create a file called <code>pnp4nagios/share/install.ignore</code> which will prevent the call of the installer after further updates.
+</p>
+
+<p>
 If you receive the message “<acronym title="Hypertext Preprocessor">PHP</acronym> magic_quotes_gpc is deprecated” then please locate your <code>php.ini</code> and set the value to <code>Off</code>.
 </p>
 
 <p>
-Called without any arguments PNP looks for RRD and <acronym title="Extensible Markup Language">XML</acronym> files in var/perfdata and shows all graphs of the first host.
+Called without any arguments PNP looks for RRD and <acronym title="Extensible Markup Language">XML</acronym> files in pnp4nagios/var/perfdata and shows all graphs of the first host.
 </p>
 
 <p>
-ATTENTION: Immediately after (re-)starting Nagios after you enabled the processing of performance data you will get error messages in your browser because performance data has to be collected and stored in RRD files. Depending on the check interval you are using you have to wait some time before you can view the graphs.
+ATTENTION: Immediately after (re-)starting Nagios after you enabled the processing of performance data you will get error messages in your browser because performance data has to be collected and stored in RRD files. Depending on the check interval you are using you have to wait some time before you can view the first graphs.
 </p>
 
 <p>
