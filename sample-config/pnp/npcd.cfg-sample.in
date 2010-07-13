@@ -99,7 +99,7 @@ perfdata_file_run_cmd = @libexecdir@/@pp_pl_name@
 #
 # Hint:
 # NPCD will create a command line like this:
-# '<perfdata_file_runc_cmd> <perfdata_file_runc_cmd_args> <filename_from_spool_dir>'
+# '<perfdata_file_run_cmd> <perfdata_file_run_cmd_args> <filename_from_spool_dir>'
 #
 
 perfdata_file_run_cmd_args = -b
@@ -108,7 +108,7 @@ perfdata_file_run_cmd_args = -b
 # identify_npcd (optional)
 #
 # If set to one (by default) npcd will append
-# '-n' to the perfdata_file_rund_cmd
+# '-n' to the perfdata_file_run_cmd
 #
 # identify_npcd = 0|1 (default: 1)
 
