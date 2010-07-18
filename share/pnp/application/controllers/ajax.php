@@ -10,6 +10,9 @@ class Ajax_Controller extends System_Controller  {
 
     public function __construct(){
         parent::__construct();
+        $this->auto_render = FALSE;
+        // Disable auto-rendering
+        $this->auto_render = FALSE;
     }
 
     public function index(){
@@ -17,9 +20,6 @@ class Ajax_Controller extends System_Controller  {
     }
 
     public function search() {
-        // Disable auto-rendering
-        $this->auto_render = FALSE;
-    
         $query     = $this->input->get('term');
         $result    = array();
         if(strlen($query)>=1) {

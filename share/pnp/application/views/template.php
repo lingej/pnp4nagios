@@ -13,7 +13,7 @@
 <?php echo html::script('media/js/jquery-ui.min.js')?>
 <script type="text/javascript">
 $(document).ready(function(){
-    var path = "<?php echo url::base(TRUE)."index.php"?>";
+    var path = "<?php echo url::base(TRUE)."index.php/"?>";
     $("img").fadeIn(1500);
     $("#basket_action_add a").click(function(){
         var item = (this.id)
