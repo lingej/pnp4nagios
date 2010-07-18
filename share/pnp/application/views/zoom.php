@@ -1,7 +1,7 @@
 <html>
 <head>
 <?php echo html::stylesheet('media/css/common.css') ?>
-<?php echo html::stylesheet('media/css/ui-'.$this->config->conf['ui-theme'].'/jquery-ui.css') ?>
+<?php echo html::stylesheet('media/css/ui-'.$this->theme.'/jquery-ui.css') ?>
 </head>
 <body>
 <div class="pagebody">
