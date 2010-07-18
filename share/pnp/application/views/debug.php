@@ -13,11 +13,11 @@
 		<li><a href="#tabs-1">Data Structure</a></li>
 		<li><a href="#tabs-2">RRD Datasource</a></li>
 		<li><a href="#tabs-3">Nagios Macros</a></li>
+		<li><a href="#tabs-4">PHP Session </a></li>
 	</ul>
 	<div id="tabs-1">
 	<h3>$this->data->STRUCT</h3>
 	<pre>
-<?php print_r($this->session->get());?>
 <?php print_r($this->data->STRUCT);?>
 	</pre>
 	</div>
@@ -31,6 +31,12 @@
 	<h3>$this->data->MACRO</h3>
 	<pre>
 <?php print_r($this->data->MACRO);?>
+	</pre>
+	</div>
+	<div id="tabs-4">
+	<h3>$this->session->get()</h3>
+	<pre>
+<?php print_r($this->session->get());?>
 	</pre>
 	</div>
 </div>
