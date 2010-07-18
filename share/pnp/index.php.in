@@ -8,8 +8,10 @@
  * @see http://kohanaphp.com
  */
 
-define('PNP_VERSION','@PKG_VERSION@');
-define('PNP_REL_DATE','@PKG_REL_DATE@');
+define('PNP_VERSION'  , '@PKG_VERSION@');
+define('PNP_REL_DATE' , '@PKG_REL_DATE@');
+define('PNP_ETC_PATH' , '@sysconfdir@');
+define('PNP_LOG_PATH' , '@localstatedir@');
 
 /**
  * Define the website environment status. When this flag is set to TRUE, some
@@ -19,6 +21,31 @@ define('PNP_REL_DATE','@PKG_REL_DATE@');
  * @see http://docs.kohanaphp.com/installation/deployment
  */
 define('IN_PRODUCTION', TRUE);
+
+/**
+ *
+ * OMD path detection
+ *
+ */
+if(preg_match ("/^\/opt\/omd\//", __FILE__)){
+    $parts = preg_split('/\//', __FILE__ );
+    define('OMD', TRUE);
+    define('OMD_VERSION', $parts[4]);
+    define('OMD_ROOT', sprintf('/%s/%s/%s/%s', $parts[1],$parts[2],$parts[3],$parts[4]));
+    $parts = preg_split('/\//', $_SERVER['REQUEST_URI'] );
+    define('OMD_SITE', $parts[1]);
+    define('OMD_SITE_ROOT', '/opt/omd/sites/'.$parts[1]);
+    unset($parts);
+}else{
+    define('OMD', FALSE);
+}
+
+/**
+ *
+ * Autodetect base URL
+ *
+ */
+define('BASE_URL' , dirname($_SERVER["SCRIPT_NAME"]));
 
 /**
 * The current XML Structure Tag for this PNP Version

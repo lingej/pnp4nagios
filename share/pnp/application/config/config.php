@@ -4,7 +4,7 @@
  * then a full URL will be used, eg: http://localhost/kohana/. If it only includes
  * the path, and a site_protocol is specified, the domain will be auto-detected.
  */
-$config['site_domain'] = '@BASE_URL@/';
+$config['site_domain'] = BASE_URL;
 
 /**
  * Force a default protocol to be used by the site. If no site_protocol is
@@ -65,7 +65,7 @@ $config['log_threshold'] = 0;
 /**
  * Message logging directory.
  */
-$config['log_directory'] = '@localstatedir@/kohana';
+$config['log_directory'] = PNP_LOG_PATH.'/kohana';
 
 /**
  * Enable or disable displaying of Kohana error pages. This will not affect
@@ -107,7 +107,7 @@ $config['modules'] = array
  *
  * pnp_etc_path points to $sysconfdir
  */
-$config['pnp_etc_path'] = '@sysconfdir@';
+$config['pnp_etc_path'] = PNP_ETC_PATH;
 /*
  * Available Doc Languages
  */
@@ -115,4 +115,4 @@ $config['doc_language'] = array("en_US", "de_DE");
 /*
  * Default template dirs
  */
-$config['template_dirs'] = array("@datarootdir@/templates","@datarootdir@/templates.dist");
+$config['template_dirs'] = array(DOCROOT."/templates",DOCROOT."/templates.dist");

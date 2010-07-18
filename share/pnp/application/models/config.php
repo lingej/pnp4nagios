@@ -10,9 +10,11 @@ class Config_Model extends Model
 
     public function read_config(){
         if(getenv('PNP_CONFIG_FILE') != ""){
-                $config = getenv('PNP_CONFIG_FILE');
+            $config = getenv('PNP_CONFIG_FILE');
+        }elseif(OMD){
+            $config = OMD_SITE_ROOT.'/etc/pnp4nagios/config';
         }else{
-                $config = Kohana::config('core.pnp_etc_path')."/config";
+            $config = Kohana::config('core.pnp_etc_path')."/config";
         }
 
         # Default Values
@@ -20,13 +22,13 @@ class Config_Model extends Model
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {
-                include ($config . ".php");
+            include ($config . ".php");
         }else {
-                throw new Kohana_Exception('error.config-not-found', $config);
+            throw new Kohana_Exception('error.config-not-found', $config);
         }
 
         if (is_readable($config . "_local.php")) {
-                include ($config . "_local.php");
+            include ($config . "_local.php");
         }
         $this->conf = $conf;
         $this->views = $views;

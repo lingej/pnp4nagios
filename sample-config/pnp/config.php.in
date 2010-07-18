@@ -21,10 +21,6 @@
 # Credit:  Tobi Oetiker, http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
 #
 
-# The PNP4Nagios Base URL
-# Default "/pnp4nagios"
-#
-$conf['base_url'] = "@BASE_URL@";
 # URL rewriting is used by default to create friendly URLs. 
 # Set this value to '0' if URL rewriting is not available on your system.
 #
