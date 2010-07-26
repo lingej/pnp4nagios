@@ -459,7 +459,7 @@ class Data_Model extends Model
             include($template_file);
             ob_end_clean();
         }
-       // Compatibility for very old Templates
+        // Compatibility for very old Templates
         if(!is_array($def) && $def != FALSE){
             $tmp[1] = $def;
             $def = $tmp;
@@ -473,21 +473,29 @@ class Data_Model extends Model
             $ds_name = $tmp;
         }
         //
-
         if($def != FALSE){
-            $this->RRD['def'] = $def;
+            $this->RRD['def'] = $this->array_reindex($def);
         }else{
             throw new Kohana_Exception('error.template-without-def', $template_file);
         }
         if($opt != FALSE ){
-            $this->RRD['opt'] = $opt;
+            $this->RRD['opt'] = $this->array_reindex($opt);
         }else{
             throw new Kohana_Exception('error.template-without-opt', $template_file);
         }
         if( $ds_name != FALSE ){
-            $this->RRD['ds_name'] = $ds_name;
+            $this->RRD['ds_name'] = $this->array_reindex($ds_name);
         }
         return TRUE;        
+    }
+    
+    private function array_reindex($data){
+        $i=0;
+        foreach($data as $d){
+            $tmp[$i] = $d;
+            $i++; 
+        }
+        return $tmp;
     }
     
     /*
