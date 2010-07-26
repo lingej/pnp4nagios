@@ -71,9 +71,9 @@ class Docs_Controller extends System_Controller  {
         $this->content     = str_replace("/templates/", "http://docs.pnp4nagios.org/templates/", $this->content);
         $this->content     = str_replace("/de/pnp-0.6/", "", $this->content);
         $this->content     = str_replace("/pnp-0.6/", "", $this->content);
-        $this->content     = str_replace("/_media", url::base(TRUE)."documents/_media", $this->content);
+        $this->content     = str_replace("/_media", url::base()."documents/_media", $this->content);
         $this->content     = str_replace("gallery", "", $this->content);
-        $this->content     = str_replace("/_detail", url::base(TRUE)."documents/_media", $this->content);
+        $this->content     = str_replace("/_detail", url::base()."documents/_media", $this->content);
         $this->graph_width = ($this->config->conf['graph_width'] + 140);
     }
 }

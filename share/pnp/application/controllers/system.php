@@ -18,7 +18,6 @@ class System_Controller extends Template_Controller {
 
         $this->config->read_config();
         Kohana::config_set('locale.language',$this->config->conf['lang']);
-        Kohana::config_set('core.site_domain',$this->config->conf['base_url']);
         // Check for mod_rewrite
         $this->check_mod_rewrite();
 
@@ -36,15 +35,28 @@ class System_Controller extends Template_Controller {
         if(Router::$controller != "image" && Router::$controller != "image_special"){
             $this->session = Session::instance();
 
-            if($this->theme){
-                $this->session->set('theme', $this->theme );
-            }
-            # New session
+            # Session withou theme info
             if($this->session->get("theme","new") == "new"){
-                $this->theme = $this->config->conf['ui-theme'];
-                $this->session->set("theme", $this->theme);
+                if($this->theme){
+                    # store $this->theme if available
+                    $this->session->set('theme', $this->theme );
+                }else{
+                    # set $this->theme to default value 
+                    $this->theme = $this->config->conf['ui-theme'];
+                }
+            # Sesion with theme info    
             }else{
-                $this->theme = $this->session->get('theme');
+                if($this->theme && $this->theme != 'default'){
+                    # store $this->theme if available
+                    $this->session->set('theme', $this->theme );
+                }elseif($this->theme == 'default'){
+                    # reset to default theme 
+                    $this->theme = $this->config->conf['ui-theme'];
+                    $this->session->set('theme', $this->theme );
+                }else{
+                    # set $this->theme with session infos
+                    $this->theme = $this->session->get('theme');
+                }
             }
 
             if($this->start && $this->end ){

@@ -25,7 +25,7 @@ With Nagios 2.x the integration of external URLs into the nagios web interface i
 define serviceextinfo {
    host_name             localhost
    service_description   load
-   action_url            /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   action_url            /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
 }
 </pre>
 
@@ -34,7 +34,7 @@ You have to specify an additional Extended Info Definition for every service.
 </p>
 
 </div>
-<!-- SECTION "Nagios 2.x" [286-877] -->
+<!-- SECTION "Nagios 2.x" [286-887] -->
 <h2><a name="nagios_3x" id="nagios_3x">Nagios 3.x</a></h2>
 <div class="level2">
 
@@ -49,13 +49,13 @@ First two nagios templates are defined. If you used the Nagios <a href="http://n
 <pre class="code">
 define host {
    name       host-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=_HOST_
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_
    register   0
 }
 
 define service {
    name       srv-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
    register   0
 }
 </pre>
@@ -88,7 +88,7 @@ The links to the correct URLs are created automagically.<br/>
 </p>
 
 </div>
-<!-- SECTION "Nagios 3.x" [878-3004] -->
+<!-- SECTION "Nagios 3.x" [888-3034] -->
 <h2><a name="popups" id="popups">Popups</a></h2>
 <div class="level2">
 
@@ -118,13 +118,13 @@ Definition:
 <pre class="code">
 define host {
    name       host-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=_HOST_
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=_HOST_
    register   0
 }
 
 define service {
    name       srv-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
    register   0
 }
 </pre>
@@ -142,4 +142,4 @@ After a restart of Nagios (after modifying the definitions) the result might loo
 </p>
 
 </div>
-<!-- SECTION "Popups" [3005-] -->
+<!-- SECTION "Popups" [3035-] -->
