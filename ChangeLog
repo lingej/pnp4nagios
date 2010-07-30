@@ -2,6 +2,7 @@
 
   * Bugfix: Fixed max amount of graphs per template 
   * Bugfix: Autodetect PNP base URL
+  * Bugfix: Too short npcdmod perfdata_template to take perfdata + overhead, increased +1024byte
 
 **pnp-0.6.5 07/09/2010**
 

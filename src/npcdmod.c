@@ -2,7 +2,7 @@
  *
  * NPCDMOD.C
  *
- * Copyright (c) 2008-2009 Hendrik Baecker (http://www.pnp4nagios.org)
+ * Copyright (c) 2008-2010 Hendrik Baecker (http://www.pnp4nagios.org)
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation;
@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Last Modified: 07-12-2009
+ * Last Modified: 07-30-2010
  *
  *****************************************************************************/
 
@@ -187,7 +187,7 @@ int npcdmod_handle_data(int event_type, void *data) {
 	service *service=NULL;
 
 	char temp_buffer[1024];
-	char perfdatafile_template[8192];
+	char perfdatafile_template[9216];
 
 	/* what type of event/data do we have? */
 	switch (event_type) {
