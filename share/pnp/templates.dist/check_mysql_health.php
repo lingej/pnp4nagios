@@ -7,12 +7,12 @@
 # This is a template for the visualisation addon PNP (http://www.pnp4nagios.org)
 #
 
-$defcnt  = 1;
+$defcnt = 1;
 
-$green   = "33FF00E0";
-$yellow  = "FFFF00E0";
-$red     = "F83838E0";
-$now     = "FF00FF";
+$green = "33FF00E0";
+$yellow = "FFFF00E0";
+$red = "F83838E0";
+$now = "FF00FF";
 
 foreach ($DS as $i) {
     $warning = ($WARN[$i] != "") ? $WARN[$i] : "";
@@ -83,9 +83,9 @@ foreach ($DS as $i) {
         foreach ($DS as $ii) {
           if(preg_match('/^bufferpool_hitrate$/', $NAME[$ii])) {
             $def[$defcnt] .= "DEF:hitrate=$RRDFILE[$ii]:$DS[$ii]:AVERAGE:reduce=LAST " ;
-            $def[$defcnt] .= "CDEF:ar=hitrate,$critmin,LE,hitrate,0,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
-            $def[$defcnt] .= "CDEF:ay=hitrate,$warnmin,LE,hitrate,$critmin,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
-            $def[$defcnt] .= "CDEF:ag=hitrate,100,LE,hitrate,$warnmin,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
+            $def[$defcnt] .= "CDEF:ar=hitrate,$CRIT_MIN[$ii],LE,hitrate,0,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
+            $def[$defcnt] .= "CDEF:ay=hitrate,$WARN_MIN[$ii],LE,hitrate,$CRIT_MIN[$ii],GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
+            $def[$defcnt] .= "CDEF:ag=hitrate,100,LE,hitrate,$WARN_MIN[$ii],GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
             $def[$defcnt] .= "AREA:ag#$green: " ;
             $def[$defcnt] .= "AREA:ay#$yellow: " ;
             $def[$defcnt] .= "AREA:ar#$red: " ;
@@ -139,9 +139,9 @@ foreach ($DS as $i) {
         foreach ($DS as $ii) {
           if(preg_match('/^keycache_hitrate$/', $NAME[$ii])) {
             $def[$defcnt] .= "DEF:hitrate=$RRDFILE[$ii]:$DS[$ii]:AVERAGE:reduce=LAST " ;
-            $def[$defcnt] .= "CDEF:ar=hitrate,$critmin,LE,hitrate,0,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
-            $def[$defcnt] .= "CDEF:ay=hitrate,$warnmin,LE,hitrate,$critmin,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
-            $def[$defcnt] .= "CDEF:ag=hitrate,100,LE,hitrate,$warnmin,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
+            $def[$defcnt] .= "CDEF:ar=hitrate,$CRIT_MIN[$ii],LE,hitrate,0,GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
+            $def[$defcnt] .= "CDEF:ay=hitrate,$WARN_MIN[$ii],LE,hitrate,$CRIT_MIN[$ii],GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
+            $def[$defcnt] .= "CDEF:ag=hitrate,100,LE,hitrate,$WARN_MIN[$ii],GT,INF,UNKN,IF,UNKN,IF,ISINF,hitrate,0,IF ";
             $def[$defcnt] .= "AREA:ag#$green: " ;
             $def[$defcnt] .= "AREA:ay#$yellow: " ;
             $def[$defcnt] .= "AREA:ar#$red: " ;
@@ -150,7 +150,7 @@ foreach ($DS as $i) {
             $def[$defcnt] .= "GPRINT:vhitrate:\"Hitratio (since epoch) is %3.2lf percent \\n\" ";
           }
           if(preg_match('/^keycache_hitrate_now$/', $NAME[$ii])) {
-            $def[$defcnt] .= "DEF:hitratenow=$RRDFILE[$i]:$DS[$ii]:AVERAGE:reduce=LAST " ;
+            $def[$defcnt] .= "DEF:hitratenow=$RRDFILE[$ii]:$DS[$ii]:AVERAGE:reduce=LAST " ;
             $def[$defcnt] .= "LINE1.5:hitratenow#$now:\" \" ";
             $def[$defcnt] .= "VDEF:vhitratenow=hitratenow,LAST " ;
             $def[$defcnt] .= "GPRINT:vhitratenow:\"Hitratio (current) is %3.2lf percent \\n\" ";
@@ -346,3 +346,4 @@ foreach ($DS as $i) {
     }
 }
 ?>
+
