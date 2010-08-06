@@ -67,25 +67,29 @@ class Data_Model extends Model
         $hosts = array();
         $conf = $this->config->conf;
         $i = 0;
-           if (is_dir($conf['rrdbase'])) {
-               if ($dh = opendir($conf['rrdbase'])) {
-                   while (($file = readdir($dh)) !== false) {
-                       if ($file == "." || $file == ".." || $file == ".pnp-internal")
-                           continue;
-                       $stat = stat($conf['rrdbase'] . "/" . $file);
-                       $age = (time() - $stat['mtime']);
-                       $hosts[$i]['name'] = $file;
-                       $hosts[$i]['sort'] = strtoupper($file);
-                       if ($age < $conf['max_age']) {
-                           $hosts[$i]['state'] = 'active';
-                       } else {
-                           $hosts[$i]['state'] = 'inactive';
-                       }
+            if (is_dir($conf['rrdbase'])) {
+                if ($dh = opendir($conf['rrdbase'])) {
+                    while (($file = readdir($dh)) !== false) {
+                        if ($file == "." || $file == ".." || $file == ".pnp-internal")
+                            continue;
+                        
+                        if (is_file($conf['rrdbase'] . "/" . $file) )
+                            continue;
+
+                        $stat = stat($conf['rrdbase'] . "/" . $file);
+                        $age = (time() - $stat['mtime']);
+                        $hosts[$i]['name'] = $file;
+                        $hosts[$i]['sort'] = strtoupper($file);
+                        if ($age < $conf['max_age']) {
+                            $hosts[$i]['state'] = 'active';
+                        } else {
+                            $hosts[$i]['state'] = 'inactive';
+                        }
                 $i++;
                    }
                    closedir($dh);
                } else {
-                throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
+                    throw new Kohana_User_Exception('Perfdata Dir', "Can not open $path");
                }
            }
         if(sizeof($hosts)>0){
@@ -135,6 +139,8 @@ class Data_Model extends Model
                     $i++;
                 }
             }
+        }else{
+            throw new Kohana_Exception('error.perfdata-dir-for-host', $path, $hostname );
         }
         if( is_array($services) && sizeof($services) > 0){
             # Obtain a list of columns
@@ -144,6 +150,8 @@ class Data_Model extends Model
             # Sort the data with volume descending, edition ascending
             # Add $data as the last parameter, to sort by the common key
             array_multisort($sort, SORT_STRING, $services);
+        }else{
+            throw new Kohana_Exception('error.host-perfdata-dir-empty', $path, $hostname );
         }        
         return $services;
     }
