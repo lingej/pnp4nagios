@@ -142,10 +142,65 @@ All these steps are combined in
 <strong>Attention:</strong> After copying the configuration file for the web server you have to restart the web server (<code>service httpd restart</code> or <code>/etc/init.d/apache2 restart</code>, respectively).
 </p>
 
+</div>
+<!-- SECTION "Make and more" [323-3329] -->
+<h2><a name="update" id="update">Update</a></h2>
+<div class="level2">
+
 <p>
+
+The update of a 0.6.x version works (nearly) the same way as an installation. Please note that you have to call <code>./configure</code> with the same options you used during the first installation.
+Please check if you changed anything in the folder <code>share/templates.dist</code>. Own templates should be placed in <code>share/templates</code> to avoid being overwritten.<br/>
+
+<strong>Attention</strong>: If you changed config.php then you should save this file before it is overwritten when you execute <code>make install-config</code>.
+</p>
+
+<p>
+You can skip <code>make install-webconf</code> and <code>make install-init</code> because nothing changed between 0.6.x versions.
+</p>
+
+</div>
+<!-- SECTION "Update" [3330-3954] -->
+<h2><a name="the_components" id="the_components">The components</a></h2>
+<div class="level2">
+
+<p>
+
+After installation the components of PNP were copied to the appropriate places in the file system. These are
+</p>
+
+<p>
+the <acronym title="Hypertext Preprocessor">PHP</acronym>-Files for the web-frontend in
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+
+<p>
+
+the data collector process_perfdata.pl in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/libexec</pre>
+
+<p>
+
+sample config files with the suffix <code>-sample</code> in
+
+</p>
+<pre class="code"> /usr/local/pnpnagios/etc</pre>
+
+<p>
+
+the config file config.php for the web frontend in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/etc</pre>
+
+<p>
+
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/config" class="wikilink1" title="pnp-0.6:config">configuration</a>
 
 </p>
 
 </div>
-<!-- SECTION "Make and more" [323-] -->
+<!-- SECTION "The components" [3955-] -->

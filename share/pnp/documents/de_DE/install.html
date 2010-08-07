@@ -150,10 +150,64 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 <strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei für den Web-Server ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
 </p>
 
+</div>
+<!-- SECTION "Make und Co" [389-3696] -->
+<h2><a name="update" id="update">Update</a></h2>
+<div class="level2">
+
+<p>
+
+Das Update einer 0.6.x-Version funktioniert (fast) genauso wie die Installation. Bitte beachten Sie, dass Sie beim ”./configure” die gleichen Optionen wie bei der Erstinstallation benutzen!
+Bitte prüfen Sie außerdem, ob Sie Änderungen im Verzeichnis <code>share/templates.dist</code> vorgenommen haben. Eigene Templates sollten im Ordner <code>share/templates</code> abgelegt werden.<br/>
+
+<strong>Achtung</strong>:  Wenn Sie in der Datei config.php Änderungen vorgenommen haben, sollten Sie diese Datei sichern, bevor sie bei einem “make install-config” überschrieben wird.
+</p>
+
+<p>
+Sie können die Schritte <code>make install-webconf</code> und <code>make install-init</code> überspringen, denn zwischen den 0.6.x-Versionen gab es an dieser Stelle keine Änderungen.
+</p>
+
+</div>
+<!-- SECTION "Update" [3697-4432] -->
+<h2><a name="die_komponenten" id="die_komponenten">Die Komponenten</a></h2>
+<div class="level2">
+
+<p>
+
+Nach der Installation sind einige Komponenten von PNP an die passenden Stellen im Dateisystem kopiert worden.
+</p>
+
+<p>
+Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files für das Web-Frontend in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+
+<p>
+
+Der Datensammler process_perfdata.pl in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/libexec</pre>
+
+<p>
+
+Beispiel-Config-Files mit der Dateierweiterung <code>-sample</code> in
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/etc</pre>
+
+<p>
+
+Die Config-Datei config.php für das Web-Frontend in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/etc</pre>
+
 <p>
 <a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">Konfiguration</a>
 
 </p>
 
 </div>
-<!-- SECTION "Make und Co" [389-] -->
+<!-- SECTION "Die Komponenten" [4433-] -->
