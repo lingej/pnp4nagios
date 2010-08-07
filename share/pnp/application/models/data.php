@@ -788,7 +788,9 @@ class Data_Model extends Model
             if($host['state'] == "inactive"){
                 continue;
             }
-            $new_hosts[] = $this->filterHostByPage($host['name']);
+            if($tmp = $this->filterHostByPage($host['name'])){
+                $new_hosts[] = $tmp;
+            }
         }
         return $new_hosts;
     }
