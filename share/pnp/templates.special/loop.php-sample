@@ -21,7 +21,8 @@ foreach($hosts as $key=>$host){
     #
     # get the data for a given Host/Service
     $a = $this->tplGetData($host,$service);
-    $def[0]    .= "DEF:$key=".$a['DS'][0]['RRDFILE'].":".$a['DS'][0]['DS'].":AVERAGE ";
-    $def[0]    .= "AREA:$key".rrd::color($key).":\"".$a['MACRO']['HOSTNAME']." \\n\":STACK ";
+    $def[0]    .= rrd::def("a$key" ,$a['DS'][0]['RRDFILE'], $a['DS'][0]['DS'], "AVERAGE");
+    $def[0]    .= rrd::area("a$key", rrd::color($key), $a['MACRO']['HOSTNAME'], "STACK");
+    $def[0]    .= rrd::gprint("a$key", array("MIN", "MAX", "LAST"), "%.2lf%s");
 }
 ?>
