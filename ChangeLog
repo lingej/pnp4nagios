@@ -1,4 +1,6 @@
-**pnp-0.6.6 ??/??/2010**
+**pnp-0.6.7 ??/??/2010**
+
+**pnp-0.6.6 08/07/2010**
 
   * Bugfix: Fixed max amount of graphs per template 
   * Bugfix: Autodetect PNP base URL
