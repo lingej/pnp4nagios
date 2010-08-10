@@ -1,5 +1,7 @@
 **pnp-0.6.7 ??/??/2010**
 
+  * Bugfix: Page config parser fix (Beau Gunderson) 
+
 **pnp-0.6.6 08/07/2010**
 
   * Bugfix: Fixed max amount of graphs per template 

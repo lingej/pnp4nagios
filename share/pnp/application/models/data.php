@@ -291,9 +291,9 @@ class Data_Model extends Model
     * 
     *
     */
-    public function buildDataStruct ($host = FALSE, $service = FALSE, $view = "", $source = ""){
-        if($host === false && $service === false){
-            return false;
+    public function buildDataStruct ($host = FALSE, $service = FALSE, $view = NULL, $source = NULL){
+        if($host === FALSE && $service === FALSE){
+            return FALSE;
         }
         $conf = $this->config->conf;
 
@@ -314,7 +314,7 @@ class Data_Model extends Model
             $view = intval($view);
             $i=0;
             foreach( $this->RRD['def'] as $key=>$val){
-                if( $source != "" && $source != $key ){
+                if( ! is_null($source) && $source != $key ){
                     continue;
                 }
                 $tmp_struct = array();
@@ -347,7 +347,7 @@ class Data_Model extends Model
             foreach($this->config->views as $view_key=>$view_val){
                 $i=0;
                 foreach( $this->RRD['def'] as $key=>$val){
-                    if($source != "" && $source != $key ){
+                    if( ! is_null($source) && $source != $key ){
                         continue;
                     }
                     $tmp_struct = array();
@@ -379,7 +379,7 @@ class Data_Model extends Model
             $view = intval($view);
             $i=0;
             foreach( $this->RRD['def'] as $key=>$val){
-                if( $source != "" && $source != $key ){
+                if( ! is_null($source) && $source != $key ){
                     continue;
                 }
                 $tmp_struct = array();
@@ -723,7 +723,7 @@ class Data_Model extends Model
                 }
             }
         }
-        #print Kohana::debug(sizeof($servicelist));
+        #print Kohana::debug($servicelist);
         if(sizeof($servicelist) > 0 ){
             foreach($servicelist as $s){
                 $this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
@@ -825,7 +825,7 @@ class Data_Model extends Model
                     if(isset($g['service_desc']) && preg_match('/'.$g['service_desc'].'/',$service['name'])){
                         $data['service_desc'] = $g['service_desc'];
                         $data['host_name'] = $g['host_name'];
-                        $data['source'] = "";
+                        $data['source'] = NULL; 
                         // if we only want a single image 
                         if(isset($g['source'])){
                             $this->readXML($host,$service['name']);
@@ -847,7 +847,7 @@ class Data_Model extends Model
                     if(isset($g['service_desc']) && in_array($service['name'] ,$services_to_search_for) ){
                         $data['service_desc'] = $g['service_desc'];
                         $data['host_name'] = $g['host_name'];
-                        $data['source'] = "";
+                        $data['source'] = NULL;
                         // if we only want a single image 
                         if(isset($g['source'])){
                             $this->readXML($host,$service['name']);

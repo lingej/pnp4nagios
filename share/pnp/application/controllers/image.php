@@ -24,13 +24,13 @@ class Image_Controller extends System_Controller  {
         $start   = $this->input->get('start');
         $end     = $this->input->get('end');
         $view    = $this->config->conf['overview-range']; //default value
-        $source  = "";
+        $source  = NULL;
 
         if($this->input->get('view') != "" )
             $view = $this->input->get('view') ;
 
         if($this->input->get('source') )
-            $source = $this->input->get('source') ;
+            $source = intval($this->input->get('source')) ;
 
         $this->data->getTimeRange($start,$end,$view);
 
