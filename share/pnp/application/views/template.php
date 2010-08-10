@@ -57,10 +57,9 @@ $(document).ready(function(){
     });
 });
 
-function Gzoom (url) {
-    GzoomWindow = window.open(url, "PNP", "width=640,height=300,resizable=yes,scrollbars=yes,location=no,menubar=no,status=no");
-    GzoomWindow.focus();
-}
+<?php if (!empty($zoom_header)) {
+     echo $zoom_header;
+} ?>
 </script>
 </head>
 <body>

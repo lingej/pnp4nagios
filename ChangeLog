@@ -1,6 +1,7 @@
 **pnp-0.6.7 ??/??/2010**
 
   * Bugfix: Page config parser fix (Beau Gunderson) 
+  * Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) 
 
 **pnp-0.6.6 08/07/2010**
 

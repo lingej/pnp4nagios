@@ -12,6 +12,9 @@ class Graph_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template->graph   = $this->add_view('graph');
+        $this->template->zoom_header   = $this->add_view('zoom_header');
+        $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 125);
+        $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 185);
         $this->host              = $this->input->get('host');
         $this->service           = $this->input->get('srv');
     }

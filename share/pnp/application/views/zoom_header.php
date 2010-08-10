@@ -1,6 +1,4 @@
-		<script type="text/javascript">
-		function Gzoom (url) {
-		  GzoomWindow = window.open(url, "PNP", "width=600,height=300,resizable=yes,scrollbars=yes");
-		  GzoomWindow.focus();
-		}
-		</script>
+	function Gzoom (url) {
+      GzoomWindow = window.open(url, "PNP", "width=<?php echo $graph_width ?>,height=<?php echo $graph_height ?>,resizable=yes,scrollbars=yes");
+	  GzoomWindow.focus();
+	}
