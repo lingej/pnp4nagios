@@ -32,6 +32,12 @@ class Image_Controller extends System_Controller  {
         if($this->input->get('source') )
             $source = intval($this->input->get('source')) ;
 
+        if($this->input->get('w') != "" )
+            $this->rrdtool->config->conf['graph_width'] = intval($this->input->get('w'));
+
+        if($this->input->get('h') != "" )
+            $this->rrdtool->config->conf['graph_height'] = intval($this->input->get('h'));
+
         $this->data->getTimeRange($start,$end,$view);
 
         if(isset($tpl)){
