@@ -23,4 +23,5 @@ $lang = array
     'tpl-no-services-found' => 'Impossible de trouver des services "%s". <a href="http://docs.pnp4nagios.org/faq/20">Read FAQ online</a>',
     'tpl-no-hosts-found' => 'Impossible de trouver des serveurs "%s". <a href="http://docs.pnp4nagios.org/faq/21">Read FAQ online</a>',
     'no-templates-found' => 'Impossible de trouver des modèles. <a href="http://docs.pnp4nagios.org/faq/22">Read FAQ online</a>',
+    'not_authorized' => 'You are not authorized to view this host/service',
 );

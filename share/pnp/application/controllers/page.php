@@ -16,6 +16,7 @@ class Page_Controller extends System_Controller  {
         $this->template->page->graph_content->timerange_select = $this->add_view('timerange_select');
         $this->template->page->header         = $this->add_view('header');
         $this->template->page->logo_box       = $this->add_view('logo_box');
+        $this->is_authorized=TRUE;
     }
 
     public function index(){

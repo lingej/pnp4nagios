@@ -24,6 +24,7 @@ class Data_Model extends Model
     public function __construct(){
         $this->config = new Config_Model();    
         $this->config->read_config();
+        $this->auth = new Auth_Model();    
     }
 
     /*
@@ -74,6 +75,9 @@ class Data_Model extends Model
                             continue;
                         
                         if (is_file($conf['rrdbase'] . "/" . $file) )
+                            continue;
+
+                        if($this->auth->is_authorized($file) === FALSE)
                             continue;
 
                         $stat = stat($conf['rrdbase'] . "/" . $file);
@@ -168,14 +172,21 @@ class Data_Model extends Model
             if(!$this->readXML($hostname, $s['name'], FALSE)){
                 continue;
             }
-    
             if($s['name'] == "_HOST_"){
+                // Check authorization
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_DISP_HOSTNAME, "_HOST_") === FALSE)
+                    continue;
+ 
                 $host[0]['name']             = "_HOST_";
                 $host[0]['hostname']         = (string) $this->XML->NAGIOS_HOSTNAME;
                 $host[0]['state']            = $s['state'];
                 $host[0]['servicedesc']      = "Host Perfdata";
                 $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
             }else{
+                // Check authorization
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_DISP_HOSTNAME, (string) $this->XML->NAGIOS_DISP_SERVICEDESC) === FALSE )
+                    continue;
+ 
                 $services[$i]['name']        = $s['name'];
                 // Sorting check_multi
                 if( (string) $this->XML->NAGIOS_MULTI_PARENT == ""){

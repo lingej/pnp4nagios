@@ -1,3 +1,9 @@
+<?php 
+if($this->is_authorized === FALSE){
+    print "<div class=\"pagebody b1\"><h2>Your are not authorized to view this site</h2></div>";
+    return; 
+}    
+?>
 <div class="pagebody b1">
 
 <script type="text/javascript">

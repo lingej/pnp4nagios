@@ -148,44 +148,51 @@ class Rrdtool_Model extends Model
             return;       
         }
         if (preg_match('/^ERROR/', $data)) {
-            $data .= $this->format_rrd_debug( $this->config->conf['rrdtool'] . $this->RRD_CMD) ;
-            // Set font size
-            $font_size = 1.5;
-
+            if(preg_match('/NOT_AUTHORIZED/', $data)){
+                // TODO: i18n
+                $data .= "\n\nYou are not authorized to view this Image";
+                // Set font size
+                $font_size = 3;
+            }else{
+                $data .= $this->format_rrd_debug( $this->config->conf['rrdtool'] . $this->RRD_CMD) ;
+                // Set font size
+                $font_size = 1.5;
+            }
             $ts=explode("\n",$data);
             $width=0;
             foreach ($ts as $k=>$string) {
                 $width=max($width,strlen($string));
             }
 
-              $width  = imagefontwidth($font_size)*$width;
+            $width  = imagefontwidth($font_size)*$width;
             if($width <= $this->config->conf['graph_width']+100){
                 $width = $this->config->conf['graph_width']+100;
             }
-              $height = imagefontheight($font_size)*count($ts);
+            $height = imagefontheight($font_size)*count($ts);
             if($height <= $this->config->conf['graph_height']+60){
                 $height = $this->config->conf['graph_height']+60;
             }
-              $el=imagefontheight($font_size);
-              $em=imagefontwidth($font_size);
-              // Create the image pallette
-              $img = imagecreatetruecolor($width,$height);
-              // Dark red background
-              $bg = imagecolorallocate($img, 0xAA, 0x00, 0x00);
-              imagefilledrectangle($img, 0, 0,$width ,$height , $bg);
-              // White font color
-              $color = imagecolorallocate($img, 255, 255, 255);
+            $el=imagefontheight($font_size);
+            $em=imagefontwidth($font_size);
+            // Create the image pallette
+            $img = imagecreatetruecolor($width,$height);
+            // Dark red background
+            $bg = imagecolorallocate($img, 0xAA, 0x00, 0x00);
+            imagefilledrectangle($img, 0, 0,$width ,$height , $bg);
+            // White font color
+            $color = imagecolorallocate($img, 255, 255, 255);
 
-              foreach ($ts as $k=>$string) {
+            foreach ($ts as $k=>$string) {
                 // Length of the string
                 $len = strlen($string);
                 // Y-coordinate of character, X changes, Y is static
-                $ypos = 0;
+                $ypos_offset = 5;
+                $xpos_offset = 5;
                 // Loop through the string
                 for($i=0;$i<$len;$i++){
                       // Position of the character horizontally
-                      $xpos = $i * $em;
-                      $ypos = $k * $el;
+                      $xpos = $i * $em + $ypos_offset;
+                      $ypos = $k * $el + $xpos_offset;
                       // Draw character
                       imagechar($img, $font_size, $xpos, $ypos, $string, $color);
                       // Remove character from string
