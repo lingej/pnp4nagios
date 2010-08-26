@@ -13,8 +13,11 @@ CP=@CP@
 all html:
 
 clean:
+	-rm -f pnp/index.php
+	-rm -f pnp/install.php
 
 distclean: clean
+	-rm -f Makefile
 
 devclean: distclean
 

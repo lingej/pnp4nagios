@@ -23,9 +23,10 @@ clean:
 	-rm -f nagios.cfg-sample 
 	-rm -f httpd.conf 
 	-rm -f pnp/pnp4nagios_release
+	-rm -f lighttpd.pnp4nagios.conf
 
 distclean: clean
-	-rm Makefile
+	-rm -f Makefile
 
 devclean: distclean
 
