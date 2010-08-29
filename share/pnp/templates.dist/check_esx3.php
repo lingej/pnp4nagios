@@ -34,7 +34,8 @@ $color_list = array(
 					4 => "#ee0a04", // Red
 					5 => "#56a901", // Green
 					6 => "#ff6600", // Orange
-					7 => "#a4a4a4"  // Grey
+					7 => "#a4a4a4", // Grey
+                    8 => "#336633"  // darker green
 				);
 
 $opt[1] = '';
