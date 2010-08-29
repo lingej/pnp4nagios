@@ -16,6 +16,7 @@ all html:
 clean:
 
 distclean: clean
+	-rm -f Makefile
 
 devclean: distclean
 
