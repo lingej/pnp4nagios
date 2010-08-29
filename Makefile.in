@@ -82,10 +82,9 @@ distclean:
 	-rm -f *~ *.*~ */*~ */*.*~
 	-rm -f config.log config.status config.cache
 	rm -f Makefile include/stamp-h1 include/config.h config.status config.log
-	rm -f sample-config/xinetd.pnp.sample sample-config/misccommands.sample
 	rm -f subst summary
-	rm -f $(SRC_CONTRIB)/verify_pnp_config
 	rm -f $(SRC_CONTRIB)/ssi/status-header.ssi
+	rm -f $(SRC_HELPERS)/w2h.pl
 
 devclean: distclean
 
