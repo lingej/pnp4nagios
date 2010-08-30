@@ -1333,7 +1333,7 @@ sub new_child {
     
         my $worker = Gearman::Worker->new;
         $worker->job_servers($opt_gm);
-        $worker->register_function("pp", 2, sub { return main(@_); });
+        $worker->register_function("perfdata", 2, sub { return main(@_); });
         my %opt = ( 
                     on_complete => sub { $req++; }, 
                     stop_if => sub { if ( $req > $conf{'REQUESTS_PER_CHILD'} ) { return 1;}; } 
