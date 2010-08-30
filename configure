@@ -7093,5 +7093,6 @@ $PERL subst sample-config/pnp/process_perfdata.cfg-sample
 $PERL subst sample-config/pnp/pnp4nagios_release
 $PERL subst contrib/ssi/status-header.ssi
 $PERL subst helpers/w2h.pl
+$PERL subst man/npcd.8
 
 $PERL summary
