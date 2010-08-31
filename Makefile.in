@@ -85,6 +85,7 @@ distclean:
 	rm -f subst summary
 	rm -f $(SRC_CONTRIB)/ssi/status-header.ssi
 	rm -f $(SRC_HELPERS)/w2h.pl
+	rm -f $(SRC_MAN)/npcd.8
 
 devclean: distclean
 
