@@ -32,6 +32,7 @@ my $EOL = "\015\012";
 my($opt_verbose, $opt_help, $opt_debug);
 my $opt_host = "localhost";
 my $opt_port = 4730;
+my $opt_timeout = 5;
 my $opt_queue;
 my $opt_mode;
 my $opt_warn_jobs = '50';
@@ -46,6 +47,7 @@ GetOptions (
     "h|help" => \$opt_help,
     "v|verbose" => \$opt_verbose,
     "d|debug" => \$opt_debug,
+    "t|timeout" => \$opt_timeout,
     "H|host=s" => \$opt_host,
     "P|port=i" => \$opt_port,
     "Q|queue=s" => \$opt_queue,
@@ -66,6 +68,9 @@ unless( defined($opt_mode)){
     pod2usage( { -verbose => 1 } );
     exit 3;
 }
+
+alarm($opt_timeout);
+$SIG{'ALRM'} = sub { print "CRITICAL: Plugn Timeout after $opt_timeout seconds\n"; exit 2};
 
 my $remote = IO::Socket::INET->new(
         Proto => "tcp",
