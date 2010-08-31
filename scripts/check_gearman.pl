@@ -116,10 +116,11 @@ if($opt_mode =~ /queue/i){
         my $state_txt = "OK";
         my $state_id = 0;
         my $state_info = "";
-        my $perfdata = sprintf("waiting=%s;%s;%s;0; worker=%s;%s;%s;0;",
+        my $perfdata = sprintf("waiting=%s;%s;%s;0; running=%s worker=%s;%s;%s;0;",
                                 $queue{$opt_queue}{'waiting'},
                                 $opt_warn_jobs,
                                 $opt_crit_jobs,
+                                $queue{$opt_queue}{'running'},
                                 $queue{$opt_queue}{'worker'},
                                 $opt_warn_worker,
                                 $opt_crit_worker,
@@ -217,7 +218,10 @@ check_greaman.pl
 [ -h ]
 [ -H | --host ]
 [ -P | --port ]
+[ -M | --mode ]
 [ -Q | --queue ]
+[ -v | --verbose ]
+[ -t | --timeout ]
 
 =head1 DESCRIPTION
 
@@ -230,6 +234,8 @@ script has the following arguments
 -h | --help Display the help and exit
 
 -v | --verbose Enable verbose mode
+
+-t | --timeout Plugin timeout
 
 -H | --host=<hostname> connect to this gearman server.
 
