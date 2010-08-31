@@ -69,9 +69,14 @@ unless( defined($opt_mode)){
 
 my $remote = IO::Socket::INET->new(
         Proto => "tcp",
-        PeerAddr => "localhost",
-        PeerPort => "4730",
-    ) or die "cannot connect to daytime port at localhost";
+        PeerAddr => $opt_host,
+        PeerPort => $opt_port,
+    ); # or die "CRITICAL: connect to gearmand on $opt_host:$opt_port failed";
+
+unless ( defined($remote) ){
+    print "CRITICAL: connect to gearmand on $opt_host:$opt_port failed\n";
+    exit 2;
+}
 
 $remote->autoflush(1);
 
