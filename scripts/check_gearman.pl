@@ -37,8 +37,8 @@ my $opt_queue;
 my $opt_mode;
 my $opt_warn_jobs = '50';
 my $opt_crit_jobs = '150';
-my $opt_warn_worker = '2:10';
-my $opt_crit_worker = '1:50';
+my $opt_warn_worker = '2:50';
+my $opt_crit_worker = '1:80';
 
 my $np = Nagios::Plugin->new();
 
@@ -54,8 +54,8 @@ GetOptions (
     "M|mode=s" => \$opt_mode,
     "warn_jobs=s" => \$opt_warn_jobs,
     "crit_jobs=s" => \$opt_crit_jobs,
-    "warn_worker=s" => \$opt_warn_worker,
-    "crit_worker=s" => \$opt_crit_worker,
+    "warn_workers=s" => \$opt_warn_worker,
+    "crit_workers=s" => \$opt_crit_worker,
 );
 
 if(defined $opt_help) {
@@ -220,6 +220,10 @@ check_greaman.pl
 [ -P | --port ]
 [ -M | --mode ]
 [ -Q | --queue ]
+[ --warn_jobs ]
+[ --crit_jobs ]
+[ --warn_workers ]
+[ --crit_workers ]
 [ -v | --verbose ]
 [ -t | --timeout ]
 
@@ -244,9 +248,18 @@ script has the following arguments
 -M | --mode Type of check to perform. 
     
     '--mode=queue --queue=perfdata' count the number of waiting jobs for a given queue
-    '--mode=orphaned_jobs' report back queues containing jobs but without workers connected
+    '--mode=orphaned_jobs' report back queues containing jobs without workers connected
 
 -Q | --queue name of queue to check
+
+--warn_jobs Warning number of jobs waiting
+
+--crit_jobs Critical number of jobs waiting
+
+--warn_workers Warning number of workers connected
+
+--crit_workers Critical number of workers connected
+
 
 =head1 EXAMPLE
 
