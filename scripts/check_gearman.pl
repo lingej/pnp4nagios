@@ -1,8 +1,22 @@
 #!/usr/bin/perl
-#
-#
-#
-#
+# nagios: -epn
+## check_gearman.pl - PNP4Nagios.
+## Copyright (c) 2006-2010 Joerg Linge (http://www.pnp4nagios.org)
+##
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 use warnings;
 use strict;
 use IO::Socket;
@@ -82,6 +96,12 @@ while ( $gearmand_version = <$remote> ){
 #print Dumper %queue;
 if($opt_mode =~ /queue/i){
 
+    unless( defined($opt_queue)){
+        print "Missing queue name [ -Q | --queue ]\n\n";
+        pod2usage( { -verbose => 1 } );
+        exit 3;
+    }
+
     if(defined($queue{$opt_queue})){
         my $state_txt = "OK";
         my $state_id = 0;
@@ -94,15 +114,12 @@ if($opt_mode =~ /queue/i){
                                 $opt_warn_worker,
                                 $opt_crit_worker,
                         );
-        #print Dumper $queue{$opt_queue};
         $state_id = $np->check_threshold(check => $queue{$opt_queue}{'waiting'}, warning => $opt_warn_jobs, critical => $opt_crit_jobs);
-        #if($queue{$opt_queue}{'waiting'} >= $opt_crit_jobs){
         if($state_id == 2){
             $state_txt = "CRITICAL";
             $state_id  = 2;
             $state_info .= sprintf("[Jobs waiting %s (C=>%s)] ",$queue{$opt_queue}{'worker'}, $opt_crit_jobs); 
  
-        #}elsif($queue{$opt_queue}{'waiting'} >= $opt_warn_jobs){
         }elsif($state_id == 1){
             $state_txt = "WARNING";
             $state_id  = 1; 
@@ -113,13 +130,11 @@ if($opt_mode =~ /queue/i){
             $state_id  = 0; 
         }
         $state_id = $np->check_threshold(check => $queue{$opt_queue}{'worker'}, warning => $opt_warn_worker, critical => $opt_crit_worker);
-        #if($queue{$opt_queue}{'worker'} < $opt_crit_worker){
         if($state_id == 2){
             $state_txt = "CRITICAL";
             $state_id  = 2;
             $state_info .= sprintf("[Worker %s (C=>%s)] ",$queue{$opt_queue}{'worker'}, $opt_crit_worker); 
  
-        #}elsif($queue{$opt_queue}{'worker'} < $opt_warn_worker){
         }elsif($state_id == 1 ){
             $state_txt = "WARNING";
             $state_id  = 1; 
