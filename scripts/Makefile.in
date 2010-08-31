@@ -33,6 +33,7 @@ install-processperfdata:
 
 install-plugins: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) check_pnp_rrds.pl $(DESTDIR)$(LIBEXECDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) check_gearman.pl $(DESTDIR)$(LIBEXECDIR)
 
 install-verifyconfig: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) verify_pnp_config.pl $(DESTDIR)$(LIBEXECDIR)
