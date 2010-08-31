@@ -160,6 +160,39 @@ if($opt_mode =~ /queue/i){
     }
 }
 
+if($opt_mode =~ /orphaned_jobs/i){
+    my $state_id = 0;
+    my $state_txt = "OK";
+    my $state_info = "";
+    my $count = 0;
+    foreach my $d ( keys %queue ) {
+        if($queue{$d}{'waiting'} > 0 && $queue{$d}{'worker'} == 0){
+            $state_info .= " [$d]";
+            $count++;
+        }
+    }
+    my $perfdata = "queues=$count";
+    if($count == 0){
+        $state_id = 0;
+        $state_txt = "OK: No orphaned queues found";
+    }
+    if($count == 1){
+        $state_id = 1;
+        $state_txt = sprintf("WARNING: One orphaned queue found.%s", $state_info);
+    }
+    if($count > 1){
+        $state_id = 1;
+        $state_txt = sprintf("WARNING: %d orphaned queues found.%s", $count, $state_info);
+    }
+
+    printf ( "%s | %s\n", $state_txt, $perfdata);
+    exit $state_id;
+}
+
+print "UNKNOWN: Mode '$opt_mode' not known\n";
+exit 3;
+
+
 __END__
 
 =pod
@@ -191,6 +224,11 @@ script has the following arguments
 -H | --host=<hostname> connect to this gearman server.
 
 -P | --port Gearman tcp port. Defaults to 4730
+
+-M | --mode Type of check to perform. 
+    
+    '--mode=queue --queue=perfdata' count the number of waiting jobs for a given queue
+    '--mode=orphaned_jobs' report back queues containing jobs but without workers connected
 
 -Q | --queue name of queue to check
 
