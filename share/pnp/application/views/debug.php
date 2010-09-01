@@ -1,10 +1,10 @@
 <div class="pagebody b1">
 
 <script type="text/javascript">
-	$(function() {
-		$("#tabs").tabs();
+	jQuery(function() {
+		jQuery("#tabs").tabs();
 	});
-	</script>
+</script>
 <table class="body"><tr><td valign="top">
 <div class="gw left ui-corner-all">
 
