@@ -89,3 +89,16 @@ RRD_DAEMON_OPTS =
 # Spool Directory used for internal statistic 
 #
 STATS_DIR = @localstatedir@/stats
+
+#
+# Gearman Worker Config
+# Only used while running as gearman worker
+#
+# How many Child processes
+#
+PREFORK = 2
+
+#
+# Restart child process after a given count of requests 
+# 
+REQUESTS_PER_CHILD = 5000
