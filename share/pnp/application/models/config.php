@@ -28,7 +28,13 @@ class Config_Model extends Model
         }
 
         if (is_readable($config . "_local.php")) {
+            $array_a = $views;
+            $views = array();
             include ($config . "_local.php");
+            $array_b = $views;
+            if(sizeof($views == 0 ) ){
+                $views = $array_a;
+            }
         }
         $this->conf = $conf;
         $this->views = $views;

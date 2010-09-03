@@ -1,8 +1,8 @@
 <?php if( $this->isAuthorizedFor('host_search') ){ ?>
 <!-- Search Box Start -->
 <script type="text/javascript">
-$(function() {
-    $("#query").autocomplete({
+jQuery(function() {
+    jQuery("#query").autocomplete({
         source: "<?php echo url::base('true')?>/index.php/ajax/search",
         select: function(event, ui) { window.location = "graph?host=" + ui.item.value  }
     });

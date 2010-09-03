@@ -32,3 +32,5 @@ sample-config/lighttpd.pnp4nagios.conf
 share/pnp/media/js/basket.js
 scripts/rrd_convert.pl
 scripts/rrd_converter.pl
+
+man/npcd.8
