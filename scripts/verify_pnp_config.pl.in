@@ -31,13 +31,14 @@
 # 2010.06.06: 0.1.20 bugfix: base_url
 # 2010.06.20: 0.1.21 skip views directive
 # 2010.07.03: 0.1.22 template_dirs; multiple directives
+# 2010.09.09: 0.1.23 include_dir / include_file / yum fixes
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.21";
+my $version = "0.1.23";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -557,23 +558,49 @@ parameters:
 EOF3
 }
 
+# process main config line
+sub process_main_cfg_line {
+    chomp;
+    s/#.*//;
+    s/\s*$//;
+    next if (/^$/);
+    my ($par, $val) = /^(.*?)=(.*)/;    # shortest string (broker module contains multiple equal signs)
+    if (($par eq "") or ($val eq "")) {
+        info ("oddLine", "$_");
+        next;
+    }
+    next if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
+    $val .= ";";    # multiple cfg_dir/cfg_file entries might occur
+
+    # process include_dir/file
+    if ($par =~ /^include_/) {
+        my @files = ();
+        chop $val;
+        if ($par eq "include_dir") {
+            info ("[D] include_dir : $val") if ($debug);
+            @files = glob ("$val/*.cfg");
+        }
+        if ($par eq "include_file") {
+            info ("[D] include_dir : $val") if ($debug);
+            push @files, $val;
+        }
+        for my $idc (0..$#files) {
+            open (CFGFILE, "$files[$idc]") || abort (33, "errOpen", "$files[$idc]", "$!");
+            while (<CFGFILE>) {
+                process_main_cfg_line();
+            }
+            close (CFGGILE);
+        }
+    }
+    $NagiosCfg{"$par"} .= $val;
+}
+
 # process nagios.cfg
 sub process_nagios_cfg {
     info ("procFile","$NagiosCfg");
     open (NFILE, "$NagiosCfg") || abort (21, "errOpen", "$NagiosCfg", "$!");
     while (<NFILE>) {
-        chomp;
-        s/#.*//;
-        s/\s*$//;
-        next if (/^$/);
-        my ($par, $val) = /^(.*?)=(.*)/;    # shortest string (broker module contains multiple equal signs)
-        if (($par eq "") or ($val eq "")) {
-            info ("oddLine", "$_");
-            next;
-        }
-        next if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
-        $val .= ";";    # multiple cfg_dir/cfg_file entries might occur
-        $NagiosCfg{"$par"} .= $val;
+        process_main_cfg_line();
     }
     close (NFILE);
     # remove trailing semicolon
@@ -1409,9 +1436,11 @@ sub chk_pkg {
         info ("key", $pkg_name) if ($debug);
         if ($pkg_mgr =~ /yum/) {
             if ($exactly) {
-                $pkg = `yum list installed $pkg_name 2>/dev/null | grep "installed"`;
+# Fedora < 13   $pkg = `yum list installed $pkg_name 2>/dev/null | grep "installed"`;
+                $pkg = `yum list installed $pkg_name 2>/dev/null | grep "$pkg_name" | cut -d' ' -f 1,1`;
             } else {
-                $pkg = `yum list installed 2>/dev/null | grep "$pkg_name" | grep "installed"`;
+# Fedora < 13   $pkg = `yum list installed 2>/dev/null | grep "$pkg_name" | grep "installed"`;
+                $pkg = `yum list installed 2>/dev/null | grep "$pkg_name" | cut -d' ' -f 1,1`;
             }
             $pkg =~ s/\s+/ /g;
             $pkg =~ s/ installed//g;
