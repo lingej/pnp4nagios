@@ -28,6 +28,7 @@ use warnings;
 use strict;
 use POSIX;
 use Getopt::Long;
+use MIME::Base64;
 use Time::HiRes qw(gettimeofday tv_interval);
 use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
@@ -110,7 +111,15 @@ if ( $conf{USE_RRDs} == 1 ) {
 #
 if ( defined($opt_gm) ) {
     unless ( eval "use Gearman::Worker;1" ) {
-        print "gearman modules not found\n";
+        print "Gearman::Worker module not found\n";
+        exit 1;
+    }
+    unless ( eval "use MIME::Base64;1" ) {
+        print "MIME::Base64 module not found\n";
+        exit 1;
+    }
+    unless ( eval "use Crypt::Rijndael;1" ) {
+        print "Crypt::Rijndael module not found\n";
         exit 1;
     }
 }
@@ -141,6 +150,7 @@ if( ! defined($opt_gm) ){
 # Main function to switch to the right mode.
 sub main {
     my $job = shift;
+    $job = decode_base64($job);
     $t0 = [gettimeofday];
     my $lines = 0;
     # Gearman Worker
