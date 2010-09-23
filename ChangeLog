@@ -3,6 +3,7 @@
   * Bugfix: Page config parser fix (Beau Gunderson) 
   * Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) 
   * Bugfix: Fixed undefined offset while using 'ds_name' in templates (Reported by Vladimir Bilik)
+  * Bugfix: Npcdmod respects process_perf_data option used in hosts and services definitions ( Reported by Wolfgang Barth )
 
 **pnp-0.6.6 08/07/2010**
 
