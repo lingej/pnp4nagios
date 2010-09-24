@@ -3,13 +3,13 @@ $start = $this->session->get('start','');
 $end   = $this->session->get('end','');
 ?>
 <script type="text/javascript">
-$(function() {
-    $("#button").click(function() {
-        $("#toggle-timerange").toggle("blind",500); 
+jQuery(function() {
+    jQuery("#button").click(function() {
+        jQuery("#toggle-timerange").toggle("blind",500); 
         return false;
     });
-	$("#dpstart").datepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/calendar.gif', buttonImageOnly: true, constrainInput: false });
-	$("#dpend").datepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/calendar.gif', buttonImageOnly: true, constrainInput: false });
+	jQuery("#dpstart").datepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/calendar.gif', buttonImageOnly: true, constrainInput: false });
+	jQuery("#dpend").datepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/calendar.gif', buttonImageOnly: true, constrainInput: false });
 });
 </script>
 

@@ -198,6 +198,10 @@ int npcdmod_handle_data(int event_type, void *data) {
 
 			host = find_host(hostchkdata->host_name);
 
+                        if(host->process_performance_data == 0) {
+                            break;
+                        }
+
 			/* Do some Debuglog */
 			/*
 			snprintf(temp_buffer, sizeof(temp_buffer) - 1,  "npcdmod: DEBUG >>> %s\n",
@@ -236,6 +240,10 @@ int npcdmod_handle_data(int event_type, void *data) {
 
 				/* find the nagios service object for this service */
 				service = find_service(srvchkdata->host_name, srvchkdata->service_description);
+
+                                if(service->process_performance_data == 0) {
+                                    break;
+                                }
 
 				/* Do some Debuglog */
 				/*

@@ -18,7 +18,7 @@ if($WARN[1] != ""){
 }
 if($CRIT[1] != ""){
 	if($UNIT[1] == "%%"){ $UNIT[1] = "%"; };
-  	$def[1] .= rrd::hrule($CRIT[1], "#FF0000", "Warning  ".$CRIT[1].$UNIT[1]."\\n");
+  	$def[1] .= rrd::hrule($CRIT[1], "#FF0000", "Critical ".$CRIT[1].$UNIT[1]."\\n");
 }
 #
 # Packets Lost
@@ -38,7 +38,7 @@ if($WARN[2] != ""){
 }
 if($CRIT[2] != ""){
 	if($UNIT[2] == "%%"){ $UNIT[2] = "%"; };
-  	$def[2] .= rrd::hrule($CRIT[2], "#FF0000", "Warning  ".$CRIT[2].$UNIT[2]."\\n");
+  	$def[2] .= rrd::hrule($CRIT[2], "#FF0000", "Critical ".$CRIT[2].$UNIT[2]."\\n");
 }
 
 ?>

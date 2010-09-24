@@ -1,0 +1,56 @@
+.\" In .TH, FOO should be all caps, SECTION should be 1-8, maybe w/ subsection
+.\" other parms are allowed: see man(7), man(1)
+.\"
+.\" This template provided by Tom Christiansen <tchrist@jhereg.perl.com>.
+.\" 
+.TH NPCD 8
+.SH NAME
+npcd \- Nagios Performance C Daemon
+.SH SYNOPSIS
+.B npcd
+[
+.B -d | --daemon
+]
+(
+.I -f | --config )
+<configfile>
+.SH DESCRIPTION
+The
+.I npcd
+is a daemon processing nagios performance data.
+.PP
+For more information you can visit pnp4nagios website:
+.IP
+http://docs.pnp4nagios.org/
+.PP
+and SourceForge project:
+.IP
+http://pnp4nagios.sourceforge.net
+.SH OPTIONS
+.TP
+.B \-d, \--daemon
+Run
+.B npcd
+as daemon in the background.
+.TP
+.I \-f, \--config <configfile>
+Path to the
+.B npcd
+config file (typically @sysconfdir@/npcd.cfg).
+.SH "RETURN VALUE"
+On sucess starting
+.B npcd
+0 is returned.
+.SH ERRORS
+On error starting
+.B npcd
+1 is returned.
+.SH FILES
+.br
+.nf
+.\" set tabstop to longest possible filename, plus a wee bit
+.ta \w'/usr/lib/perl/getopts.pl   'u
+\fI@sysconfdir@/npcd.cfg\fR	default config file
+.SH AUTHORS
+Joerg Linge <pitchfork@pnp4nagios.org>, 
+Hendrik Baecker <andurin@process-zero.de>

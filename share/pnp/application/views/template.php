@@ -12,42 +12,43 @@
 <?php echo html::script('media/js/jquery-min.js')?>
 <?php echo html::script('media/js/jquery-ui.min.js')?>
 <script type="text/javascript">
-$(document).ready(function(){
+jQuery.noConflict();
+jQuery(document).ready(function(){
     var path = "<?php echo url::base(TRUE)."index.php/"?>";
-    $("img").fadeIn(1500);
-    $("#basket_action_add a").click(function(){
+    jQuery("img").fadeIn(1500);
+    jQuery("#basket_action_add a").click(function(){
         var item = (this.id)
-        $.ajax({
+        jQuery.ajax({
             type: "POST",
             url: path + "ajax/basket/add",
             data: { item: item },
             success: function(msg){
-                $("#basket_items").html(msg);
+                jQuery("#basket_items").html(msg);
             }
         });
     });
-    $("#basket_action_remove-all a").click(function(){
-        $.ajax({
+    jQuery("#basket_action_remove-all a").click(function(){
+        jQuery.ajax({
             type: "POST",
             url: path + "ajax/basket/remove-all/",
             success: function(msg){
-                $("#basket_items").html(msg);
+                jQuery("#basket_items").html(msg);
             }
         });
     });
-    $("#basket_action_remove a").live("click", function(){
+    jQuery("#basket_action_remove a").live("click", function(){
         var item = (this.id)
-        $.ajax({
+        jQuery.ajax({
             type: "POST",
             url: path + "ajax/basket/remove/"+item,
             data: { item: item },
             success: function(msg){
-                $("#basket_items").html(msg);
+                jQuery("#basket_items").html(msg);
             }
         });
     });
-    $("#remove_timerange_session").click(function(){
-        $.ajax({
+    jQuery("#remove_timerange_session").click(function(){
+        jQuery.ajax({
             type: "GET",
             url: path + "ajax/remove/timerange",
             success: function(){

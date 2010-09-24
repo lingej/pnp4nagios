@@ -212,7 +212,7 @@ $conf['RRD_DAEMON_OPTS'] = '';
 #
 # Add your own template directories here
 # First match wins!
-$conf['template_dirs'][] = '/usr/local/check_mk/pnp-templates';
+#$conf['template_dirs'][] = '/usr/local/check_mk/pnp-templates';
 $conf['template_dirs'][] = '@datarootdir@/templates';
 $conf['template_dirs'][] = '@datarootdir@/templates.dist';
 
