@@ -324,7 +324,7 @@ class Data_Model extends Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE;
-                if(array_key_exists($key,$this->RRD['ds_name']) ){
+                if(isset($this->RRD['ds_name'][$key]) ){
                      $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
                      $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
@@ -356,7 +356,7 @@ class Data_Model extends Model
                     $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                     $tmp_struct['SOURCE']        = $key;
                     $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-                    if(array_key_exists($key,$this->RRD['ds_name']) ){
+                    if(isset($this->RRD['ds_name'][$key]) ){
                         $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                     }elseif(array_key_exists($i, $this->DS)){
                         $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
@@ -389,7 +389,7 @@ class Data_Model extends Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
-                if(array_key_exists( $key,$this->RRD['ds_name'] ) ){
+                if(isset($this->RRD['ds_name'][$key]) ){
                     $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
                     $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
