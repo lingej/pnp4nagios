@@ -32,7 +32,7 @@ class Config_Model extends Model
             $views = array();
             include ($config . "_local.php");
             $array_b = $views;
-            if(sizeof($views == 0 ) ){
+            if(sizeof($views) == 0 ){
                 $views = $array_a;
             }
         }
