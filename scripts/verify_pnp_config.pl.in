@@ -32,13 +32,14 @@
 # 2010.06.20: 0.1.21 skip views directive
 # 2010.07.03: 0.1.22 template_dirs; multiple directives
 # 2010.09.09: 0.1.23 include_dir / include_file / yum fixes
+# 2010.09.26: 0.1.24 option -I
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.23";
+my $version = "0.1.24";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -110,6 +111,7 @@ if ((exists $ENV{LANG}) and ($ENV{LANG} ne "POSIX")) {
     ($language) = ($ENV{LANG} =~ /^(..)/);
 }
 my %msg = ();
+my $vInfo = "";
 
 # process command line parameters
 Getopt::Long::Configure('bundling');
@@ -140,6 +142,7 @@ GetOptions(
     "T|template=s" => \$TemplPath,
     "t|time" => \$time,
     "s|skip" => \$skip,
+    "I|info" => \$vInfo,
 );
 
 if ($pnp_version =~ /^(\d+\.\d+)/) {
@@ -157,6 +160,11 @@ if ($language) {
     $language = lc("/$language") unless ($language =~ m#^/..#);
 }
 message();
+
+if ($vInfo) {
+    vInfo();
+    exit 0;
+}
 
 if (($help) or ((! $mode) and (! $Object))) {
     usage();
@@ -563,13 +571,13 @@ sub process_main_cfg_line {
     chomp;
     s/#.*//;
     s/\s*$//;
-    next if (/^$/);
+    return if (/^$/);
     my ($par, $val) = /^(.*?)=(.*)/;    # shortest string (broker module contains multiple equal signs)
     if (($par eq "") or ($val eq "")) {
         info ("oddLine", "$_");
         next;
     }
-    next if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
+    return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
     $val .= ";";    # multiple cfg_dir/cfg_file entries might occur
 
     # process include_dir/file
@@ -589,7 +597,7 @@ sub process_main_cfg_line {
             while (<CFGFILE>) {
                 process_main_cfg_line();
             }
-            close (CFGGILE);
+            close (CFGFILE);
         }
     }
     $NagiosCfg{"$par"} .= $val;
@@ -1554,6 +1562,59 @@ sub chk_templates_dir {
         chomp $php_rc;
         info ("error", "PHP",$php_rc) if ($php_rc);
     }  
+}
+
+sub vInfo {
+print <<EOD;
+
+prefix="@prefix@";
+datarootdir="@datarootdir@";
+datadir="@datadir@";
+init_dir="@init_dir@";
+libexecdir="@libexecdir@";
+localstatedir="@localstatedir@";
+libdir="@libdir@";
+sysconfdir="@sysconfdir@";
+sbindir="@sbindir@";
+bindir="@bindir@";
+srcdir="@srcdir@";
+host_os="@host_os@";
+
+nagios_user="@nagios_user@";
+nagios_grp="@nagios_grp@";
+INSTALL="@INSTALL@";
+INSTALL_OPTS="@INSTALL_OPTS@";
+
+PERL="@PERL@";
+PERL_LIB_PATH="@PERL_LIB_PATH@";
+SHELL="@SHELL@";
+STRIP="@STRIP@";
+DEBUG="@DEBUG@";
+PERFDATA_DIR="@PERFDATA_DIR@";
+PERFDATA_LOG="@PERFDATA_LOG@";
+PERFDATA_SPOOL_DIR="@PERFDATA_SPOOL_DIR@";
+RRDTOOL="@RRDTOOL@";
+RRDS="@RRDS@";
+XML_STRUCTURE_VERSION="@XML_STRUCTURE_VERSION@";
+PKG_REL_DATE="@PKG_REL_DATE@";
+PKG_VERSION="@PKG_VERSION@";
+PKG_NAME="@PKG_NAME@";
+BASE_URL="@BASE_URL@";
+HTTPD_CONF="@HTTPD_CONF@";
+npcd_name="@npcd_name@";
+pp_pl_name="@pp_pl_name@";
+KOHANA="@KOHANA@";
+KOHANA_SYSTEM="@KOHANA_SYSTEM@";
+
+CC="@CC@";
+CFLAGS="@CFLAGS@";
+DEFS="@DEFS@";
+LDFLAGS="@LDFLAGS@";
+LIBS="@LIBS@";
+MOD_CFLAGS="@MOD_CFLAGS@";
+MOD_LDFLAGS="@MOD_LDFLAGS@";
+CP="@CP@";
+EOD
 }
 
 # set different messages according to the language
