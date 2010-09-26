@@ -51,6 +51,8 @@ my %conf = (
     RRD_DAEMON_OPTS   => "",
     PREFORK           => 2,                        # How many gearman worker childs to start 
     REQUESTS_PER_CHILD => 20000,                   # Restart after a given count of requests
+    ENCRYPTION         => 1,                       # Decrypt mod_gearman packets
+    KEY                => 'should_be_changed',
 );
 
 my %const = (
@@ -96,6 +98,7 @@ parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 
 my %stats = init_stats();
+my $cypher;
 
 #
 # RRDs Perl Module Detection
@@ -136,11 +139,11 @@ if( ! defined($opt_gm) ){
 }else{
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
     pidlock("create");
-    # Fork off our children.
-    for (1 .. $conf{'PREFORK'}) {
-        new_child();
-        print_log( "starting child process $children", 1 );
-    }
+  	if($conf{ENCRYPTION} == 1){
+        # fill key up to 32 bytes 
+        $conf{'KEY'} = substr($conf{'KEY'},0,32) . 0 x ( 32 - length( $conf{'KEY'} ) );
+	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
+	}
     daemonize();
 }
 
@@ -150,7 +153,6 @@ if( ! defined($opt_gm) ){
 # Main function to switch to the right mode.
 sub main {
     my $job = shift;
-    $job = decode_base64($job);
     $t0 = [gettimeofday];
     my $lines = 0;
     # Gearman Worker
@@ -200,11 +202,19 @@ sub parse_env {
     $NAGIOS{DATATYPE} = "SERVICEPERFDATA";
 
     if(defined $opt_gm){
+        $job_data = decode_base64($job_data);
+        if($conf{ENCRYPTION} == 1){
+            $job_data = $cypher->decrypt( $job_data )	    
+        }
         my @LINE = split(/\t/, $job_data);
         %ENV = ();    # cleaning ENV
         foreach my $k (@LINE) {
             $k =~ /([A-Z 0-9_]+)::(.*)$/;
             $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+        }
+        if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
+            print_log( "Gearman job data missmatch.", 1 );
+            return 1;
         }
     }
 
@@ -1301,6 +1311,11 @@ sub daemonize {
         defined( my $pid = fork )  or die "Can't fork: $!";
         exit if $pid;
         setsid or die "Can't start a new session: $!";
+    }
+    # Fork off our children.
+    for (1 .. $conf{'PREFORK'}) {
+        new_child();
+        print_log( "starting child process $children", 1 );
     }
     while (1) {
         sleep;   # wait for a signal (i.e., child's death)

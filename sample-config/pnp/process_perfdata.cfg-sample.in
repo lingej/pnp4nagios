@@ -90,7 +90,7 @@ RRD_DAEMON_OPTS =
 #
 STATS_DIR = @localstatedir@/stats
 
-#
+#########################################################
 # Gearman Worker Config
 # Only used while running as gearman worker
 #
