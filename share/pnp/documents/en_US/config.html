@@ -248,6 +248,10 @@ All other directives mentioned on this page must <strong>NOT</strong> be used.
 </p>
 
 <p>
+<strong>Attention:</strong> If you have changed the value of <code>event_broker_options</code> from -1 to another value then please note that PNP needs the bits 2 and 3 set (0b01100). Make sure that the resultung value has these bits set because otherwise there will be no performance data to process.
+</p>
+
+<p>
 After restarting Nagios information regarding the start of the module will be logged.
 </p>
 
