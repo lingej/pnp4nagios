@@ -67,6 +67,8 @@ Some basic settings should be checked
 1. Have any RRD and <acronym title="Extensible Markup Language">XML</acronym> files been created?
 <code>process_perfdata.pl</code> will create a new directory under pnp/perfdata for every host. In this directory an RRD database and an <acronym title="Extensible Markup Language">XML</acronym> file will be created for every service. The host data will be stored in <code>_HOST_.xml</code> and <code>_HOST_.rrd</code> respectively.<br/>
 
+If graphing stops out of a sudden then open the appropriate <acronym title="Extensible Markup Language">XML</acronym> file. There are two tags called &lt;RC&gt; and &lt;TXT&gt;. &lt;RC&gt; shows the return code of the RRDtool update and &lt;TXT&gt; a textual description. <br/>
+
 Sometimes you have to specify additional options so that performance data is produced. In some cases a <a href="/pnp-0.6/wrapper" class="wikilink1" title="pnp-0.6:wrapper">wrapper script</a> might help.<br/>
 
 However not all checks provide performance data. That applies - among others - to “check_ping” in contrast to “check_icmp” which does provide data (starting with Nagios plugin version 1.4.12 check_ping does provide performance data).<br/>
@@ -89,7 +91,11 @@ Have a look at the <a href="/pnp-0.6/about#system_requirements" class="wikilink1
 </p>
 
 <p>
-4. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> in the <code>scripts</code> directory of the installation folder or the <code>libexec</code> folder after installation to check your settings and if performance data is present and/or valid. The syntax is quite simple for that:
+4. Using the npcdmod module the value of the nagios.cfg directive <code>event_broker_options</code> may have to be adapted if it was modified. You&#039;ll find some details  <a href="/pnp-0.6/config#bulk_mode_with_npcd_and_npcdmod" class="wikilink1" title="pnp-0.6:config">here</a>.
+</p>
+
+<p>
+5. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> in the <code>scripts</code> directory of the installation folder or the <code>libexec</code> folder after installation to check your settings and if performance data is present and/or valid. The syntax is quite simple for that:
 
 </p>
 <pre class="code">./verify_pnp_config.pl -m &lt;mode&gt;</pre>
