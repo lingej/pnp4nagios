@@ -7,6 +7,15 @@ if (!empty($widget_graph)) {
 	echo $widget_graph;
 }
 echo "<div class=\"ui-widget\" style=\"min-width:".$graph_width."px\">\n";
+
+if($this->is_authorized == FALSE){
+    echo "<div style=\"padding: 0pt 0.7em;\" class=\"ui-state-error ui-corner-all\">\n"; 
+    echo "<p><span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-alert\"></span>\n"; 
+    echo "<strong>Alert:&nbsp;</strong>".Kohana::lang('error.not_authorized')."</p>\n";
+    echo "</div></div>\n";
+    return;
+}
+
 $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 
     if($value['LEVEL'] == 0){

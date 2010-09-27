@@ -15,6 +15,7 @@ class System_Controller extends Template_Controller {
         $this->data       = new Data_Model();
         $this->config     = new Config_Model();
         $this->rrdtool    = new Rrdtool_Model();
+        $this->auth       = new Auth_Model();
 
         $this->config->read_config();
         Kohana::config_set('locale.language',$this->config->conf['lang']);
@@ -22,11 +23,13 @@ class System_Controller extends Template_Controller {
         $this->check_mod_rewrite();
 
 
-        $this->start      = $this->input->get('start',FALSE);
-        $this->end        = $this->input->get('end',FALSE);
-        $this->theme      = $this->input->get('theme',FALSE);
-        $this->view       = "";
-        $this->controller = Router::$controller;
+        $this->start             = $this->input->get('start',FALSE);
+        $this->end               = $this->input->get('end',FALSE);
+        $this->theme             = $this->input->get('theme',FALSE);
+        $this->view              = "";
+        $this->host              = $this->input->get('host',NULL);
+        $this->service           = $this->input->get('srv',NULL);
+        $this->controller        = Router::$controller;
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
             $this->view = pnp::clean($_GET['view']);
