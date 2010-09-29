@@ -1,4 +1,6 @@
 **pnp-0.6.10 ??/??/2010**
+
+  * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
   * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
 
 **pnp-0.6.7 09/27/2010**
