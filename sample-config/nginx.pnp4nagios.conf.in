@@ -1,0 +1,18 @@
+# SAMPLE CONFIG SNIPPETS FOR NGINX WEB SERVER
+
+location @BASE_URL@ {
+    alias @datarootdir@;
+    auth_basic "Nagios Access";
+    auth_basic_user_file /usr/local/nagios/etc/htpasswd.users;
+    index index.php;
+    try_files $uri $uri/ @pnp4nagios;
+}
+location @pnp4nagios {
+    fastcgi_pass php;
+    fastcgi_index index.php;
+    include fastcgi_params;	
+    fastcgi_split_path_info ^(.+\.php)(.*)$;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param SCRIPT_FILENAME @datarootdir@/index.php;
+}
+
