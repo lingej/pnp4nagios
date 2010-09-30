@@ -71,7 +71,7 @@ class pnp_Core {
         }
     }
 
-    public static function addToUri($fields,$base = True){
+    public static function addToUri($fields = array(),$base = True){
         if(!is_array($fields)){
             return false;
         }
@@ -87,7 +87,7 @@ class pnp_Core {
             $get[$key] = $value;
         }
         foreach($get as $key=>$value){
-            $uri .= $key."=".urlencode($value)."&";
+			$uri .= $key."=".urlencode($value)."&";
         }
         return rtrim($uri,"&");
     }

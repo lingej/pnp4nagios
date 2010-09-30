@@ -1,5 +1,6 @@
 **pnp-0.6.10 ??/??/2010**
 
+  * Feature: Pass query string from special controller to image controller ( Matthew Garrett ) 
   * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
   * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
 

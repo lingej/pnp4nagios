@@ -32,8 +32,15 @@ foreach($this->data->STRUCT as $key=>$value){
     echo "</tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
-    echo "<a href=\"".url::base(TRUE)."special?tpl=" . $this->tpl . "\">\n";
-	echo "<img src=\"".url::base(TRUE)."image?tpl=" . $this->tpl . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\">\n";
+	$path = pnp::addToUri( array('tpl' => $this->tpl, 'view' => NULL ) );
+    echo "<a href=\"". $path . "\">\n";
+	$path = pnp::addToUri( array('tpl' => $this->tpl,
+				'view' => $value['VIEW'],
+				'source' => $value['SOURCE'], 
+				'start' => $value['TIMERANGE']['start'], 
+				'end' => $value['TIMERANGE']['end']), FALSE 
+			);
+	echo "<img src=\"".url::base(TRUE)."image" . $path . "\">\n";
     echo "</a></div><p>\n";
 }
 echo "</div>\n";
