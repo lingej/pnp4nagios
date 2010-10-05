@@ -46,7 +46,8 @@ my %conf = (
     LOG_LEVEL         => @DEBUG@,
     XML_ENC           => "UTF-8",
     XML_UPDATE_DELAY  => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
-    RRD_DAEMON_OPTS   => ""
+    RRD_DAEMON_OPTS   => "",
+    UOM2TYPE          => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
 );
 
 my %const = (
@@ -593,13 +594,13 @@ sub read_custom_template {
     my $rrd_storage_type  = $conf{'RRD_STORAGE_TYPE'};
     my $rrd_heartbeat     = $conf{'RRD_HEARTBEAT'};
 
-    if ( $uom eq "c" ) {
-        $dstype = "COUNTER";
+    if ( defined($conf{'UOM2TYPE'}{$uom}) ) {
+        $dstype = $conf{'UOM2TYPE'}{$uom};
         print_log( "DEBUG: DSTYPE adjusted to $dstype by UOM", 3 );
+    }else {
+        $dstype = 'GAUGE'; 
     }
-    else {
-        $dstype = "GAUGE";
-    }
+
     print_log( "DEBUG: RAW Command -> $command", 3 );
     my @temp_template = split /\!/, $command;
     my $template = cleanup( $temp_template[0] );
@@ -925,14 +926,17 @@ sub parse_perfstring {
 
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
-                }
-                else {
+                } 
+		else {
                     $p{rrd_max} = "U";
                 }
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
                 }
-                else {
+		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } 
+		else {
                     $p{rrd_min} = "U";
                 }
                 $p{template}         = $CTPL{'TEMPLATE'};
@@ -961,6 +965,9 @@ sub parse_perfstring {
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
                 }
+		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } 
                 else {
                     $p{rrd_min} = "U";
                 }
@@ -1011,6 +1018,9 @@ sub parse_perfstring {
             if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                 $p{rrd_min} = $p{min};
             }
+	    elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+		$p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+	    } 
             else {
                 $p{rrd_min} = "U";
             }
