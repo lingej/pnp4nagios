@@ -12,7 +12,7 @@
 ### END INIT INFO
 
 DAEMON="@libexecdir@/process_perfdata.pl"
-CFG="sysconfdir@/process_perfdata.cfg"
+CFG="@sysconfdir@/process_perfdata.cfg"
 NAME=pnp_gearman_worker
 PIDFILE=@localstatedir@/${NAME}.pid
 USER=@nagios_user@
