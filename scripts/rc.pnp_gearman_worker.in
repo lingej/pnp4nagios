@@ -2,8 +2,8 @@
 
 ### BEGIN INIT INFO
 # Provides:          pnp_gearman_worker
-# Required-Start:    $local_fs
-# Required-Stop:     $local_fs
+# Required-Start:    $all
+# Required-Stop:     $all
 # Should-Start:
 # Should-Stop:
 # Default-Start:     2 3 4 5
@@ -86,24 +86,11 @@ case "$1" in
             # kill if still running
             ps -p $pid > /dev/null 2>&1 && kill_procs;
         fi
-        ;;
-    reload|force-reload)
-        echo -n "Reloading $NAME configuration files "
-        pid=`cat $PIDFILE 2>/dev/null`
-        if [ "$pid" != "" ]; then
-            kill -HUP $pid
-            echo "OK"
-            exit 0;
-        else
-            echo ""
-            echo "$NAME is not running"
-            exit 1;
-        fi
-    ;;
+		;;
     status)
         get_status;
         exit $?;
-    ;;
+		;;
     restart)
         $0 stop && sleep 1 && $0 start
         exit $?
