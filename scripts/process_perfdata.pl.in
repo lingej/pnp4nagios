@@ -49,6 +49,7 @@ my %conf = (
     XML_ENC           => "UTF-8",
     XML_UPDATE_DELAY  => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
     RRD_DAEMON_OPTS   => "",
+    GEARMAN_HOST      => "localhost:4730",                        # How many gearman worker childs to start 
     PREFORK           => 2,                        # How many gearman worker childs to start 
     REQUESTS_PER_CHILD => 20000,                   # Restart after a given count of requests
     ENCRYPTION         => 1,                       # Decrypt mod_gearman packets
@@ -90,7 +91,7 @@ GetOptions(
     "config=s"   => \$opt_c,
     "n"          => \$opt_n,
     "npcd"       => \$opt_n,
-    "gearman=s"  => \$opt_gm,
+    "gearman"    => \$opt_gm,
     "daemon"     => \$opt_daemon,
     "pidfile=s"  => \$opt_pidfile,
 );
@@ -1368,7 +1369,7 @@ sub new_child {
             or die "Can't unblock SIGINT for fork: $!\n";
     
         my $worker = Gearman::Worker->new;
-        $worker->job_servers($opt_gm);
+        $worker->job_servers($conf{'GEARMAN_HOST'});
         $worker->register_function("perfdata", 2, sub { return main(@_); });
         my %opt = ( 
                     on_complete => sub { $req++; }, 

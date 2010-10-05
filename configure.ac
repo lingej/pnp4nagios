@@ -292,6 +292,7 @@ $PERL subst scripts/process_perfdata.pl
 $PERL subst scripts/rrd_convert.pl 
 $PERL subst scripts/verify_pnp_config.pl 
 $PERL subst scripts/rc.npcd 
+$PERL subst scripts/rc.pnp_gearman_worker 
 $PERL subst scripts/check_pnp_rrds.pl 
 $PERL subst share/pnp/index.php 
 $PERL subst share/pnp/install.php 

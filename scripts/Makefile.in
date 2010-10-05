@@ -27,6 +27,7 @@ devclean: distclean
 install-init: 
 	$(INSTALL) -m 755 $(INIT_OPTS) -d $(DESTDIR)$(INIT_DIR)
 	$(INSTALL) -m 755 $(INIT_OPTS) rc.npcd $(DESTDIR)$(INIT_DIR)/npcd
+	$(INSTALL) -m 755 $(INIT_OPTS) rc.pnp_gearman_worker $(DESTDIR)$(INIT_DIR)/pnp_gearman_worker
 
 install-processperfdata: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) process_perfdata.pl $(DESTDIR)$(LIBEXECDIR)
