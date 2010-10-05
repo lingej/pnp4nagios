@@ -264,7 +264,7 @@ Bei Problemen kann das <acronym title="Practical Extraction and Report Language"
 </p>
 
 <p>
-<strong>* Hinweis </strong>*: Die Angaben beziehen sich auf verify_pnp_config v0.1.19, das über <a href="http://www.pnp4nagios.org/pnp/dwnld" class="urlextern" title="http://www.pnp4nagios.org/pnp/dwnld"  rel="nofollow">http://www.pnp4nagios.org/pnp/dwnld</a> in der aktuellen Version 0.6.4 zu finden ist.
+<strong>* Hinweis </strong>*: Die Angaben beziehen sich auf verify_pnp_config v0.1.24, das über <a href="http://www.pnp4nagios.org/pnp/dwnld" class="urlextern" title="http://www.pnp4nagios.org/pnp/dwnld"  rel="nofollow">http://www.pnp4nagios.org/pnp/dwnld</a> in der Version 0.6.7 zu finden ist.
 Ältere Versionen haben teilweise weniger Optionen, so dass es in den Beschreibungen der einzelnen Optionen Hinweise auf die PNP-Version gibt.<br/>
 
 </p>
@@ -324,6 +324,7 @@ Das Script liefert beim Aufruf mit der Option <code>–h</code> bzw <code>–hel
 -n, --native      show messages in native language (so far &quot;es&quot; or &quot;de&quot;)
 -e, --english     show english messages/links
 -d, --debug       some debugging output
+-I, --info        show information about compile time variable settings
 </pre>
 
 <p>
@@ -409,6 +410,10 @@ Die Option <code>-e</code> (<code>–english</code>) erzwingt die Anzeige von en
 
 <p>
 Durch Angabe der Option <code>-d</code> bzw. <code>–debug</code> werden zusätzliche Zeilen ausgegeben, die bei der Fehlersuche helfen können, <code>-q</code> bzw. <code>–quiet</code> unterdrückt sämtliche Ausgaben.
+</p>
+
+<p>
+Die Option <code>-I</code> (<code>–info</code>) zeigt die Inhalte von Variable wie z.B. <code>prefix</code>, <code>datadir</code> und anderen Dingen, die Sie vielleicht beim Aufruf von &#039;./configure&#039; geändert haben. In einigen Fällen möchten wir diese Werte wissen und mit Hilfe dieser Option geht es einfacher als wenn Sie verschiedene Dateien durchsuchen müßten. Diese Option gibt es seit PNP 0.6.7.
 </p>
 
 <p>

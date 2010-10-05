@@ -271,7 +271,7 @@ In case of problems there is a script called <code>verify_pnp_config.pl</code> l
 </p>
 
 <p>
-<strong>* Note </strong>*: The information applies to verify_pnp_config v0.1.19 which is available in the current stable version downloadable via <a href="http://www.pnp4nagios.org/pnp/dwnld" class="urlextern" title="http://www.pnp4nagios.org/pnp/dwnld"  rel="nofollow">http://www.pnp4nagios.org/pnp/dwnld</a>.
+<strong>* Note </strong>*: The information applies to verify_pnp_config v0.1.24 which is available in the current stable version downloadable via <a href="http://www.pnp4nagios.org/pnp/dwnld" class="urlextern" title="http://www.pnp4nagios.org/pnp/dwnld"  rel="nofollow">http://www.pnp4nagios.org/pnp/dwnld</a>.
 Older versions may have fewer options so in the descriptions of the various options you will find hints to the PNP versions.<br/>
 
 </p>
@@ -331,6 +331,7 @@ Specifying the option <code>-h</code> or <code>–-help</code> respectively show
 -n, --native      show messages in native language (so far &quot;es&quot; or &quot;de&quot;)
 -e, --english     show english messages/links
 -d, --debug       some debugging output
+-I, --info        show information about compile time variable settings
 </pre>
 
 <p>
@@ -409,6 +410,10 @@ The option <code>-e</code> (<code>–english</code>) enables you to force the us
 
 <p>
 The option <code>-d</code> (<code>–debug</code>) will output additional lines which may help during trouble shooting  whereas -q (–quiet) suppresses all output. Errors will result in a non-zero return code.
+</p>
+
+<p>
+The option <code>-I</code> (<code>–info</code>) shows the settings of variables like <code>prefix</code>, <code>datadir</code> and other things you might have changed during &#039;./configure&#039;. In some cases we need to know these values and using this option is easier than searching different files. The option is available starting with PNP 0.6.7.
 </p>
 
 <p>

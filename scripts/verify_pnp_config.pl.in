@@ -563,6 +563,7 @@ parameters:
     -n, --native      show messages in native language (so far "es" or "de")
     -e, --english     show english messages/links
     -d, --debug       some debugging output
+    -I, --info        show information about compile time variable settings
 EOF3
 }
 
