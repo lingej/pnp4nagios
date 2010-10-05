@@ -139,7 +139,6 @@ if( ! defined($opt_gm) ){
     main();
 }else{
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
-    pidlock("create");
   	if($conf{ENCRYPTION} == 1){
         # fill key up to 32 bytes 
         $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
@@ -1320,7 +1319,10 @@ sub daemonize {
         open STDERR, '>>/dev/null' or die "Can't write to /dev/null: $!";
         defined( my $pid = fork )  or die "Can't fork: $!";
         exit if $pid;
+        pidlock("create");
         setsid or die "Can't start a new session: $!";
+    } else {
+        pidlock("create");
     }
     # Fork off our children.
     for (1 .. $conf{'PREFORK'}) {
