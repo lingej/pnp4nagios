@@ -213,8 +213,8 @@ sub parse_env {
             $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
         }
         if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
-            print_log( "Gearman job data missmatch.", 1 );
-            return 1;
+            print_log( "Gearman job data missmatch. Please check your encryption key.", 1 );
+            return %NAGIOS;
         }
     }
 
@@ -253,8 +253,7 @@ sub parse_env {
 # Perfdata sanity check
 #
 sub process_perfdata {
-    if ( ! defined($NAGIOS{PERFDATA}) && defined($opt_gm) ) {
-        print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
+    if ( keys( %NAGIOS ) == 1 && defined($opt_gm) ) {
         $stats{skipped}++;
         return 1;
     }
