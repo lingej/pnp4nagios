@@ -106,6 +106,9 @@ class Rrdtool_Model extends Model
         if ($height > 0){
             $command .= " --height=$height";
         }
+        if ($height < 32 ){
+            $command .= " --only-graph ";
+        }
 
         $command .= $RRD_CMD;
         $this->RRD_CMD = $command;
