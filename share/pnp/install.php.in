@@ -137,7 +137,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <?php if (is_dir(SYSPATH) AND is_file(SYSPATH.'core/Bootstrap'.EXT)): ?>
 <td class="pass"><?php echo SYSPATH ?></td>
 <?php else: $failed++ ?>
-<td class="fail">The configured <code>system</code> directory does not exist or does not contain required files.</td>
+<td class="fail">The configured system directory <br>('<?php echo SYSPATH ?>') <br>does not exist or does not contain required files.</td>
 <?php endif ?>
 </tr>
 <tr>
@@ -145,7 +145,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <?php if (is_dir(APPPATH) AND is_file(APPPATH.'config/config'.EXT)): ?>
 <td class="pass"><?php echo APPPATH ?></td>
 <?php else: $failed++ ?>
-<td class="fail">The configured <code>application</code> directory does not exist or does not contain required files.</td>
+<td class="fail">The configured application directory<br>('<?php echo APPPATH ?>')<br> does not exist or does not contain required files.</td>
 <?php endif ?>
 </tr>
 <tr>

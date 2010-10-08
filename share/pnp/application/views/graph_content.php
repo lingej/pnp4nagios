@@ -54,7 +54,9 @@ foreach($this->data->STRUCT as $key=>$value){
 		$value['TIMERANGE']['start'],
 		$value['TIMERANGE']['end'],
 		$value['SOURCE'],
-		$value['VIEW'])."</td>\n";
+		$value['VIEW'],
+		$value['GRAPH_WIDTH'],
+		$value['GRAPH_HEIGHT'])."</td>\n";
     echo "</tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
