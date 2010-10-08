@@ -335,6 +335,8 @@ class Data_Model extends Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE;
+				$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+				$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
                 if(isset($this->RRD['ds_name'][$key]) ){
                      $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
@@ -367,6 +369,8 @@ class Data_Model extends Model
                     $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                     $tmp_struct['SOURCE']        = $key;
                     $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
+					$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+					$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
                     if(isset($this->RRD['ds_name'][$key]) ){
                         $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                     }elseif(array_key_exists($i, $this->DS)){
@@ -400,6 +404,8 @@ class Data_Model extends Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
+				$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+				$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
                 if(isset($this->RRD['ds_name'][$key]) ){
                     $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
@@ -507,7 +513,32 @@ class Data_Model extends Model
         }
         return TRUE;        
     }
-    
+
+	#
+	#
+	#
+	private function getGraphDimensions($search, $command){
+		if($search == 'width'){
+			if(preg_match_all('/(-w|--width|--width=)\s([0-9]+)\s/i',$command,$match)){
+				$value = array_pop($match[2]); 
+				return $value;
+			}else{
+				return $this->config->conf['graph_width'];
+			}
+		}
+		if($search == 'height'){
+			if(preg_match_all('/(-h|--height|--height=)\s([0-9]+)\s/i',$command,$match)){
+				$value = array_pop($match[2]); 
+				return $value;
+			}else{
+				return $this->config->conf['graph_height'];
+			}
+		}
+		return FALSE;
+	}
+    #
+	#
+	#
     private function array_reindex($data){
         $i=0;
         foreach($data as $d){

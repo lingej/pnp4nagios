@@ -1,5 +1,6 @@
 **pnp-0.6.10 ??/??/2010**
 
+  * Feature: RRDTool Option --width and --height is now allowed in templates
   * Feature: RRDTool DS Type for UOM of "c" changed from COUNTER to DERIVE   
   * Feature: Pass query string from special controller to image controller ( Matthew Garrett ) 
   * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
