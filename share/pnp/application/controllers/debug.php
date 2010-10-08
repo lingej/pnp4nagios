@@ -43,10 +43,12 @@ class Debug_Controller extends System_Controller  {
             }
             $services      = $this->data->getServices($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
+			$this->is_authorized = $this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']);
             $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
         }elseif(isset($this->host)){
             $this->host    = pnp::clean($this->host);
-               if($this->view == ""){
+			$this->is_authorized = $this->auth->is_authorized($this->host);
+            if($this->view == ""){
                 $this->view = $this->config->conf['overview-range'];
             }
             if($this->start){
