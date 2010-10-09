@@ -5,7 +5,7 @@
  */
 class Auth_Model extends Model {
     public $SOCKET = NULL;
-    public $socketPath = '/usr/local/nagios/var/rw/live';
+    public $socketPath = NULL;
     public $ERR_TXT = "";
     public $AUTH_ENABLED = FALSE;
     public $REMOTE_USER = NULL;
@@ -13,8 +13,9 @@ class Auth_Model extends Model {
     public function __construct() {
         $this->config = new Config_Model;
         $this->config->read_config();
-        if($this->config->conf['auth_enabled'] === TRUE){
+        if($this->config->conf['auth_enabled'] == 1){
             $this->AUTH_ENABLED = TRUE;
+			$this->socketPath = $this->config->conf['livestatus_socket'];
         }
         if(isset($_SERVER['REMOTE_USER'])){
             $this->REMOTE_USER = $_SERVER['REMOTE_USER'];
@@ -34,11 +35,11 @@ class Auth_Model extends Model {
     public function connect(){
         $this->SOCKET = socket_create(AF_UNIX, SOCK_STREAM, 0);
         if($this->SOCKET === FALSE) {
-            throw new Kohana_exception("error.livestatus_socket_error", socket_strerror(socket_last_error($this->SOCKET)));
+            throw new Kohana_exception("error.livestatus_socket_error", socket_strerror(socket_last_error($this->SOCKET)), $this->socketPath);
         }
         $result = @socket_connect($this->SOCKET, $this->socketPath);
         if(!$result) {
-            throw new Kohana_exception("error.livestatus_socket_error", socket_strerror(socket_last_error($this->SOCKET)));
+            throw new Kohana_exception("error.livestatus_socket_error", socket_strerror(socket_last_error($this->SOCKET)), $this->socketPath);
         }
 
     }

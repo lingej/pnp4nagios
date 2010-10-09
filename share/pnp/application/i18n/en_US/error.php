@@ -25,5 +25,5 @@ $lang = array
     'no-templates-found' => 'No templates could be found. <a href="http://docs.pnp4nagios.org/faq/22">Read FAQ online</a>',
     'not_authorized' => 'You are not authorized to view this host/service',
     'remote_user_missing' => 'Remote user is missing. Authentication check cancled. <a href="http://docs.pnp4nagios.org/faq/23">Read FAQ online</a>',
-    'livestatus_socket_error' => 'Livestatus Socket error: %s <a href="http://docs.pnp4nagios.org/faq/24">Read FAQ online</a>',
+    'livestatus_socket_error' => 'Livestatus Socket error: %s (%s) <a href="http://docs.pnp4nagios.org/faq/24">Read FAQ online</a>',
 );
