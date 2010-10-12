@@ -4,8 +4,14 @@
  * Retrieves the PNP config files 
  */
 class Auth_Model extends Model {
-    public $SOCKET = NULL;
-    public $socketPath = NULL;
+    public $SOCKET       = NULL;
+    public $socketPath   = NULL;
+    public $socketDOMAIN = NULL;
+    public $socketTYPE   = NULL;
+    public $socketHOST   = NULL;
+    public $socketPORT   = 0;
+    public $socketPROTO  = NULL;
+
     public $ERR_TXT = "";
     public $AUTH_ENABLED = FALSE;
     public $REMOTE_USER = NULL;
@@ -33,11 +39,16 @@ class Auth_Model extends Model {
     }
 
     public function connect(){
-        $this->SOCKET = socket_create(AF_UNIX, SOCK_STREAM, 0);
+		$this->getSocketDetails($this->socketPath);
+        $this->SOCKET = socket_create($this->socketDOMAIN, $this->socketTYPE, $this->socketPROTO);
         if($this->SOCKET === FALSE) {
             throw new Kohana_exception("error.livestatus_socket_error", socket_strerror(socket_last_error($this->SOCKET)), $this->socketPath);
         }
-        $result = @socket_connect($this->SOCKET, $this->socketPath);
+		if($this->socketDOMAIN === AF_UNIX){
+        	$result = @socket_connect($this->SOCKET, $this->socketPATH);
+		}else{
+        	$result = @socket_connect($this->SOCKET, $this->socketHOST, $this->socketPORT);
+		}
         if(!$result) {
             throw new Kohana_exception("error.livestatus_socket_error", socket_strerror(socket_last_error($this->SOCKET)), $this->socketPath);
         }
@@ -99,4 +110,33 @@ class Auth_Model extends Model {
             return FALSE;
         }
     }
+
+
+	public function getSocketDetails($string=FALSE){
+
+		if(preg_match('/^unix:(.*)$/',$string,$match) ){
+			$this->socketDOMAIN = AF_UNIX;
+			$this->socketTYPE   = SOCK_STREAM;
+			$this->socketPATH   = $match[1];
+			$this->socketPROTO  = 0;
+			return;
+		}
+		if(preg_match('/^tcp:([a-zA-Z0-9-]+):([0-9]+)$/',$string,$match) ){
+			$this->socketDOMAIN = AF_TCP;
+			$this->socketTYPE   = SOCK_STREAM;
+			$this->socketHOST   = $match[1];
+			$this->socketPORT   = $match[2];
+			$this->socketPROTO  = SOL_TCP;
+			return;
+		}
+		# Fallback
+		if(preg_match('/^\/.*$/',$string,$match) ){
+			$this->socketDOMAIN = AF_UNIX;
+			$this->socketTYPE   = SOCK_STREAM;
+			$this->socketPATH   = $string;
+			$this->socketPROTO  = 0;
+			return;
+		}
+		return FALSE;
+	}
 }
