@@ -50,7 +50,7 @@ class Image_Controller extends System_Controller  {
             $service = pnp::clean($service);
             $host    = pnp::clean($host);
             $this->data->buildDataStruct($host,$service,$view,$source);
-            if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE)
+            if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE)
                 $this->rrdtool->streamImage("ERROR: NOT_AUTHORIZED"); 
 
             #print Kohana::debug($this->data->STRUCT);

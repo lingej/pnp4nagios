@@ -36,7 +36,7 @@ class Xport_Controller extends System_Controller  {
             $this->service = pnp::clean($this->service);
             $this->host    = pnp::clean($this->host);
             $this->data->buildXport($this->host,$this->service);
-            if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE){
+            if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 header('Content-Type: application/xml');
                 print "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
                 print "<NAGIOS>\n";
@@ -57,7 +57,7 @@ class Xport_Controller extends System_Controller  {
             $this->service = pnp::clean($this->service);
             $this->host    = pnp::clean($this->host);
             $this->data->buildXport($this->host,$this->service);
-            if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE){
+            if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 header('Content-type: application/json');
                 print json_encode("not authorized");                
                 exit;
@@ -76,7 +76,7 @@ class Xport_Controller extends System_Controller  {
             $this->service = pnp::clean($this->service);
             $this->host    = pnp::clean($this->host);
             $this->data->buildXport($this->host,$this->service);
-            if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE){
+            if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 header("Content-Type: text/plain; charset=UTF-8");
                 print "not authorized";                
                 exit;

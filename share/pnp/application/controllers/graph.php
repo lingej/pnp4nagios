@@ -46,7 +46,7 @@ class Graph_Controller extends System_Controller  {
             $services      = $this->data->getServices($this->host);
             #print Kohana::debug($services);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
-            $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']); 
+            $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']); 
 
             $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
         	$this->template->graph->graph_content->graph_width = ($this->data->STRUCT[0]['GRAPH_WIDTH'] + 85);

@@ -174,7 +174,7 @@ class Data_Model extends Model
             }
             if($s['name'] == "_HOST_"){
                 // Check authorization
-                if($this->auth->is_authorized((string) $this->XML->NAGIOS_DISP_HOSTNAME, "_HOST_") === FALSE)
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_AUTH_HOSTNAME, "_HOST_") === FALSE)
                     continue;
  
                 $host[0]['name']             = "_HOST_";
@@ -184,7 +184,7 @@ class Data_Model extends Model
                 $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
             }else{
                 // Check authorization
-                if($this->auth->is_authorized((string) $this->XML->NAGIOS_DISP_HOSTNAME, (string) $this->XML->NAGIOS_DISP_SERVICEDESC) === FALSE )
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_AUTH_HOSTNAME, (string) $this->XML->NAGIOS_AUTH_SERVICEDESC) === FALSE )
                     continue;
  
                 $services[$i]['name']        = $s['name'];

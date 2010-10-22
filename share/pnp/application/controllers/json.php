@@ -27,7 +27,7 @@ class Json_Controller extends System_Controller  {
             $this->host    = pnp::clean($this->host);
             $services      = $this->data->getServices($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
-            if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE){
+            if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 print json_encode("not authorized");
                 exit;
             }

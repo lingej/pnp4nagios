@@ -29,7 +29,7 @@ class Xml_Controller extends System_Controller  {
             throw new Kohana_User_Exception('No Options', "RTFM my Friend, RTFM!");
         }
         $this->data->readXML($this->host, $this->service);
-        if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE){
+        if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
             header('Content-Type: application/xml');
             print "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
             print "<NAGIOS>\n";
