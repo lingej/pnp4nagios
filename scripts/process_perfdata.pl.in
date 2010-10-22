@@ -875,8 +875,6 @@ sub parse_perfstring {
     my %CTPL = ();
     $dstype = "GAUGE";
     my $perfstring = shift;
-    #$perfstring =~ s/\\/\//g;
-    #$perfstring =~ s/\//_/g;
     my $is_multi = "0";
     my @perfs;
     my @multi;
@@ -887,7 +885,7 @@ sub parse_perfstring {
     #
     # check_multi
     #
-    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)=/ ) {
+    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)=/ ) {
         $is_multi = 1;
         print_log( "check_multi Perfdata start", 3 );
         my $count        = 0;
@@ -902,7 +900,7 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
-            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)$/ ) {
+            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)$/ ) {
                 @multi = ( $1, $2, $3 );
                 if ( $count == 0 ) {
                     print_log( "DEBUG: First check_multi block", 3 );
