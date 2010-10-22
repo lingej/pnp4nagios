@@ -26,8 +26,8 @@ This is the version with support for Gearman, suitable to use with mod_gearman.
 %setup -q
 
 %build
-./configure --with-nagios-user=icinga \
-    --with-nagios-group=icinga \
+./configure --with-nagios-user=nagios \
+    --with-nagios-group=nagios \
     --prefix=%{_prefix} \
     --libdir=%{_libdir}/%{name} \
     --sysconfdir=%{_sysconfdir}/%{name} \
@@ -54,7 +54,7 @@ rm -rf $RPM_BUILD_ROOT
 %docdir %{_defaultdocdir}
 %{_prefix}
 %{_sysconfdir}
-%defattr(-,icinga,root)
+%defattr(-,nagios,root)
 %{_localstatedir} 
 
 %changelog
