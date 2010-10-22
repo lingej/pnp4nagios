@@ -263,6 +263,8 @@ class Data_Model extends Model
         $conf        = $this->config->conf;
         $this->XML   = array();
         $this->MACRO = array();
+        $this->MACRO['AUTH_SERVICEDESC'] = '';
+        $this->MACRO['AUTH_HOSTNAME'] = '';
         $this->DS    = array();
         $xml         = array();
         $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
