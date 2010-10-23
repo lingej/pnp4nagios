@@ -885,7 +885,7 @@ sub parse_perfstring {
     #
     # check_multi
     #
-    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)=/ ) {
+    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)=/ ) {
         $is_multi = 1;
         print_log( "check_multi Perfdata start", 3 );
         my $count        = 0;
@@ -900,7 +900,7 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
-            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)$/ ) {
+            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)$/ ) {
                 @multi = ( $1, $2, $3 );
                 if ( $count == 0 ) {
                     print_log( "DEBUG: First check_multi block", 3 );
