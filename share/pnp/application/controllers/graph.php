@@ -93,11 +93,15 @@ class Graph_Controller extends System_Controller  {
                        $this->data->buildDataStruct($this->host,$service['name'],$this->view);
             }
         }else{
-            $this->host = $this->data->getFirstHost();
-            if(isset($this->host)){
-                url::redirect("graph?host=".$this->host);
+			if($this->isAuthorizedFor('host_overview' ) ){
+                $this->host = $this->data->getFirstHost();
+                if(isset($this->host)){
+                    url::redirect("graph?host=".$this->host);
+				}else{
+                    throw new Kohana_Exception('error.get-first-host');
+				}
             }else{
-                throw new Kohana_Exception('error.get-first-host');
+                throw new Kohana_Exception('error.not_authorized_for_host_overview');
             }            
         }
         $this->template->graph->icon_box      = $this->add_view('icon_box');
