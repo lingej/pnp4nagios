@@ -113,15 +113,18 @@ class pnp_Core {
             $mag++;
         }
         $pos = 0;
-        if ($matches[2] != "") {
-            $matches[2] = str_replace(' ','',$matches[2]);
-            if (strpos('Bb%',$matches[2]) === false){
-                $pos = strpos(' KMGTP',$matches[2]);
-                $unit = substr(' KMGTP',$mag+$pos,1).$matches[3];
-            } else {
-                $matches[3] = $matches[2];
-                $unit = '%';
+        if ($matches[2] == "%") {
+            $unit = '%';
+        } else {
+            if ($matches[2] == "") {
+                $matches[2] = " ";
             }
+            if (($matches[2] == "B") or ($matches[2] == "b")) {
+                $matches[3] = $matches[2];
+                $matches[2] = " ";
+            }
+            $pos = strpos(' KMGTP',$matches[2]);
+            $unit = substr(' KMGTP',$mag+$pos,1).$matches[3];
         }
         $val_unit = sprintf ("$format %s", $value, $unit);
         $val_fmt = sprintf ($format, $value);
