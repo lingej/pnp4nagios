@@ -11,8 +11,6 @@ class Json_Controller extends System_Controller  {
     public function __construct()
     {
         parent::__construct();
-        $this->host      = $this->input->get('host');
-        $this->service   = $this->input->get('srv');
     }
 
     public function index(){

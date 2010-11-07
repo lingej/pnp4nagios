@@ -13,15 +13,10 @@ class Debug_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template->debug   = $this->add_view('debug');
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
     }
 
     public function index()
     {
-
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
         $this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" )

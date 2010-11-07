@@ -14,10 +14,6 @@ class Xport_Controller extends System_Controller  {
         // Disable auto-rendering
         $this->auto_render = FALSE;
     
-        $this->host    = $this->input->get('host');
-        $this->service = $this->input->get('srv');
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
         $this->view    = 0; //fake value
         $this->source  = "";
 

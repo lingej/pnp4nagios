@@ -27,8 +27,8 @@ class System_Controller extends Template_Controller {
         $this->end               = $this->input->get('end',FALSE);
         $this->theme             = $this->input->get('theme',FALSE);
         $this->view              = "";
-        $this->host              = $this->input->get('host',NULL);
-        $this->service           = $this->input->get('srv',NULL);
+        $this->host              = urldecode($this->input->get('host',NULL));
+        $this->service           = urldecode($this->input->get('srv',NULL));
         $this->controller        = Router::$controller;
 
         if(isset($_GET['view']) && $_GET['view'] != "" )

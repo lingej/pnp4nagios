@@ -13,8 +13,6 @@ class Zoom_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template          = $this->add_view('zoom');
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
         $this->tpl               = $this->input->get('tpl');
         $this->graph_width       = $this->input->get('graph_width');
         $this->graph_height      = $this->input->get('graph_height');
@@ -22,9 +20,6 @@ class Zoom_Controller extends System_Controller  {
 
     public function index()
     {
-
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
         $this->source  = $this->input->get('source');
         $this->view    = "";
 

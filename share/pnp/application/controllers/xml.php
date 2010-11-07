@@ -12,8 +12,6 @@ class Xml_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->config->read_config();
-        $this->host    = $this->input->get('host');
-        $this->service = $this->input->get('srv');
     }
 
     public function index()
