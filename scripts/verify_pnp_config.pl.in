@@ -34,13 +34,14 @@
 # 2010.09.09: 0.1.23 include_dir / include_file / yum fixes
 # 2010.09.26: 0.1.24 option -I
 # 2010.11.07:        bugfix (php-common/Fedora), msg output
+# 2010.11.08: 0.1.25 bugfixes (auth_enabled, allowed_for...)
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.24";
+my $version = "0.1.25";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -1207,6 +1208,10 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'special_template_dir\']'} = 'd;;';
     $CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';    
     $CPcfg{'$conf[\'html_dir-links\']'} = 'd;;235-237';    
+    $CPcfg{'$conf[\'livestatus_socket\']'} = 's;;';
+    $CPcfg{'$conf[\'auth_enabled\']'} = 'v;false|true;';
+    $CPcfg{'$conf[\'allowed_for_all_hosts\']'} = 'S;.*;';
+    $CPcfg{'$conf[\'allowed_for_all_services\']'} = 'S;.*;';
     $err = 0;
 
 # try to set a file name if variable is unset
@@ -1343,7 +1348,9 @@ sub examine {
         info ("noSock",$val);
     } elsif (($act eq "n") and ($val !~ /$patt/)) {
         info ("noNumber",$par, $val);
-    } elsif (($act eq "v") and ($val !~ /$patt/)) {
+    } elsif (($act eq "v") and ($val !~ /$patt/i)) {
+        info ("invValue2",$val,$par);
+    } elsif (($act eq "V") and ($val !~ /$patt/)) {
         info ("invValue2",$val,$par);
     } elsif (($act eq "S") and ($val !~ /$patt/)) {
         info ("invValue2",$val,$par);
