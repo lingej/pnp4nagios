@@ -46,6 +46,7 @@ class Data_Model extends Model
             }
         }
         if(sizeof($templates) > 0){
+            sort($templates);
             return $templates;
         }else{
             return FALSE;
