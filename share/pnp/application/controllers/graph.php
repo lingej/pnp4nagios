@@ -15,8 +15,6 @@ class Graph_Controller extends System_Controller  {
         $this->template->zoom_header   = $this->add_view('zoom_header');
         $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
         $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
     }
 
     public function index()
@@ -46,7 +44,7 @@ class Graph_Controller extends System_Controller  {
             $services      = $this->data->getServices($this->host);
             #print Kohana::debug($services);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
-            $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']); 
+            $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']); 
 
             $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
         	$this->template->graph->graph_content->graph_width = ($this->data->STRUCT[0]['GRAPH_WIDTH'] + 85);
@@ -93,11 +91,15 @@ class Graph_Controller extends System_Controller  {
                        $this->data->buildDataStruct($this->host,$service['name'],$this->view);
             }
         }else{
-            $this->host = $this->data->getFirstHost();
-            if(isset($this->host)){
-                url::redirect("graph?host=".$this->host);
+			if($this->isAuthorizedFor('host_overview' ) ){
+                $this->host = $this->data->getFirstHost();
+                if(isset($this->host)){
+                    url::redirect("graph?host=".$this->host);
+				}else{
+                    throw new Kohana_Exception('error.get-first-host');
+				}
             }else{
-                throw new Kohana_Exception('error.get-first-host');
+                throw new Kohana_Exception('error.not_authorized_for_host_overview');
             }            
         }
         $this->template->graph->icon_box      = $this->add_view('icon_box');

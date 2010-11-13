@@ -27,8 +27,8 @@ class System_Controller extends Template_Controller {
         $this->end               = $this->input->get('end',FALSE);
         $this->theme             = $this->input->get('theme',FALSE);
         $this->view              = "";
-        $this->host              = $this->input->get('host',NULL);
-        $this->service           = $this->input->get('srv',NULL);
+        $this->host              = urldecode($this->input->get('host',NULL));
+        $this->service           = urldecode($this->input->get('srv',NULL));
         $this->controller        = Router::$controller;
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
@@ -42,23 +42,28 @@ class System_Controller extends Template_Controller {
             if($this->session->get("theme","new") == "new"){
                 if($this->theme){
                     # store $this->theme if available
+					Kohana::config_set('core.theme',$this->theme);
                     $this->session->set('theme', $this->theme );
                 }else{
                     # set $this->theme to default value 
                     $this->theme = $this->config->conf['ui-theme'];
+					Kohana::config_set('core.theme',$this->theme);
                 }
             # Sesion with theme info    
             }else{
                 if($this->theme && $this->theme != 'default'){
                     # store $this->theme if available
                     $this->session->set('theme', $this->theme );
+					Kohana::config_set('core.theme',$this->theme);
                 }elseif($this->theme == 'default'){
                     # reset to default theme 
                     $this->theme = $this->config->conf['ui-theme'];
                     $this->session->set('theme', $this->theme );
+					Kohana::config_set('core.theme',$this->theme);
                 }else{
                     # set $this->theme with session infos
                     $this->theme = $this->session->get('theme');
+					Kohana::config_set('core.theme',$this->theme);
                 }
             }
 

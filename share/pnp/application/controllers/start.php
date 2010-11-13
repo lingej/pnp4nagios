@@ -19,7 +19,7 @@ class Start_Controller extends System_Controller  {
             $host = $this->data->getFirstHost();
             url::redirect("graph?host=$host", 302);
         }else{
-            url::redirect("graph?host=$host", 302);
+            url::redirect("graph", 302);
         }
     }
 

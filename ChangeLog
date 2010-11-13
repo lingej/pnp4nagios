@@ -1,10 +1,12 @@
 **pnp-0.6.10 ??/??/2010**
 
+  * Feature: Add RRDTool Option --only-graph if graph height is below 32px to create thumbnails 
   * Feature: RRDTool Option --width and --height is now allowed in templates
   * Feature: RRDTool DS Type for UOM of "c" changed from COUNTER to DERIVE   
   * Feature: Pass query string from special controller to image controller ( Matthew Garrett ) 
   * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
   * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
+  * Bugfix: Sort list of special templates
 
 **pnp-0.6.7 09/27/2010**
 

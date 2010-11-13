@@ -1,3 +1,4 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -105,6 +106,13 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i7">magic_quotes_gpc</a> is deprecated</td>
 <?php endif ?></tr>
 <?php if(function_exists('apache_get_modules')) : ?>
+<th>PHP socket extension</th>
+<?php if (function_exists('socket_create')): ?>
+<td class="pass">Pass</td>
+<?php else: $failed++ ?>
+<td class="fail"><a href="http://docs.pnp4nagios.org/faq/i11">PHP socket extension</a> not available</td>
+<?php endif ?>
+</tr>
 <th>Apache Rewrite Module</th>
 <?php if(in_array('mod_rewrite', apache_get_modules())) : ?>
 <td class="pass">Pass</td>

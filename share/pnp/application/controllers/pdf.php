@@ -34,11 +34,7 @@ class Pdf_Controller extends System_Controller  {
 
     public function index(){
 
-        $this->host      = $this->input->get('host');
-        $this->service   = $this->input->get('srv');
         $this->tpl       = $this->input->get('tpl');
-        $this->start     = $this->input->get('start');
-        $this->end       = $this->input->get('end');
         $this->view      = "";
         $this->type      = "normal";
 

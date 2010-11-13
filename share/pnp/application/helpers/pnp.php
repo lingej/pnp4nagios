@@ -92,4 +92,43 @@ class pnp_Core {
         return rtrim($uri,"&");
     }
 
-} 
+    /* "normalize" and adjust value / unit (similar to format string %s in RRDtool)
+    *  Parameters in:
+    *     value    := number, maybe suffixed by unit string
+    *                 examples: 1234, 1.234, 1234M, 1234Kb
+    *     base     := base of value (1000, e.g. traffic or 1024, e.g. disk size)
+    *     format   := format string
+    *  Parameters out:
+    *     val_unit := formatted value (including unit)
+    *     val_fmt  := formatted value (without leading blanks and unit)
+    *     unit     := adjusted unit
+    *     divisor  := number used to "normalize" value
+    */
+    public static function adjust_unit($value,$base=1000,$format='%.3lf'){
+        preg_match('/^([0-9\.,]+)\s*(\S?)(\S?)/',$value,$matches);
+
+        $mag = 0;
+        while ($value >= $base){
+            $value /= $base;
+            $mag++;
+        }
+        $pos = 0;
+        if ($matches[2] == "%") {
+            $unit = '%';
+        } else {
+            if ($matches[2] == "") {
+                $matches[2] = " ";
+            }
+            if (($matches[2] == "B") or ($matches[2] == "b")) {
+                $matches[3] = $matches[2];
+                $matches[2] = " ";
+            }
+            $pos = strpos(' KMGTP',$matches[2]);
+            $unit = substr(' KMGTP',$mag+$pos,1).$matches[3];
+        }
+        $val_unit = sprintf ("$format %s", $value, $unit);
+        $val_fmt = sprintf ($format, $value);
+        $val_fmt = str_replace(' ','',$val_fmt);
+        return array ($val_unit,$val_fmt,$unit,pow($base,$mag));
+    }
+}
