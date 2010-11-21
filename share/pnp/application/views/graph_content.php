@@ -67,7 +67,14 @@ foreach($this->data->STRUCT as $key=>$value){
 		.Kohana::lang('common.service',$value['MACRO']['DISP_SERVICEDESC']) . " " 
 		.Kohana::lang('common.datasource',$value['ds_name']) . " " 
 		."\">\n";
-	echo "<img src=\"".url::base(TRUE)."image?host=" . $value['MACRO']['HOSTNAME'] . "&srv=" . $value['MACRO']['SERVICEDESC'] . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\"></a>\n";
+	echo "<img src=\"".url::base(TRUE)."image?host=" . 
+		urlencode($value['MACRO']['HOSTNAME']) . 
+		"&srv=" . urlencode($value['MACRO']['SERVICEDESC']) . 
+		"&view=" . $value['VIEW'] . 
+		"&source=" . $value['SOURCE'] . 
+		"&start=" . $value['TIMERANGE']['start'] .
+		"&end=" . $value['TIMERANGE']['end'] . 
+		"\"></a>\n";
     echo "</div><p>\n";
 }
 echo "</div>\n";
