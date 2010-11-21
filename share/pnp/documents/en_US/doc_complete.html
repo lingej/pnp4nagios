@@ -73,8 +73,190 @@ Starting with version 0.6.x we switch from subversion to GIT. The <a href="http:
 <h1><a name="about_pnp" id="about_pnp" href="/pnp-0.6/about" title="About PNP">About PNP</a></h1>
 <div class="level1">
 
+</div>
+
+<h2><a name="system_requirements" id="system_requirements">System requirements</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/about" class="wikilink1" title="pnp-0.6:about">→ Read more...</a>
+
+PNP mandatory requires valid performance data of nagios plugins.
+</p>
+
+<p>
+So what is this performance data?
+</p>
+
+<p>
+The output of a nagios plugin up to nagios 2.x is limited to one line. When the plugin produces performance data, it is divided into two parts. The pipe symbol (“|”) is used as a delimiter.
+</p>
+
+<p>
+<strong>Example check_icmp :</strong>
+
+</p>
+<pre class="code"> OK - 127.0.0.1: rta 2.687ms, lost 0% | rta=2.687ms;3000.000;5000.000;0; pl=0%;80;100;;</pre>
+
+<p>
+
+resulting in the text on the left side of the pipe symbol
+
+</p>
+<pre class="code"> OK - 127.0.0.1: rta 2.687ms, lost 0%</pre>
+
+<p>
+
+and the performance data
+
+</p>
+<pre class="code">  rta=2.687ms;3000.000;5000.000;0; pl=0%;80;100;;</pre>
+
+<p>
+
+Performance data is designed for automatic processing. The format is specified within the <a href="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203" class="urlextern" title="http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203"  rel="nofollow">Developer Guidelines</a> (you&#039;ll find an excerpt <a href="/pnp-0.6/perfdata_format" class="wikilink1" title="pnp-0.6:perfdata_format">here</a>) but should be exemplified here nonetheless:
+
+</p>
+<pre class="code">  rta=2.687ms;3000.000;5000.000;0;
+   |    |  |    |         |     | |
+   |----|--|----|---------|-----|-|----- * label 
+        |--|----|---------|-----|-|----- * current value
+           |----|---------|-----|-|----- unit ( UOM = UNIT of Measurement ) 
+                |---------|-----|-|----- warning threshold
+                          |-----|-|----- critical threshold 
+                                |-|----- minimum value 
+                                  |----- maximum value
+                                  </pre>
+
+<p>
+Value marked with * are mandatory. All other values are optional.
+</p>
+
+<p>
+Several data series are separated by blanks. The actual data must not contains any blanks. If the label contains blanks, it has to be surrounded by single quotes.
+</p>
+
+</div>
+
+<h2><a name="required_software" id="required_software">Required Software</a></h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> <acronym title="Practical Extraction and Report Language">Perl</acronym> &gt;= 5.x without additional modules</div>
+</li>
+<li class="level1"><div class="li"> RRDtool &gt;= 1.x, better 1.2 but not compulsory<br/>
+Attention: installing RRDtool without a packet manager might lead to missing dejavu fonts. If you see graphs without text then this may be the cause.</div>
+</li>
+<li class="level1"><div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym> &gt;= 5.2. for the Webfrontend based on <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a></div>
+<ul>
+<li class="level2"><div class="li"> <acronym title="Hypertext Preprocessor">PHP</acronym>-extension zlib, session and GD.</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Nagios &gt;= 2.x or Icinga </div>
+</li>
+<li class="level1"><div class="li"> Kohana needs the module “mod_rewrite” to be enabled. For details please have a look at the documentation of your web-server specific to your distribution.</div>
+</li>
+</ul>
+
+</div>
+
+<h2><a name="license" id="license">License</a></h2>
+<div class="level2">
+
+<p>
+
+PNP is licensed under <a href="http://www.gnu.org/licenses/gpl-2.0.txt" class="urlextern" title="http://www.gnu.org/licenses/gpl-2.0.txt"  rel="nofollow">GPL 2</a>
+</p>
+
+</div>
+
+<h2><a name="download" id="download">Download</a></h2>
+<div class="level2">
+
+<p>
+
+Development of PNP is organized using <a href="http://sourceforge.net/projects/pnp4nagios" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios"  rel="nofollow">Sourceforge.Net</a>. PNP is registered under “PNP4nagios”.
+</p>
+
+<p>
+The current stable version of 0.4.x can be found in the download area: <a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Sourceforge Download</a>
+</p>
+
+<p>
+If you want to be up to date you can use the latest developer version of 0.4.x which is generated automatically on a daily basis from the SVN repository. 
+</p>
+
+<p>
+Starting with PNP 0.6.x the source code repository was switched from SVN to GIT.
+</p>
+
+<p>
+The current development can be viewed anytime at <a href="http://pnp4nagios.git.sourceforge.net/" class="urlextern" title="http://pnp4nagios.git.sourceforge.net/"  rel="nofollow">http://pnp4nagios.git.sourceforge.net/</a>. Clicking on <a href="http://pnp4nagios.git.sourceforge.net/git/gitweb.cgi?p=pnp4nagios/pnp4nagios;a=snapshot;h=HEAD;sf=tgz" class="urlextern" title="http://pnp4nagios.git.sourceforge.net/git/gitweb.cgi?p=pnp4nagios/pnp4nagios;a=snapshot;h=HEAD;sf=tgz"  rel="nofollow">PNP Devel version</a> will download an archive containing the latest version.
+<br/>
+
+</p>
+
+</div>
+
+<h2><a name="support" id="support">Support</a></h2>
+<div class="level2">
+
+<p>
+
+PRIOR to support questions please make sure that you have verified certain things described under <a href="/pnp-0.6/verify" class="wikilink1" title="pnp-0.6:verify">verify your installation</a>.<br/>
+<br/>
+
+</p>
+
+<p>
+The developers and helpers are present on a separate board at <a href="http://www.nagios-portal.org" class="urlextern" title="http://www.nagios-portal.org"  rel="nofollow">http://www.nagios-portal.org</a> and will be informed about new postings in the PNP-section. Postings in english will be answered as well.<br/>
+
+After registering as a user <strong>please fill in the profile regarding operating system and PNP version used. Please mention if you used a package or compiled the sources.</strong>
+Please mark successfully solved threads by adding ”[solved]” to the title as it helps other users to find a solution for their problem.
+</p>
+
+<p>
+The mailing lists on Sourceforge can be used to request support (and are limited to english):
+</p>
+
+<p>
+<a href="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-users" class="urlextern" title="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-users"  rel="nofollow">pnp4nagios-users</a>: users list for general questions regarding configuration. Please state your operating system and PNP version
+</p>
+
+<p>
+<a href="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-devel" class="urlextern" title="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-devel"  rel="nofollow">pnp4nagios-devel</a>: devel list for suggestions and error reports. Please state your operating system and PNP version
+</p>
+
+<p>
+<a href="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-checkins" class="urlextern" title="https://lists.sourceforge.net/lists/listinfo/pnp4nagios-checkins"  rel="nofollow">pnp4nagios-checkins</a>: the checkin list automatically contains changes to the SVN repository
+</p>
+
+</div>
+
+<h2><a name="storage" id="storage">Storage</a></h2>
+<div class="level2">
+
+<p>
+
+Performance data will be stored in Round Robin Databases using <a href="http://www.rrdtool.org" class="urlextern" title="http://www.rrdtool.org"  rel="nofollow">RRDtool</a>. That means that after some time the oldest data will be dropped at the “end” and it will be replaced by new values “at the beginning”.
+</p>
+
+<p>
+Various intervals provide for different resolutions. Using the defaults allows to store the data with a resolution of one minute for the last two days, five minutes resolution for ten days, 30 minutes resolution for 90 days and 6 hours resolution for four years. The increasing interval causes averaging of the data which leads to smaller max values. This not an error of PNP.
+</p>
+
+<p>
+Using this storage format the size of the files will stay the same over time. Per datasource you will need approx. 400 KB.
+</p>
+
+</div>
+
+<h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
+<div class="level2">
+<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 81137 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 99.48%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<p>
+
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
+
 </p>
 
 </div>
@@ -108,8 +290,99 @@ Nagios invokes a command for every host and every service whose performance data
 Before you choose a mode please read the documentation and decide which way will be the best for installation.
 </p>
 
+</div>
+
+<h1><a name="the_modes_in_comparison" id="the_modes_in_comparison">The modes in comparison</a></h1>
+<div class="level1">
+
+</div>
+
+<h2><a name="synchronous_mode" id="synchronous_mode">Synchronous Mode</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">→ Read more...</a>
+
+<a href="/_detail/synchronous.png?id=pnp-0.6%3Adoc_complete" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>The “synchronous mode” is the simplest and easiest to set up. Nagios will call the perl script <code>process_perfdata.pl</code> for every service and host, respectively, to process the data. The synchronous mode will work very good up to about 1.000 services in a 5 minute interval.
+</p>
+
+</div>
+
+<h2><a name="bulk_mode" id="bulk_mode">Bulk Mode</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>In bulk mode Nagios writes the necessary data to a temporary file. After expiration of a defined time the file will be processed in one piece and deleted afterwards.
+</p>
+
+<p>
+The number of calls of process_perfdata.pl will be reduced to a fraction. Depending on time and the amount of collected data there will be much less system calls. Instead, process_perfdata.pl will run longer.
+</p>
+
+<p>
+<strong>Note</strong>
+Using this mode you should keep an eye on the runtime of process_perfdata.pl. While it is running to process data nagios will not execute any checks.
+</p>
+
+<p>
+snippet of var/perfdata.log:
+
+</p>
+<pre class="code">
+2007-10-18 12:05:01 [21138] 71 Lines processed
+2007-10-18 12:05:01 [21138] .../spool/service-perfdata-1192701894-PID-21138 deleted
+2007-10-18 12:05:01 [21138] PNP exiting (runtime 0.060969s) ...
+</pre>
+
+<p>
+71 lines were processed in 0.06 seconds. This will be the data volume of about 2000 services und processing using a 10 second interval. It means we blocked nagios for exactly 0.06 seconds.
+</p>
+
+</div>
+
+<h2><a name="bulk_mode_with_npcd" id="bulk_mode_with_npcd">Bulk Mode with NPCD</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk-npcd.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>Viewing from Nagios this is the best way of processing because Nagios will not be blocked.
+</p>
+
+<p>
+Nagios again uses a temporary file to store the data and executes a command after expiration of a certain time. Instead of immediate processing by process_perfdata.pl the file is moved to a spool directory. As moving a file inside the same filesystem nearly takes no time nagios is able to execute crucial work immediately.
+</p>
+
+<p>
+The NPCD daemon (Nagios Performance C Daemon) will monitor the directory for new files and will pass the names to process_perfdata.pl. Processing of performance data is decoupled completely from nagios. NPCD itself is able to start multiple thread for processing the data.
+</p>
+
+</div>
+
+<h2><a name="bulk_mode_with_npcdmod" id="bulk_mode_with_npcdmod">Bulk Mode with npcdmod</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk-npcdmod.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="medialeft" align="left" alt="" width="150" /></a> This scenario includes npcdmod.o, an NEB-module.
+This module reduces the configuration of the “Bulk Mode with NPCD” to a mere two lines in nagios.cfg
+</p>
+
+<p>
+This mode is similar to “Bulk Mode with NPCD” and it is exactly the same functionality and the same performance.
+</p>
+
+</div>
+
+<h2><a name="the_decision" id="the_decision">The decision</a></h2>
+<div class="level2">
+
+<p>
+Which mode you choose will depend on the size of your Nagios installation. You will find theses terms throughout the documentation.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/install" class="wikilink1" title="pnp-0.6:install">installation</a>
+
 </p>
 
 </div>
@@ -124,9 +397,244 @@ Before you choose a mode please read the documentation and decide which way will
 <h1><a name="pnp_06x_downloads" id="pnp_06x_downloads" href="/pnp-0.6/dwnld" title="PNP 0.6.x Downloads">PNP 0.6.x Downloads</a></h1>
 <div class="level1">
 
+</div>
+
+<h2><a name="current_stable_pnp_version" id="current_stable_pnp_version">Current stable PNP Version</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/dwnld" class="wikilink1" title="pnp-0.6:dwnld">→ Read more...</a>
+
+Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/gitweb.cgi?p=pnp4nagios/pnp4nagios" class="urlextern" title="http://pnp4nagios.git.sourceforge.net/git/gitweb.cgi?p=pnp4nagios/pnp4nagios"  rel="nofollow">pnp4nagios.git.sourceforge.net</a>
 </p>
+
+<p>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.7.tar.gz</a>
+</p>
+
+</div>
+
+<h2><a name="latest_devel_version" id="latest_devel_version">Latest Devel Version</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="http://docs.pnp4nagios.org/_media/dwnld/pnp4nagios-head.tar.gz" class="urlextern" title="http://docs.pnp4nagios.org/_media/dwnld/pnp4nagios-head.tar.gz"  rel="nofollow"> pnp4nagios-head.tar.gz</a>
+</p>
+
+<p>
+This is allways the latest GIT HEAD Version
+</p>
+<hr />
+
+<p>
+
+Last Update: Sat Nov 20 17:55:01 CET 2010
+</p>
+
+</div>
+
+<h1><a name="changelog" id="changelog">ChangeLog</a></h1>
+<div class="level1">
+
+<p>
+
+<strong>pnp-0.6.10 ??/??/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: Add RRDTool Option –only-graph if graph height is below 32px to create thumbnails </div>
+</li>
+<li class="level1"><div class="li"> Feature: RRDTool Option –width and –height is now allowed in templates</div>
+</li>
+<li class="level1"><div class="li"> Feature: RRDTool DS Type for UOM of “c” changed from COUNTER to DERIVE   </div>
+</li>
+<li class="level1"><div class="li"> Feature: Pass query string from special controller to image controller ( Matthew Garrett ) </div>
+</li>
+<li class="level1"><div class="li"> Feature: Authorisation against <a href="http://mathias-kettner.de/checkmk_livestatus.html" class="urlextern" title="http://mathias-kettner.de/checkmk_livestatus.html"  rel="nofollow">mk_livestatus</a> <acronym title="Application Programming Interface">API</acronym> added</div>
+</li>
+<li class="level1"><div class="li"> Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Sort list of special templates</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.7 09/27/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix: Page config parser fix (Beau Gunderson) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Fixed undefined offset while using &#039;ds_name&#039; in templates (Reported by Vladimir Bilik)</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Npcdmod respects process_perf_data option used in hosts and services definitions ( Reported by Wolfgang Barth )</div>
+</li>
+<li class="level1"><div class="li"> Template: New Template check_nagiostats.php used with check_nagiostats written by Jochen Bern </div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.6 08/07/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix: Fixed max amount of graphs per template </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Autodetect PNP base <acronym title="Uniform Resource Locator">URL</acronym></div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Too short npcdmod perfdata_template to take perfdata + overhead, increased +1024byte</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Ignore files in var/perfdata and check for empty directories</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Reducing memory usage while parsing page config (Laurent Freval)</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.5 07/09/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: Special Templates are back <a href="/pnp-0.6/tpl_special" class="wikilink1" title="pnp-0.6:tpl_special">tpl_special</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: New rrdtool helper functions makes template design easier <a href="/pnp-0.6/tpl_helper" class="wikilink1" title="pnp-0.6:tpl_helper">tpl_helper</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: config.php → &#039;recursive_template_search&#039; is enabled by default</div>
+</li>
+<li class="level1"><div class="li"> Feature: config.php → &#039;template_dirs&#039; is now an array of directorys to search for PNP templates</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.4 06/03/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Update: jQuery Update to 1.4.2</div>
+</li>
+<li class="level1"><div class="li"> Update: jQuery-ui Update to 1.8</div>
+</li>
+<li class="level1"><div class="li"> Feature: New configure Option –with-base-url</div>
+</li>
+<li class="level1"><div class="li"> Template: New template check_ntp_time.php (Mathias Kettner)</div>
+</li>
+<li class="level1"><div class="li"> Feature: New i18n files for fr_FR (Yannig Parre)</div>
+</li>
+<li class="level1"><div class="li"> Feature: New jQuery Theme &#039;multisite&#039;</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.3 03/16/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: New helper script libexec/rrd_convert.pl → <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">rrd_convert</a></div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Ignore old <acronym title="Extensible Markup Language">XML</acronym> files while building the service list</div>
+</li>
+<li class="level1"><div class="li"> Template: New template check_hpasm.php</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Installer now checks for json_decode()</div>
+</li>
+<li class="level1"><div class="li"> Workaround: Allow “trailing unfilled semicolons”. Workaround for nsclient++</div>
+</li>
+<li class="level1"><div class="li"> Template: Updates for check_openmanage.php, check_hp_bladecenter.php and check_dell_baldecenter.php ( Trond Hasle Amundsen )”</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.2 12/23/2009</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: <acronym title="Extensible Markup Language">XML</acronym>_WRITE_DELAY option added to process_perfdata.cfg as suggested by Mathias Kettner</div>
+</li>
+<li class="level1"><div class="li"> Feature: New template integer.php </div>
+</li>
+<li class="level1"><div class="li"> Update: FPDI update to 1.3.1</div>
+</li>
+<li class="level1"><div class="li"> Feature: PNP will now work with <a href="http://http://www.lighttpd.net" class="urlextern" title="http://http://www.lighttpd.net"  rel="nofollow">lighttpd</a> and php-cgi</div>
+</li>
+<li class="level1"><div class="li"> Template: check_mk-ps.perf.php added ( by Mathias Kettner )</div>
+</li>
+<li class="level1"><div class="li"> Feature: PNP will now work without mod_rewrite → <a href="/pnp-0.6/webfe" class="wikilink1" title="pnp-0.6:webfe">webfe</a> </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Wrong pdf link used on site &#039;pages&#039; and &#039;basket&#039;</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Incorrect group permissions on spool directory</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.1 11/22/2009</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: RRD heartbeat per check_command → <a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">tpl_custom</a> </div>
+</li>
+<li class="level1"><div class="li"> Feature: New config.php option pdf_graph_opt </div>
+</li>
+<li class="level1"><div class="li"> Feature: Recognize the &#039;background_pdf&#039; option in page definitions → <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: Recognize the &#039;source&#039; option in page definitions → <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: Array $TIMERANGE now available for templates → <a href="/pnp-0.6/timeranges" class="wikilink1" title="pnp-0.6:timeranges">timeranges</a></div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  ./configure –sysconfdir no longer ignored</div>
+</li>
+<li class="level1"><div class="li"> Feature: Store internal runtime statistics on a per minute base </div>
+</li>
+<li class="level1"><div class="li"> Feature: Added two widgets views/widget_menu.php and views/widget_graph.php </div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.0 10/30/2009</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Webfrontend based on <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a></div>
+</li>
+<li class="level1"><div class="li"> Webfrontend based on <a href="http://jqueryui.com/themeroller/" class="urlextern" title="http://jqueryui.com/themeroller/"  rel="nofollow">jQuery Themes</a></div>
+</li>
+<li class="level1"><div class="li"> Javascript-functions using <a href="http://jquery.com/" class="urlextern" title="http://jquery.com/"  rel="nofollow">jQuery</a> plugins  </div>
+</li>
+<li class="level1"><div class="li"> process_perfdata.pl will be able to use one RRD database per datasource</div>
+</li>
+<li class="level1"><div class="li"> improved installer. Specification of directory layouts using –with-layout</div>
+</li>
+<li class="level1"><div class="li"> RRDtool errors are now displayed as images. no more missing images</div>
+</li>
+<li class="level1"><div class="li"> PNP templates cannot overwrite internal variables anymore</div>
+</li>
+<li class="level1"><div class="li"> PNP templates of version 0.4.x can still be used</div>
+</li>
+<li class="level1"><div class="li"> <acronym title="Portable Document Format">PDF</acronym> functions recoded</div>
+</li>
+<li class="level1"><div class="li"> Template default.php optimized</div>
+</li>
+<li class="level1"><div class="li"> Export from RRD databases into <acronym title="Extensible Markup Language">XML</acronym>, CSV and JSON format using the RRDtool “xport” function</div>
+</li>
+<li class="level1"><div class="li"> Page functions recoded</div>
+</li>
+<li class="level1"><div class="li"> Error pages links to online <acronym title="Frequently Asked Questions">FAQ</acronym></div>
+</li>
+<li class="level1"><div class="li"> Mouseover Popup in Nagios frontend via jQuery.clueTip plugin</div>
+</li>
+<li class="level1"><div class="li"> Full support of rrdcached</div>
+</li>
+</ul>
 
 </div>
 <div class="inclmeta level1">
@@ -161,9 +669,196 @@ Without specifying any options during <code>./configure</code> PNP 0.6.x will be
 Note: It is sufficient to copy the *.rrd files from the old to the new location. They contain the data The *.xml files are recreated every time new performance data arrives as they contain meta information. The internal structure of the xml files has changed so you wouldn&#039;t be able to use them either way.
 </p>
 
+</div>
+
+<h2><a name="comparison_of_the_structure" id="comparison_of_the_structure">Comparison of the structure</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/upgrade" class="wikilink1" title="pnp-0.6:upgrade">→ Read more...</a>
+
+Summary of a PNP 0.4.14 installation
 </p>
+<pre class="code">
+./configure
+...
+*** Configuration summary for pnp 0.4.14 05-02-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/nagios
+  HTML Dir:                         /usr/local/nagios/share/pnp
+  Config Dir:                       /usr/local/nagios/etc/pnp
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.3.1
+  RRDs Perl Modules:                FOUND (Version 1.3001)
+  RRD Files stored in:              /usr/local/nagios/share/perfdata
+  process_perfdata.pl Logfile:      /usr/local/nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/nagios/var/spool/perfdata/
+</pre>
+
+<p>
+Summary of a PNP 0.6.0 installation
+</p>
+<pre class="code">
+./configure
+...
+*** Configuration summary for pnp4nagios-0.6.0 07-30-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/pnp4nagios
+  HTML Dir:                         /usr/local/pnp4nagios/share
+  Config Dir:                       /usr/local/pnp4nagios/etc
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.3.1
+  RRDs Perl Modules:                FOUND (Version 1.3001)
+  RRD Files stored in:              /usr/local/pnp4nagios/var/perfdata
+  process_perfdata.pl Logfile:      /usr/local/pnp4nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/pnp4nagios/var/spool
+
+  Web Interface Options:  -------------------------         -------------------
+  HTML URL:                         http://localhost/pnp4nagios/
+  Apache Config File:               /etc/apache2/conf.d/pnp4nagios.conf
+</pre>
+
+<p>
+Looking at these lines result in the parameters to be changed and the upgrade strategy.
+</p>
+
+</div>
+
+<h2><a name="adjustments" id="adjustments">Adjustments</a></h2>
+<div class="level2">
+
+<p>
+
+The templates of the action_url definitions have changed. Instead of ”/nagios/pnp” the <acronym title="Uniform Resource Locator">URL</acronym> should be ”/pnp4nagios” and instead of “index.php” now “graph” will be used.
+</p>
+<pre class="code">define host {
+  name       host-pnp
+  register   0
+  action_url /pnp4nagios/graph?host=$HOSTNAME$
+}
+
+define service {
+  name       srv-pnp
+  register   0
+  action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+}</pre>
+
+<p>
+The definitions for the preview popup function are similar
+
+</p>
+<pre class="code">define host {
+   name       host-pnp
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$
+   register   0
+}
+
+define service {
+   name       srv-pnp
+   action_url /pnp4nagios/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   register   0
+}</pre>
+
+<p>
+
+<strong>Attention</strong>: It is <em>not</em> an error that the strings in front and after “class” contain only one quote.
+</p>
+
+<p>
+Other than described in the 0.4.x documentation these templates can be used for Nagios 2.x and 3.x.
+</p>
+
+<p>
+The variables in the files in the templates folder have to be initialised before first use. Example
+</p>
+<pre class="code">$lower = &quot;&quot;</pre>
+
+<p>
+
+Earlier you were able to append to variables which weren&#039;t initialised before first use. Example: 
+
+</p>
+<pre class="code">foreach ($DS as $i) {
+    $def[1] .= &quot;DEF:var$i=$rrdfile:$DS[$i]:AVERAGE &quot; ;</pre>
+
+<p>
+
+Now you have to change that to
+
+</p>
+<pre class="code">
+$def[1] = &quot;&quot;;
+foreach ($DS as $i) {
+    $def[1] .= &quot;DEF:var$i=$rrdfile:$DS[$i]:AVERAGE &quot; ;</pre>
+
+<p>
+
+<br/>
+
+Constants in template files don&#039;t work anymore, so that they have to be converted to variables. 
+</p>
+<pre class="code">define(&quot;_WARNRULE&quot;, &#039;#FFFF00&#039;);</pre>
+
+<p>
+may be changed to
+</p>
+<pre class="code"> $WARNRULE = &#039;#FFFF00&#039;;</pre>
+
+<p>
+Please keep in mind that all occurrences have to be changed <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
+</p>
+
+</div>
+
+<h2><a name="upgrade_scenario_using_npcd" id="upgrade_scenario_using_npcd">Upgrade scenario using NPCD</a></h2>
+<div class="level2">
+<ol>
+<li class="level1"><div class="li"> planning the new setup</div>
+</li>
+<li class="level1"><div class="li"> perform test installation and acquaint oneself with the new system</div>
+</li>
+<li class="level1"><div class="li"> create backup of the old installation</div>
+</li>
+<li class="level1"><div class="li"> install PNP 0.6.x at <code>/usr/local/pnp4nagios</code></div>
+</li>
+<li class="level1"><div class="li"> make install-config</div>
+</li>
+<li class="level1"><div class="li"> make install-webconf</div>
+</li>
+<li class="level1"><div class="li"> reload Apache</div>
+</li>
+<li class="level1"><div class="li"> test Apache-config </div>
+<ol>
+<li class="level2"><div class="li"> call of <code>/pnp4nagios</code> has to report an empty perfdata directory</div>
+</li>
+</ol>
+</li>
+<li class="level1"><div class="li"> create <code>/usr/local/pnp4nagios/etc/npcd.cfg</code> from <code>npcd.cfg-sample</code></div>
+<ol>
+<li class="level2"><div class="li"> check paths and adapt changes from 0.4.x if necessary</div>
+</li>
+</ol>
+</li>
+<li class="level1"><div class="li"> adjust all paths in nagios.cfg to the new PNP installation </div>
+</li>
+<li class="level1"><div class="li"> adjust all paths in the command definitions</div>
+</li>
+<li class="level1"><div class="li"> stop npcd using <code>/etc/init.d/npcd stop</code></div>
+</li>
+<li class="level1"><div class="li"> <code>make install-init</code> installs the new init script for npcd</div>
+</li>
+<li class="level1"><div class="li"> <code>/etc/init.d/nagios stop</code></div>
+</li>
+<li class="level1"><div class="li"> copy <code>/usr/local/nagios/share/perfdata</code> to <code>/usr/local/pnp4nagios/var/perfdata</code>. Attention: check the permissions</div>
+</li>
+<li class="level1"><div class="li"> <code>/etc/init.d/npcd start</code></div>
+</li>
+<li class="level1"><div class="li"> <code>/etc/init.d/nagios start</code></div>
+</li>
+</ol>
 
 </div>
 <div class="inclmeta level1">
@@ -185,8 +880,194 @@ The installation of PNP will be described in more detail. It is expected that na
 Please note that PNP has to be configured after the installation.
 </p>
 
+</div>
+
+<h2><a name="make_and_more" id="make_and_more">Make and more</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/install" class="wikilink1" title="pnp-0.6:install">→ Read more...</a>
+The installation of PNP is controlled by <a href="http://de.wikipedia.org/wiki/makefile" class="interwiki iw_wpde" title="http://de.wikipedia.org/wiki/makefile">makefile</a>s. The system is analyzed after invocation of ./configure and the detected values are tranferred to makefiles.
+</p>
+
+<p>
+Please unpack PNP as user root:
+
+</p>
+<pre class="code">
+tar -xvzf pnp4nagios-HEAD.tar.gz
+cd pnp4nagios
+</pre>
+
+<p>
+./configure is to be called from the directory pnp4nagios.
+</p>
+<pre class="code">
+./configure
+</pre>
+
+<p>
+
+<strong>Note:</strong> Without specifying any options user and group will be “nagios”. If you have different values then please use the parameters ”–with-nagios-user” and ”–with-nagios-group”, respectively. Using  Icinga the call might be
+
+</p>
+<pre class="code">
+./configure --with-nagios-user=icinga --with-nagios-group=icinga
+</pre>
+
+<p>
+
+Some lines run across the screen. The output at the end is important.
+</p>
+<pre class="code">
+*** Configuration summary for pnp4nagios-0.6.2 23-12-2009 ***
+
+  General Options:
+  -------------------------         -------------------
+  Nagios user/group:                nagios nagios
+  Install directory:                /usr/local/pnp4nagios
+  HTML Dir:                         /usr/local/pnp4nagios/share
+  Config Dir:                       /usr/local/pnp4nagios/etc
+  Location of rrdtool binary:       /usr/bin/rrdtool Version 1.2.12
+  RRDs Perl Modules:                FOUND (Version 1.2012)
+  RRD Files stored in:              /usr/local/pnp4nagios/var/perfdata
+  process_perfdata.pl Logfile:      /usr/local/pnp4nagios/var/perfdata.log
+  Perfdata files (NPCD) stored in:  /usr/local/pnp4nagios/var/spool
+
+  Web Interface Options:  -------------------------         -------------------
+  HTML URL:                         http://localhost/pnp4nagios/
+  Apache Config File:               /etc/apache2/conf.d/pnp4nagios.conf
+
+
+  Review the options above for accuracy.  If they look okay,
+  type &#039;make all&#039; to compile.</pre>
+
+<p>
+The paths shown should be checked. If the displayed values aren&#039;t correct you can change them calling ./configure with appropriate options.<br/>
+
+<strong>Attention:</strong> “Location of rrdtool binary” means path including name of binary! If necessary it can be specified using the following syntax:
+
+</p>
+<pre class="code"> ./configure --with-rrdtool=/usr/local/rrdtool-1.2.xx/bin/rrdtool</pre>
+<pre class="code"> ./configure --help </pre>
+
+<p>
+
+shows the supported options.<br/>
+<br/>
+
+</p>
+
+<p>
+Invoking
+</p>
+<pre class="code"> make all</pre>
+
+<p>
+
+compiles the components like NPCD which are written in C
+
+</p>
+<pre class="code"> make install</pre>
+
+<p>
+
+copies everything to the right places in the file system. The paths were already shows during ./configure.
+</p>
+
+<p>
+After the installation of the program and <acronym title="HyperText Markup Language">HTML</acronym> files you can copy a sample Apache configuration file to your web-server config directory
+
+</p>
+<pre class="code"> make install-webconf</pre>
+
+<p>
+
+You can call
+
+</p>
+<pre class="code"> make install-config</pre>
+
+<p>
+
+optionally. This way config files for process_perfdata.pl and npcd are copied to etc/pnp.
+</p>
+
+<p>
+To install the NPCD Init script call
+
+</p>
+<pre class="code"> make install-init</pre>
+
+<p>
+
+All these steps are combined in
+
+</p>
+<pre class="code"> make fullinstall</pre>
+
+<p>
+
+<strong>Attention:</strong> After copying the configuration file for the web server you have to restart the web server (<code>service httpd restart</code> or <code>/etc/init.d/apache2 restart</code>, respectively).
+</p>
+
+</div>
+
+<h2><a name="update" id="update">Update</a></h2>
+<div class="level2">
+
+<p>
+
+The update of a 0.6.x version works (nearly) the same way as an installation. Please note that you have to call <code>./configure</code> with the same options you used during the first installation.
+Please check if you changed anything in the folder <code>share/templates.dist</code>. Own templates should be placed in <code>share/templates</code> to avoid being overwritten.<br/>
+
+<strong>Attention</strong>: If you changed config.php then you should save this file before it is overwritten when you execute <code>make install-config</code>.
+</p>
+
+<p>
+You can skip <code>make install-webconf</code> and <code>make install-init</code> because nothing changed between 0.6.x versions.
+</p>
+
+</div>
+
+<h2><a name="the_components" id="the_components">The components</a></h2>
+<div class="level2">
+
+<p>
+
+After installation the components of PNP were copied to the appropriate places in the file system. These are
+</p>
+
+<p>
+the <acronym title="Hypertext Preprocessor">PHP</acronym>-Files for the web-frontend in
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+
+<p>
+
+the data collector process_perfdata.pl in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/libexec</pre>
+
+<p>
+
+sample config files with the suffix <code>-sample</code> in
+
+</p>
+<pre class="code"> /usr/local/pnpnagios/etc</pre>
+
+<p>
+
+the config file config.php for the web frontend in 
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/etc</pre>
+
+<p>
+
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/config" class="wikilink1" title="pnp-0.6:config">configuration</a>
+
 </p>
 
 </div>
@@ -206,8 +1087,268 @@ Please note that PNP has to be configured after the installation.
 The configuration of the already mentioned <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">modes of performance data processing</a> will be described in more detail.
 </p>
 
+</div>
+
+<h2><a name="synchronous_mode1" id="synchronous_mode1">Synchronous Mode</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/config" class="wikilink1" title="pnp-0.6:config">→ Read more...</a>
+
+<a href="/_detail/synchronous.png?id=pnp-0.6%3Adoc_complete" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> The synchronous mode is the simplest way to integrate the data collector <code>process_perfdata.pl</code> into nagios. Every event will trigger an execution of <code>process-service-perfdata</code>.
+</p>
+
+<p>
+Initially you have to enable processing of performance data in <code>nagios.cfg</code>. Please note that this directive might already exist in the config file. Default is “0”.
+
+</p>
+<pre class="code"> process_performance_data=1</pre>
+
+<p>
+
+Data processing has to be disabled in the definition of every host or service whose performance data should NOT be processed.
+</p>
+<pre class="code">
+define service {
+   ...
+   process_perf_data 0
+   ...
+}
+</pre>
+
+<p>
+Since Nagios 3.x it is possible to deactivate the export of environment variables (as part of optimizing the system for maximum performance). Unfortunately this directive has to be enabled to use the synchronous mode. So either you use the default value (which means that the export is enabled) or you define the variable in <code>nagios.cfg</code>
+</p>
+<pre class="code">enable_environment_macros=1</pre>
+
+<p>
+Additionally the command to process performance data is to be specified in <code>nagios.cfg</code>
+
+</p>
+<pre class="code"> service_perfdata_command=process-service-perfdata</pre>
+
+<p>
+
+Starting with Nagios 3.0 it may be useful to enable processing of performance data for hosts as well. Due to changed host check logic Nagios 3 now performs regularly scheduled host checks.
+
+</p>
+<pre class="code"> host_perfdata_command=process-host-perfdata</pre>
+
+<p>
+
+Nagios has to be notified about the referenced commands as well. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
+You can see that calling process_perfdata.pl doesn&#039;t require any arguments apart from specifing the option -d ( DATATYPE ) if you want to process performance data resulting from host checks.
+</p>
+<pre class="code">
+define command {
+       command_name    process-service-perfdata
+       command_line    /usr/bin/perl /usr/local/pnp4nagios/libexec/process_perfdata.pl
+}
+
+define command {
+       command_name    process-host-perfdata
+       command_line    /usr/bin/perl /usr/local/pnp4nagios/libexec/process_perfdata.pl -d HOSTPERFDATA
+}
+</pre>
+
+<p>
+<strong>Note</strong> <code>process_perfdata.pl</code> cannot be started under control of ePN ( embedded <acronym title="Practical Extraction and Report Language">Perl</acronym> Nagios ). Therefore the script is explicitly called using <code>/usr/bin/perl</code> ( or where you perl binary is located ). If you use Nagios 3.x or do not use ePN there is no need to specify <code>/usr/bin/perl</code>. 
+</p>
+
+</div>
+
+<h2><a name="bulk_mode1" id="bulk_mode1">Bulk Mode</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Bulk mode is a bit more complicated than the  synchronous mode but reduces the load on the nagios server significantly because the data collector <code>process_perfdata.pl</code> is not invoked for every service/host check.
+</p>
+
+<p>
+In bulk mode Nagios writes the data to a temporary file in a defined format. This file is processed by <code>process_perfdata.pl</code> at certain intervals. Nagios will take care for starting and running it periodically.
+</p>
+
+<p>
+Processing of performance data has to be enabled in <code>nagios.cfg</code>
+
+</p>
+<pre class="code"> process_performance_data=1</pre>
+
+<p>
+
+Additionally some new directives are required
+</p>
+<pre class="code">
+#
+# service performance data
+#
+service_perfdata_file=/usr/local/pnp4nagios/var/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+#
+# host performance data starting with Nagios 3.0
+# 
+host_perfdata_file=/usr/local/pnp4nagios/var/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+</pre>
+
+<p>
+
+<strong>Attention:</strong> Please note that these template definitions differ from the ones delivered in <code>nagios.cfg</code>!
+</p>
+
+<p>
+The directives and their meaning:
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> path to the temporary file which should contain the performance data.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> <a href="/pnp-0.6/perfdata_file_template" class="wikilink2" title="pnp-0.6:perfdata_file_template" rel="nofollow">format</a> of the temporary file. Data will be defined using Nagios macros.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> option “a” specifies that data is to be appended to the file.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> the interval is 15 seconds</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_command</strong></code> the command to be called during the interval.</div>
+</li>
+</ul>
+
+<p>
+
+The used commands have to be announced to Nagios. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
+</p>
+<pre class="code">
+define command{
+       command_name    process-service-perfdata-file
+       command_line    /usr/local/pnp4nagios/libexec/process_perfdata.pl --bulk=/usr/local/pnp4nagios/var/service-perfdata
+}
+
+define command{
+       command_name    process-host-perfdata-file
+       command_line    /usr/local/pnp4nagios/libexec/process_perfdata.pl --bulk=/usr/local/pnp4nagios/var/host-perfdata
+}
+</pre>
+<div class="box" style="width: 90%; ">
+  <b class='xtop'><b class='xb1'></b><b class='xb2'></b><b class='xb3'></b><b class='xb4'></b></b>
+  <div class='xbox'>
+<p class='box_title'><strong>NOTE:</strong></p>
+<div class='box_content'>
+Because there is more data to process than in synchronous mode <code>process_perfdata.pl</code> will take longer to do this so you should check the TIMEOUT value in <code>etc/process_perfdata.cfg</code> and adjust it appropriately.</div>
+  </div>
+  <b class='xbottom'><b class='xb4'></b><b class='xb3'></b><b class='xb2'></b><b class='xb1'></b></b>
+</div>
+
+</div>
+
+<h2><a name="bulk_mode_with_npcd1" id="bulk_mode_with_npcd1">Bulk Mode with NPCD</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk-npcd.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> The configuration is identical to the Bulk Mode except for the used command. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
+</p>
+<pre class="code">
+define command{
+       command_name    process-service-perfdata-file
+       command_line    /bin/mv /usr/local/pnp4nagios/var/service-perfdata /usr/local/pnp4nagios/var/spool/service-perfdata.$TIMET$
+}
+
+define command{
+       command_name    process-host-perfdata-file
+       command_line    /bin/mv /usr/local/pnp4nagios/var/host-perfdata /usr/local/pnp4nagios/var/spool/host-perfdata.$TIMET$
+}
+</pre>
+
+<p>
+Using these commands the file service-perfdata will be moved to var/spool/ after the interval specified in <code><strong>service_perfdata_file_processing_interval</strong></code> has passed. The Nagios macro $TIMET$ is appended to the filename to avoid overwriting of old files unintentionally. The macro $TIMET$ contains the current timestamp in time_t format (seconds since the UNIX epoch).
+</p>
+
+<p>
+In the directory /usr/local/pnp4nagios/var/spool/ files are gathered to be processed by NPCD.
+</p>
+
+<p>
+NPCD monitors the spool directory and passes the file names to <code>process_perfdata.pl</code>. This way processing of performance data is completely decoupled from nagios. 
+</p>
+
+<p>
+Before starting NPCD you have to check the paths to the spool directory and to <code>process_perfdata.pl</code> specified in the config file <code>npcd.cfg</code>.
+The only thing that remains is to start NPCD.
+
+</p>
+<pre class="code"> /usr/local/pnp4nagios/bin/npcd -d -f /usr/local/pnp4nagios/etc/npcd.cfg</pre>
+
+<p>
+
+The option <code>-d</code> starts NPCD as a daemon in the background.
+</p>
+
+</div>
+
+<h2><a name="bulk_mode_with_npcd_and_npcdmod" id="bulk_mode_with_npcd_and_npcdmod">Bulk Mode with NPCD and npcdmod</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/bulk-npcdmod.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> This mode uses the event broker module npcdmod.o. The flow of data is identical to “bulk mode with NPCD”. The internal perfdata routines of Nagios activated by the “*_perf_data_*” directives in nagios.cfg are *NOT* used anymore. The module npcdmod.o takes over the task of processing the data required by PNP.
+</p>
+
+<p>
+Pro:
+</p>
+<ul>
+<li class="level1"><div class="li"> The perfdata routines can now be used for other addons.</div>
+</li>
+<li class="level1"><div class="li"> The configuration is easier.</div>
+</li>
+<li class="level1"><div class="li"> It is the preferred mode of the PNP developers.</div>
+</li>
+</ul>
+
+<p>
+
+Adjustments in nagios.cfg:
+</p>
+<pre class="code">
+process_performance_data=1
+broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nagios/etc/npcd.cfg
+</pre>
+
+<p>
+All other directives mentioned on this page must <strong>NOT</strong> be used.
+</p>
+
+<p>
+<strong>Attention:</strong> If you have changed the value of <code>event_broker_options</code> from -1 to another value then please note that PNP needs the bits 2 and 3 set (0b01100). Make sure that the resultung value has these bits set because otherwise there will be no performance data to process.
+</p>
+
+<p>
+After restarting Nagios information regarding the start of the module will be logged.
+</p>
+
+<p>
+Excerpt from nagios.log
+
+</p>
+<pre class="code">
+[1277545053] npcdmod: Copyright (c) 2008-2009 Hendrik Baecker (andurin@process-zero.de) - http://www.pnp4nagios.org
+[1277545053] npcdmod: /usr/local/pnp4nagios/etc/npcd.cfg initialized
+[1277545053] npcdmod: spool_dir = &#039;/usr/local/pnp4nagios/var/spool/&#039;.
+[1277545053] npcdmod: perfdata file &#039;/usr/local/pnp4nagios/var/perfdata.dump&#039;.
+[1277545053] npcdmod: Ready to run to have some fun!
+[1277545053] Event broker module &#039;/usr/local/pnp4nagios/lib/npcdmod.o&#039; initialized successfully.
+</pre>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/verify" class="wikilink1" title="pnp-0.6:verify">checking the functionality</a>
+
 </p>
 
 </div>
@@ -250,8 +1391,81 @@ Called without any arguments PNP looks for RRD and <acronym title="Extensible Ma
 ATTENTION: Immediately after (re-)starting Nagios after you enabled the processing of performance data you will get error messages in your browser because performance data has to be collected and stored in RRD files. Depending on the check interval you are using you have to wait some time before you can view the first graphs.
 </p>
 
+</div>
+
+<h2><a name="debug_logfile" id="debug_logfile">Debug Logfile</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/verify" class="wikilink1" title="pnp-0.6:verify">→ Read more...</a>
+
+Calling <code>make install-config</code> during installation will create a sample config file <code>etc/process_perfdata.cfg-sample</code>. The values in the sample file will correspond to the defaults used by <code>process_perfdata.pl</code> so normally you do not have a file called <code>process_perfdata.cfg</code> while running the procedure.<br/>
+
+However you can influence the way <code>process_perfdata.pl</code> works by changing options which have to be specified in <code>process_perfdata.<strong>cfg</strong></code>. 
+</p>
+
+<p>
+The most important options launching PNP are LOG_LEVEL and LOG_FILE. We recommend setting the <code>LOG_LEVEL</code> value to “2” so you can track what process_perfdata.pl will do.
+Most likely we will ask for excerpts from perfdata.log if you open a <a href="/pnp-0.6/about#support" class="wikilink1" title="pnp-0.6:about">support request</a> on the mailing lists as well as the output of the <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config</a> script so please provide them <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
+</p>
+
+<p>
+During normal operation the debug level should be set to 0 to avoid performance issues due to unnecessary entries in the log file.
+</p>
+
+</div>
+
+<h2><a name="something_went_wrong" id="something_went_wrong">Something went wrong</a></h2>
+<div class="level2">
+
+<p>
+
+Some basic settings should be checked
+</p>
+
+<p>
+1. Have any RRD and <acronym title="Extensible Markup Language">XML</acronym> files been created?
+<code>process_perfdata.pl</code> will create a new directory under pnp/perfdata for every host. In this directory an RRD database and an <acronym title="Extensible Markup Language">XML</acronym> file will be created for every service. The host data will be stored in <code>_HOST_.xml</code> and <code>_HOST_.rrd</code> respectively.<br/>
+
+If graphing stops out of a sudden then open the appropriate <acronym title="Extensible Markup Language">XML</acronym> file. There are two tags called &lt;RC&gt; and &lt;TXT&gt;. &lt;RC&gt; shows the return code of the RRDtool update and &lt;TXT&gt; a textual description. <br/>
+
+Sometimes you have to specify additional options so that performance data is produced. In some cases a <a href="/pnp-0.6/wrapper" class="wikilink1" title="pnp-0.6:wrapper">wrapper script</a> might help.<br/>
+
+However not all checks provide performance data. That applies - among others - to “check_ping” in contrast to “check_icmp” which does provide data (starting with Nagios plugin version 1.4.12 check_ping does provide performance data).<br/>
+
+Using the web interface the detail information of hosts/services shows a field “Performance Data”. If it is empty there is no data available so no files are written to the appropriate directory and that is why PNP does not provide you with graphs!<br/>
+
+The following image shows the information of a “PING” service. The output of the plugin is surrounded by a blue border, the performance data by a red one.<br/>
+
+<a href="/_detail/srv_info.png?id=pnp-0.6%3Adoc_complete" class="media" title="srv_info.png"><img src="/_media/srv_info.png?w=350" class="media" title="status information" alt="status information" width="350" /></a>
+</p>
+
+<p>
+2. Has nagios called <code>process_perfdata.pl</code>?
+In the config file for process_perfdata.pl (<code>etc/process_perfdata.<strong>cfg</strong></code>) you can increase the debug level. Data processing will be logged in <code>var/perfdata.log</code>.
+</p>
+
+<p>
+3. Graphs are shown without text?
+Have a look at the <a href="/pnp-0.6/about#system_requirements" class="wikilink1" title="pnp-0.6:about">requirements</a>.
+</p>
+
+<p>
+4. Using the npcdmod module the value of the nagios.cfg directive <code>event_broker_options</code> may have to be adapted if it was modified. You&#039;ll find some details  <a href="/pnp-0.6/config#bulk_mode_with_npcd_and_npcdmod" class="wikilink1" title="pnp-0.6:config">here</a>.
+</p>
+
+<p>
+5. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> in the <code>scripts</code> directory of the installation folder or the <code>libexec</code> folder after installation to check your settings and if performance data is present and/or valid. The syntax is quite simple for that:
+
+</p>
+<pre class="code">./verify_pnp_config.pl -m &lt;mode&gt;</pre>
+
+<p>
+ whereas <code>&lt;mode&gt;</code> is one of “sync”, “bulk” or “npcd” (without quotes). Please note that using “default” will select “npcd” which is different from the behaviour in PNP 0.4.x.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a>
+
 </p>
 
 </div>
@@ -460,8 +1674,137 @@ Of course PNP should be easily accessible. You do not want to search long for th
 Nagios itself features external URLs using so called extended info configs. Due to changes between Nagios 2.x and Nagios 3.x both versions are described.
 </p>
 
+</div>
+
+<h2><a name="nagios_2x" id="nagios_2x">Nagios 2.x</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/webfe" class="wikilink1" title="pnp-0.6:webfe">→ Read more...</a>
+
+With Nagios 2.x the integration of external URLs into the nagios web interface is made using Extended Info Objects for <a href="http://nagios.sourceforge.net/docs/2_0/xodtemplate.html#serviceextinfo" class="urlextern" title="http://nagios.sourceforge.net/docs/2_0/xodtemplate.html#serviceextinfo"  rel="nofollow">services</a>. For PNP we use the directive action_url to call the PNP web frontend with the appropriate options.
+</p>
+<pre class="code">
+define serviceextinfo {
+   host_name             localhost
+   service_description   load
+   action_url            /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+}
+</pre>
+
+<p>
+You have to specify an additional Extended Info Definition for every service.
+</p>
+
+</div>
+
+<h2><a name="nagios_3x" id="nagios_3x">Nagios 3.x</a></h2>
+<div class="level2">
+
+<p>
+
+Since nagios 3.0 the action_url-directive has be moved to the <a href="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#host"  rel="nofollow">host</a> or <a href="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#service" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#service"  rel="nofollow">service</a> definition. This way the definition of URLs to the PNP-interface has been simplified. The <a href="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#serviceextinfo" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#serviceextinfo"  rel="nofollow">serviceextinfo</a> and <a href="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#hostextinfo" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/objectdefinitions.html#hostextinfo"  rel="nofollow">hostextinfo</a> definitions are deprecated. 
+</p>
+
+<p>
+First two nagios templates are defined. If you used the Nagios <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> you can append these lines to templates.cfg:
+</p>
+<pre class="code">
+define host {
+   name       host-pnp
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_
+   register   0
+}
+
+define service {
+   name       srv-pnp
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   register   0
+}
+</pre>
+
+<p>
+These two templates can now be included via “use srv-pnp” or “use host-pnp” for services and hosts respectively. If you used the quickstart installation guide you might for example edit the file localhost.cfg and add the template to the host or service definition as follows:
+</p>
+<pre class="code">define host{
+        use                     linux-server,host-pnp    ; Name of host templates to use
+                                                         ; This host definition will inherit all variables that are defined
+                                                         ; in (or inherited by) the linux-server host template definition.
+        host_name               localhost
+        alias                   localhost
+        address                 127.0.0.1
+        }
+</pre>
+<pre class="code">define service{
+        use                     local-service,srv-pnp   ; Name of service template to use
+        host_name               localhost
+        service_description     PING
+        check_command           check_ping!100.0,20%!500.0,60%
+        }
+</pre>
+
+<p>
+
+The links to the correct URLs are created automagically.<br/>
+<br/>
+
+</p>
+
+<p>
+<strong>Tips</strong>: if you want to open the PNP window in your <em>main</em> frame (on the right of the menu) instead of a new page, just set <code>action_url_target=main</code> in your nagios cgi.cfg
+</p>
+
+</div>
+
+<h2><a name="popups" id="popups">Popups</a></h2>
+<div class="level2">
+
+<p>
+You can integrate PNP into Nagios in a way that you have current graphs without clicking any icons. This can be accomplished using the <a href="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html"  rel="nofollow">CGI Includes</a> which allow us to include JavaScript code in the status detail view ( status.cgi ). 
+</p>
+
+<p>
+Prerequisites:
+</p>
+<ul>
+<li class="level1"><div class="li"> PNP is installed and running</div>
+</li>
+<li class="level1"><div class="li"> the file status-header.ssi from the contrib/ssi/ folder of the PNP package was copied to /usr/local/nagios/share/ssi/.<br/>
+<strong>Attention</strong>: This file must <strong>NOT</strong> be executable. Otherwise it will be treated as a <acronym title="Common Gateway Interface">CGI</acronym> which will result in an error.<br/>
+*Note to Apache admins*: Apache ssi and Nagios ssi only have a similar name.</div>
+</li>
+<li class="level1"><div class="li"> the appropriate service definition(s) has/have been modified. Please note that until Nagios 2.x you have to modify the serviceextinfo definition (which is deprecated starting with Nagios 3).</div>
+</li>
+</ul>
+
+<p>
+
+Definition:
+
+</p>
+<pre class="code">
+define host {
+   name       host-pnp
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=_HOST_
+   register   0
+}
+
+define service {
+   name       srv-pnp
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   register   0
+}
+</pre>
+
+<p>
+
+After a restart of Nagios (after modifying the definitions) the result might look like this:<br/>
+
+<a href="/_detail/popup.png?id=pnp-0.6%3Adoc_complete" class="media" title="popup.png"><img src="/_media/popup.png?w=200" class="media" alt="" width="200" /></a>
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/webfe_cfg" class="wikilink1" title="pnp-0.6:webfe_cfg">config options</a>
+
 </p>
 
 </div>
@@ -485,8 +1828,131 @@ The behaviour of the PNP Web-Frontend can be controlled through the config file 
 Own adjustments should be made in <code>etc/config_local.php</code>. If this file does not exist the file config.php can be taken as a guideline.
 </p>
 
+</div>
+
+<h2><a name="etcconfigphp" id="etcconfigphp">etc/config.php</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/webfe_cfg" class="wikilink1" title="pnp-0.6:webfe_cfg">→ Read more...</a>
+
+Following the most important parameters:
+</p>
+
+<p>
+The path to the RRDtool binary. Will be detected by <code>./configure</code>
+
+</p>
+<pre class="code"> $conf[&#039;rrdtool&#039;] = &quot;/usr/bin/rrdtool&quot;;</pre>
+
+<p>
+
+Height and width of the RRD graphs
+
+</p>
+<pre class="code"> $conf[&#039;graph_width&#039;] = &quot;500&quot;;
+ $conf[&#039;graph_height&#039;] = &quot;100&quot;;</pre>
+
+<p>
+
+Screen sizes may vary, pages sizes won&#039;t. The following two directives enable you to specify different sizes for the creation of PDFs. If they aren&#039;t specified the values of the graph sizes are taken.
+
+</p>
+<pre class="code"> $conf[&#039;pdf_width&#039;] = &quot;675&quot;;
+ $conf[&#039;pdf_height&#039;] = &quot;100&quot;;</pre>
+
+<p>
+
+Additional options passed with every call of RRDTool, for example <code>—-slope-mode</code> to smooth the graphs
+
+</p>
+<pre class="code"> $conf[&#039;graph_opt&#039;] = &quot;&quot;;</pre>
+
+<p>
+
+The path to the RRD and <acronym title="Extensible Markup Language">XML</acronym> files created by <code>process_perfdata.pl</code>
+
+</p>
+<pre class="code"> $conf[&#039;rrdbase&#039;] = &quot;/usr/local/pnp4nagios/var/perfdata/&quot;;</pre>
+
+<p>
+
+The path to the config file for the <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a>.
+
+</p>
+<pre class="code"> $conf[&#039;page_dir&#039;] = &quot;/usr/local/pnp4nagios/etc/pages/&quot;;</pre>
+<hr />
+
+<p>
+PNP pages will be refreshed every n seconds
+
+</p>
+<pre class="code"> $conf[&#039;refresh&#039;] = &quot;90&quot;;</pre>
+<hr />
+
+<p>
+Max. age of RRD files in seconds. After reaching this value links to the graphs will be marked as inactive
+
+</p>
+<pre class="code"> $conf[&#039;max_age&#039;] = 60*60*6;</pre>
+<hr />
+
+<p>
+
+Base <acronym title="Uniform Resource Locator">URL</acronym> to the Nagios CGIs
+
+</p>
+<pre class="code"> $conf[&#039;nagios_base&#039;] = &quot;/nagios/cgi-bin&quot;;</pre>
+<hr />
+
+<p>
+
+List of users who are allowed to view links to the services of the current host
+
+</p>
+<pre class="code"> $conf[&#039;allowed_for_service_links&#039;] = &quot;EVERYONE&quot;;</pre>
+<hr />
+
+<p>
+List of users who can view/access the host search field
+
+</p>
+<pre class="code"> $conf[&#039;allowed_for_host_search&#039;] = &quot;EVERYONE&quot;;</pre>
+<hr />
+
+<p>
+If PNP is called with a host only ( index.php?host=&lt;myserver&gt; ), the defined user is shown an overview of all services related to this host
+
+</p>
+<pre class="code"> $conf[&#039;allowed_for_host_overview&#039;] = &quot;EVERYONE&quot;;</pre>
+<hr />
+
+<p>
+The periods of time the RRD graphs will show are determined using the array $views[]. The title and number of graphs can be specified globally in this place
+</p>
+<pre class="code">$views[0][&quot;title&quot;] = &quot;4 Hours&quot;;
+$views[0][&quot;start&quot;] = ( 60*60*4 );
+
+$views[1][&quot;title&quot;] = &quot;24 Hours&quot;;
+$views[1][&quot;start&quot;] = ( 60*60*24 );
+
+$views[2][&quot;title&quot;] = &quot;One Week&quot;;
+$views[2][&quot;start&quot;] = ( 60*60*24*7 );
+
+$views[3][&quot;title&quot;] = &quot;One Month&quot;;
+$views[3][&quot;start&quot;] = ( 60*60*24*30 );
+
+$views[4][&quot;title&quot;] = &quot;One Year&quot;;
+$views[4][&quot;start&quot;] = ( 60*60*24*365 );
+</pre>
+
+<p>
+
+You can add more views ($views[5], …) but please keep in mind that under normal circumstances ALL views you defined are shown.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/timeranges" class="wikilink1" title="pnp-0.6:timeranges">timeranges</a>
+
 </p>
 
 </div>
@@ -722,8 +2188,227 @@ PNP uses templates to influence the appearance of RRD graphs.
 The selected check_command determines which template will be used to control the graph. Following will be described where templates are stored and how the decision for the “right” template is made.
 </p>
 
+</div>
+
+<h2><a name="what_template_will_be_used_when" id="what_template_will_be_used_when">What template will be used when?</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/tpl" class="wikilink1" title="pnp-0.6:tpl">→ Read more...</a>
+
+Templates are stored at two places in the file system.
+
+</p>
+<ul>
+<li class="level1"><div class="li"> share/templates.dist - for templates included in the PNP package</div>
+</li>
+<li class="level1"><div class="li"> share/templates - for custom made templates which are not changed during updates</div>
+</li>
+</ul>
+
+<p>
+
+If the graph for the service “http” on host “localhost” should be shown, PNP will look for the <acronym title="Extensible Markup Language">XML</acronym> file <code>perfdata/localhost/http.xml</code> and read its contents. The <acronym title="Extensible Markup Language">XML</acronym> files are created automatically and contain information about the particular host and service. The header contains information about the plugin and the performance data. The <acronym title="Extensible Markup Language">XML</acronym> tag <code>&lt;TEMPLATE&gt;</code> identifies which PNP template will be used for this graph.
+</p>
+
+<p>
+<code><strong>/localhost/http.xml</strong></code>
+
+</p>
+<pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;DATASOURCE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;TEMPLATE<span class="re2">&gt;</span></span></span>check_http<span class="sc3"><span class="re1">&lt;/TEMPLATE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;DS<span class="re2">&gt;</span></span></span>1<span class="sc3"><span class="re1">&lt;/DS<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;NAME<span class="re2">&gt;</span></span></span>time<span class="sc3"><span class="re1">&lt;/NAME<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;UNIT<span class="re2">&gt;</span></span></span>s<span class="sc3"><span class="re1">&lt;/UNIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;ACT<span class="re2">&gt;</span></span></span>0.006721<span class="sc3"><span class="re1">&lt;/ACT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;WARN<span class="re2">&gt;</span></span></span>1.000000<span class="sc3"><span class="re1">&lt;/WARN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;CRIT<span class="re2">&gt;</span></span></span>2.000000<span class="sc3"><span class="re1">&lt;/CRIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MIN<span class="re2">&gt;</span></span></span>0.000000<span class="sc3"><span class="re1">&lt;/MIN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MAX<span class="re2">&gt;</span></span><span class="re1">&lt;/MAX<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;/DATASOURCE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;DATASOURCE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;TEMPLATE<span class="re2">&gt;</span></span></span>check_http<span class="sc3"><span class="re1">&lt;/TEMPLATE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;DS<span class="re2">&gt;</span></span></span>2<span class="sc3"><span class="re1">&lt;/DS<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;NAME<span class="re2">&gt;</span></span></span>size<span class="sc3"><span class="re1">&lt;/NAME<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;UNIT<span class="re2">&gt;</span></span></span>B<span class="sc3"><span class="re1">&lt;/UNIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;ACT<span class="re2">&gt;</span></span></span>263<span class="sc3"><span class="re1">&lt;/ACT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;WARN<span class="re2">&gt;</span></span><span class="re1">&lt;/WARN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;CRIT<span class="re2">&gt;</span></span><span class="re1">&lt;/CRIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MIN<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/MIN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MAX<span class="re2">&gt;</span></span><span class="re1">&lt;/MAX<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;/DATASOURCE<span class="re2">&gt;</span></span></span>
+...
+<span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
+
+<p>
+PNP will look for a template with the name <code>check_http.php</code> in the following sequence:
+
+</p>
+<ol>
+<li class="level1"><div class="li"> templates/check_http.php</div>
+</li>
+<li class="level1"><div class="li"> templates.dist/check_http.php</div>
+</li>
+<li class="level1"><div class="li"> templates/default.php</div>
+</li>
+<li class="level1"><div class="li"> templates.dist/default.php</div>
+</li>
+</ol>
+
+<p>
+
+The template default.php takes an exceptional position as it is used every time no other applicable template is found.
+</p>
+
+</div>
+
+<h2><a name="creating_own_templates" id="creating_own_templates">Creating own templates</a></h2>
+<div class="level2">
+
+<p>
+
+PNP templates are <acronym title="Hypertext Preprocessor">PHP</acronym> files which are included during execution of PNP using the <acronym title="Hypertext Preprocessor">PHP</acronym> function include(). This means that every <acronym title="Hypertext Preprocessor">PHP</acronym> code in templates will be interpreted so manipulation of all values is possible.
+</p>
+
+<p>
+PNP template must have the following characteristics:
+
+</p>
+<ol>
+<li class="level1"><div class="li"> templates must contain valid <acronym title="Hypertext Preprocessor">PHP</acronym> code.</div>
+</li>
+<li class="level1"><div class="li"> templates must not create any output.</div>
+</li>
+<li class="level1"><div class="li"> the two arrays $opt[] and $def[] have to be filled</div>
+</li>
+</ol>
+
+<p>
+
+These two arrays are used to call <code>&#039;rrdtool graph</code>&#039; so every option is possible that RRDtool supports. All options of RRDtool are described very thoroughly on the <a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html"  rel="nofollow">RRDtool Homepage</a>.
+</p>
+
+<p>
+If both arrays contain more than one set of data graphs will be created for every set.
+</p>
+
+<p>
+Inside the templates the data from the related <acronym title="Extensible Markup Language">XML</acronym> files can be used.
+</p>
+
+<p>
+Using the relatively simple template response.php we will describe the most important options.
+</p>
+<pre class="code php"><span class="kw2">&lt;?php</span>
+<span class="co2">#
+</span><span class="re0">$opt</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;--title <span class="es1">\&quot;</span>Response Time For <span class="es4">$hostname</span> / <span class="es4">$servicedesc</span><span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="co2">#
+</span><span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">=</span>  <span class="st0">&quot;DEF:var1=<span class="es4">$RRDFILE[1]</span>:<span class="es4">$DS[1]</span>:AVERAGE &quot;</span> <span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;AREA:var1#00FF00:<span class="es1">\&quot;</span>Response Times <span class="es1">\&quot;</span> &quot;</span> <span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;LINE1:var1#000000 &quot;</span> <span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;GPRINT:var1:LAST:<span class="es1">\&quot;</span>%3.4lg <span class="es6">%s</span><span class="es4">$UNIT[1]</span> LAST <span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;GPRINT:var1:MAX:<span class="es1">\&quot;</span>%3.4lg <span class="es6">%s</span><span class="es4">$UNIT[1]</span> MAX <span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="re0">$def</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span> <span class="sy0">.=</span> <span class="st0">&quot;GPRINT:var1:AVERAGE:<span class="es1">\&quot;</span>%3.4lg <span class="es6">%s</span><span class="es4">$UNIT[1]</span> AVERAGE <span class="es1">\&quot;</span> &quot;</span><span class="sy0">;</span>
+<span class="sy1">?&gt;</span></pre>
+
+<p>
+Note: as the number (1) and the letter “L” look alike in this listing: the format ”%3.4lg” contains a small letter.
+</p>
+
+<p>
+<strong><code>$opt[1] = ”–title …</code></strong> sets RRDtool options for the first set of data, here the title as you can see. Embedded quotes are masked using a backslash (\). The variables <code>$hostname</code> and <code>$servicedesc</code> were determined through the call of PNP and are available for the template as well.
+</p>
+
+<p>
+<strong><code>$def[1] =  “DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE ”;</code></strong> defines which data is to be read from which RRD file. $RRDFILE[1] contains the path to the RRD file of this service. $DS[1] refers to the first data series from the RRD file.
+</p>
+
+<p>
+<strong><code>$def[1] .= “AREA:var1#00FF00:\”Response Times \” ”;</code></strong> the operator ”.=” appends more data to the array $def[1]. An area will be drawn using data from the variable <code>var1</code>. The color is defined in HEX notation #00FF00 (red, green, blue). The label is “Response Times”.
+</p>
+
+<p>
+<strong><code>$def[1] .= “LINE1:var1#000000 ”;</code></strong> As completion of the just drawn area a line (LINE1) will be drawn in black (#000000).
+</p>
+
+<p>
+<strong><code>$def[1] .= “GPRINT:var1:LAST:\”%3.4lg %s$UNIT[1] LAST \” ”; <br/>
+
+$def[1] .= “GPRINT:var1:MAX:\”%3.4lg %s$UNIT[1] MAX \” ”; <br/>
+
+$def[1] .= “GPRINT:var1:AVERAGE:\”%3.4lg %s$UNIT[1] AVERAGE \” ”;</code></strong>
+</p>
+
+<p>
+The three GPRINT lines build up the caption for the graph. The current values are formatted using the <a href="http://en.wikipedia.org/wiki/printf" class="interwiki iw_wp" title="http://en.wikipedia.org/wiki/printf">printf</a> syntax.
+</p>
+
+</div>
+
+<h2><a name="available_variables" id="available_variables">Available variables</a></h2>
+<div class="level2">
+
+<p>
+
+Using the data collector <code>process_perfdata.pl</code> PNP stores not only performance data but other values exported by Nagios. These values are stored in the <acronym title="Extensible Markup Language">XML</acronym> file associated to the appropriate service.
+</p>
+
+<p>
+In the first part of the <acronym title="Extensible Markup Language">XML</acronym> file the performance data is stored in separate components.
+</p>
+<pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;DATASOURCE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;TEMPLATE<span class="re2">&gt;</span></span></span>check_http<span class="sc3"><span class="re1">&lt;/TEMPLATE<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;DS<span class="re2">&gt;</span></span></span>1<span class="sc3"><span class="re1">&lt;/DS<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;NAME<span class="re2">&gt;</span></span></span>time<span class="sc3"><span class="re1">&lt;/NAME<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;UNIT<span class="re2">&gt;</span></span></span>s<span class="sc3"><span class="re1">&lt;/UNIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;ACT<span class="re2">&gt;</span></span></span>0.006721<span class="sc3"><span class="re1">&lt;/ACT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;WARN<span class="re2">&gt;</span></span></span>1.000000<span class="sc3"><span class="re1">&lt;/WARN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;CRIT<span class="re2">&gt;</span></span></span>2.000000<span class="sc3"><span class="re1">&lt;/CRIT<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MIN<span class="re2">&gt;</span></span></span>0.000000<span class="sc3"><span class="re1">&lt;/MIN<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;MAX<span class="re2">&gt;</span></span><span class="re1">&lt;/MAX<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;/DATASOURCE<span class="re2">&gt;</span></span></span>
+....
+<span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
+
+<p>
+The field &lt;DS&gt; designates the data source and is used to identify the data series of the RRD files and is the key of the following arrays as well.
+</p>
+
+<p>
+The array <code>$UNIT[1]</code> contains the unit of measurement of the first data series.
+</p>
+
+<p>
+The <acronym title="Extensible Markup Language">XML</acronym> file contains other information. When process_perfdata.pl is used in default mode all available macros are at hand with the current values. For the benefit of readability the following lines show only an extract. 
+</p>
+<pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
+...
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICENOTIFICATIONID<span class="re2">&gt;</span></span></span>8418<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICENOTIFICATIONID<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICENOTIFICATIONNUMBER<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICENOTIFICATIONNUMBER<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEOUTPUT<span class="re2">&gt;</span></span></span>HTTP OK HTTP/1.1 200 OK - 10087 bytes in 0.125 seconds<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEOUTPUT<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPERCENTCHANGE<span class="re2">&gt;</span></span></span>0.00<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEPERCENTCHANGE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPERFDATA<span class="re2">&gt;</span></span></span>time=0.124811s;;;0.000000 size=10087B;;;0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEPERFDATA<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPERFDATAFILE<span class="re2">&gt;</span></span><span class="re1">&lt;/NAGIOS_SERVICEPERFDATAFILE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICEPROBLEMID<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICEPROBLEMID<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICESTATE<span class="re2">&gt;</span></span></span>OK<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICESTATE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICESTATEID<span class="re2">&gt;</span></span></span>0<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICESTATEID<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SERVICESTATETYPE<span class="re2">&gt;</span></span></span>HARD<span class="sc3"><span class="re1">&lt;/NAGIOS_SERVICESTATETYPE<span class="re2">&gt;</span></span></span>
+  <span class="sc3"><span class="re1">&lt;NAGIOS_SHORTDATETIME<span class="re2">&gt;</span></span></span>27-12-2007 13:51:23<span class="sc3"><span class="re1">&lt;/NAGIOS_SHORTDATETIME<span class="re2">&gt;</span></span></span>
+...
+<span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
+
+<p>
+The various <acronym title="Extensible Markup Language">XML</acronym> fields can be used as variables in the PNP templates. Each field is available as a variable with the same name.
+</p>
+
+<p>
+The value of the field <code>&lt;NAGIOS_SERVICEOUTPUT&gt;</code> is available as the variable <code>$NAGIOS_SERVICEOUTPUT</code>.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">custom templates</a>
+
 </p>
 
 </div>
@@ -747,8 +2432,169 @@ As already described under ”<a href="/pnp-0.6/tpl" class="wikilink1" title="pn
 There are situations where this behaviour must be overruled. This has to be done when universal commands have been defined.
 </p>
 
+</div>
+
+<h2><a name="custom_template" id="custom_template">CUSTOM_TEMPLATE</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">→ Read more...</a>
+
+Example:
+
+</p>
+<pre class="code">
+define command {
+  command_name check_nrpe
+  command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -C $ARG1$ -a &quot;$ARG2$&quot;
+}
+</pre>
+
+<p>
+This would lead to a call of the check_nrpe.php template even when the monitored host would use a completely different plugin which is called via NRPE.
+</p>
+
+<p>
+PNP, especially process_perfdata.pl, will search for a config file (&lt;check_command&gt;.cfg) in the etc/check_commands directory and read its contents (if available).
+</p>
+
+<p>
+As our example command is called check_nrpe it will be searched for etc/check_commands/check_nrpe.cfg.
+</p>
+
+<p>
+During installation a sample config file with the extension .cfg-sample is copied to etc/check_commands.
+</p>
+
+<p>
+Two options can be set in this config file:
+</p>
+<pre class="code">
+# check_command check_nrpe!load!-w 4,4,4 -c 5,5,5
+# ________0__________|       |       |
+# ________1__________________|       |
+# ________2__________________________|
+#
+CUSTOM_TEMPLATE = 1
+</pre>
+
+<p>
+<code>CUSTOM_TEMPLATE = 1</code> assures that only the contents of $ARG1$ will be used as a template name. As $ARG1$ contains “load” in this example the template name would result in “load.php”.
+</p>
+
+<p>
+<code>CUSTOM_TEMPLATE = 0,1</code> results in → “check_nrpe_load.php”
+</p>
+
+<p>
+<code>CUSTOM_TEMPLATE = 1,0</code> results in → “load_check_nrpe.php”
+</p>
+
+</div>
+
+<h2><a name="datatype" id="datatype">DATATYPE</a></h2>
+<div class="level2">
+
+<p>
+
+The option “DATATYPE” controls the datatype which is used during creation of the RRD database. Default is “GAUGE”. For consecutive values the type should be “COUNTER”. Plugin-developers should use the unit “c” for counters but this is not always the case.
+</p>
+
+<p>
+To set all datasources to COUNTER
+
+</p>
+<pre class="code">DATATYPE = COUNTER</pre>
+
+<p>
+Setting datasources to different types
+
+</p>
+<pre class="code">DATATYPE = GAUGE,GAUGE,COUNTER,COUNTER</pre>
+
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
+<p>
+More datatypes are explained in the RRDTool documentation found at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">rrdcreate</a>.
+</p>
+
+</div>
+
+<h2><a name="min_and_max" id="min_and_max">MIN and MAX</a></h2>
+<div class="level2">
+
+<p>
+
+In a few situations it might be necessary to limit the values which are valid for RRDTool.
+</p>
+
+<p>
+RRD databases can be created with fixed minimum and maximum values. You will find further details at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html</a>.
+</p>
+
+<p>
+Account for the maximum value taken from the performance data
+
+</p>
+<pre class="code">USE_MAX_ON_CREATE = 1</pre>
+
+<p>
+Account for the minimum value taken from the performance data
+
+</p>
+<pre class="code">USE_MIN_ON_CREATE = 1</pre>
+
+</div>
+
+<h2><a name="rrd_storage_type" id="rrd_storage_type">RRD_STORAGE_TYPE</a></h2>
+<div class="level2">
+<pre class="code">RRD_STORAGE_TYPE = SINGLE</pre>
+
+<p>
+
+The option RRD_STORAGE_TYPE defines the kind of data storage.
+</p>
+
+<p>
+Possible values are MULTIPLE and SINGLE, respectively.
+</p>
+
+<p>
+SINGLE: A RRD database per service
+</p>
+
+<p>
+MULTIPLE: One or more RRD databases per service. Each datasource will be stored in a separate RRD database.
+</p>
+
+<p>
+<strong>ATTENTION:</strong> The data will not be migrated automatically!
+You will find a conversion script <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">here</a>.
+</p>
+
+</div>
+
+<h2><a name="rrd_heartbeat" id="rrd_heartbeat">RRD_HEARTBEAT</a></h2>
+<div class="level2">
+
+<p>
+
+<strong>Starting with PNP 0.6.1</strong>
+</p>
+<pre class="code">RRD_HEARTBEAT = 305</pre>
+
+<p>
+After &lt;RRD_HEARTBEAT&gt; seconds RRDtool expects new data.
+</p>
+
+<p>
+More information at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html</a>
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/advanced" class="wikilink1" title="pnp-0.6:advanced">PNP in distributed environments</a>
+
 </p>
 
 </div>
@@ -805,8 +2651,27 @@ define command{
 	}
 </pre>
 
+</div>
+
+<h1><a name="check_multi_plugin" id="check_multi_plugin">check_multi plugin</a></h1>
+<div class="level1">
+
 <p>
-<a href="/pnp-0.6/advanced" class="wikilink1" title="pnp-0.6:advanced">→ Read more...</a>
+
+The plugin <a href="http://my-plugin.de/wiki/projects/check_multi/start" class="urlextern" title="http://my-plugin.de/wiki/projects/check_multi/start"  rel="nofollow">check_multi</a> is one of the first plugins which uses new features of Nagios 3.x. Check_multi can execute multiple Nagios plugins but returns only results like a single service. The output of check_multi comprises of several lines to be able to display the amount of information.
+</p>
+
+<p>
+This results in some difficulties for PNP which has to extract the information of several plugins from the performance data. Together with Matthias Flacke, developer of check_multi, we have found a solution to assign the data to the appropriate plugins.
+</p>
+
+<p>
+<a href="/lib/exe/fetch.php?hash=a9e001&amp;media=http%3A%2F%2Fmy-plugin.de%2Fwiki%2F_media%2Fcheck_multi%2Fperformance%2Fmulti_labels.png" class="media" title="http://my-plugin.de/wiki/_media/check_multi/performance/multi_labels.png"><img src="/lib/exe/fetch.php?hash=a9e001&amp;w=300&amp;media=http%3A%2F%2Fmy-plugin.de%2Fwiki%2F_media%2Fcheck_multi%2Fperformance%2Fmulti_labels.png" class="media" alt="" width="300" /></a>
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/rrdcached" class="wikilink1" title="pnp-0.6:rrdcached">support of rrdcached</a>
+
 </p>
 
 </div>
@@ -838,8 +2703,133 @@ The current RRDtool ( <a href="http://oss.oetiker.ch/rrdtool-trac/browser/trunk/
 At this point I&#039;d like to thank Florian octo Forster, Kevin Brintnall and Tobi Oetiker. The development of this daemon has been coordinated exemplary on the <a href="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html" class="urlextern" title="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html"  rel="nofollow">rrd-developers</a> mailing list.
 </p>
 
+</div>
+
+<h2><a name="mode_of_operation" id="mode_of_operation">Mode of operation</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/rrdcached" class="wikilink1" title="pnp-0.6:rrdcached">→ Read more...</a>
+
+The rrdcached is working as a daemon in the background and opens a UNIX or TCP socket to wait for requests of rrdtool. Due to security reasons newer versions of rrdcached cannot use absolute paths for network access anymore so the only possible way are unix sockets.
+</p>
+
+</div>
+
+<h3><a name="rrdcached" id="rrdcached">rrdcached</a></h3>
+<div class="level3">
+
+<p>
+
+rrdcached recognizes some important options which are passed during startup.
+</p>
+
+<p>
+Option -l defines the socket the daemon will listen for update requests. The default TCP port will be 42217.
+</p>
+<pre class="code">
+-l unix:/path/to/rrdcached.sock
+-l /path/to/rrdcached.sock
+-l 127.0.0.1
+-l 127.0.0.1:8888
+</pre>
+
+<p>
+Option -P specifies which commands are usable with the RRD data bases
+
+</p>
+<pre class="code">-P FLUSH,PENDING</pre>
+
+<p>
+Option -s allows to change the group ownership of the unix socket
+</p>
+<pre class="code">-s nagios</pre>
+
+<p>
+Option -m sets the permissions of the unix socket in the usual octal format
+</p>
+<pre class="code">-m 0660</pre>
+
+<p>
+Option -w specifies the interval (in seconds) the data will be written to disk.
+</p>
+<pre class="code">-w 1800</pre>
+
+<p>
+Option -z defines a maximum delay which will be used to spread the write cycles over a certain range [0-delay] to avoid parallel write accesses. The value of option -z must not be larger than -w.
+</p>
+<pre class="code">-z 1800</pre>
+
+<p>
+Option -p defines a PID file
+</p>
+<pre class="code">-p /var/run/rrdcached.pid</pre>
+
+<p>
+Option -j defines the path to a journaling directory. All requests will be logged there so that they can be processed after a restart in case the daemon crashes.
+</p>
+<pre class="code">-j /var/cache/rrdcached</pre>
+
+<p>
+These options may result in a call of rrdcached with the following parameters
+</p>
+<pre class="code"> rrdcached -w 1800 -z 1800 -p /tmp/rrdcached.pid -j /tmp  -s nagios -m 0660 -l unix:/tmp/rrdcached.sock</pre>
+
+</div>
+
+<h3><a name="rrdtool" id="rrdtool">rrdtool</a></h3>
+<div class="level3">
+
+<p>
+
+RRDtool itself will be informed about the daemon using the option –daemon=&lt;socket&gt;.
+
+</p>
+<pre class="code"> rrdtool --daemon=unix:/tmp/rrdcached.sock update ...</pre>
+
+<p>
+
+Of course this has to correspond with the options of rrdcached!
+</p>
+
+</div>
+
+<h2><a name="integration_into_pnp" id="integration_into_pnp">Integration into PNP</a></h2>
+<div class="level2">
+
+<p>
+
+Because two components of PNP have to prepared for the use of rrdcached there are changes in two config files.
+</p>
+
+<p>
+1. Adjustment of process_perfdata.cfg for the data collector process_perfdata.pl 
+</p>
+<pre class="code">
+# EXPERIMENTAL rrdcached Support
+# Use only with rrdtool svn revision 1511+
+#
+RRD_DAEMON_OPTS = unix:/var/run/rrdcached.sock
+</pre>
+
+<p>
+2. Adjustment of config_local.php (or config.php) for the web interface
+</p>
+<pre class="code">
+#
+# EXPERIMENTAL rrdcached Support
+# Use only with rrdtool svn revision 1511+
+#
+# $conf[&#039;RRD_DAEMON_OPTS&#039;] = &#039;unix:/tmp/rrdcached.sock&#039;;
+$conf[&#039;RRD_DAEMON_OPTS&#039;] = &#039;unix:/var/run/rrdcached.sock&#039;;
+</pre>
+
+<p>
+The sample files contain the relevant options.
+</p>
+
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">migrating RRD files</a>
+
 </p>
 
 </div>
@@ -859,8 +2849,314 @@ At this point I&#039;d like to thank Florian octo Forster, Kevin Brintnall and T
 NPCD (Nagios-Perfdata-C-Daemon) was written to provide an asynchronous mode to handle performance data with <code>nagios</code>.
 </p>
 
+</div>
+
+<h2><a name="introduction" id="introduction">Introduction</a></h2>
+<div class="level2">
+
 <p>
-<a href="/pnp-0.6/npcd" class="wikilink1" title="pnp-0.6:npcd">→ Read more...</a>
+
+In large nagios installations, your average check latency may increase to a non-acceptable high value. This means that Nagios should do a check at time <code>x</code> but actually does it <code>y</code> seconds later.
+</p>
+
+<p>
+If you tell the Nagios core that you want to process the performance data after every single check this is doing well for a certain amount of checks but above this limit you will run into latency problems.
+</p>
+
+<p>
+To reduce the number of actions for each check you can use the <a href="/pnp-0.6/modes#bulk_mode" class="wikilink1" title="pnp-0.6:modes">Bulk Mode</a> which gathers performance data for some time and then lets the <code>Nagios core</code> execute the <code>&lt;host|service&gt;_perfdata_file_processing_command</code> or you can tell Nagios to just move the <code>perfdata_files</code> to a spool directory. 
+</p>
+
+<p>
+This move is a very fast action for the <code>Nagios core</code> and the <code>core</code> will be done with the processing of performance data and can continue to do what it should do: execute other checks, sending notifications, and so on.
+</p>
+
+</div>
+
+<h2><a name="how_it_works" id="how_it_works">How it works</a></h2>
+<div class="level2">
+
+<p>
+
+As mentioned above the Nagios process has finished its work with moving the performance data file to a spool directory but this won&#039;t bring the data into the RRD files.
+</p>
+
+<p>
+For this task you can start <code>npcd</code> to have a look at the defined spool directory and start an action for every file which is found.
+</p>
+
+<p>
+After NPCD starts running it will build a list of filenames found in <code>perfdata_spool_dir</code> and starts new threads for every filename and executes the <code>perfdata_file_run_cmd</code> with the optional <code>perfdata_file_run_cmd_arg</code> as an additional argument.
+</p>
+
+<p>
+Since the perfdata files in the spool dir are in the same format as for the &#039;normal&#039; bulk mode NPCD should execute <code>process_perfdata.pl</code> in <a href="/pnp-0.6/modes#bulk_mode" class="wikilink1" title="pnp-0.6:modes">Bulk Mode</a>.
+</p>
+
+</div>
+
+<h2><a name="advantages_disadvantages" id="advantages_disadvantages">Advantages / Disadvantages</a></h2>
+<div class="level2">
+
+<p>
+
+<strong>Pro:</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Performance improvements for Nagios</div>
+<ul>
+<li class="level2"><div class="li"> because the performance data processing is detached from the <code>Nagios core</code> it has more time for its own work.</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> no lost data</div>
+<ul>
+<li class="level2"><div class="li"> as long as <code>Nagios</code> writes perfdata files to the spool dir your data won&#039;t get lost if NPCD dies or you forgot to start it after a system reboot. NPCD will start with the first file found (they are sorted by the $TIME_T$ macro in chronological order) and update your RRD Files.</div>
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+
+<strong>Con:</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> no real time processing of performance data</div>
+<ul>
+<li class="level2"><div class="li"> since there is a delay in writing the performance data files by <code>Nagios</code> (<code>service_perfdata_file_processing_interval</code>)</div>
+</li>
+<li class="level2"><div class="li"> another delay exists within NPCD which waits for up to 10 seconds after each directory scanning</div>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+<h1><a name="npcd_config" id="npcd_config">NPCD Config</a></h1>
+<div class="level1">
+
+<p>
+
+You have to control NPCD with its own configuration file like the rolled out <code>npcd.cfg-sample</code> file.
+</p>
+
+<p>
+Just rename it to <code>npcd.cfg</code> to start NPCD like this:
+</p>
+<pre class="code _bash">/usr/local/pnp4nagios/bin/npcd -f /usr/local/pnp4nagios/etc/npcd.cfg</pre>
+
+<p>
+
+or
+
+</p>
+<pre class="code _bash">/usr/local/pnp4nagios/bin/npcd -d -f /usr/local/pnp4nagios/etc/npcd.cfg</pre>
+
+<p>
+
+to run in Daemon Mode (background).
+</p>
+
+<p>
+<strong>Hint:</strong>
+If you decide to not rename the config file, it might be overwritten by a future update of PNP.
+</p>
+
+</div>
+
+<h2><a name="npcdcfg-sample" id="npcdcfg-sample">npcd.cfg-sample</a></h2>
+<div class="level2">
+
+<p>
+
+These are the essential configuration directives for NPCD:
+</p>
+<pre class="code"># Privilege Options
+user = nagios
+group = nagios
+
+# Logging Options
+log_type = syslog
+log_file = /usr/local/pnp4nagios/var/npcd.log
+max_logfile_size = 10485760
+log_level=0
+
+# Processing Options
+perfdata_spool_dir = /usr/local/pnp4nagios/var/spool/
+perfdata_file_run_cmd = /usr/local/pnp4nagios/libexec/process_perfdata.pl
+perfdata_file_run_cmd_args = -b
+
+# Thread Options
+npcd_max_threads=5
+
+# greedy options
+use_load_threshold = 0
+load_threshold = 10.0
+
+# Process Options
+pid_file=/var/run/npcd.pid
+</pre>
+
+</div>
+
+<h2><a name="the_directives" id="the_directives">The directives</a></h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> <strong>Privilege Options</strong></div>
+<ul>
+<li class="level2"><div class="li"> user &lt;username&gt; </div>
+<ul>
+<li class="level3"><div class="li"> NPCD tries to drop &#039;root&#039; privileges to switch to this user.</div>
+</li>
+<li class="level3"><div class="li"> <strong>default:</strong> nagios</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> group &lt;groupname&gt;</div>
+<ul>
+<li class="level3"><div class="li"> NPCD tries to drop &#039;root&#039; privileges to switch to this group.</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> nagios</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> <strong>Logging Options</strong></div>
+<ul>
+<li class="level2"><div class="li"> log_type &lt;syslog&gt; or &lt;file&gt; </div>
+<ul>
+<li class="level3"><div class="li"> Log type that is uses by NPCD</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> syslog</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> log_file &lt;/path/to/filename&gt; </div>
+<ul>
+<li class="level3"><div class="li"> if <code>log_type = file</code> this will be the logfile used</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> /usr/local/pnp4nagios/var/npcd.log</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> max_logfile_size &lt;bytes&gt; </div>
+<ul>
+<li class="level3"><div class="li"> NPCD will rotate the logfile if the filesize of the current log is above this limit</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 10485760 = 10 MByte</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> log_level &lt;integer&gt;</div>
+<ul>
+<li class="level3"><div class="li"> how much to log, possible values:</div>
+<ul>
+<li class="level4"><div class="li"> 0  = No Log - except errors</div>
+</li>
+<li class="level4"><div class="li"> 1  = small Log - some more output</div>
+</li>
+<li class="level4"><div class="li"> 2  = more Log (actual ALL log messages)</div>
+</li>
+<li class="level4"><div class="li"> -1 = DEBUG Mode - ALL Logs and slower processing for debugging purposes</div>
+</li>
+</ul>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 0</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> <strong>Processing Options</strong></div>
+<ul>
+<li class="level2"><div class="li">  perfdata_spool_dir  &lt;/path/to/spool/dir/&gt;</div>
+<ul>
+<li class="level3"><div class="li"> The directory where the perfdata file should be found</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> /usr/local/pnp4nagios/var/spool/</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> perfdata_file_run_cmd &lt;/path/to/bin/filename&gt;</div>
+<ul>
+<li class="level3"><div class="li"> This is the script/binary that NPCD will execute</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong>  /usr/local/pnp4nagios/libexec/process_perfdata.pl</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> perfdata_file_run_cmd_args &lt;option&gt; </div>
+<ul>
+<li class="level3"><div class="li"> The argument added to the perfdata_file_run_cmd</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> ”-b”</div>
+</li>
+<li class="level3"><div class="li"> <img src="/lib/images/smileys/icon_exclaim.gif" class="middle" alt=":!:" /> The command line will be created like this: <pre class="code">&lt;perfdata_file_run_cmd&gt; &lt;perfdata_file_run_cmd_args&gt; &lt;filename_from_perfdata_spool_dir&gt;</pre>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> <strong>Thread Options</strong></div>
+<ul>
+<li class="level2"><div class="li"> npcd_max_threads &lt;integer value&gt;</div>
+<ul>
+<li class="level3"><div class="li"> Defines how many parallel threads should be started</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 5</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> <strong>Greedy Options</strong></div>
+<ul>
+<li class="level2"><div class="li"> use_load_threshold  &lt;0 or 1&gt;</div>
+<ul>
+<li class="level3"><div class="li"> defines if NPCD should _not_ start new threads if your system load is too high</div>
+<ul>
+<li class="level4"><div class="li"> 0 = disable</div>
+</li>
+<li class="level4"><div class="li"> 1 = enable</div>
+</li>
+</ul>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 0</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> load_threshold &lt;float value&gt;</div>
+<ul>
+<li class="level3"><div class="li"> if <code>use_load_threshold</code> is set to 1 this load limit must not be exceeded</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 10.0</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> <strong>Process Options</strong></div>
+<ul>
+<li class="level2"><div class="li"> pid_file &lt;/path/to/pid.file&gt;</div>
+<ul>
+<li class="level3"><div class="li"> the path to the PID File</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> /var/run/npcd.pid</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/wrapper" class="wikilink1" title="pnp-0.6:wrapper">wrapper script</a>
+
 </p>
 
 </div>
