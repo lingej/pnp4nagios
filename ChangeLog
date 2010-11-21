@@ -7,6 +7,7 @@
   * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
   * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
   * Bugfix: Sort list of special templates
+  * Bugfix: Urlencode hostname and service description  ( Reported by Yannick ) 
 
 **pnp-0.6.7 09/27/2010**
 
