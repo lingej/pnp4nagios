@@ -35,13 +35,14 @@
 # 2010.09.26: 0.1.24 option -I
 # 2010.11.07:        bugfix (php-common/Fedora), msg output
 # 2010.11.08: 0.1.25 bugfixes (auth_enabled, allowed_for...)
+# 2010.11.21: 0.1.26 check bulk= entries, french messages
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.25";
+my $version = "0.1.26";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -108,7 +109,7 @@ my $skip = 0;
 my $mult = undef;	# 0.1.22
 my $language = "";
 my $english = "";
-my $valLang = '^en$|^de$|^es$';
+my $valLang = '^en$|^de$|^es$|^fr$';
 if ((exists $ENV{LANG}) and ($ENV{LANG} ne "POSIX")) {
     ($language) = ($ENV{LANG} =~ /^(..)/);
 }
@@ -496,6 +497,21 @@ información mostrada:
 [H] sugerencia: valdría la pena leer la documentación apropiada
 [D] mensaje de depuración, esperamos que se muestre el origen de su problema
 EOF1
+} elsif ($language =~ /fr/i) {
+    print <<EOF4;
+Ce script permet de vérifier certains paramètres / entrées de votre
+$prod_name/PNP-environnement pour vous aider à trouver des problèmes
+lorsque vous utilisez PNP.
+Il peut être utilisé avant et pendant le fonctionnement de la PNP.
+
+Sortie commence par une lettre avec la signification suivante
+[I] message d'information sur les paramètres, ...
+[A] les mesures à prendre
+[W] message d'avertissement, ne sera pas affecter le fonctionnement du PNP
+[E] message d'erreur: PNP ne fonctionnera pas sans résoudre le(s) problème(s)
+[H] indice: il pourrait être utile de lire la documentation appropriée
+[D] débogage message, j'espère montrer la source de votre problème
+EOF4
 } else {
 print <<EOF2;
 This script will check certain settings/entries of your $prod_name/PNP environ-
@@ -562,7 +578,7 @@ parameters:
                       ";Name": search for service description
     -t, --time        show warnings if RRDfiles are too old
     -s, --skip        skip check of installed packages
-    -n, --native      show messages in native language (so far "es" or "de")
+    -n, --native      show messages in native language (so far "es", "fr" or "de")
     -e, --english     show english messages/links
     -d, --debug       some debugging output
     -I, --info        show information about compile time variable settings
@@ -840,6 +856,10 @@ sub chk_param {
             if (! exists($commands{"$NagiosCfg{\"$param\"}"})) {
                 info ("noCmd","$NagiosCfg{\"$param\"}");
                 info ("LinkNagiosCfg2");
+            } else {
+                my ($bulk_dir) = $commands{"$NagiosCfg{\"$param\"}"} =~ /bulk=(.*)/;
+                examine ("d;","Bulk-Dir","$bulk_dir");
+                info ("BulkDirWarn",$bulk_dir,"$PNPdir") unless ($bulk_dir =~ /$PNPdir/);
             }
         }
         if ($param =~ /broker_module/) {
@@ -1717,6 +1737,7 @@ sub message {
     $msg{"keyValue"} = "[D] directive:\"%s\", value:\"%s\"";
     $msg{"oddLine"} = "[W] \"%s\" looks odd";
     $msg{"errOpen"} = "[E] open of %s failed, RC=%s";
+    $msg{"BulkDirWarn"} = "[W] \"%s\" not a subdirectory of \"%s\"";
 
     $msg{"LinkNagiosChk"} = "[H] http://nagios.sourceforge.net/docs/3_0/verify_config.html";
     $msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#required_software";
@@ -1827,6 +1848,7 @@ sub message {
         $msg{"keyValue"} = "[D] Direktive:\"%s\", Wert:\"%s\"";
         $msg{"oddLine"} = "[W] \"%s\" sieht komisch aus";
         $msg{"errOpen"} = "[E] oeffnen von %s fehlgeschlagen, RC=%s";
+        $msg{"BulkDirWarn"} = "[W] \"%s\" ist kein Unterverzeichnis von \"%s\"";
 
         $msg{"LinkNagiosChk"} = "[H] http://www.nagios-wiki.de/nagios/doku3/verify_config";
         $msg{"LinkReqSW"} = "[H] http://docs.pnp4nagios.org$language/pnp-${doc_version}/about#benoetigte_software";
@@ -1929,5 +1951,94 @@ sub message {
         $msg{"NPCDcfgReq"} = "[E] Se requiere fichero de configuración NPCD";
         $msg{"noNPCDreq"} = "[H] No se requiere fichero de configuración NPCD";
         $msg{"LinkNagiosCfg2"} = "[H] http://nagios.sourceforge.net/docs/3_0/configmain.html#process_performance_data\n    (y las opciones que siguen)";
+    }
+
+    if ($language =~ /fr/i) {
+        $msg{"qd"} = "[E] --quiet et --debug sont mutuellement exclusives";
+        $msg{"noBase"} = "[E] $prod_name basedir ne pas trouvé / non précisé";
+        $msg{"noBaseDir"} = "[E] $prod_name basedir \"%s\" n'existe pas";
+        $msg{"useBase"} = "[I] utilisant $prod_name basedir \"%s\"";
+        $msg{"noBinary"} = "[E] binary \"%s\" ne pas trouvé / défini";
+        $msg{"useBinary"} = "[I] utilisant $prod_name binary \"%s\"";
+        $msg{"noCfg"} = "[E] $product.cfg ne pas défini";
+        $msg{"noCfgFile"} = "[E] fichier de configuration \"%s\" ne pas trouvé";
+        $msg{"useCfg"} = "[I] utilisant $prod_name config \"%s\"";
+        $msg{"binExec"} = "[E] fichier \"%s\" n'est pas exécutable";
+        $msg{"verifyCfg"} = "[A] vérifier $prod_name configuration";
+        $msg{"invPNPmode"} = "[E] pas de mode valide spécifiée (sync, Bulk, NPCD, default$module)";
+        $msg{"PNPmode"} = "[I] PNP mode: \"%s\"";
+        $msg{"Package"} = "[I] Paquet: \"%s\"";
+        $msg{"noPkg"} = "[E] Paquet \"%s\" ne pas trouvé";
+        $msg{"useLog"} = "[I] LogFile \"%s\" spécifié";
+        $msg{"NagiosChkErr"} = "[E] $prod_name vérification trouvé des erreurs";
+        $msg{"NagiosCfgErr"} = "[E] $prod_name contient des erreurs";
+        $msg{"verifyRRD"} = "[A] vérification de RRDtool (%s)";
+        $msg{"invFile"} = "[E] \"%s\" n'est pas un fichier (régulier)";
+        $msg{"invDir"} = "[E] (%s) répertoire  \"%s\" n'existe pas";
+        $msg{"useEntry"} = "[I] utilisant cfg_dir/cfg_file entries";
+        $msg{"useCache"} = "[I] utilisant \"%s\" entries";
+        $msg{"dupEntry"} = "[E] directive \"%s\" est en double";
+        $msg{"noPerfEna"} = "[E] aucune données de performance a permis (process_performance_data=1 en $product.cfg)";
+        $msg{"envMacrosDis"} = "[E] macros environnement desactivé (enable_environment_macros=0)";
+        $msg{"noErrors"} = "\nAucune erreur (évidente) trouvé. Graphique heureux avec PNP";
+        $msg{"Warnings"} = "\nAvertissements trouvé. S'il vous plaît vérifiez les paramètres.";
+        $msg{"Errors"} = "\nErreurs détectées. S'il vous plaît vérifiez les réglages et jeter un oeil à la documentation.";
+        $msg{"procFile"} = "[A] processing \"%s\"";
+        $msg{"searchObj"} = "[A] searching for \"%s\"";
+        $msg{"noLabel"} = "[E] pas d'étiquette définie";
+        $msg{"invValue"} = "[E] aucune valeur valide";
+        $msg{"invOption"} = "[E] \"%s\" n'est pas une option valable";
+        $msg{"invUOM"} = "[E] \"%s\" ne semble pas être une UOM valide";
+        $msg{"minRev"} = "[W] option \"%s\" est valable à partir de la révision %s";
+        $msg{"maxRev"} = "[W] option \"%s\" n'est valable que jusqu'à la révision %s";
+        $msg{"noUser"} = "[E] (%s) l'utilisateur \"%s\" n'existe pas";
+        $msg{"noGroup"} = "[E] (%s) groupe \"%s\" n'existe pas";
+        $msg{"noPerf"} = "[E] Il n'ya pas de données de performance pour \"%s\" !";
+        $msg{"noRRDchk"} = "[I] perfdata répertoire ne sera pas contrôlé";
+        $msg{"chkPath"} = "[A] vérification de %s \"%s\"";
+        $msg{"fileUser"} = "[E] \"%s\": propriétaire est \"%s\" au lieu de \"%s\"";
+        $msg{"fileGroup"} = "[E] \"%s\": groupe est \"%s\" au lieu de \"%s\"";
+        $msg{"RRDrc"} = "[E] \"%s\"\n\tRRDtool RC: %s, %s";
+        $msg{"RRDold"} = "[W] \"%s\" est âgé de plus de %s secondes";
+        $msg{"RRDcount"} = "[I] %s répertoire(s) aves un total de %s rrd fichier(s)";
+        $msg{"noRRDfiles"} = "[E] %s répertoire(s) mais NE PAS des fichiers rrd => NE PAS des graphes!";
+        $msg{"useRRDs"} = "[I] RRDs perl module est installé";
+        $msg{"noRRDs"} = "[I] RRDs perl module n'est pas installé";
+        $msg{"noHiRes"} = "[E] Time::HiRes perl module n'est pas installé";
+        $msg{"chkPar"} = "[D] vérification du paramètre \"%s\"";
+        $msg{"ParValue"} = "[I] valeur du paramètre \"%s\"";
+        $msg{"parModeInv"} = "[E] \"%s\" n'est pas valide en mode \"%s\"";
+        $msg{"invValue2"} = "[E] valeur \"%s\" for \"%s\" is invalid";
+        $msg{"chkTemplate"} = "[A] vérification du modèle \"%s\"";
+        $msg{"invTemplate"} = "[E] la syntaxe du modèle n'est pas valide";
+        $msg{"invDelim"} = "[E] délimiteur (%s) non valide dans la modèle";
+        $msg{"missDelim"} = "[E] délimiteur manquante dans la modèle";
+        $msg{"invDatatype"} = "[E] type de données \"%s\" dans le modèle n'est pas valide";
+        $msg{"invTempVar"} = "[E] variable \"%s\" dans la modèle est invalide (probablement)";
+        $msg{"invTempVal"} = "[E] valeur \"%s\" dans la modèle est invalide, devrait être \"%s\"";
+        $msg{"invEOL"} = "[E] \"%s\" devrait se terminer par un point-virgule";
+        $msg{"invQuote"} = "[E] \"%s\" guillemets ne sont pas de contrepartie";
+        $msg{"missTempVar"} = "[E] variable \"%s\" dans la modèle est manquante";
+        $msg{"missinvTempVal"} = "[E] valeur \"%s\" dans la modèle est manquante";
+        $msg{"noCmd"} = "[E] command_name \"%s\" ne pas trouvé";
+        $msg{"noParCfg"} = "[E] \"%s\" ne pas trouvé en $product.cfg";
+        $msg{"noParCfgH"} = "[H] \"%s\" ne pas trouvé en $product.cfg";
+        $msg{"notAdv"} = "[H] \"%s\" ne pas souhaitable en Nagios < 3.x";
+        $msg{"invChar"} = "[E] \"%s\" (\"%s\") a un format non valide / contient des caractères invalides";
+        $msg{"undefVal"} = "[E] aucune valeur (valide) défini pour \"%s\"";
+        $msg{"noNumber"} = "[E] %s: \"%s\" n'est pas un nombre valide";
+        $msg{"startEnd"} = "[E] départ (%s) est supérieure à la fin (%s)";
+        $msg{"noFile"} = "[E] (%s) fichier \"%s\" est manquant";
+        $msg{"noRes"} = "[E] ressource \"%s\" n'est pas défini";
+        $msg{"noFileYet"} = "[I] (%s) fichier \"%s\" n'existe pas (encore)";
+        $msg{"noDir"} = "[E] (%s) directoire \"%s\" est manquant";
+        $msg{"noSock"} = "[E] \"%s\" ne pas un socket";
+        $msg{"noWrite"} = "[E] \"%s\": pas de permissions d'écriture pour \"%s\"";
+        $msg{"key"} = "[D] clé:\"%s\"";
+        $msg{"keyVal"} = "[I] %s:\"%s\"";
+        $msg{"keyValue"} = "[D] directive:\"%s\", valeur:\"%s\"";
+        $msg{"oddLine"} = "[W] \"%s\" semble étrange";
+        $msg{"errOpen"} = "[E] ouverte de %s a échoué, RC=%s";
+        $msg{"BulkDirWarn"} = "[W] \"%s\" ne pas un sous-répertoire de \"%s\"";
     }
 }
