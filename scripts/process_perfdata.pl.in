@@ -452,8 +452,60 @@ sub data2rrd {
     close_template( $NAGIOS{XMLFILE} );
 }
 
+# Do the call to the RRDs:: or rrd binaries, with options
+sub call_rrd {
+    my $action = shift; # Create or update
+    my $rrdfile = shift;
+    my @options = @_;
+
+    # Check if user was smart and configured a rrdcached daemon
+    if ( $conf{RRD_DAEMON_OPTS} ) {
+        unshift @options, "--daemon" => $conf{RRD_DAEMON_OPTS};
+    }
+
+    # Check if we can use the perl RRD modules (faster)
+    if ( $conf{USE_RRDs} == 1 ) {
+        print_log( "RRDs::$action $rrdfile @options", 2 );
+        if( $action eq 'create' ) {
+            RRDs::create( $rrdfile, @options );
+        }
+        elsif( $action eq 'update' ) {
+            RRDs::update( $rrdfile, @options );
+        }
+        else {
+            print_log( "RRds:: do not understand $action", 1 );
+            return;
+        }
+
+        my $err = RRDs::error();
+        if ($err) {
+            $stats{error}++;
+            print_log( "RRDs::create ERROR $err", 1 );
+            return ( 1, $err );
+        }
+        else {
+            $stats{$action}++;
+            print_log( "$rrdfile ${action}d", 2 );
+            return ( 0, "just ${action}d" );
+        }
+    }
+    else { # Fallback to rrdtool binaries
+        my @cmd = ( "System exec: $conf{RRDTOOL}", $action => $rrdfile, @options );
+        print_log( "@cmd", 2 );
+        if ( system( @cmd ) == 0 ) {
+            print_log( "rrdtool $action returns $?", 2 );
+            $stats{$action}++;
+            return ( 0, "just ${action}d" );
+        }
+        else {
+            print_log( "rrdtool $action returns " . $? >> 8, 1 );
+            $stats{error}++;
+            return ( $? >> 8, "$action failed" );
+        }
+    }
+}
+
 sub write_rrd {
-    my @rrd_create = ();
     my @rrd_state  = ();
 
     print_log( "DEBUG: TPL-> $TEMPLATE",  3 );
@@ -461,84 +513,15 @@ sub write_rrd {
     print_log( "DEBUG: UPD-> $ds_update", 3 );
 
     if ( !-e "$rrdfile" ) {
-        @rrd_create = parse_rra_config($TEMPLATE);
-        if ( $conf{USE_RRDs} == 1 ) {
-            print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
-            RRDs::create( "$rrdfile", @rrd_create, @ds_create, "--start=$NAGIOS{TIMET}", "--step=$conf{RRA_STEP}" );
-
-            my $err = RRDs::error();
-            if ($err) {
-                print_log( "RRDs::create ERROR $err", 1 );
-                @rrd_state = ( 1, $err );
-                $stats{error}++;
-            }
-            else {
-                print_log( "$rrdfile created", 2 );
-                @rrd_state = ( 0, "just created" );
-                $stats{create}++;
-            }
-        }
-        else {
-            print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.",                           2 );
-            print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
-            system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
-            if ( $? > 0 ) {
-                print_log( "rrdtool create returns $?", 1 );
-                @rrd_state = ( $?, "create failed" );
-                $stats{error}++;
-            }
-            else {
-                print_log( "rrdtool create returns $?", 1 );
-                @rrd_state = ( 0, "just created" );
-                $stats{create}++;
-            }
-        }
+        my @rrd_create = parse_rra_config($TEMPLATE);
+        return call_rrd( create => $rrdfile,
+            @rrd_create, @ds_create,
+            "--start" => $NAGIOS{TIMET},
+            "--step" => $conf{RRA_STEP} );
     }
     else {
-        if ( $conf{USE_RRDs} == 1 ) {
-            if ( $conf{RRD_DAEMON_OPTS} ) {
-                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
-            }
-            else {
-                print_log( "RRDs::update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                RRDs::update( "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
-            }
-            my $err = RRDs::error();
-            if ($err) {
-                print_log( "RRDs::update ERROR $err", 1 );
-                @rrd_state = ( 1, $err );
-                $stats{error}++;
-            }
-            else {
-                print_log( "$rrdfile updated", 2 );
-                @rrd_state = ( 0, "successful updated" );
-                $stats{update}++;
-            }
-        }
-        else {
-            print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.", 2 );
-            if ( $conf{RRD_DAEMON_OPTS} ) {
-                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update");
-            }
-            else {
-                print_log( "$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                system("$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update");
-            }
-            if ( $? > 0 ) {
-                print_log( "rrdtool update returns $?", 1 );
-                @rrd_state = ( $?, "update failed" );
-                $stats{error}++;
-            }
-            else {
-                print_log( "rrdtool update returns $?", 1 );
-                @rrd_state = ( $?, "successful updated" );
-                $stats{update}++;
-            }
-        }
+        return call_rrd( update => $rrdfile, "$NAGIOS{TIMET}$ds_update" );
     }
-    return @rrd_state;
 }
 
 #
