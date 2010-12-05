@@ -774,7 +774,7 @@ class Data_Model extends Model
                 $this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
             }
         }else{
-            throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
+        //    throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
         }
     }
 
