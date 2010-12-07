@@ -16,10 +16,10 @@ if($this->is_authorized == FALSE){
     return;
 }
 
-if(sizeof($this->data->STRUCT) == 0){
+if($this->data->ERROR != NULL){
     echo "<div style=\"padding: 0pt 0.7em;\" class=\"ui-state-error ui-corner-all\">\n"; 
     echo "<p><span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-alert\"></span>\n"; 
-    echo "<strong>Alert:&nbsp;</strong>".Kohana::lang('error.no-data-for-page', $this->page.'.cfg')."</p>\n";
+    echo "<strong>Alert:&nbsp;</strong>".$this->data->ERROR."</p>\n";
     echo "</div></div>\n";
     return;
 }

@@ -3,7 +3,7 @@
 /**
  * Retrieves and manipulates current status of hosts (and services?)
  */
-class Data_Model extends Model
+class Data_Model extends System_Model
 {
 
     private $XML   = array();
@@ -774,7 +774,7 @@ class Data_Model extends Model
                 $this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
             }
         }else{
-        //    throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
+            $this->ERROR = "ERROR: ". Kohana::lang('error.no-data-for-page', $page.".cfg" );
         }
     }
 
