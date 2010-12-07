@@ -129,7 +129,8 @@ $kohana_system = file_exists($kohana_system) ? $kohana_system : DOCROOT.$kohana_
 define('APPPATH', str_replace('\\', '/', realpath($kohana_application)).'/');
 define('MODPATH', str_replace('\\', '/', realpath($kohana_modules)).'/');
 define('SYSPATH', str_replace('\\', '/', realpath($kohana_system)).'/');
-
+// JSON Wrapper used for PHP 5.1.x
+require('application/lib/jsonwrapper.php');
 // Clean up
 unset($kohana_application, $kohana_modules, $kohana_system);
 
