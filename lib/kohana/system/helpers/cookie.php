@@ -45,7 +45,7 @@ class cookie_Core {
 		// Expiration timestamp
 		$expire = ($expire == 0) ? 0 : time() + (int) $expire;
 
-		return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+		return setcookie($name, $value, $expire, $path, $domain, $secure);
 	}
 
 	/**

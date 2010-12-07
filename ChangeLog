@@ -6,6 +6,7 @@
   * Feature: Pass query string from special controller to image controller ( Matthew Garrett ) 
   * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
   * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
+  * Feature: Kohana backport to support PHP 5.1.6 ( Kudos to Andreas Ericsson )
   * Bugfix: Sort list of special templates
   * Bugfix: Urlencode hostname and service description  ( Reported by Yannick ) 
 

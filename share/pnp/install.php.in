@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');?>
+<?php require('application/lib/jsonwrapper.php');?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -134,10 +135,10 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <table cellspacing="0">
 <tr>
 <th>PHP Version</th>
-<?php if (version_compare(PHP_VERSION, '5.2', '>=')): ?>
+<?php if (version_compare(PHP_VERSION, '5.1', '>=')): ?>
 <td class="pass"><?php echo PHP_VERSION ?></td>
 <?php else: $failed++ ?>
-<td class="fail">Kohana requires PHP 5.2 or newer, this version is <?php echo PHP_VERSION ?>.</td>
+<td class="fail">Kohana requires PHP 5.1 or newer, this version is <?php echo PHP_VERSION ?>.</td>
 <?php endif ?>
 </tr>
 <tr>
@@ -162,14 +163,6 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <td class="pass">Pass</td>
 <?php else: $failed++ ?>
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i3">reflection</a> is either not loaded or not compiled in.</td>
-<?php endif ?>
-</tr>
-<tr>
-<th>Filters Enabled</th>
-<?php if (function_exists('filter_list')): ?>
-<td class="pass">Pass</td>
-<?php else: $failed++ ?>
-<td class="fail">The <a href="http://docs.pnp4nagios.org/faq/i4">filter</a> extension is either not loaded or not compiled in.</td>
 <?php endif ?>
 </tr>
 <tr>

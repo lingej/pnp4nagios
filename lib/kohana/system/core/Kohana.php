@@ -917,7 +917,7 @@ final class Kohana {
 	
 			if ($PHP_ERROR)
 			{
-				$description = self::lang('errors.'.E_RECOVERABLE_ERROR);
+				//$description = self::lang('errors.'.E_RECOVERABLE_ERROR);
 				$description = is_array($description) ? $description[2] : '';
 	
 				if ( ! headers_sent())
