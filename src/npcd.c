@@ -76,7 +76,8 @@ static void start_daemon(const char *log_name, int facility) {
 		exit(EXIT_SUCCESS);
 
 	/* for core dump handling and better unmounting behavior */
-	chdir("/");
+	if (chdir("/") != 0)
+		exit(EXIT_FAILURE);
 
 	/* change umask to defined value - be independet from parent umask */
 	umask(002);
@@ -105,7 +106,7 @@ int main(int argc, char **argv) {
 
 	int i = 0;
 	int filecounter = 0, pthread_ret = 0;
-	double load;
+	double load = 0.0;
 	char buffer[MAX_LOGMESSAGE_SIZE];
 
 	FILE *fppid = NULL;
@@ -203,8 +204,8 @@ int main(int argc, char **argv) {
 	while (1) {
 
 		/* read directory with perfdata files */
-
-		chdir(directory);
+		if (chdir(directory) != 0)
+			exit(EXIT_FAILURE);
 
 		/* is_file() filter may cause trouble on some systems
 		 * like Solaris or HP-UX that don't have a d-type
@@ -486,7 +487,7 @@ void * processfile(void *filename) {
 	char *file = (char *) filename;
 	char command_line[MAX_COMMANDLINE_LENGTH];
 	char buffer[MAX_LOGMESSAGE_SIZE];
-	int result;
+	int result = 0;
 	FILE *proc;
 
 	snprintf(command_line, sizeof(command_line), "%s %s %s %s/%s", command,

@@ -35,5 +35,8 @@ pnp_mmapfile *pnp_mmap_fopen(char *); /* open a file read-only via mmap() */
 int pnp_mmap_fclose(pnp_mmapfile *);
 char *pnp_mmap_fgets(pnp_mmapfile *);
 char *pnp_mmap_fgets_multiline(pnp_mmapfile *);
-
-extern pnp_strip(char *);
+int npcdmod_process_config_var(char *arg);
+int npcdmod_process_module_args(char *args);
+void npcdmod_file_roller();
+int npcdmod_handle_data(int, void *);
+extern void pnp_strip(char *);

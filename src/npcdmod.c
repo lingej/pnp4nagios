@@ -50,9 +50,6 @@ char *perfdata_file = "/usr/local/nagios/var/perfdata";
 char *perfdata_spool_filename = "perfdata";
 char *spool_dir = NULL;
 
-void npcdmod_file_roller();
-int npcdmod_handle_data(int, void *);
-
 /* this function gets called when the module is loaded by the event broker */
 int nebmodule_init(int flags, char *args, nebmodule *handle) {
 	char temp_buffer[1024];
@@ -92,19 +89,18 @@ int nebmodule_init(int flags, char *args, nebmodule *handle) {
 	}
 
 	/* Log some health data */
-	snprintf(temp_buffer, sizeof(temp_buffer) - 1, "npcdmod: spool_dir = '%s'.", spool_dir, NSLOG_INFO_MESSAGE);
+	snprintf(temp_buffer, sizeof(temp_buffer) - 1, "npcdmod: spool_dir = '%s'.", spool_dir);
 	temp_buffer[sizeof(temp_buffer) - 1] = '\x0';
 	write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
 
-	snprintf(temp_buffer, sizeof(temp_buffer) - 1, "npcdmod: perfdata file '%s'.", perfdata_file, NSLOG_INFO_MESSAGE);
+	snprintf(temp_buffer, sizeof(temp_buffer) - 1, "npcdmod: perfdata file '%s'.", perfdata_file);
 	temp_buffer[sizeof(temp_buffer) - 1] = '\x0';
 	write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
 
 	/* open perfdata_file to write perfdata in it */
 	if ((fp = fopen(perfdata_file, "a")) == NULL) {
 		snprintf(temp_buffer, sizeof(temp_buffer) - 1,
-				"npcdmod: Could not open file. %s", strerror(errno),
-				NSLOG_INFO_MESSAGE);
+			"npcdmod: Could not open file. %s", strerror(errno));
 		temp_buffer[sizeof(temp_buffer) - 1] = '\x0';
 		write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
 		return -1;
@@ -157,7 +153,7 @@ void npcdmod_file_roller() {
 
 	time(&current_time);
 
-	sprintf(spool_file, "%s%s.%d", spool_dir, perfdata_spool_filename, current_time);
+	sprintf(spool_file, "%s%s.%d", spool_dir, perfdata_spool_filename, (int)current_time);
 	spool_file[sizeof(spool_file) - 1] = '\x0';
 
 	/* close actual file */
@@ -169,8 +165,7 @@ void npcdmod_file_roller() {
 	/* open a new file */
 	if ((fp = fopen(perfdata_file, "a")) == NULL) {
 		snprintf(temp_buffer, sizeof(temp_buffer) - 1,
-				"npcdmod: Could not reopen file. %s", strerror(errno),
-				NSLOG_INFO_MESSAGE);
+				"npcdmod: Could not reopen file. %s", strerror(errno));
 		temp_buffer[sizeof(temp_buffer) - 1] = '\x0';
 		write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
 	}
@@ -186,7 +181,7 @@ int npcdmod_handle_data(int event_type, void *data) {
 	host *host=NULL;
 	service *service=NULL;
 
-	char temp_buffer[1024];
+//	char temp_buffer[1024];
 	char perfdatafile_template[9216];
 
 	/* what type of event/data do we have? */
@@ -220,7 +215,7 @@ int npcdmod_handle_data(int event_type, void *data) {
 					"HOSTPERFDATA::%s\t"
 					"HOSTCHECKCOMMAND::%s!%s\t"
 					"HOSTSTATE::%d\t"
-					"HOSTSTATETYPE::%d\n", hostchkdata->timestamp.tv_sec,
+					"HOSTSTATETYPE::%d\n", (int)hostchkdata->timestamp.tv_sec,
 						hostchkdata->host_name, hostchkdata->perf_data,
 						hostchkdata->command_name, hostchkdata->command_args,
 						hostchkdata->state, hostchkdata->state_type);
@@ -262,7 +257,7 @@ int npcdmod_handle_data(int event_type, void *data) {
 					"SERVICEPERFDATA::%s\t"
 					"SERVICECHECKCOMMAND::%s\t"
 					"SERVICESTATE::%d\t"
-					"SERVICESTATETYPE::%d\n", srvchkdata->timestamp.tv_sec,
+					"SERVICESTATETYPE::%d\n", (int)srvchkdata->timestamp.tv_sec,
 						srvchkdata->host_name, srvchkdata->service_description,
 						srvchkdata->perf_data, service->service_check_command,
 						srvchkdata->state, srvchkdata->state_type);

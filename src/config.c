@@ -60,14 +60,8 @@ void process_configfile(char *config_file) {
 
 	/* ok - parsing the config file line by line */
 	else {
-		while (feof(fh_config_file) == 0) {
+		while (fgets(current_config_line, 1024, fh_config_file) != NULL) {
 			line_number++;
-			temp = NULL;
-			fgets(current_config_line, 1024, fh_config_file);
-			if (current_config_line == NULL) {
-				printf("Error reading config\n");
-				exit(1);
-			}
 
 			if (current_config_line[0] == '#' || current_config_line[0] == '\n')
 				continue;
