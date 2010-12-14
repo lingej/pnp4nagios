@@ -23,8 +23,8 @@ $lang = array
     'tpl-no-services-found' => 'Службы "%s" не найдены. <a href="http://docs.pnp4nagios.org/faq/20">Read FAQ online</a>',
     'tpl-no-hosts-found' => 'Хосты "%s" не найдены. <a href="http://docs.pnp4nagios.org/faq/21">Read FAQ online</a>',
     'no-templates-found' => 'Шаблоны "%s" не найдены. <a href="http://docs.pnp4nagios.org/faq/22">Read FAQ online</a>',
-    'not_authorized' => 'You are not authorized to view this host/service',
-    'remote_user_missing' => 'Remote user is missing. Authentication check cancled. <a href="http://docs.pnp4nagios.org/faq/23">Read FAQ online</a>',
-    'livestatus_socket_error' => 'Livestatus Socket error: %s (%s) <a href="http://docs.pnp4nagios.org/faq/24">Read FAQ online</a>',
-    'not_authorized_for_host_overview' => 'You are not authorized to access this host overview page.',
+    'not_authorized' => 'Вы не авторизованы для просмотра данного хоста/службы',
+    'remote_user_missing' => 'Удалённый пользователь не указан. Проверка аутентификации отменена. <a href="http://docs.pnp4nagios.org/faq/23">Read FAQ online</a>',
+    'livestatus_socket_error' => 'Ошибка Livestatus сокета: %s (%s) <a href="http://docs.pnp4nagios.org/faq/24">Read FAQ online</a>',
+    'not_authorized_for_host_overview' => 'Вы не авторизованы для доступа к странице обзора хоста.',
 );
