@@ -2,3 +2,7 @@ PKG_REL_DATE="@PKG_REL_DATE@"
 PKG_VERSION="@PKG_VERSION@"
 PKG_NAME="@PKG_NAME@"
 
+#
+# Configure Arguments
+# ./configure @ac_configure_args@
+#

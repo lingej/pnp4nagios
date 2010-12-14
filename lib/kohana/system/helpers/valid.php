@@ -90,7 +90,7 @@ class valid_Core {
 	 */
 	public static function ip($ip, $ipv6 = FALSE, $allow_private = TRUE)
 	{
-		return (bool) preg_match('/(\d+).(\d+).(\d+).(\d+)/',$ip;
+		return (bool) preg_match('/(\d+).(\d+).(\d+).(\d+)/',$ip);
 	}
 
 	/**
