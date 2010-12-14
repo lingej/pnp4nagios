@@ -45,6 +45,10 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <td class="pass">@prefix@</td>
 </tr>
 <tr>
+<th>Configure Arguments</th>
+<td class="pass">./configure @ac_configure_args@</td>
+</tr>
+<tr>
 <th>RRD Storage</th>
 <?php if (is_readable('@PERFDATA_DIR@')): ?>
 <td class="pass">@PERFDATA_DIR@ is readable.</td>
@@ -195,9 +199,9 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 
 <div id="results">
 <?php if ($failed > 0): ?>
-<p class="fail">@PKG_NAME@ may not work correctly with your environment. Remove or rename the <code>install<?php echo EXT ?></code> file on your own risk.</p>
+<p class="fail">@PKG_NAME@ may not work correctly with your environment. Remove or rename the <code><?php echo __FILE__ ?></code> file on your own risk.</p>
 <?php else: ?>
-<p class="pass">Your environment passed all requirements. Remove or rename the <code>install<?php echo EXT ?></code> file now.</p>
+<p class="pass">Your environment passed all requirements. Remove or rename the <code><?php echo __FILE__ ?></code> file now.</p>
 <?php endif ?>
 </div>
 

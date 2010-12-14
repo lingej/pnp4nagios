@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT(pnp, 0.6.7, pnp4nagios-devel@lists.sourceforge.net)
+AC_INIT(pnp, 0.6.10, pnp4nagios-devel@lists.sourceforge.net)
 AC_CONFIG_SRCDIR(src/)
 AC_CONFIG_HEADERS(include/config.h:include/config.h.in)
 AC_PREFIX_DEFAULT(/usr/local/pnp4nagios)
@@ -11,13 +11,14 @@ AC_DEFINE([DEFAULT_NAGIOS_USER], [nagios], [Default Nagios User])
 AC_DEFINE([DEFAULT_NAGIOS_GROUP], [nagios], [Default Nagios Group])
 
 PKG_NAME=pnp4nagios
-PKG_VERSION="0.6.7"
+PKG_VERSION="0.6.10"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
-PKG_REL_DATE="09-27-2010"
+PKG_REL_DATE="12-14-2010"
 AC_SUBST(PKG_NAME)
 AC_SUBST(PKG_VERSION)
 AC_SUBST(PKG_HOME_URL)
 AC_SUBST(PKG_REL_DATE)
+AC_SUBST(ac_configure_args)
 XML_STRUCTURE_VERSION="4"
 AC_SUBST(XML_STRUCTURE_VERSION)
 
