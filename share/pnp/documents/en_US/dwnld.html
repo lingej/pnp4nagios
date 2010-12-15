@@ -35,7 +35,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Tue Dec 14 20:55:01 CET 2010
+Last Update: Wed Dec 15 13:55:01 CET 2010
 </p>
 
 </div>
@@ -45,84 +45,179 @@ Last Update: Tue Dec 14 20:55:01 CET 2010
 
 <p>
 
-<strong>pnp-0.6.11 ??/??/2011
+<strong>pnp-0.6.11 ??/??/2011</strong>
+</p>
 
-</strong>pnp-0.6.10 12/15/2010<strong>
+<p>
+<strong>pnp-0.6.10 12/15/2010</strong>
 
-  * Feature: Add RRDTool Option –only-graph if graph height is below 32px to create thumbnails 
-  * Feature: RRDTool Option –width and –height is now allowed in templates
-  * Feature: RRDTool DS Type for UOM of “c” changed from COUNTER to DERIVE   
-  * Feature: Pass query string from special controller to image controller ( Matthew Garrett ) 
-  * Feature: Authorisation against <a href="http://mathias-kettner.de/checkmk_livestatus.html" class="urlextern" title="http://mathias-kettner.de/checkmk_livestatus.html"  rel="nofollow">mk_livestatus</a> <acronym title="Application Programming Interface">API</acronym> added
-  * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
-  * Feature: Kohana backport to support <acronym title="Hypertext Preprocessor">PHP</acronym> 5.1.6 ( Kudos to Andreas Ericsson )
-  * Bugfix: Sort list of special templates
-  * Bugfix: Urlencode hostname and service description  ( Reported by Yannick ) 
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: Add RRDTool Option –only-graph if graph height is below 32px to create thumbnails </div>
+</li>
+<li class="level1"><div class="li"> Feature: RRDTool Option –width and –height is now allowed in templates</div>
+</li>
+<li class="level1"><div class="li"> Feature: RRDTool DS Type for UOM of “c” changed from COUNTER to DERIVE   </div>
+</li>
+<li class="level1"><div class="li"> Feature: Pass query string from special controller to image controller ( Matthew Garrett ) </div>
+</li>
+<li class="level1"><div class="li"> Feature: Authorisation against <a href="http://mathias-kettner.de/checkmk_livestatus.html" class="urlextern" title="http://mathias-kettner.de/checkmk_livestatus.html"  rel="nofollow">mk_livestatus</a> <acronym title="Application Programming Interface">API</acronym> added</div>
+</li>
+<li class="level1"><div class="li"> Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )</div>
+</li>
+<li class="level1"><div class="li"> Feature: Kohana backport to support <acronym title="Hypertext Preprocessor">PHP</acronym> 5.1.6 ( Kudos to Andreas Ericsson )</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Sort list of special templates</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Urlencode hostname and service description  ( Reported by Yannick ) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: corrected warning/critical thresholds in ticker/alerter functions</div>
+</li>
+</ul>
 
-</strong>pnp-0.6.7 09/27/2010<strong>
+<p>
 
-  * Bugfix: Page config parser fix (Beau Gunderson) 
-  * Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) 
-  * Bugfix: Fixed undefined offset while using &#039;ds_name&#039; in templates (Reported by Vladimir Bilik)
-  * Bugfix: Npcdmod respects process_perf_data option used in hosts and services definitions ( Reported by Wolfgang Barth )
-  * Template: New Template check_nagiostats.php used with check_nagiostats written by Jochen Bern 
+<strong>pnp-0.6.7 09/27/2010</strong>
 
-</strong>pnp-0.6.6 08/07/2010<strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix: Page config parser fix (Beau Gunderson) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Fixed undefined offset while using &#039;ds_name&#039; in templates (Reported by Vladimir Bilik)</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Npcdmod respects process_perf_data option used in hosts and services definitions ( Reported by Wolfgang Barth )</div>
+</li>
+<li class="level1"><div class="li"> Template: New Template check_nagiostats.php used with check_nagiostats written by Jochen Bern </div>
+</li>
+</ul>
 
-  * Bugfix: Fixed max amount of graphs per template 
-  * Bugfix: Autodetect PNP base <acronym title="Uniform Resource Locator">URL</acronym>
-  * Bugfix: Too short npcdmod perfdata_template to take perfdata + overhead, increased +1024byte
-  * Bugfix: Ignore files in var/perfdata and check for empty directories
-  * Bugfix: Reducing memory usage while parsing page config (Laurent Freval)
+<p>
 
-</strong>pnp-0.6.5 07/09/2010<strong>
+<strong>pnp-0.6.6 08/07/2010</strong>
 
-  * Feature: Special Templates are back <a href="/pnp-0.6/tpl_special" class="wikilink1" title="pnp-0.6:tpl_special">tpl_special</a>
-  * Feature: New rrdtool helper functions makes template design easier <a href="/pnp-0.6/tpl_helper" class="wikilink1" title="pnp-0.6:tpl_helper">tpl_helper</a>
-  * Feature: config.php → &#039;recursive_template_search&#039; is enabled by default
-  * Feature: config.php → &#039;template_dirs&#039; is now an array of directorys to search for PNP templates
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix: Fixed max amount of graphs per template </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Autodetect PNP base <acronym title="Uniform Resource Locator">URL</acronym></div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Too short npcdmod perfdata_template to take perfdata + overhead, increased +1024byte</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Ignore files in var/perfdata and check for empty directories</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Reducing memory usage while parsing page config (Laurent Freval)</div>
+</li>
+</ul>
 
-</strong>pnp-0.6.4 06/03/2010<strong>
+<p>
 
-  * Update: jQuery Update to 1.4.2
-  * Update: jQuery-ui Update to 1.8
-  * Feature: New configure Option –with-base-url
-  * Template: New template check_ntp_time.php (Mathias Kettner)
-  * Feature: New i18n files for fr_FR (Yannig Parre)
-  * Feature: New jQuery Theme &#039;multisite&#039;
+<strong>pnp-0.6.5 07/09/2010</strong>
 
-</strong>pnp-0.6.3 03/16/2010<strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: Special Templates are back <a href="/pnp-0.6/tpl_special" class="wikilink1" title="pnp-0.6:tpl_special">tpl_special</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: New rrdtool helper functions makes template design easier <a href="/pnp-0.6/tpl_helper" class="wikilink1" title="pnp-0.6:tpl_helper">tpl_helper</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: config.php → &#039;recursive_template_search&#039; is enabled by default</div>
+</li>
+<li class="level1"><div class="li"> Feature: config.php → &#039;template_dirs&#039; is now an array of directorys to search for PNP templates</div>
+</li>
+</ul>
 
-  * Feature: New helper script libexec/rrd_convert.pl → <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">rrd_convert</a>
-  * Bugfix: Ignore old <acronym title="Extensible Markup Language">XML</acronym> files while building the service list
-  * Template: New template check_hpasm.php
-  * Bugfix: Installer now checks for json_decode()
-  * Workaround: Allow “trailing unfilled semicolons”. Workaround for nsclient++
-  * Template: Updates for check_openmanage.php, check_hp_bladecenter.php and check_dell_baldecenter.php ( Trond Hasle Amundsen )”
+<p>
 
-</strong>pnp-0.6.2 12/23/2009<strong>
+<strong>pnp-0.6.4 06/03/2010</strong>
 
-  * Feature: <acronym title="Extensible Markup Language">XML</acronym>_WRITE_DELAY option added to process_perfdata.cfg as suggested by Mathias Kettner
-  * Feature: New template integer.php 
-  * Update: FPDI update to 1.3.1
-  * Feature: PNP will now work with <a href="http://http://www.lighttpd.net" class="urlextern" title="http://http://www.lighttpd.net"  rel="nofollow">lighttpd</a> and php-cgi
-  * Template: check_mk-ps.perf.php added ( by Mathias Kettner )
-  * Feature: PNP will now work without mod_rewrite → <a href="/pnp-0.6/webfe" class="wikilink1" title="pnp-0.6:webfe">webfe</a> 
-  * Bugfix: Wrong pdf link used on site &#039;pages&#039; and &#039;basket&#039;
-  * Bugfix: Incorrect group permissions on spool directory
+</p>
+<ul>
+<li class="level1"><div class="li"> Update: jQuery Update to 1.4.2</div>
+</li>
+<li class="level1"><div class="li"> Update: jQuery-ui Update to 1.8</div>
+</li>
+<li class="level1"><div class="li"> Feature: New configure Option –with-base-url</div>
+</li>
+<li class="level1"><div class="li"> Template: New template check_ntp_time.php (Mathias Kettner)</div>
+</li>
+<li class="level1"><div class="li"> Feature: New i18n files for fr_FR (Yannig Parre)</div>
+</li>
+<li class="level1"><div class="li"> Feature: New jQuery Theme &#039;multisite&#039;</div>
+</li>
+</ul>
 
-</strong>pnp-0.6.1 11/22/2009<strong>
+<p>
 
-  * Feature: RRD heartbeat per check_command → <a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">tpl_custom</a> 
-  * Feature: New config.php option pdf_graph_opt 
-  * Feature: Recognize the &#039;background_pdf&#039; option in page definitions → <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a>
-  * Feature: Recognize the &#039;source&#039; option in page definitions → <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a>
-  * Feature: Array $TIMERANGE now available for templates → <a href="/pnp-0.6/timeranges" class="wikilink1" title="pnp-0.6:timeranges">timeranges</a>
-  * Bugfix:  ./configure –sysconfdir no longer ignored
-  * Feature: Store internal runtime statistics on a per minute base 
-  * Feature: Added two widgets views/widget_menu.php and views/widget_graph.php 
+<strong>pnp-0.6.3 03/16/2010</strong>
 
-</strong>pnp-0.6.0 10/30/2009**
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: New helper script libexec/rrd_convert.pl → <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">rrd_convert</a></div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Ignore old <acronym title="Extensible Markup Language">XML</acronym> files while building the service list</div>
+</li>
+<li class="level1"><div class="li"> Template: New template check_hpasm.php</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Installer now checks for json_decode()</div>
+</li>
+<li class="level1"><div class="li"> Workaround: Allow “trailing unfilled semicolons”. Workaround for nsclient++</div>
+</li>
+<li class="level1"><div class="li"> Template: Updates for check_openmanage.php, check_hp_bladecenter.php and check_dell_baldecenter.php ( Trond Hasle Amundsen )”</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.2 12/23/2009</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: <acronym title="Extensible Markup Language">XML</acronym>_WRITE_DELAY option added to process_perfdata.cfg as suggested by Mathias Kettner</div>
+</li>
+<li class="level1"><div class="li"> Feature: New template integer.php </div>
+</li>
+<li class="level1"><div class="li"> Update: FPDI update to 1.3.1</div>
+</li>
+<li class="level1"><div class="li"> Feature: PNP will now work with <a href="http://http://www.lighttpd.net" class="urlextern" title="http://http://www.lighttpd.net"  rel="nofollow">lighttpd</a> and php-cgi</div>
+</li>
+<li class="level1"><div class="li"> Template: check_mk-ps.perf.php added ( by Mathias Kettner )</div>
+</li>
+<li class="level1"><div class="li"> Feature: PNP will now work without mod_rewrite → <a href="/pnp-0.6/webfe" class="wikilink1" title="pnp-0.6:webfe">webfe</a> </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Wrong pdf link used on site &#039;pages&#039; and &#039;basket&#039;</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Incorrect group permissions on spool directory</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.1 11/22/2009</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: RRD heartbeat per check_command → <a href="/pnp-0.6/tpl_custom" class="wikilink1" title="pnp-0.6:tpl_custom">tpl_custom</a> </div>
+</li>
+<li class="level1"><div class="li"> Feature: New config.php option pdf_graph_opt </div>
+</li>
+<li class="level1"><div class="li"> Feature: Recognize the &#039;background_pdf&#039; option in page definitions → <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: Recognize the &#039;source&#039; option in page definitions → <a href="/pnp-0.6/pages" class="wikilink1" title="pnp-0.6:pages">pages</a></div>
+</li>
+<li class="level1"><div class="li"> Feature: Array $TIMERANGE now available for templates → <a href="/pnp-0.6/timeranges" class="wikilink1" title="pnp-0.6:timeranges">timeranges</a></div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  ./configure –sysconfdir no longer ignored</div>
+</li>
+<li class="level1"><div class="li"> Feature: Store internal runtime statistics on a per minute base </div>
+</li>
+<li class="level1"><div class="li"> Feature: Added two widgets views/widget_menu.php and views/widget_graph.php </div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.0 10/30/2009</strong>
 
 </p>
 <ul>
