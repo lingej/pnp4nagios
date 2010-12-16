@@ -15,6 +15,10 @@ class Graph_Controller extends System_Controller  {
         $this->template->zoom_header   = $this->add_view('zoom_header');
         $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
         $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
+        $this->template->graph->icon_box           = $this->add_view('icon_box');
+        $this->template->graph->icon_box->position = "graph";
+        $this->template->graph->icon_box->xml_icon = TRUE;
+        $this->template->graph->icon_box->pdf_icon = TRUE;
     }
 
     public function index()
@@ -85,6 +89,8 @@ class Graph_Controller extends System_Controller  {
             $this->template->graph->timerange_box = $this->add_view('timerange_box');
             $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
 
+            $this->template->graph->icon_box->xml_icon = FALSE;
+
             $this->title = Kohana::lang('common.service-overview', $this->host);
             foreach($services as $service){
                 if($service['state'] == 'active')
@@ -102,8 +108,6 @@ class Graph_Controller extends System_Controller  {
                 throw new Kohana_Exception('error.not_authorized_for_host_overview');
             }            
         }
-        $this->template->graph->icon_box      = $this->add_view('icon_box');
-        $this->template->graph->icon_box->position = "graph";
         $this->template->graph->logo_box      = $this->add_view('logo_box');
         $this->template->graph->header->title = $this->title;
     }
