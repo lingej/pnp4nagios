@@ -38,13 +38,14 @@
 # 2010.11.21: 0.1.26 check bulk= entries, french messages
 # 2010.12.05:        move info to __DATA__
 # 2010.12.07: 0.1.27 check socket; typos
+# 2010.12.17: 0.1.28 bugfix (performance data), option -O
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.27";
+my $version = "0.1.28";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -97,6 +98,7 @@ my $cfg_call = "";
 my $StatusLog = "";
 my %StatusLog = ();
 my $Object = "";
+my $ObjectData = "";
 my $RRDpath = ""; # path to RRD files
 my $RRDdir = 0;
 my $RRDfile = 0;
@@ -141,6 +143,7 @@ GetOptions(
     "g|group=s" => \$group,
     "l|logfile=s" => \$LogFile,
     "o|object=s" => \$Object,
+    "O|objectdata=s" => \$ObjectData,
     "n|native=s" => \$language,
     "M|monitor=s" => \$product,
     "L|layout=s" => \$layout,
@@ -173,7 +176,7 @@ if ($vInfo) {
     exit 0;
 }
 
-if (($help) or ((! $mode) and (! $Object))) {
+if (($help) or ((! $mode) and (! $Object) and (! $ObjectData))) {
     usage();
     exit 0;
 }
@@ -182,6 +185,13 @@ if (($debug) and ($quiet)) {
     $quiet = 0;
     info ("qd");
     exit 2
+}
+
+if ($ObjectData) {
+    my $deli = substr($ObjectData,0,1);
+    ($ObjectData) =~ /$deli(.*)$deli/ if ($deli =~ /['"]/);
+    chk_perfdata ($ObjectData);
+    exit $err;
 }
 
 # system information
@@ -534,7 +544,7 @@ EOF2
 print <<EOF3;
 
 $0 [-h]
-    -m <mode> [ -l <logfile>] [ -p ] | -o <object>
+    -m <mode> [ -l <logfile>] [ -p ] | -o <object> | -O '<performance data>'
     [ -b <basedir> ]
     [ -B <binary> ]
     [ -c <config file> ]
@@ -556,36 +566,37 @@ $0 [-h]
     [ -d | -q ]
        
 parameters:
-    -h, --help        print these lines
-    -b, --basedir=s   $prod_name Base directory (default: $basedir)
-    -B, --binary=s    $prod_name binary (default: $product)
-    -c, --config=s    $prod_name main config file (default: $basedir/etc/product.cfg)
-    -m, --mode=s      PNP mode ("default", "sync", "bulk", "NPCD"$module)
-    -l, --logfile=s   check configure log file 
-    -D, --pnpdir=s    PNP root directory (PNP >= 0.6)
-    -N, --npcdcfg=s   PNP config file for NPCD mode (default: $basedir/etc/pnp/npcd.cfg)
-    -P, --ppcfg=s     process_perfdata config file (default: $basedir/etc/pnp/process_perfdata.cfg)
-    -C, --cpcfg=s     PNP config file (config.php)
-    -p, --precheck    use config files instead of objects cache
-    -r, --rrdtool=s   specify the location of the RRDtool binary
-    -R, --RRDpath=s   specify the perfdata directory (default: $basedir/share/perfdata) or "no" for no check
-    -U, --resource=s  specify the location of the resource.cfg (default: $basedir/etc/resource.cfg)
-    -M, --monitor=s   specify the monitoring product (default: nagios)
-    -L, --layout=s    specify a layout (Nagios2, Nagios3, SuSE, Fedora)
-    -T, --template=s  specify the path to the templates directory (default $basedir/share/pnp/templates.dist)
-    -u, --user=s      user of the perfdata directory
-    -g, --group=s     group of the perfdata directory
-    -q, --quiet       quiet mode, non-zero return code will indicate errors
-    -o, --object=s    $prod_name object (host name/service description)
-                      "Name" : search for matching host name or service desc
-                      "Name;": search for matching host name
-                      ";Name": search for service description
-    -t, --time        show warnings if RRDfiles are too old
-    -s, --skip        skip check of installed packages
-    -n, --native      show messages in native language (so far "es", "fr" or "de")
-    -e, --english     show english messages/links
-    -d, --debug       some debugging output
-    -I, --info        show information about compile time variable settings
+    -h, --help          print these lines
+    -b, --basedir=s     $prod_name Base directory (default: $basedir)
+    -B, --binary=s      $prod_name binary (default: $product)
+    -c, --config=s      $prod_name main config file (default: $basedir/etc/product.cfg)
+    -m, --mode=s        PNP mode ("default", "sync", "bulk", "NPCD"$module)
+    -l, --logfile=s     check configure log file 
+    -D, --pnpdir=s      PNP root directory (PNP >= 0.6)
+    -N, --npcdcfg=s     PNP config file for NPCD mode (default: $basedir/etc/pnp/npcd.cfg)
+    -P, --ppcfg=s       process_perfdata config file (default: $basedir/etc/pnp/process_perfdata.cfg)
+    -C, --cpcfg=s       PNP config file (config.php)
+    -p, --precheck      use config files instead of objects cache
+    -r, --rrdtool=s     specify the location of the RRDtool binary
+    -R, --RRDpath=s     specify the perfdata directory (default: $basedir/share/perfdata) or "no" for no check
+    -U, --resource=s    specify the location of the resource.cfg (default: $basedir/etc/resource.cfg)
+    -M, --monitor=s     specify the monitoring product (default: nagios)
+    -L, --layout=s      specify a layout (Nagios2, Nagios3, SuSE, Fedora)
+    -T, --template=s    specify the path to the templates directory (default $basedir/share/pnp/templates.dist)
+    -u, --user=s        user of the perfdata directory
+    -g, --group=s       group of the perfdata directory
+    -q, --quiet         quiet mode, non-zero return code will indicate errors
+    -o, --object=s      $prod_name object (host name/service description)
+                        "Name" : search for matching host name or service desc
+                        "Name;": search for matching host name
+                        ";Name": search for service description
+    -O, --objectdata=s  performance data to check, enclosed within single quotes
+    -t, --time          show warnings if RRDfiles are too old
+    -s, --skip          skip check of installed packages
+    -n, --native        show messages in native language (so far "es", "fr" or "de")
+    -e, --english       show english messages/links
+    -d, --debug         some debugging output
+    -I, --info          show information about compile time variable settings
 EOF3
 }
 
@@ -676,6 +687,53 @@ sub process_nagios_cfg {
     }
 }
 
+# check process performance data
+sub chk_perfdata {
+# $perf_data = "'hello folks'=10%;20:10;10;45;10; errors=5";
+    my $perf_data = shift;
+    my $hint = 0;
+    info ("[I] Performance data: $perf_data");
+    $_= $perf_data." ";
+    # try to check for valid performance data according to
+    # http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201
+    while ($_) {
+        my ($label) = $_ =~ /^(.*?)=/;
+        if (! defined($label)) {
+            info ("noLabel");
+            $hint = 1;
+        } else {
+            info ("[D] Label:>$label<") if ($debug);
+            if (/^'/) {
+                s/^'(.*?)'=//;
+                $label = $1;
+            } else {
+                info ("noQuotes", "$label") if (index($label,' ') > 0);
+                s/^(.*?)=//;
+            }
+        }
+        s/,/./g;    # change decimal comma
+        s/^(.*?)[; ]//;
+        my ($value,$uom) = $1 =~ /([-]?[0-9.]+)(.*)/;
+        if (! defined($value)) {
+            info ("invValue");
+            $hint = 1;
+        } else {
+            info ("[D] value:>$value<") if ($debug);
+        }
+        if (($uom) and ($uom !~ /^(c|%|[um]?s|[KMGT]?B)$/)) {
+            info ("invUOM","$uom");
+            $hint = 1;
+        }
+        info ("[D] UOM:>$uom<:") if (($debug) and (defined($uom)));
+        chk_fmt ("Warning",  '^[@~]?[-]?[0-9.:]+$');
+        chk_fmt ("Critical", '^[@~]?[-]?[0-9.:]+$');
+        chk_fmt ("Minimum",  '^[-]?[0-9.]+$');
+        chk_fmt ("Maximum",  '^[-]?[0-9.]+$');
+        s/^\s+//;
+    }
+    return $hint;
+}
+
 # process status log file
 sub status_log {
     return if ($Object eq "");
@@ -715,7 +773,6 @@ sub status_log {
         $zeile .= "#" if ($_ =~ /=/);
         if ($zeile =~ /\}/) {            
             $StatusLog{"$name"} = $zeile;
-            info ("[D] $zeile") if ($debug);
             if ($hostname ne "") {
                 if ($zeile !~ /host_name=$hostname/i) {
                     $zeile = "";
@@ -729,48 +786,11 @@ sub status_log {
                 }    
             }
             if (uc($name) =~ /$Object/i) {
+                info ("[D] $zeile") if ($debug);
                 $name =~ s/.*?;//;
                 my ($perf_data) = $zeile =~ /#performance_data\s*=\s*(.*?)#/;
                 if ($perf_data ne "") {
-                    info ("[I] Performance data ($name): $perf_data");
-                    $_= $perf_data." ";
-                    # try to check for valid performance data according to
-                    # http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN203
-                    while ($_) {
-                        my $label = "";
-                        if (/^'/) {
-                            s/^'(.*?)'=//;
-                            $label = $1;
-                        } else {
-                            s/(.*?)=//;
-                            $label = $1;
-                        }
-                        if (! defined($label)) {
-                            info ("noLabel");
-                            $hint = 1;
-                        } else {
-                            info ("[D] Label:>$label<") if ($debug);
-                        }
-                        s/,/./g;    # change decimal comma 
-                        s/^(.*?)[; ]//;
-                        my ($value,$uom) = $1 =~ /([-]?[0-9.]+)(.*)/;
-                        if (! defined($value)) {
-                            info ("invValue");
-                            $hint = 1;
-                        } else {
-                            info ("[D] value:>$value<") if ($debug);
-                        }
-                        if (($uom) and ($uom !~ /^(c|%|[um]?s|[KMGT]?B)$/)) {
-                            info ("invUOM","$uom");
-                            $hint = 1;
-                        }
-                        info ("[D] UOM:>$uom<:\n") if (($debug) and (defined($uom)));
-                        chk_fmt ("Warning",  '^[@~]?[-]?[0-9.:]+$');
-                        chk_fmt ("Critical", '^[@~]?[-]?[0-9.:]+$');
-                        chk_fmt ("Minimum",  '^[-]?[0-9.]+$');
-                        chk_fmt ("Maximum",  '^[-]?[0-9.]+$');
-                        s/^\s+//;
-                    }
+                    chk_perfdata ($perf_data);
                 } else {
                     info ("noPerf","$name");
                     info ("LinkPNPreq");
@@ -975,9 +995,10 @@ sub chk_fmt {
     return if (/^$/);
     s/^(.*?)([; ])//;
     my $value = $1 || "";
-    if (($value ne "") and ($2 eq " ")) {
+    my $delim = $2;
+    if (($value ne "") and ($delim eq " ")) {
         $_ = " ".$_;
-        return;
+#        return;
     }
     $zeile .= "value:>$value< ";
     if ($value) {
@@ -1010,10 +1031,13 @@ sub chk_fmt {
                 }
             }
         } else {    
-            $value =~ /([-]?[0-9.]+)/;
-            $zeile .= "alert if value > $1";
-        }        
+#            $value =~ /([-]?[0-9.]+)/;
+            $zeile .= "alert if value < 0 or value > $value" if ($var =~ /[WC]/);
+        }
+    } else {
+        $_ = " ".$_;
     }
+    info ("invEOD", $var) if (($var eq "Maximum") and ($delim eq ";"));
     info ("[D] $zeile") if (($debug) and ($zeile)); 
 }
 
@@ -1448,7 +1472,7 @@ sub abort {
 }
 
 # check perfdata dir
-sub chk_perfdata {
+sub chk_perfdatadir {
     -d && $_ ne "." && $RRDdir++;
     -d && $_ ne "." && info ("procFile", "$_") if ($debug);
     my $f = "$File::Find::name";
@@ -1565,7 +1589,7 @@ sub chk_rrdpath {
         } else {
             unlink ("$RRDpath/testfile");
         }
-        find(\&chk_perfdata, "$RRDpath");
+        find(\&chk_perfdatadir, "$RRDpath");
         if ($RRDfile) {
             info ("RRDcount", $RRDdir, $RRDfile);
         } else {
@@ -1700,6 +1724,8 @@ sub message {
     $msg{"invTempVar"} = "[E] variable \"%s\" in template is (probably) invalid";
     $msg{"invTempVal"} = "[E] value \"%s\" in template is invalid, should be \"%s\"";
     $msg{"invEOL"} = "[E] \"%s\" should end with a semicolon";
+    $msg{"invEOD"} = "[E] \"%s\" must not end with a semicolon";
+    $msg{"noQuotes"} = "[E] \"%s\" must be enclosed within quotes";
     $msg{"invQuote"} = "[E] \"%s\" quotes are not matching";
     $msg{"missTempVar"} = "[E] variable \"%s\" in template is missing";
     $msg{"missinvTempVal"} = "[E] value \"%s\" in template is missing";
@@ -1815,6 +1841,8 @@ sub message {
         $msg{"invTempVar"} = "[E] Variable \"%s\" im Template ist (wahrscheinlich) ungueltig";
         $msg{"invTempVal"} = "[E] Wert \"%s\" im Template ist ungueltig, sollte \"%s\" lauten";
         $msg{"invEOL"} = "[E] \"%s\" sollte mit einem Semikolon enden";
+        $msg{"invEOD"} = "[E] \"%s\" darf nicht mit einem Semikolon enden";
+        $msg{"noQuotes"} = "[E] \"%s\" muss in Apostroph eingeschlossen sein";
         $msg{"invQuote"} = "[E] \"%s\" Anfuehrungszeichen nicht paarig";
         $msg{"missTempVar"} = "[E] Variable \"%s\" im Template fehlt";
         $msg{"missinvTempVal"} = "[E] Wert \"%s\" im Template fehlt";
@@ -2010,6 +2038,8 @@ sub message {
         $msg{"invTempVar"} = "[E] variable \"%s\" dans la modèle est invalide (probablement)";
         $msg{"invTempVal"} = "[E] valeur \"%s\" dans la modèle est invalide, devrait être \"%s\"";
         $msg{"invEOL"} = "[E] \"%s\" devrait se terminer par un point-virgule";
+        $msg{"invEOD"} = "[E] \"%s\" ne doit pas se terminer par un point-virgule";
+        $msg{"noQuotes"} = "[E] \"%s\" doit être entre guillemets";
         $msg{"invQuote"} = "[E] \"%s\" guillemets ne sont pas de contrepartie";
         $msg{"missTempVar"} = "[E] variable \"%s\" dans la modèle est manquante";
         $msg{"missinvTempVal"} = "[E] valeur \"%s\" dans la modèle est manquante";
