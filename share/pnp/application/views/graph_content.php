@@ -16,9 +16,16 @@ if($this->is_authorized == FALSE){
     return;
 }
 
+if($this->data->ERROR != NULL){
+    echo "<div style=\"padding: 0pt 0.7em;\" class=\"ui-state-error ui-corner-all\">\n"; 
+    echo "<p><span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-alert\"></span>\n"; 
+    echo "<strong>Alert:&nbsp;</strong>".$this->data->ERROR."</p>\n";
+    echo "</div></div>\n";
+    return;
+}
 $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 
-    if($value['LEVEL'] == 0){
+   	if($value['LEVEL'] == 0){
 		echo "<strong>Host: </strong>".$value['MACRO']['DISP_HOSTNAME']. " <strong>Service: </strong>".$value['MACRO']['DISP_SERVICEDESC']."<p>\n";
 		echo "<strong>".$value['TIMERANGE']['title']. "</strong> " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "\n";
 		$count = 0;
@@ -57,10 +64,10 @@ foreach($this->data->STRUCT as $key=>$value){
 		$value['VIEW'],
 		$value['GRAPH_WIDTH'],
 		$value['GRAPH_HEIGHT'])."</td>\n";
-    echo "</tr></table>\n";
-    echo "</div>\n";
-    echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
-    echo "<a href=\"".url::base(TRUE)."graph?host=" 
+	echo "</tr></table>\n";
+	echo "</div>\n";
+   	echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
+   	echo "<a href=\"".url::base(TRUE)."graph?host=" 
 		.$value['MACRO']['HOSTNAME'] . "&srv=" 
 		.$value['MACRO']['SERVICEDESC'] ."\" title=\""
 		.Kohana::lang('common.host',$value['MACRO']['DISP_HOSTNAME']) . " "
@@ -75,7 +82,7 @@ foreach($this->data->STRUCT as $key=>$value){
 		"&start=" . $value['TIMERANGE']['start'] .
 		"&end=" . $value['TIMERANGE']['end'] . 
 		"\"></a>\n";
-    echo "</div><p>\n";
+   	echo "</div><p>\n";
 }
 echo "</div>\n";
 ?>

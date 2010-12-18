@@ -2,7 +2,7 @@
 /**
  * Retrieves and manipulates current status of hosts (and services?)
  */
-class Rrdtool_Model extends Model
+class Rrdtool_Model extends System_Model
 {
 
     private $RRD_CMD   = FALSE;

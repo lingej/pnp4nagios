@@ -3,7 +3,7 @@
 /**
  * Retrieves the PNP config files 
  */
-class Auth_Model extends Model {
+class Auth_Model extends System_Model {
     public $SOCKET       = NULL;
     public $socketPath   = NULL;
     public $socketDOMAIN = NULL;

@@ -16,6 +16,7 @@ class System_Controller extends Template_Controller {
         $this->config     = new Config_Model();
         $this->rrdtool    = new Rrdtool_Model();
         $this->auth       = new Auth_Model();
+		#$this->system	  = new System_Model();
 
         $this->config->read_config();
         Kohana::config_set('locale.language',$this->config->conf['lang']);

@@ -35,6 +35,8 @@
 <h3><?php echo Kohana::lang('core.stack_trace') ?></h3>
 <?php echo $trace ?>
 <?php endif ?>
+<p>
+<a href="javascript:history.back()"><?php echo Kohana::lang('common.back') ?></a>
 
 </div>
 </div>
@@ -49,6 +51,7 @@
 
 <div class="p4 ui-widget-content ui-corner-bottom" >
 <?php
+echo "<a title=\"".Kohana::lang('common.back')."\" href=\"javascript:history.back()\"><img class=\"icon\" src=\"".url::base()."media/images/back.png\"></a>\n";
 echo "<a title=\"".Kohana::lang('common.title-home-link')."\" href=\"".url::base(TRUE)."graph\"><img class=\"icon\" src=\"".url::base()."media/images/home.png\"></a>\n";
 echo "<a title=\"".Kohana::lang('common.title-docs-link')."\" href=\"".url::base(TRUE)."docs\"><img class=\"icon\" src=\"".url::base()."media/images/docs.png\"></a>\n";
 ?>
