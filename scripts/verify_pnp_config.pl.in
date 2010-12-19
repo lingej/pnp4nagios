@@ -39,6 +39,7 @@
 # 2010.12.05:        move info to __DATA__
 # 2010.12.07: 0.1.27 check socket; typos
 # 2010.12.17: 0.1.28 bugfix (performance data), option -O
+# 2010.12.19:        check permissions of perfdata dirs  
 
 use strict;
 use Getopt::Long;
@@ -1475,6 +1476,7 @@ sub abort {
 sub chk_perfdatadir {
     -d && $_ ne "." && $RRDdir++;
     -d && $_ ne "." && info ("procFile", "$_") if ($debug);
+    -d && $_ ne "." && chk_usrgrp ($_);
     my $f = "$File::Find::name";
     return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
     chk_usrgrp ($f);
