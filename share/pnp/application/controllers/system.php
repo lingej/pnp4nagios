@@ -28,9 +28,17 @@ class System_Controller extends Template_Controller {
         $this->end               = $this->input->get('end',FALSE);
         $this->theme             = $this->input->get('theme',FALSE);
         $this->view              = "";
-        $this->host              = urldecode($this->input->get('host',NULL));
-        $this->service           = urldecode($this->input->get('srv',NULL));
+        $this->host              = $this->input->get('host',NULL);
+        $this->service           = $this->input->get('srv',NULL);
         $this->controller        = Router::$controller;
+
+        if($this->host != NULL){
+		$this->host = urldecode($this->host);
+        }
+
+        if($this->service != NULL){
+		$this->service = urldecode($this->service);
+        }
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
             $this->view = pnp::clean($_GET['view']);
