@@ -57,7 +57,7 @@ class Image_Controller extends System_Controller  {
             }
             $this->rrdtool->streamImage($image); 
         }else{
-            $this->rrdtool->streamImage("ERROR:\n\n");
+            url::redirect("start", 302);
         }
     }
 

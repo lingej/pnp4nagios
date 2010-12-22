@@ -24,6 +24,7 @@ clean:
 	-rm -f httpd.conf 
 	-rm -f pnp/pnp4nagios_release
 	-rm -f lighttpd.pnp4nagios.conf
+	-rm -f nginx.pnp4nagios.conf
 
 distclean: clean
 	-rm -f Makefile
