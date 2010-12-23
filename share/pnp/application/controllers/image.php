@@ -45,6 +45,8 @@ class Image_Controller extends System_Controller  {
             $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);
             $this->rrdtool->streamImage($image);
         }elseif(isset($this->host) && isset($this->service)){
+            $this->service = pnp::clean($this->service);
+            $this->host    = pnp::clean($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view,$this->source);
             if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE)
                 $this->rrdtool->streamImage("ERROR: NOT_AUTHORIZED"); 
