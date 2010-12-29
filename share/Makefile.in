@@ -43,7 +43,6 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/es_ES
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/ru_RU
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/i18n/fr_FR
-	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/libraries
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/models
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/views
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/application/vendor
