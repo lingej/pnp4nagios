@@ -186,5 +186,10 @@ perfdata_file = @localstatedir@/perfdata.dump
 
 perfdata_spool_filename = perfdata
 
+#
+# perfdata_file_processing_interval
+#
+perfdata_file_processing_interval = 15
+
 # We have to end with a newline
 

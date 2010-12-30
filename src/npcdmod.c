@@ -48,6 +48,7 @@ void *npcdmod_module_handle = NULL;
 char *perfdata_file = "/usr/local/nagios/var/perfdata";
 char *perfdata_spool_filename = "perfdata";
 char *spool_dir = NULL;
+char *perfdata_file_processing_interval = "15";
 
 void npcdmod_file_roller();
 int npcdmod_handle_data(int, void *);
@@ -59,7 +60,7 @@ int npcdmod_process_module_args(char *args);
 int nebmodule_init(int flags, char *args, nebmodule *handle) {
 	char temp_buffer[1024];
 	time_t current_time;
-	unsigned long interval;
+	//unsigned long interval;
 
 	/* save our handle */
 	npcdmod_module_handle = handle;
@@ -119,9 +120,9 @@ int nebmodule_init(int flags, char *args, nebmodule *handle) {
 
 	/* register for a 15 seconds file move event */
 	time(&current_time);
-	interval = 15;
-	schedule_new_event(EVENT_USER_FUNCTION,TRUE, current_time + interval, TRUE,
-	interval, NULL, TRUE, (void *) npcdmod_file_roller, "", 0);
+	//interval = 15;
+	schedule_new_event(EVENT_USER_FUNCTION,TRUE, current_time + atoi(perfdata_file_processing_interval), TRUE,
+	atoi(perfdata_file_processing_interval), NULL, TRUE, (void *) npcdmod_file_roller, "", 0);
 
 	/* register to be notified of certain events... */
 	neb_register_callback(NEBCALLBACK_HOST_CHECK_DATA, npcdmod_module_handle,
@@ -431,6 +432,9 @@ int npcdmod_process_config_var(char *arg) {
 
 	else if (!strcmp(var, "perfdata_spool_filename"))
 		perfdata_spool_filename = strdup(val);
+
+	else if (!strcmp(var, "perfdata_file_processing_interval"))
+		perfdata_file_processing_interval = strdup(val);
 
 	else if (!strcmp(var, "user"))
 		;

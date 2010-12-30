@@ -250,6 +250,9 @@ void process_configfile(char *config_file) {
 			else if (!strcmp(variable, "perfdata_spool_filename"))
 				;
 
+			else if (!strcmp(variable, "perfdata_file_processing_interval"))
+				;
+
 			else if (!strcmp(variable, "user")) {
 
 				/* save the macro */
