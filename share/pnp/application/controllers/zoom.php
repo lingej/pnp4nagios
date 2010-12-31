@@ -29,6 +29,21 @@ class Zoom_Controller extends System_Controller  {
             $this->view = $this->config->conf['overview-range'];
         }
 
+		#
+		#  Limit startto 2000/01/01
+		#
+		$start_limit = strtotime("2000/01/01");
+		$this->start = abs((int)$this->start);
+		if($this->start < $start_limit)
+			$this->start = $start_limit;
+		#
+		# Limit end to now + one hour 
+		#	
+		$end_limit = time() + 3600;
+		$this->end = abs((int)$this->end);
+		if($this->end > $end_limit)
+			$this->end = $end_limit;
+
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
         if(isset($this->tpl) && $this->tpl != 'undefined' ){

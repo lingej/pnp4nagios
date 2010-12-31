@@ -579,7 +579,7 @@ function onMouseUpEvent(e) {
 		var host = gUrlObj.getUrlParameterValue("host");
 		var srv = gUrlObj.getUrlParameterValue("srv");
 		var tpl = gUrlObj.getUrlParameterValue("tpl");
-		var graphWidth = gUrlObj.getUrlParameterValue("_width");
+		var graphWidth = gUrlObj.getUrlParameterValue("graph_width");
 		var graphHeight = gUrlObj.getUrlParameterValue("graph_height");
 		var view = gUrlObj.getUrlParameterValue("view");
 		var source = gUrlObj.getUrlParameterValue("source");
