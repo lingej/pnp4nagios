@@ -1257,7 +1257,6 @@ sub chk_cpcfg {
     $CPcfg{'$conf[\'special_template_dir\']'} = 'd;;';
     $CPcfg{'$conf[\'multigraph-links\']'} = 'v;0|1;-279';    
     $CPcfg{'$conf[\'html_dir-links\']'} = 'd;;235-237';    
-    $CPcfg{'$conf[\'livestatus_socket\']'} = 's;;';
     $CPcfg{'$conf[\'auth_enabled\']'} = 'v;false|true;';
     $CPcfg{'$conf[\'allowed_for_all_hosts\']'} = 'S;.*;';
     $CPcfg{'$conf[\'allowed_for_all_services\']'} = 'S;.*;';
