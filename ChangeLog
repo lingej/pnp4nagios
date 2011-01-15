@@ -1,7 +1,10 @@
-**pnp-0.6.11 ??/??/2011**
+**pnp-0.6.12 ??/??/2011**
+
+**pnp-0.6.11 01/15/2011**
   * Bugfix: urldecoding fixed 
   * Bugfix: Zoom in/out is working again ( Reported by Thorben Soehl )
   * Featue: npcd.cfg -  New option perfdata_file_processing_interval used by npcdmod
+  * Info: Version used by OMD-0.46 [[http://omdistro.org|OMD]]
 
 **pnp-0.6.10 12/15/2010**
 
