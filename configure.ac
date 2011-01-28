@@ -285,7 +285,7 @@ else
 fi
 AC_SUBST(RRDS)
 
-AC_CONFIG_FILES( subst Makefile share/Makefile lib/Makefile scripts/Makefile src/Makefile sample-config/Makefile )
+AC_CONFIG_FILES( subst Makefile share/Makefile lib/Makefile scripts/Makefile src/Makefile sample-config/Makefile man/Makefile )
 AC_OUTPUT()
 
 $PERL subst summary
