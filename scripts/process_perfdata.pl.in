@@ -46,7 +46,8 @@ my %conf = (
     LOG_LEVEL         => @DEBUG@,
     XML_ENC           => "UTF-8",
     XML_UPDATE_DELAY  => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
-    RRD_DAEMON_OPTS   => ""
+    RRD_DAEMON_OPTS   => "",
+    UOM2TYPE          => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
 );
 
 my %const = (
@@ -289,6 +290,8 @@ sub data2rrd {
     $NAGIOS{XMLFILE}          = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".xml";
     $NAGIOS{SERVICEDESC}      = $data[0]{servicedesc};
     $NAGIOS{DISP_SERVICEDESC} = $data[0]{disp_servicedesc};
+    $NAGIOS{AUTH_SERVICEDESC} = $data[0]{auth_servicedesc} || "";
+    $NAGIOS{AUTH_HOSTNAME}    = $data[0]{auth_hostname} || "";
     $NAGIOS{MULTI_PARENT}     = "";
     $NAGIOS{MULTI_PARENT}     = $data[0]{multi_parent} || "";
     $TEMPLATE                 = $data[0]{template};
@@ -593,13 +596,13 @@ sub read_custom_template {
     my $rrd_storage_type  = $conf{'RRD_STORAGE_TYPE'};
     my $rrd_heartbeat     = $conf{'RRD_HEARTBEAT'};
 
-    if ( $uom eq "c" ) {
-        $dstype = "COUNTER";
+    if ( defined($conf{'UOM2TYPE'}{$uom}) ) {
+        $dstype = $conf{'UOM2TYPE'}{$uom};
         print_log( "DEBUG: DSTYPE adjusted to $dstype by UOM", 3 );
+    }else {
+        $dstype = 'GAUGE'; 
     }
-    else {
-        $dstype = "GAUGE";
-    }
+
     print_log( "DEBUG: RAW Command -> $command", 3 );
     my @temp_template = split /\!/, $command;
     my $template = cleanup( $temp_template[0] );
@@ -872,8 +875,6 @@ sub parse_perfstring {
     my %CTPL = ();
     $dstype = "GAUGE";
     my $perfstring = shift;
-    #$perfstring =~ s/\\/\//g;
-    #$perfstring =~ s/\//_/g;
     my $is_multi = "0";
     my @perfs;
     my @multi;
@@ -884,12 +885,13 @@ sub parse_perfstring {
     #
     # check_multi
     #
-    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)=/ ) {
+    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)=/ ) {
         $is_multi = 1;
         print_log( "check_multi Perfdata start", 3 );
         my $count        = 0;
         my $check_multi_blockcount = 0;
-        my $multi_parent = cleanup( $NAGIOS{SERVICEDESC} );
+        my $multi_parent     = cleanup( $NAGIOS{SERVICEDESC} );
+        my $auth_servicedesc = $NAGIOS{DISP_SERVICEDESC};
         while ($perfstring) {
             ( $perfstring, %p ) = _parse($perfstring);
             if ( !$p{label} ) {
@@ -898,7 +900,7 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
-            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)$/ ) {
+            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)$/ ) {
                 @multi = ( $1, $2, $3 );
                 if ( $count == 0 ) {
                     print_log( "DEBUG: First check_multi block", 3 );
@@ -906,6 +908,7 @@ sub parse_perfstring {
                     # Keep servicedesc while processing the first block.
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
                     $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
+                    $p{auth_servicedesc} = $auth_servicedesc;
                     $p{multi}            = 1;
                     $p{multi_parent}     = $multi_parent;
                 }
@@ -916,6 +919,7 @@ sub parse_perfstring {
                     $p{multi_parent}     = $multi_parent;
                     $p{servicedesc}      = cleanup( $multi[0] );    # Use the multi servicedesc.
                     $p{disp_servicedesc} = cleanup( $multi[0] );    # Use the multi servicedesc.
+                    $p{auth_servicedesc} = $auth_servicedesc;
                     data2rrd(@perfs) if ( $#perfs >= 0 );           # Process when a new block starts.
                     @perfs = ();                                    # Clear the perfs array.
                     # reset check_multi block count
@@ -925,14 +929,17 @@ sub parse_perfstring {
 
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
-                }
-                else {
+                } 
+		else {
                     $p{rrd_max} = "U";
                 }
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
                 }
-                else {
+		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } 
+		else {
                     $p{rrd_min} = "U";
                 }
                 $p{template}         = $CTPL{'TEMPLATE'};
@@ -943,6 +950,7 @@ sub parse_perfstring {
                 $p{name}             = cleanup( $multi[2] );           # store the original label from check_multi header
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
+                $p{auth_hostname}    = $NAGIOS{HOSTNAME};
                 push @perfs, {%p};
                 $count++;
             }
@@ -961,6 +969,9 @@ sub parse_perfstring {
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
                 }
+		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } 
                 else {
                     $p{rrd_min} = "U";
                 }
@@ -970,9 +981,10 @@ sub parse_perfstring {
                 $p{rrd_heartbeat}    = $CTPL{'RRD_HEARTBEAT'};
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
+                $p{auth_hostname}    = $NAGIOS{HOSTNAME};
                 if ( $count == 1 ) {
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );    # Use the servicedesc.
-                    $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};               # Use the servicedesc.
+                    $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};          # Use the servicedesc.
                 }
                 else {
                     $p{servicedesc}      = cleanup( $multi[0] );               # Use the multi servicedesc.
@@ -980,6 +992,7 @@ sub parse_perfstring {
                 }
                 $p{multi}        = $is_multi;
                 $p{multi_parent} = $multi_parent;
+                $p{auth_servicedesc} = $auth_servicedesc;          # Use the servicedesc.
                 push @perfs, {%p};
             }
         }
@@ -1011,6 +1024,9 @@ sub parse_perfstring {
             if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                 $p{rrd_min} = $p{min};
             }
+	    elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+		$p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+	    } 
             else {
                 $p{rrd_min} = "U";
             }
@@ -1022,8 +1038,10 @@ sub parse_perfstring {
             $p{multi}            = $is_multi;
             $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
             $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
+            $p{auth_hostname}    = $NAGIOS{DISP_HOSTNAME};
             $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
             $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
+            $p{auth_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
 
             push @perfs, {%p};
             $count++;

@@ -76,7 +76,10 @@ Einige grundlegende Einstellungen sind zu prüfen.
 </p>
 
 <p>
-<code>process_perfdata.pl</code> legt für jeden Host unter var/perfdata ein neues Verzeichnis an. In diesem Verzeichnis wird wiederum für jeden Service eine RRD-Datenbank und ein <acronym title="Extensible Markup Language">XML</acronym>-File erstellt. Für den Host-Check lautet der Dateinamen <code>_HOST_.xml</code> bzw. <code>_HOST_.rrd</code>.
+<code>process_perfdata.pl</code> legt für jeden Host unter var/perfdata ein neues Verzeichnis an. In diesem Verzeichnis wird wiederum für jeden Service eine RRD-Datenbank und ein <acronym title="Extensible Markup Language">XML</acronym>-File erstellt. Für den Host-Check lautet der Dateinamen <code>_HOST_.xml</code> bzw. <code>_HOST_.rrd</code>.<br/>
+
+Falls Graphen urplötzlich nicht mehr weitergeführt werden, dann hilft vielleicht ein Blick in die betroffene <acronym title="Extensible Markup Language">XML</acronym>-Datei. Dort gibt es u.a. die Tags &lt;RC&gt; und &lt;TXT&gt;. &lt;RC&gt; zeigt den Return-Code des RRDtool-Updates der RRD-Datei, &lt;TXT&gt; eine textuelle Beschreibung.<br/>
+
 Allerdings liefern nicht alle Checks Performance-Daten, das gilt u.a. für “check_ping”, die Alternative “check_icmp” dagegen erzeugt Daten (ab Nagios-Plugin-Version 1.4.12 liefert auch check_ping Performance-Daten).<br/>
 
 Teilweise muss man zusätzliche Optionen aktivieren, damit Performance-Daten ausgegeben werden. Evtl. kann das auch durch ein <a href="/de/pnp-0.6/wrapper" class="wikilink1" title="de:pnp-0.6:wrapper">Wrapper-Script</a> geändert werden.<br/>
@@ -105,7 +108,11 @@ siehe <a href="/de/pnp-0.6/about#anforderungen" class="wikilink1" title="de:pnp-
 </p>
 
 <p>
-4. verify_pnp_config
+4. Bei aktiviertem npcdmod-Modul muss der Wert von <code>event_broker_options</code> in der nagios.cfg ggf. angepasst werden. Hinweise gibt es <a href="/de/pnp-0.6/config#bulk_mode_with_npcd_und_npcdmod" class="wikilink1" title="de:pnp-0.6:config">hier</a>.
+</p>
+
+<p>
+5. verify_pnp_config
 </p>
 
 <p>

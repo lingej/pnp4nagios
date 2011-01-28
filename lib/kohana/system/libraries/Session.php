@@ -152,8 +152,7 @@ class Session_Core {
 			Session::$config['expiration'],
 			Kohana::config('cookie.path'),
 			Kohana::config('cookie.domain'),
-			Kohana::config('cookie.secure'),
-			Kohana::config('cookie.httponly')
+			Kohana::config('cookie.secure')
 		);
 
 		// Start the session!

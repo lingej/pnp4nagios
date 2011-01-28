@@ -24,16 +24,25 @@ foreach($this->data->STRUCT as $key=>$value){
 	echo Kohana::lang('common.datasource',$value['ds_name'])."</td>\n";
     echo "<td align=right>";
     echo pnp::zoom_icon_special($this->tpl,
-         $value['TIMERANGE']['start'],
-         $value['TIMERANGE']['end'],
-         $value['SOURCE'],
-         $value['VIEW'])."</td>\n";
+		$value['TIMERANGE']['start'],
+		$value['TIMERANGE']['end'],
+		$value['SOURCE'],
+		$value['VIEW'],
+		$value['GRAPH_WIDTH'],
+		$value['GRAPH_HEIGHT'])."</td>\n";
 
     echo "</tr></table>\n";
     echo "</div>\n";
     echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
-    echo "<a href=\"".url::base(TRUE)."special?tpl=" . $this->tpl . "\">\n";
-	echo "<img src=\"".url::base(TRUE)."image?tpl=" . $this->tpl . "&view=" . $value['VIEW'] . "&source=" . $value['SOURCE'] . "&start=" . $value['TIMERANGE']['start'] ."&end=" . $value['TIMERANGE']['end'] . "\">\n";
+	$path = pnp::addToUri( array('tpl' => $this->tpl, 'view' => NULL ) );
+    echo "<a href=\"". $path . "\">\n";
+	$path = pnp::addToUri( array('tpl' => $this->tpl,
+				'view' => $value['VIEW'],
+				'source' => $value['SOURCE'], 
+				'start' => $value['TIMERANGE']['start'], 
+				'end' => $value['TIMERANGE']['end']), FALSE 
+			);
+	echo "<img src=\"".url::base(TRUE)."image" . $path . "\">\n";
     echo "</a></div><p>\n";
 }
 echo "</div>\n";

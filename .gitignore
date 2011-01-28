@@ -29,6 +29,9 @@ helpers/w2h.pl
 helpers/wiki2html.sh
 scripts/verify_pnp_config.pl
 sample-config/lighttpd.pnp4nagios.conf
+sample-config/nginx.pnp4nagios.conf
 share/pnp/media/js/basket.js
 scripts/rrd_convert.pl
 scripts/rrd_converter.pl
+
+man/npcd.8

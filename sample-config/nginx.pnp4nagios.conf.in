@@ -1,0 +1,34 @@
+# SAMPLE CONFIG SNIPPETS FOR NGINX WEB SERVER
+# Contributed by Thomas Charbonnel <thomas@evax.fr>
+#
+location @BASE_URL@ {
+    # e.g. /usr/local/pnp4nagios/share;
+    alias @datarootdir@;
+    auth_basic "Nagios Access";
+    auth_basic_user_file /usr/local/nagios/etc/htpasswd.users;
+    index index.php;
+    # if we have e.g. /pnp4nagios/media/css/common.css
+    # nginx will check
+    # /usr/local/png4nagios/share/media/css/common/css
+    # and return it if it's found
+    # if it can't find a matching file even adding a trailing /
+    # the request is handled to the @pnp4nagios location
+    try_files $uri $uri/ @pnp4nagios;
+}
+location @pnp4nagios {
+    # this implies the definition of some backend
+    # e.g
+    # upstream php {
+    #     server 127.0.0.1:9000;
+    # }
+    fastcgi_pass php;
+    fastcgi_index index.php;
+    # implies an external file, but this is common nginx practice
+    include fastcgi_params;
+    # this splits out the trailing path
+    # eg index.php?host -> $fastcgi_path_info == 'host'
+    fastcgi_split_path_info ^(.+\.php)(.*)$;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param SCRIPT_FILENAME @datarootdir@/index.php;
+}
+

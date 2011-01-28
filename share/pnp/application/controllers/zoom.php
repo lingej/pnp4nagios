@@ -13,16 +13,13 @@ class Zoom_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template          = $this->add_view('zoom');
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
         $this->tpl               = $this->input->get('tpl');
+        $this->graph_width       = $this->input->get('graph_width');
+        $this->graph_height      = $this->input->get('graph_height');
     }
 
     public function index()
     {
-
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
         $this->source  = $this->input->get('source');
         $this->view    = "";
 
@@ -31,6 +28,21 @@ class Zoom_Controller extends System_Controller  {
         }else{
             $this->view = $this->config->conf['overview-range'];
         }
+
+		#
+		#  Limit startto 2000/01/01
+		#
+		$start_limit = strtotime("2000/01/01");
+		$this->start = abs((int)$this->start);
+		if($this->start < $start_limit)
+			$this->start = $start_limit;
+		#
+		# Limit end to now + one hour 
+		#	
+		$end_limit = time() + 3600;
+		$this->end = abs((int)$this->end);
+		if($this->end > $end_limit)
+			$this->end = $end_limit;
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
@@ -44,8 +56,8 @@ class Zoom_Controller extends System_Controller  {
             $this->template->source  = $this->source;
             $this->template->end     = $this->end;
             $this->template->start   = $this->start;
-            $this->template->graph_height = $this->config->conf['graph_height'];
-            $this->template->graph_width  = $this->config->conf['graph_width'];
+            $this->template->graph_height = $this->graph_height;
+            $this->template->graph_width  = $this->graph_width;
         }elseif(isset($this->host) && isset($this->service)){
             if($this->start && $this->end ){
                     $this->session->set("start", $this->start);
@@ -57,8 +69,8 @@ class Zoom_Controller extends System_Controller  {
             $this->template->source  = $this->source;
             $this->template->end     = $this->end;
             $this->template->start   = $this->start;
-            $this->template->graph_height = $this->config->conf['graph_height'];
-            $this->template->graph_width  = $this->config->conf['graph_width'];
+            $this->template->graph_height = $this->graph_height;
+            $this->template->graph_width  = $this->graph_width;
         }else{
             url::redirect("/graph");
         }

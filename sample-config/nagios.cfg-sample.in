@@ -37,7 +37,6 @@ host_perfdata_file_processing_command=process-host-perfdata-file
 #
 # Module mode
 # 
-
+event_broker_options=-1 # minimum 4+8=12
 process_performance_data=1
-
 broker_module=@libdir@/npcdmod.o config_file=@sysconfdir@/npcd.cfg

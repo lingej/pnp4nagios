@@ -21,18 +21,21 @@ Dabei bestimmt das verwendete check_command, welches Template zur Darstellung he
 <p>
 
 Templates werden an zwei Stellen im Dateisystem gespeichert.
-</p>
 
-<p>
-  * share/templates.dist - für Templates, die im PNP-Paket bereits enthalten sind.
 </p>
 <ul>
+<li class="level1"><div class="li"> share/templates.dist - für Templates, die im PNP-Paket bereits enthalten sind.</div>
+</li>
 <li class="level1"><div class="li"> share/templates - für selbst erstellte Templates. Diese werden bei Updates nicht verändert.</div>
 </li>
 </ul>
 
 <p>
 
+Weiterhin können seit Version 0.6.5 weitere Template Verzeichnisse in der Config Datei <code>pnp4nagios/etc/config.php</code> hinzugefügt werden.
+</p>
+
+<p>
 Soll der Graph für den Service “http” auf Host “localhost” angezeigt werden, so sucht PNP zuerst nach der <acronym title="Extensible Markup Language">XML</acronym>-Datei <code>perfdata/localhost/http.xml</code> und liest diese ein. Diese <acronym title="Extensible Markup Language">XML</acronym>-Dateien werden automatisch erstellt und enthalten Informationen zum jeweiligen Host und Service. Weiterhin enthält der Kopf Informationen über das Plugin und die Performance-Daten. Im folgenden Beispiel erkennt man anhand des <acronym title="Extensible Markup Language">XML</acronym>-Tags <code>&lt;TEMPLATE&gt;</code>, welches PNP-Template für diesen Graphen verwendet werden soll.
 </p>
 
@@ -87,7 +90,7 @@ Das Template default.php nimmt somit eine Sonderstellung ein und wird immer verw
 </p>
 
 </div>
-<!-- SECTION "Wann wird welches Template verwendet ?" [341-2015] -->
+<!-- SECTION "Wann wird welches Template verwendet ?" [341-2156] -->
 <h2><a name="eigene_templates_erstellen" id="eigene_templates_erstellen">Eigene Templates erstellen</a></h2>
 <div class="level2">
 
@@ -169,7 +172,7 @@ Die drei GPRINT Zeilen bilden die Legende des Graphen. Die aktuellen Werte werde
 </p>
 
 </div>
-<!-- SECTION "Eigene Templates erstellen" [2016-5013] -->
+<!-- SECTION "Eigene Templates erstellen" [2157-5154] -->
 <h2><a name="verfuegbare_variablen" id="verfuegbare_variablen">Verfügbare Variablen</a></h2>
 <div class="level2">
 
@@ -237,4 +240,4 @@ Aus <code>&lt;NAGIOS_SERVICEOUTPUT&gt;</code> wird die Variable <code>$NAGIOS_SE
 </p>
 
 </div>
-<!-- SECTION "Verfügbare Variablen" [5014-] -->
+<!-- SECTION "Verfügbare Variablen" [5155-] -->

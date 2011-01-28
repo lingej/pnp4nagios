@@ -1,0 +1,91 @@
+
+
+
+<h1><a name="pnp_helper_functions" id="pnp_helper_functions">PNP Helper Functions</a></h1>
+<div class="level1">
+
+<p>
+
+PNP-Helper-Funktionen sind dazu gedacht, die Erstellung von Templates zu vereinfachen. Im Gegensatz zu den rrd-Helper-Funktionen rufen sie keine existierenden RRDtool-Funktionen auf.
+</p>
+
+</div>
+<!-- SECTION "PNP Helper Functions" [1-220] -->
+<h2><a name="pnpadjust_unit" id="pnpadjust_unit">pnp::adjust_unit</a></h2>
+<div class="level2">
+
+<p>
+
+(string,number,string,number) <strong>pnp::adjust_unit</strong> ( $value, $base=1000, $format=&#039;%.3lf&#039; )
+</p>
+
+<p>
+Der Zweck dieser Funktion ist die “Normalisierung” von großen Zahlen. Moderne Festplatten haben Größen von mehreren <acronym title="Gigabyte">GB</acronym> oder TB erreicht und wenn Sie auf Zahlen wie 1521073648234 schauen, dann fangen Sie an, die Ziffern zu zählen, also wäre es schön, diese Zahlen in ein “handliches” Format zu verwandeln. Das Gleiche gilt für Netzwerkverkehr.
+</p>
+
+<p>
+An die Funktion werden bis zu drei Parameter übergeben und in jedem Fall ein Array mit vier Elementen zurückgeliefert.
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Der erste übergebene Parameter ist der Wert (ggf. inklusive die “UOM”)</div>
+</li>
+<li class="level1"><div class="li"> Der zweite Parameter ist optional (Default “1000”, z.B. für “Traffic”), bzw.  “1024” (z.B. Festplattengrößen)</div>
+</li>
+<li class="level1"><div class="li"> Der dritte Parameter ist optional (Default &#039;%.3lf&#039;) und gibt das Format des zurückzugebenden Wertes an</div>
+</li>
+</ul>
+<pre class="code php"><span class="re0">$size</span> <span class="sy0">=</span> pnp<span class="sy0">::</span><span class="me2">adjust_unit</span><span class="br0">&#40;</span><span class="nu0">1521073648234</span><span class="sy0">,</span><span class="nu0">1024</span><span class="sy0">,</span><span class="st_h">'%7.3lf'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Bitte beachten Sie, dass “$size” ein Array ist, das aus vier Feldern besteht:
+</p>
+<pre class="code"> $size[0] := &quot;  1.383 T&quot;</pre>
+
+<p>
+enthält den formatierten Wert inkl. der Einheit
+</p>
+<pre class="code"> $size[1] := &quot;1.383&quot;</pre>
+
+<p>
+enthält den formatierten Wert (ohne führende Leerzeichen)
+</p>
+<pre class="code"> $size[2] := &quot;T&quot;</pre>
+
+<p>
+enthält die Einheit
+</p>
+<pre class="code"> $size[3] := &quot;1099511627776&quot;</pre>
+
+<p>
+enthält den Divisor
+</p>
+
+<p>
+Angenommen das Plugin “check_disk” liefert “<acronym title="Megabyte">MB</acronym>” als UOM, dann können Sie diese Einheit ebenfalls übergeben
+
+</p>
+<pre class="code php"><span class="re0">$disk</span> <span class="sy0">=</span> pnp<span class="sy0">::</span><span class="me2">adjust_unit</span><span class="br0">&#40;</span><span class="st0">&quot;1524MB&quot;</span><span class="sy0">,</span><span class="nu0">1024</span><span class="sy0">,</span><span class="st_h">'%7.3lf'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+
+liefert als Ergebnis u.a.
+$disk[0] := “1.448 <acronym title="Gigabyte">GB</acronym>”
+</p>
+
+<p>
+<a href="/_detail/templates/check_disk_1.png?id=de%3Apnp-0.6%3Atpl_helper_pnp" class="media" title="templates:check_disk_1.png"><img src="/_media/templates/check_disk_1.png" class="media" alt="" /></a><br/>
+
+“altes” check_disk-Template mit der %s Direktive<br/>
+
+</p>
+
+<p>
+<a href="/_detail/templates/check_disk_2.png?id=de%3Apnp-0.6%3Atpl_helper_pnp" class="media" title="templates:check_disk_2.png"><img src="/_media/templates/check_disk_2.png" class="media" alt="" /></a><br/>
+
+“neues” check_disk-Template mit pnp::adjust_unit
+
+</p>
+
+</div>
+<!-- SECTION "pnp::adjust_unit" [221-] -->

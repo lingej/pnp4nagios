@@ -11,11 +11,15 @@ class Page_Controller extends System_Controller  {
     public function __construct(){
         parent::__construct();
         $this->template->page    = $this->add_view('page');
+        $this->template->zoom_header   = $this->add_view('zoom_header');
+        $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
+        $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
         $this->template->page->graph_content  = $this->add_view('graph_content');
         $this->template->page->graph_content->graph_width = ($this->config->conf['graph_width'] + 85);
         $this->template->page->graph_content->timerange_select = $this->add_view('timerange_select');
         $this->template->page->header         = $this->add_view('header');
         $this->template->page->logo_box       = $this->add_view('logo_box');
+        $this->is_authorized=TRUE;
     }
 
     public function index(){

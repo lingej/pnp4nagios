@@ -1,7 +1,31 @@
-**pnp-0.6.7 ??/??/2010**
+**pnp-0.6.12 ??/??/2011**
+
+**pnp-0.6.11 01/15/2011**
+  * Bugfix: urldecoding fixed 
+  * Bugfix: Zoom in/out is working again ( Reported by Thorben Soehl )
+  * Featue: npcd.cfg -  New option perfdata_file_processing_interval used by npcdmod
+  * Info: Version used by OMD-0.46 [[http://omdistro.org|OMD]]
+
+**pnp-0.6.10 12/15/2010**
+
+  * Feature: Add RRDTool Option --only-graph if graph height is below 32px to create thumbnails 
+  * Feature: RRDTool Option --width and --height is now allowed in templates
+  * Feature: RRDTool DS Type for UOM of "c" changed from COUNTER to DERIVE   
+  * Feature: Pass query string from special controller to image controller ( Matthew Garrett ) 
+  * Feature: Authorisation against [[http://mathias-kettner.de/checkmk_livestatus.html|mk_livestatus]] API added
+  * Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )
+  * Feature: Kohana backport to support PHP 5.1.6 ( Kudos to Andreas Ericsson )
+  * Bugfix: Sort list of special templates
+  * Bugfix: Urlencode hostname and service description  ( Reported by Yannick ) 
+  * Bugfix: corrected warning/critical thresholds in ticker/alerter functions
+
+**pnp-0.6.7 09/27/2010**
 
   * Bugfix: Page config parser fix (Beau Gunderson) 
   * Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) 
+  * Bugfix: Fixed undefined offset while using 'ds_name' in templates (Reported by Vladimir Bilik)
+  * Bugfix: Npcdmod respects process_perf_data option used in hosts and services definitions ( Reported by Wolfgang Barth )
+  * Template: New Template check_nagiostats.php used with check_nagiostats written by Jochen Bern 
 
 **pnp-0.6.6 08/07/2010**
 

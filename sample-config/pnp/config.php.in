@@ -85,21 +85,44 @@ $conf['multisite_base_url'] = "/check_mk";
 #
 $conf['multisite_site'] = "";
 
+#
+# check authorization against mk_livestatus API 
+# Available since 0.6.10
+#
+$conf['auth_enabled'] = FALSE;
+
+#
+# Livestatus socket path
+# 
+#$conf['livestatus_socket'] = "tcp:localhost:6557";
+$conf['livestatus_socket'] = "unix:/usr/local/nagios/var/rw/live";
+
+#
+# Which user is allowed to see all services or all hosts?
+# Keywords: <USERNAME>
+# Example: conf['allowed_for_all_services'] = "nagiosadmin,operator";
+# This option is used while $conf['auth_enabled'] = TRUE
+$conf['allowed_for_all_services'] = "";
+$conf['allowed_for_all_hosts'] = "";
+
 # Which user is allowed to see additional service links ?
 # Keywords: EVERYONE NONE <USERNAME>
 # Example: conf['allowed_for_service_links'] = "nagiosadmin,operator";
 # 
 $conf['allowed_for_service_links'] = "EVERYONE";
+
 #
 # Who can use the host search function ?
 # Keywords: EVERYONE NONE <USERNAME>
 #
 $conf['allowed_for_host_search'] = "EVERYONE";
+
 #
 # Who can use the host overview ?
 # This function is called if no Service Description is given.  
 #
 $conf['allowed_for_host_overview'] = "EVERYONE";
+
 #
 # Who can use the Pages function?
 # Keywords: EVERYONE NONE <USERNAME>
@@ -112,10 +135,12 @@ $conf['allowed_for_pages'] = "EVERYONE";
 # use a key from array $views[]
 #
 $conf['overview-range'] = 1 ;
+
 #
 # Scale the preview images used in /popup 
 #
 $conf['popup-width'] = "300px";
+
 #
 # jQuery UI Theme
 # http://jqueryui.com/themeroller/
@@ -126,10 +151,12 @@ $conf['ui-theme'] = 'smoothness';
 # valid options are en_US, de_DE, es_ES, ru_RU, fr_FR 
 #
 $conf['lang'] = "en_US";
+
 #
 # Date format
 #
 $conf['date_fmt'] = "d.m.y G:i";
+
 #
 # This option breaks down the template name based on _ and then starts to 
 # build it up and check the different template directories for a suitable template.
@@ -141,22 +168,27 @@ $conf['date_fmt'] = "d.m.y G:i";
 # It will find and match on check_esx3 first in templates dir then in templates.dist
 #
 $conf['enable_recursive_template_search'] = 1;
+
 #
 # Direct link to the raw XML file.
 #
 $conf['show_xml_icon'] = 1;
+
 #
 # Use FPDF Lib for PDF creation ?
 #
 $conf['use_fpdf'] = 1;	
+
 #
 # Use this file as PDF background.
 #
 $conf['background_pdf'] = '@sysconfdir@/background.pdf' ;
+
 #
 # Enable Calendar
 #
 $conf['use_calendar'] = 1;
+
 #
 # Define default views with title and start timerange in seconds 
 #

@@ -3,7 +3,7 @@
 /**
  * Retrieves and manipulates current status of hosts (and services?)
  */
-class Data_Model extends Model
+class Data_Model extends System_Model
 {
 
     private $XML   = array();
@@ -24,6 +24,7 @@ class Data_Model extends Model
     public function __construct(){
         $this->config = new Config_Model();    
         $this->config->read_config();
+        $this->auth = new Auth_Model();    
     }
 
     /*
@@ -45,6 +46,7 @@ class Data_Model extends Model
             }
         }
         if(sizeof($templates) > 0){
+            sort($templates);
             return $templates;
         }else{
             return FALSE;
@@ -74,6 +76,9 @@ class Data_Model extends Model
                             continue;
                         
                         if (is_file($conf['rrdbase'] . "/" . $file) )
+                            continue;
+
+                        if($this->auth->is_authorized($file) === FALSE)
                             continue;
 
                         $stat = stat($conf['rrdbase'] . "/" . $file);
@@ -168,14 +173,21 @@ class Data_Model extends Model
             if(!$this->readXML($hostname, $s['name'], FALSE)){
                 continue;
             }
-    
             if($s['name'] == "_HOST_"){
+                // Check authorization
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_AUTH_HOSTNAME, "_HOST_") === FALSE)
+                    continue;
+ 
                 $host[0]['name']             = "_HOST_";
                 $host[0]['hostname']         = (string) $this->XML->NAGIOS_HOSTNAME;
                 $host[0]['state']            = $s['state'];
                 $host[0]['servicedesc']      = "Host Perfdata";
                 $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
             }else{
+                // Check authorization
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_AUTH_HOSTNAME, (string) $this->XML->NAGIOS_AUTH_SERVICEDESC) === FALSE )
+                    continue;
+ 
                 $services[$i]['name']        = $s['name'];
                 // Sorting check_multi
                 if( (string) $this->XML->NAGIOS_MULTI_PARENT == ""){
@@ -252,6 +264,8 @@ class Data_Model extends Model
         $conf        = $this->config->conf;
         $this->XML   = array();
         $this->MACRO = array();
+        $this->MACRO['AUTH_SERVICEDESC'] = '';
+        $this->MACRO['AUTH_HOSTNAME'] = '';
         $this->DS    = array();
         $xml         = array();
         $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
@@ -324,7 +338,9 @@ class Data_Model extends Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE;
-                if(array_key_exists('ds_name',$this->RRD) ){
+				$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+				$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
+                if(isset($this->RRD['ds_name'][$key]) ){
                      $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
                      $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
@@ -356,7 +372,9 @@ class Data_Model extends Model
                     $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                     $tmp_struct['SOURCE']        = $key;
                     $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-                    if(array_key_exists('ds_name',$this->RRD) ){
+					$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+					$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
+                    if(isset($this->RRD['ds_name'][$key]) ){
                         $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                     }elseif(array_key_exists($i, $this->DS)){
                         $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
@@ -389,7 +407,9 @@ class Data_Model extends Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
-                if(array_key_exists('ds_name',$this->RRD) ){
+				$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+				$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
+                if(isset($this->RRD['ds_name'][$key]) ){
                     $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
                     $tmp_struct['ds_name']   = $this->DS[$i]['NAME'];
@@ -496,7 +516,32 @@ class Data_Model extends Model
         }
         return TRUE;        
     }
-    
+
+	#
+	#
+	#
+	private function getGraphDimensions($search, $command){
+		if($search == 'width'){
+			if(preg_match_all('/(-w|--width|--width=)\s([0-9]+)\s/i',$command,$match)){
+				$value = array_pop($match[2]); 
+				return $value;
+			}else{
+				return $this->config->conf['graph_width'];
+			}
+		}
+		if($search == 'height'){
+			if(preg_match_all('/(-h|--height|--height=)\s([0-9]+)\s/i',$command,$match)){
+				$value = array_pop($match[2]); 
+				return $value;
+			}else{
+				return $this->config->conf['graph_height'];
+			}
+		}
+		return FALSE;
+	}
+    #
+	#
+	#
     private function array_reindex($data){
         $i=0;
         foreach($data as $d){
@@ -729,7 +774,7 @@ class Data_Model extends Model
                 $this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
             }
         }else{
-            throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
+            $this->ERROR = "ERROR: ". Kohana::lang('error.no-data-for-page', $page.".cfg" );
         }
     }
 

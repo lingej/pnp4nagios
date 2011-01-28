@@ -27,18 +27,16 @@ define('IN_PRODUCTION', TRUE);
  * OMD path detection
  *
  */
-if(preg_match ("/^\/opt\/omd\//", __FILE__)){
-    $parts = preg_split('/\//', __FILE__ );
+if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
     define('OMD', TRUE);
-    define('OMD_VERSION', $parts[4]);
-    define('OMD_ROOT', sprintf('/%s/%s/%s/%s', $parts[1],$parts[2],$parts[3],$parts[4]));
-    $parts = preg_split('/\//', $_SERVER['REQUEST_URI'] );
-    define('OMD_SITE', $parts[1]);
-    define('OMD_SITE_ROOT', '/opt/omd/sites/'.$parts[1]);
-    unset($parts);
+    $site_parts = array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
+    define('OMD_SITE_ROOT', join($site_parts, '/'));
+    define('OMD_SITE', $site_parts[count($site_parts)-1]);
+    unset($site_parts);
 }else{
     define('OMD', FALSE);
 }
+
 
 /**
  *
@@ -83,7 +81,7 @@ $kohana_system = '@KOHANA_SYSTEM@';
  * line out. When running an application on a new server, uncomment this line
  * to check the PHP version quickly.
  */
-version_compare(PHP_VERSION, '5.2', '<') and exit('Kohana requires PHP 5.2 or newer.');
+version_compare(PHP_VERSION, '5.1', '<') and exit('Kohana requires PHP 5.1 or newer.');
 
 /**
  * Set the error reporting level. Unless you have a special need, E_ALL is a
@@ -131,7 +129,8 @@ $kohana_system = file_exists($kohana_system) ? $kohana_system : DOCROOT.$kohana_
 define('APPPATH', str_replace('\\', '/', realpath($kohana_application)).'/');
 define('MODPATH', str_replace('\\', '/', realpath($kohana_modules)).'/');
 define('SYSPATH', str_replace('\\', '/', realpath($kohana_system)).'/');
-
+// JSON Wrapper used for PHP 5.1.x
+require('application/lib/jsonwrapper.php');
 // Clean up
 unset($kohana_application, $kohana_modules, $kohana_system);
 

@@ -74,6 +74,7 @@ class Docs_Controller extends System_Controller  {
         $this->content     = str_replace("/_media", url::base()."documents/_media", $this->content);
         $this->content     = str_replace("gallery", "", $this->content);
         $this->content     = str_replace("/_detail", url::base()."documents/_media", $this->content);
+        $this->content     = str_replace("/lib/images", url::base()."documents/images", $this->content);
         $this->graph_width = ($this->config->conf['graph_width'] + 140);
     }
 }

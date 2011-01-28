@@ -15,11 +15,11 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.5.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.10.tar.gz</a>
 </p>
 
 </div>
-<!-- SECTION "Current stable PNP Version" [38-325] -->
+<!-- SECTION "Current stable PNP Version" [38-326] -->
 <h3><a name="latest_devel_version" id="latest_devel_version">Latest Devel Version</a></h3>
 <div class="level3">
 
@@ -35,20 +35,81 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Sat Aug  7 15:24:40 CEST 2010
+Last Update: Sun Jan 16 10:55:01 CET 2011
 </p>
 
 </div>
-<!-- SECTION "Latest Devel Version" [326-549] -->
+<!-- SECTION "Latest Devel Version" [327-549] -->
 <h2><a name="changelog" id="changelog">ChangeLog</a></h2>
 <div class="level2">
 
 <p>
 
-<strong>pnp-0.6.7 ??/??/2010</strong>
+<strong>pnp-0.6.12 ??/??/2011</strong>
 </p>
 
 <p>
+<strong>pnp-0.6.11 01/15/2011</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix: urldecoding fixed </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Zoom in/out is working again ( Reported by Thorben Soehl )</div>
+</li>
+<li class="level1"><div class="li"> Featue: npcd.cfg -  New option perfdata_file_processing_interval used by npcdmod</div>
+</li>
+<li class="level1"><div class="li"> Info: Version used by OMD-0.46 <a href="http://omdistro.org" class="urlextern" title="http://omdistro.org"  rel="nofollow">OMD</a></div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.10 12/15/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Feature: Add RRDTool Option –only-graph if graph height is below 32px to create thumbnails </div>
+</li>
+<li class="level1"><div class="li"> Feature: RRDTool Option –width and –height is now allowed in templates</div>
+</li>
+<li class="level1"><div class="li"> Feature: RRDTool DS Type for UOM of “c” changed from COUNTER to DERIVE   </div>
+</li>
+<li class="level1"><div class="li"> Feature: Pass query string from special controller to image controller ( Matthew Garrett ) </div>
+</li>
+<li class="level1"><div class="li"> Feature: Authorisation against <a href="http://mathias-kettner.de/checkmk_livestatus.html" class="urlextern" title="http://mathias-kettner.de/checkmk_livestatus.html"  rel="nofollow">mk_livestatus</a> <acronym title="Application Programming Interface">API</acronym> added</div>
+</li>
+<li class="level1"><div class="li"> Feature: Sample nginx webserver config added ( by evax@users.sourceforge.net )</div>
+</li>
+<li class="level1"><div class="li"> Feature: Kohana backport to support <acronym title="Hypertext Preprocessor">PHP</acronym> 5.1.6 ( Kudos to Andreas Ericsson )</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Sort list of special templates</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Urlencode hostname and service description  ( Reported by Yannick ) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: corrected warning/critical thresholds in ticker/alerter functions</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.7 09/27/2010</strong>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix: Page config parser fix (Beau Gunderson) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Zoom window size fixed (Report by Rudolf Labuschagne) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Fixed undefined offset while using &#039;ds_name&#039; in templates (Reported by Vladimir Bilik)</div>
+</li>
+<li class="level1"><div class="li"> Bugfix: Npcdmod respects process_perf_data option used in hosts and services definitions ( Reported by Wolfgang Barth )</div>
+</li>
+<li class="level1"><div class="li"> Template: New Template check_nagiostats.php used with check_nagiostats written by Jochen Bern </div>
+</li>
+</ul>
+
+<p>
+
 <strong>pnp-0.6.6 08/07/2010</strong>
 
 </p>
