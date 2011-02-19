@@ -1459,8 +1459,8 @@ sub print_help {
     Default: @sysconfdir@/process_perfdata.cfg
 
   Gearman Worker Options:
-    --gearman=127.0.0.1:4730 
-    Repeat for every gearman server you want to connect to
+    --gearman 
+    Start in gearman worker mode
     --daemon
     Run as daemon
     --pidfile=/var/run/process_perfdata.pid
