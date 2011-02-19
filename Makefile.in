@@ -64,6 +64,7 @@ share:
 
 clean:
 	cd $(SRC_BASE) && $(MAKE) $@
+	cd $(SRC_MAN) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
 	cd $(SRC_LIB) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
@@ -74,6 +75,7 @@ clean:
 
 distclean: 
 	cd $(SRC_BASE) && $(MAKE) $@
+	cd $(SRC_MAN) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
 	cd $(SRC_LIB) && $(MAKE) $@
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
@@ -85,7 +87,6 @@ distclean:
 	rm -f subst summary
 	rm -f $(SRC_CONTRIB)/ssi/status-header.ssi
 	rm -f $(SRC_HELPERS)/w2h.pl
-	rm -f $(SRC_MAN)/npcd.8
 
 devclean: distclean
 
@@ -94,6 +95,9 @@ install-html:
 
 install-base:
 	cd $(SRC_BASE) && $(MAKE) install
+
+install-man:
+	cd $(SRC_MAN) && $(MAKE) install
 
 install-processperfdata:
 	cd $(SRC_SCRIPTS) && $(MAKE) install
@@ -112,6 +116,7 @@ install-plugins:
 
 install:
 	cd $(SRC_BASE) && $(MAKE) $@
+	cd $(SRC_MAN) && $(MAKE) $@
 	cd $(SRC_SHARE) && $(MAKE) $@
 	if [ x$(KOHANA) = xyes ]; then \
 		cd $(SRC_LIB) && $(MAKE) $@; \

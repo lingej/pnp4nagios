@@ -1,0 +1,23 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+MANDIR=@mandir@
+INSTALL=@INSTALL@
+INSTALL_OPTS=@INSTALL_OPTS@
+DATAROOTDIR=@datarootdir@
+
+CP=@CP@
+
+all html:
+
+clean:
+	-rm -f npcd.8
+
+distclean: clean
+	-rm -f Makefile
+
+devclean: distclean
+
+install: 
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(MANDIR)/man8
+	$(INSTALL) -m 755 $(INSTALL_OPTS) npcd.8 $(DESTDIR)$(MANDIR)/man8
+

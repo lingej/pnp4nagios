@@ -108,6 +108,10 @@ $config['modules'] = array
  * pnp_etc_path points to $sysconfdir
  */
 $config['pnp_etc_path'] = PNP_ETC_PATH;
+/**
+ * Default Theme
+ */
+$config['theme'] = 'smoothness';
 /*
  * Available Doc Languages
  */
