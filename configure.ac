@@ -102,6 +102,7 @@ case $layout in
 		PERFDATA_LOG="${localstatedir}/perfdata.log"
 		PERFDATA_DIR="${localstatedir}/perfdata"
 		PERFDATA_SPOOL_DIR="${localstatedir}/spool"
+		mandir="\${prefix}/man"
 	;;
 esac
 
