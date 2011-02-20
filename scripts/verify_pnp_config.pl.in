@@ -350,6 +350,8 @@ if ($mode) {
         s/\s*$//;
         next if (/^$/);
         my ($par, $val) = /^(.*?)=(.*)/;    # shortest string (broker module contains multiple equal signs)
+	info ("noBlank", $par) if ($par =~ /\s+$/);
+	info ("noBlank", $val) if ($val =~ /^\s+/);
         if (($par eq "") or ($val eq "")) {
             info ("oddLine", "$_");
             next;
@@ -1748,6 +1750,7 @@ sub message {
     $msg{"key"} = "[D] key:\"%s\"";
     $msg{"keyVal"} = "[I] %s:\"%s\"";
     $msg{"keyValue"} = "[D] directive:\"%s\", value:\"%s\"";
+    $msg{"noBlank"} = "[E] no blank allowed next to \"%s\"";
     $msg{"oddLine"} = "[W] \"%s\" looks odd";
     $msg{"errOpen"} = "[E] open of %s failed, RC=%s";
     $msg{"BulkDirWarn"} = "[W] \"%s\" not a subdirectory of \"%s\"";
@@ -1865,6 +1868,7 @@ sub message {
         $msg{"key"} = "[D] key:\"%s\"";
         $msg{"keyVal"} = "[I] %s:\"%s\"";
         $msg{"keyValue"} = "[D] Direktive:\"%s\", Wert:\"%s\"";
+        $msg{"noBlank"} = "[E] kein Leerzeichen erlaubt neben \"%s\"";
         $msg{"oddLine"} = "[W] \"%s\" sieht komisch aus";
         $msg{"errOpen"} = "[E] oeffnen von %s fehlgeschlagen, RC=%s";
         $msg{"BulkDirWarn"} = "[W] \"%s\" ist kein Unterverzeichnis von \"%s\"";
