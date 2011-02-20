@@ -7,6 +7,9 @@
 # This is a template for the visualisation addon PNP (http://www.pnp4nagios.org)
 #
 
+$def[1] = "";
+$opt[1] = "";
+
 $defcnt = 1;
 
 $green = "33FF00E0";
@@ -344,6 +347,54 @@ foreach ($DS as $i) {
         $def[$defcnt] .= "GPRINT:vthreads:\"%.0lf Connection threads \" " ;
         $defcnt++;
     }
+    if(preg_match('/^threads_running$/', $NAME[$i])) {
+        $ds_name[$defcnt] = "Running threads";
+        $opt[$defcnt] = "--vertical-label \"Threads\" --title \"Running threads on $hostname\" ";
+        $def[$defcnt] = "";
+        $def[$defcnt] .= "DEF:threads=$RRDFILE[$i]:$DS[$i]:AVERAGE:reduce=LAST " ;
+        $def[$defcnt] .= "AREA:threads#111111 ";
+        $def[$defcnt] .= "VDEF:vthreads=threads,LAST " ;
+        $def[$defcnt] .= "GPRINT:vthreads:\"%.0lf Running threads \" " ;
+        $defcnt++;
+    }
+    if(preg_match('/^threads_cached$/', $NAME[$i])) {
+        $ds_name[$defcnt] = "Cached threads";
+        $opt[$defcnt] = "--vertical-label \"Threads\" --title \"Cached threads on $hostname\" ";
+        $def[$defcnt] = "";
+        $def[$defcnt] .= "DEF:threads=$RRDFILE[$i]:$DS[$i]:AVERAGE:reduce=LAST " ;
+        $def[$defcnt] .= "AREA:threads#111111 ";
+        $def[$defcnt] .= "VDEF:vthreads=threads,LAST " ;
+        $def[$defcnt] .= "GPRINT:vthreads:\"%.0lf Cached threads \" " ;
+        $defcnt++;
+    }
+    if(preg_match('/^pct_open_files$/', $NAME[$i])) {
+        $ds_name[$defcnt] = "PCT Open Files";
+        $opt[$defcnt] = "--vertical-label \"OpenFiles\" --title \"PCT Open Files $hostname\" ";
+        $def[$defcnt] = "";
+        $def[$defcnt] .= "DEF:threads=$RRDFILE[$i]:$DS[$i]:AVERAGE:reduce=LAST " ;
+        $def[$defcnt] .= "AREA:threads#111111 ";
+        $def[$defcnt] .= "VDEF:vthreads=threads,LAST " ;
+        $def[$defcnt] .= "GPRINT:vthreads:\"%.0lf Open Files \" " ;
+        $defcnt++;
+    }
+    if(preg_match('/^threads_created_per_sec$/', $NAME[$i])) {
+        $ds_name[$defcnt] = "Created thread per second";
+        $opt[$defcnt] = "--vertical-label \"Created threads / sec\" --title \"Created threads per second on $hostname\" ";
+        $def[$defcnt] = ""; 
+        $def[$defcnt] .= "DEF:sps=$RRDFILE[$i]:$DS[$i]:AVERAGE:reduce=LAST " ;
+        $def[$defcnt] .= "AREA:sps#$now:\" \" ";
+        $def[$defcnt] .= "VDEF:vsps=sps,LAST " ;
+        $def[$defcnt] .= "GPRINT:vsps:\"%3.2lf Created threads per second \\n\" ";
+        }
+    if(preg_match('/^connects_aborted_per_sec$/', $NAME[$i])) {
+        $ds_name[$defcnt] = "Aborted Connects per second";
+        $opt[$defcnt] = "--vertical-label \"Aborted connects / sec\" --title \"Aborted Connects per second on $hostname\" ";
+        $def[$defcnt] = ""; 
+        $def[$defcnt] .= "DEF:sps=$RRDFILE[$i]:$DS[$i]:AVERAGE:reduce=LAST " ;
+        $def[$defcnt] .= "AREA:sps#$now:\" \" ";
+        $def[$defcnt] .= "VDEF:vsps=sps,LAST " ;
+        $def[$defcnt] .= "GPRINT:vsps:\"%3.2lf Aborted Connects per second \\n\" ";
+        }
 }
 ?>
 

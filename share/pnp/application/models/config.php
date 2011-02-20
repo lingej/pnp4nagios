@@ -24,7 +24,7 @@ class Config_Model extends System_Model
         if (is_readable($config . ".php")) {
             include ($config . ".php");
         }else {
-            throw new Kohana_Exception('error.config-not-found', $config);
+            throw new Kohana_Exception('error.config-not-found', $config.'.php');
         }
 
         if (is_readable($config . "_local.php")) {
