@@ -470,7 +470,7 @@ sub write_rrd {
 
             my $err = RRDs::error();
             if ($err) {
-                print_log( "RRDs::create ERROR $err", 1 );
+                print_log( "RRDs::create ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
             }
@@ -485,7 +485,7 @@ sub write_rrd {
             print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
             system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
             if ( $? > 0 ) {
-                print_log( "rrdtool create returns $?", 1 );
+                print_log( "rrdtool create returns $?", 0 );
                 @rrd_state = ( $?, "create failed" );
                 $stats{error}++;
             }
@@ -508,7 +508,7 @@ sub write_rrd {
             }
             my $err = RRDs::error();
             if ($err) {
-                print_log( "RRDs::update ERROR $err", 1 );
+                print_log( "RRDs::update ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
             }
@@ -529,7 +529,7 @@ sub write_rrd {
                 system("$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update");
             }
             if ( $? > 0 ) {
-                print_log( "rrdtool update returns $?", 1 );
+                print_log( "rrdtool update returns $?", 0 );
                 @rrd_state = ( $?, "update failed" );
                 $stats{error}++;
             }
