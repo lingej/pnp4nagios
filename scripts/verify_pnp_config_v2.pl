@@ -114,7 +114,7 @@ if( -r $cfg{'object_cache_file'} ){
 # Start Main config checks
 #
 
-if(canfig_var_exists($product.'_user') ){
+if(config_var_exists($product.'_user') ){
 	my $user = get_config_var($product.'_user');
 	my $uid  = getpwnam($user);
 	info( "Effective User is '$user'", 0);
@@ -127,7 +127,7 @@ if(canfig_var_exists($product.'_user') ){
 	info_and_exit("Option '".$product."_user' not found in $MainCfg", 2);
 }
 
-if(canfig_var_exists($product.'_group') ){
+if(config_var_exists($product.'_group') ){
 	my $group = get_config_var($product.'_group');
 	my $gid  = getgrnam($group);
 	info( "Effective Group is '$group'", 0);
@@ -314,7 +314,7 @@ if($process_perf_data_stats{1} > 0){
 
 exit;
 
-sub canfig_var_exists {
+sub config_var_exists {
 	my $key = shift;
 	if(exists $cfg{$key}){
 		return 1;
@@ -511,14 +511,14 @@ sub in_array{
 sub usage{
 print <<EOF;
 
-verify_pnp_config -m|--mode=[sync|bulk|npcdmod] -c|--config=[path to nagios.cfg]
+verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod] -c|--config=[path to nagios.cfg]
 
 This script will check certain settings/entries of your PNP environ-
 ment to assist you in finding problems when you are using PNP.
 It may be used prior and during operation of PNP.
 
 Output starts with a letter with the following meaning:
-[IMFO] informational message about settings, ...
+[INFO] informational message about settings, ...
 [OK  ] ok message, will not affect the operation of PNP
 [WARN] warning message, might be effent the operation of PNP
 [CRIT] error message: PNP will not work without resolving the problem(s)
