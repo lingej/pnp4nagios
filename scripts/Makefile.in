@@ -27,12 +27,14 @@ devclean: distclean
 install-init: 
 	$(INSTALL) -m 755 $(INIT_OPTS) -d $(DESTDIR)$(INIT_DIR)
 	$(INSTALL) -m 755 $(INIT_OPTS) rc.npcd $(DESTDIR)$(INIT_DIR)/npcd
+	$(INSTALL) -m 755 $(INIT_OPTS) rc.pnp_gearman_worker $(DESTDIR)$(INIT_DIR)/pnp_gearman_worker
 
 install-processperfdata: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) process_perfdata.pl $(DESTDIR)$(LIBEXECDIR)
 
 install-plugins: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) check_pnp_rrds.pl $(DESTDIR)$(LIBEXECDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) check_gearman.pl $(DESTDIR)$(LIBEXECDIR)
 
 install-verifyconfig: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) verify_pnp_config.pl $(DESTDIR)$(LIBEXECDIR)

@@ -65,6 +65,7 @@ install-config:
 
 install-webconf: 
 
+	$(INSTALL) -m 755 -d $(DESTDIR)$(HTTPD_CONF)
 	$(INSTALL) -m 644 httpd.conf $(DESTDIR)$(HTTPD_CONF)/$(PKG_NAME).conf
 
 	@echo ""

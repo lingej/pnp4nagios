@@ -26,7 +26,9 @@ if( $< == 0 ){
 
 use warnings;
 use strict;
+use POSIX;
 use Getopt::Long;
+use MIME::Base64;
 use Time::HiRes qw(gettimeofday tv_interval);
 use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
 
@@ -47,6 +49,11 @@ my %conf = (
     XML_ENC           => "UTF-8",
     XML_UPDATE_DELAY  => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
     RRD_DAEMON_OPTS   => "",
+    GEARMAN_HOST      => "localhost:4730",                        # How many gearman worker childs to start 
+    PREFORK           => 2,                        # How many gearman worker childs to start 
+    REQUESTS_PER_CHILD => 20000,                   # Restart after a given count of requests
+    ENCRYPTION         => 1,                       # Decrypt mod_gearman packets
+    KEY                => 'should_be_changed',
     UOM2TYPE          => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
 );
 
@@ -64,7 +71,7 @@ my %const = (
 my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "RRA:AVERAGE:0.5:30:4320", "RRA:AVERAGE:0.5:360:5840", "RRA:MAX:0.5:1:2880", "RRA:MAX:0.5:5:2880", "RRA:MAX:0.5:30:4320", "RRA:MAX:0.5:360:5840", "RRA:MIN:0.5:1:2880", "RRA:MIN:0.5:5:2880", "RRA:MIN:0.5:30:4320", "RRA:MIN:0.5:360:5840", );
 
 Getopt::Long::Configure('bundling');
-my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b );
+my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b,$opt_gm, $opt_pidfile,$opt_daemon );
 my $opt_t = $conf{TIMEOUT};                            # Default Timeout
 my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
 GetOptions(
@@ -83,21 +90,17 @@ GetOptions(
     "c=s"        => \$opt_c,
     "config=s"   => \$opt_c,
     "n"          => \$opt_n,
-    "npcd"       => \$opt_n
+    "npcd"       => \$opt_n,
+    "gearman"    => \$opt_gm,
+    "daemon"     => \$opt_daemon,
+    "pidfile=s"  => \$opt_pidfile,
 );
 
 parse_config($opt_c);
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
-my %stats = (
-    timet       => time,
-    error       => 0,
-    invalid     => 0,
-    skipped     => 0,
-    runtime     => 0,
-    rows        => 0,
-    create      => 0,
-    update      => 0,
-    );
+
+my %stats = init_stats();
+my $cypher;
 
 #
 # RRDs Perl Module Detection
@@ -108,33 +111,69 @@ if ( $conf{USE_RRDs} == 1 ) {
     }
 }
 
+#
+# Include Gearman modules if needed 
+#
+if ( defined($opt_gm) ) {
+    unless ( eval "use Gearman::Worker;1" ) {
+        print "Gearman::Worker module not found\n";
+        exit 1;
+    }
+    unless ( eval "use MIME::Base64;1" ) {
+        print "MIME::Base64 module not found\n";
+        exit 1;
+    }
+    unless ( eval "use Crypt::Rijndael;1" ) {
+        print "Crypt::Rijndael module not found\n";
+        exit 1;
+    }
+}
+
 print_help()    if ($opt_h);
 print_version() if ($opt_V);
 
 init_signals();
-alarm($opt_t);
-main();
+my %children = ();       # keys are current child process IDs
+my $children = 0;        # current number of children
+if( ! defined($opt_gm) ){
+    alarm($opt_t);
+    main();
+}else{
+    print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
+  	if($conf{ENCRYPTION} == 1){
+        # fill key up to 32 bytes 
+        $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
+	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
+	}
+    daemonize();
+}
 
 #
 # Subs
 #
 # Main function to switch to the right mode.
 sub main {
+    my $job = shift;
     $t0 = [gettimeofday];
     my $lines = 0;
-    if ($opt_i) {
-        print_log( "process_perfdata.pl-$const{VERSION} starting in INETD Mode", 1 );
-        %NAGIOS = parse_env();
+    # Gearman Worker
+    if ($opt_gm) {
+        print_log( "Gearman Worker Job start", 1 );
+        %stats = init_stats();
+        %NAGIOS = parse_env($job->arg);
         $lines = process_perfdata();
     }
+    # Bulk mode
     elsif ( $opt_b && !$opt_n ) {
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
         $lines = process_perfdata_file();
     }
+    # Bulk mode with npcd
     elsif ( $opt_b && $opt_n ) {
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
         $lines = process_perfdata_file();
     }
+    # Synchronous mode
     else {
         print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
@@ -144,23 +183,39 @@ sub main {
     $rt = tv_interval $t0, $t1;
     $stats{runtime} = $rt;
     $stats{rows} = $lines;
-    store_internals();
-    print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
-    exit 0;
+    if(defined($opt_gm)){
+        print_log( "Gearman job end (runtime ${rt}s) ...", 1 );
+        store_internals();
+        return 1;
+    }else{
+        store_internals();
+        print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
+        exit 0;
+    }
 }
 
 #
 # Parse %ENV and return a global hash %NAGIOS
 #
 sub parse_env {
+    my $job_data = shift;
     %NAGIOS = ();
     $NAGIOS{DATATYPE} = "SERVICEPERFDATA";
-    if ($opt_i) {
-        my @input = <STDIN>;
-        foreach my $key (@input) {
-            $key = urlencode($key);        # URLencode
-            $key =~ /<(NAGIOS_[A-Z 0-9_]+)>(.*)<\/NAGIOS_.*>/;
-            $ENV{$1} = $2 if ($2);
+
+    if(defined $opt_gm){
+        $job_data = decode_base64($job_data);
+        if($conf{ENCRYPTION} == 1){
+            $job_data = $cypher->decrypt( $job_data )	    
+        }
+        my @LINE = split(/\t/, $job_data);
+        %ENV = ();    # cleaning ENV
+        foreach my $k (@LINE) {
+            $k =~ /([A-Z 0-9_]+)::(.*)$/;
+            $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+        }
+        if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
+            print_log( "Gearman job data missmatch. Please check your encryption key.", 1 );
+            return %NAGIOS;
         }
     }
 
@@ -199,7 +254,11 @@ sub parse_env {
 # Perfdata sanity check
 #
 sub process_perfdata {
-    if ( !$NAGIOS{PERFDATA} ) {
+    if ( keys( %NAGIOS ) == 1 && defined($opt_gm) ) {
+        $stats{skipped}++;
+        return 1;
+    }
+    if ( ! defined($NAGIOS{PERFDATA}) && ! defined($opt_gm) ) {
         print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
         if ( !$opt_b ) {
             print_log( "PNP exiting ...", 1 );
@@ -411,7 +470,7 @@ sub write_rrd {
 
             my $err = RRDs::error();
             if ($err) {
-                print_log( "RRDs::create ERROR $err", 1 );
+                print_log( "RRDs::create ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
             }
@@ -426,7 +485,7 @@ sub write_rrd {
             print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
             system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
             if ( $? > 0 ) {
-                print_log( "rrdtool create returns $?", 1 );
+                print_log( "rrdtool create returns $?", 0 );
                 @rrd_state = ( $?, "create failed" );
                 $stats{error}++;
             }
@@ -449,7 +508,7 @@ sub write_rrd {
             }
             my $err = RRDs::error();
             if ($err) {
-                print_log( "RRDs::update ERROR $err", 1 );
+                print_log( "RRDs::update ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
             }
@@ -470,7 +529,7 @@ sub write_rrd {
                 system("$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update");
             }
             if ( $? > 0 ) {
-                print_log( "rrdtool update returns $?", 1 );
+                print_log( "rrdtool update returns $?", 0 );
                 @rrd_state = ( $?, "update failed" );
                 $stats{error}++;
             }
@@ -1088,6 +1147,7 @@ sub init_signals {
     $SIG{'IOT'}  = \&handle_signal;
     $SIG{'PIPE'} = \&handle_signal;
     $SIG{'HUP'}  = \&handle_signal;
+    $SIG{'CHLD'} = \&handle_signal;
 }
 
 #
@@ -1095,37 +1155,79 @@ sub init_signals {
 #
 sub handle_signal {
     my ($signal) = (@_);
-    if ( $signal eq "ALRM" ) {
-        print_log( "*** TIMEOUT: Timeout after $opt_t secs. ***", 0 );
-        if ( $opt_b && !$opt_n ) {
-            print_log( "*** TIMEOUT: Deleting current file to avoid loops",   0 );
-            print_log( "*** TIMEOUT: Please check your process_perfdata.cfg", 0 );
+    #
+    # Gearman child process
+    #
+    if ( defined ( $opt_gm ) ){
+        if($signal eq "CHLD" && defined($opt_gm) ){
+            my $pid = waitpid(-1, &WNOHANG);
+            if($pid == -1){
+                print_log( "### no hanging child ###", 1 );
+            } elsif ( WIFEXITED($?)) {
+                print_log( "### child $pid exited ###", 1 );
+                $children--;
+            } else {
+                print_log( "### wrong signal ###", 1 );
+                $children--;
+            }
+            $SIG{'CHLD'} = \&handle_signal;
         }
-        elsif ( $opt_b && $opt_n ) {
-            print_log( "*** TIMEOUT: Deleting current file to avoid NPCD loops", 0 );
-            print_log( "*** TIMEOUT: Please check your npcd.cfg",                0 );
+        if($signal eq "INT" || $signal eq "TERM"){
+            local($SIG{CHLD}) = 'IGNORE';   # we're going to kill our children
+            kill $signal => keys %children;
+            print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
+            pidlock("remove");
+            exit;                           # clean up with dignity
+        }
+        print_log( "*** process_perfdata.pl received signal $signal (ignored)", 0 );
+    }else{
+        if ( $signal eq "ALRM" ) {
+            print_log( "*** TIMEOUT: Timeout after $opt_t secs. ***", 0 );
+            if ( $opt_b && !$opt_n ) {
+                print_log( "*** TIMEOUT: Deleting current file to avoid loops",   0 );
+                print_log( "*** TIMEOUT: Please check your process_perfdata.cfg", 0 );
+            }
+            elsif ( $opt_b && $opt_n ) {
+                print_log( "*** TIMEOUT: Deleting current file to avoid NPCD loops", 0 );
+                print_log( "*** TIMEOUT: Please check your npcd.cfg",                0 );
+            }
+            if ($opt_b) {
+                my $pdfile = "$opt_b" . "-PID-" . $$;
+                if ( unlink("$pdfile") == 1 ) {
+                    print_log( "*** TIMEOUT: $pdfile deleted", 0 );
+                }
+                else {
+                    print_log( "*** TIMEOUT: Could not delete $pdfile:$!", 0 );
+                }
+            }
+            my $temp_file = "$conf{RRDPATH}/$NAGIOS{HOSTNAME}/$NAGIOS{SERVICEDESC}.xml.$$";
+            if ( -f $temp_file ) {
+                unlink($temp_file);
+            }
+            $t1 = [gettimeofday];
+            $rt = tv_interval $t0, $t1;
+            $stats{runtime} = $rt;
+            print_log( "*** Timeout while processing Host: \"$NAGIOS{HOSTNAME}\" Service: \"$NAGIOS{SERVICEDESC}\"", 0 );
+            print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
+            exit 7;
         }
     }
-    if ($opt_b) {
-        my $pdfile = "$opt_b" . "-PID-" . $$;
-        if ( unlink("$pdfile") == 1 ) {
-            print_log( "*** TIMEOUT: $pdfile deleted", 0 );
-        }
-        else {
-            print_log( "*** TIMEOUT: Could not delete $pdfile:$!", 0 );
-        }
-    }
-    my $temp_file = "$conf{RRDPATH}/$NAGIOS{HOSTNAME}/$NAGIOS{SERVICEDESC}.xml.$$";
-    if ( -f $temp_file ) {
-        unlink($temp_file);
-    }
-    print_log( "*** Timeout while processing Host: \"$NAGIOS{HOSTNAME}\" Service: \"$NAGIOS{SERVICEDESC}\"", 0 );
-    print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
-    $t1 = [gettimeofday];
-    $rt = tv_interval $t0, $t1;
-    $stats{runtime} = $rt;
-    exit 7;
 }
+
+
+sub init_stats {
+    %stats = (
+        timet       => time,
+        error       => 0,
+        invalid     => 0,
+        skipped     => 0,
+        runtime     => 0,
+        rows        => 0,
+        create      => 0,
+        update      => 0,
+    );
+}
+
 #
 # Store some internal runtime infos
 # 
@@ -1214,29 +1316,157 @@ sub process_internals {
 }
 
 #
+# Gearman Worker Daemon
+#
+sub daemonize {
+    if( defined($opt_daemon) ){
+        print_log("daemonite init",1);
+        chdir '/' or die "Can't chdir to /: $!";
+        open STDIN,  '/dev/null'   or die "Can't read /dev/null: $!";
+        open STDOUT, '>>/dev/null' or die "Can't write to /dev/null: $!";
+        open STDERR, '>>/dev/null' or die "Can't write to /dev/null: $!";
+        defined( my $pid = fork )  or die "Can't fork: $!";
+        exit if $pid;
+        pidlock("create");
+        setsid or die "Can't start a new session: $!";
+    } else {
+        pidlock("create");
+    }
+    # Fork off our children.
+    for (1 .. $conf{'PREFORK'}) {
+        new_child();
+        print_log( "starting child process $children", 1 );
+    }
+    while (1) {
+        sleep;   # wait for a signal (i.e., child's death)
+        for (my $i = $children; $i < $conf{'PREFORK'}; $i++) {
+            print_log("Starting new child (running = $i)",1);
+            new_child();  # top up the child pool
+        }
+    }
+    return;
+}
+
+#
+# start a new worker process
+#
+sub new_child {
+    my $pid;
+    my $sigset;
+    my $req = 0;
+    # block signal for fork
+    $sigset = POSIX::SigSet->new(SIGINT);
+    sigprocmask(SIG_BLOCK, $sigset)
+        or die "Can't block SIGINT for fork: $!\n";
+    
+    die "fork: $!" unless defined ($pid = fork);
+    
+    if ($pid) {
+        # Parent records the child's birth and returns.
+        sigprocmask(SIG_UNBLOCK, $sigset)
+            or die "Can't unblock SIGINT for fork: $!\n";
+        $children{$pid} = 1;
+        $children++;
+        return;
+    } else {
+        # Child can *not* return from this subroutine.
+        $SIG{INT} = 'DEFAULT';      # make SIGINT kill us as it did before
+    
+        # unblock signals
+        sigprocmask(SIG_UNBLOCK, $sigset)
+            or die "Can't unblock SIGINT for fork: $!\n";
+    
+        my $worker = Gearman::Worker->new;
+        $worker->job_servers($conf{'GEARMAN_HOST'});
+        $worker->register_function("perfdata", 2, sub { return main(@_); });
+        my %opt = ( 
+                    on_complete => sub { $req++; }, 
+                    stop_if => sub { if ( $req > $conf{'REQUESTS_PER_CHILD'} ) { return 1;}; } 
+                  );
+        $worker->work( %opt );
+        print_log("max requests per child reached",3);
+        # this exit is VERY important, otherwise the child will become
+        # a producer of more and more children, forking yourself into
+        # process death.
+        exit;
+    }
+}
+#
+# Create a pid file
+#
+sub pidlock {
+    return unless defined $opt_pidfile;
+    my $action = shift;
+    my $PIDFILE = $opt_pidfile;
+    if($action eq "create"){
+        if ( -e $PIDFILE ) {
+            if ( open( OLDPID, "<$PIDFILE" ) ) {
+                $_ = <OLDPID>;
+                chop($_);
+                my $oldpid = $_;
+                close(OLDPID);
+                if ( -e "/proc/$oldpid/cmdline" ) {
+                    print_log("Another instance is already running with PID: $oldpid",0);
+                    exit 0;
+                } else {
+                    print_log("Pidfile $PIDFILE seems to be stale!",0);
+                    print_log("Removing old pidfile",0);
+                    unlink $PIDFILE;
+                }
+            }
+        }
+        if ( !open( PID, ">$PIDFILE" ) ) {
+            print_log("Can not create $PIDFILE ( $! )",0);
+            exit 1;
+        }
+        print( PID "$$\n" );
+        close(PID);
+        print_log("Pidfile ($PIDFILE) created",0);
+    }elsif( $action eq "remove" ){
+        if ( -e $PIDFILE ) {
+            print_log("Removing pidfile ($PIDFILE)",0);
+            unlink $PIDFILE;
+        }
+    }
+}
+
+
+#
 #
 #
 sub print_help {
-    print "Copyright (c) 2005-2010 Joerg Linge <pitchfork\@pnp4nagios.org>\n";
-    print "Use process_perfdata.pl to store Nagios Plugin Performance Data into RRD Databases\n";
-    print "\n";
-    print "Options:\n";
-    print "  -h, --help\n";
-    print "     Print detailed help screen\n";
-    print "  -V, --version\n";
-    print "     Print version information\n";
-    print "  -t, --timeout=INTEGER\n";
-    print "     Seconds before process_perfdata.pl times out (default: $opt_t)\n";
-    print "  -i, --inetd\n";
-    print "     Use this Option if process_perfdata.pl is executed by inetd/xinetd.\n";
-    print "  -d, --datatype\n";
-    print "     Defaults to \"SERVICEPERFDATA\". Use \"HOSTPERFDATA\" to process Perfdata from regular Host Checks\n";
-    print "     Only used in default or inetd Mode\n";
-    print "  -b, --bulk\n";
-    print "     Provide a file for bulk update\n";
-    print "  -c, --config\n";
-    print "     Optional process_perfdata config file\n";
-    print "     Default: @sysconfdir@/process_perfdata.cfg \n";
+    print <<EOD;
+
+  Copyright (c) 2005-2010 Joerg Linge <pitchfork\@pnp4nagios.org>
+  Use process_perfdata.pl to store Nagios Plugin Performance Data into RRD Databases
+
+  Options:
+    -h, --help
+    Print detailed help screen
+    -V, --version
+    Print version information
+    -t, --timeout=INTEGER
+    Seconds before process_perfdata.pl times out (default: $opt_t)
+    -i, --inetd
+    Use this Option if process_perfdata.pl is executed by inetd/xinetd.
+    -d, --datatype
+    Defaults to \"SERVICEPERFDATA\". Use \"HOSTPERFDATA\" to process Perfdata from regular Host Checks
+    Only used in default or inetd Mode
+    -b, --bulk
+    Provide a file for bulk update
+    -c, --config
+    Optional process_perfdata config file
+    Default: @sysconfdir@/process_perfdata.cfg
+
+  Gearman Worker Options:
+    --gearman 
+    Start in gearman worker mode
+    --daemon
+    Run as daemon
+    --pidfile=/var/run/process_perfdata.pid
+    The pidfile used while running in as gearman worker daemon
+
+EOD
     exit 0;
 }
 

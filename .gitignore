@@ -5,6 +5,7 @@ summary
 config.log
 config.status
 scripts/rc.npcd
+scripts/rc.pnp_gearman_worker
 scripts/check_pnp_rrds.pl
 scripts/process_perfdata.pl
 src/*.o
