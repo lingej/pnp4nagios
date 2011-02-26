@@ -97,6 +97,7 @@ GetOptions(
 );
 
 parse_config($opt_c);
+$conf{'GLOBAL_RRD_STORAGE_TYPE'} = uc($conf{'RRD_STORAGE_TYPE'}); # store the initial value for later use
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 
 my %stats = init_stats();
@@ -391,6 +392,14 @@ sub data2rrd {
                 print_log( "  -- $job -> $data[$i]{$job}", 3 );
             }
         }
+
+	    if ( uc($conf{'GLOBAL_RRD_STORAGE_TYPE'}) eq "MULTIPLE" ) {
+	        my $file = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . ".rrd";
+            if ( -e $file ){
+                print_log("RRD_STORAGE_TYPE=MULTIPLE ignored because $file exists!", 1 ) if $i == 0;
+		        $data[$i]{rrd_storage_type} = "SINGLE";
+            }
+	    }
 
         if ( $data[$i]{rrd_storage_type} eq "MULTIPLE" ) {
             print_log( "DEBUG: MULTIPLE Storage Type", 3 );
@@ -1301,6 +1310,7 @@ sub read_internals {
 # 
 #
 sub process_internals {
+    my $last_rrd_dtorage_type = $conf{'RRD_STORAGE_TYPE'};
     $conf{'RRD_STORAGE_TYPE'} = "MULTIPLE";
     %NAGIOS = ( 
         HOSTNAME => '.pnp-internal',
@@ -1313,6 +1323,7 @@ sub process_internals {
         PERFDATA => "runtime=".$stats{runtime}."s rows=".$stats{rows}." errors=".$stats{error}." invalid=".$stats{invalid}." skipped=".$stats{skipped} ." update=".$stats{update}. " create=".$stats{create} 
     );
     parse_perfstring(  $NAGIOS{PERFDATA} );
+    $conf{'RRD_STORAGE_TYPE'} = $last_rrd_dtorage_type;
 }
 
 #
@@ -1320,7 +1331,7 @@ sub process_internals {
 #
 sub daemonize {
     if( defined($opt_daemon) ){
-        print_log("daemonite init",1);
+        print_log("daemonize init",1);
         chdir '/' or die "Can't chdir to /: $!";
         open STDIN,  '/dev/null'   or die "Can't read /dev/null: $!";
         open STDOUT, '>>/dev/null' or die "Can't write to /dev/null: $!";
