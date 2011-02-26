@@ -46,21 +46,21 @@ my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO");
 my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue");
 my %process_perf_data_stats = (0 => 0, 1 => 0);
 
-if ( ! $mode ){
-	usage();;
-	usage_no_mode();
-	exit;
-}
-
 if ( ! $MainCfg ){
 	usage();
 	usage_no_config();
 	exit;
 }
 
+if ( ! $mode ){
+	usage();;
+	usage_no_mode();
+	exit;
+}
+
 if( ! in_array(\@modes, $mode)){
 	usage();
-	info("$mode is not valid",2);
+	info("'$mode' is not a valid option",2);
 	info("Valid modes are [@modes]",2);
 	exit;
 }
@@ -520,7 +520,7 @@ It may be used prior and during operation of PNP.
 Output starts with a letter with the following meaning:
 [INFO] informational message about settings, ...
 [OK  ] ok message, will not affect the operation of PNP
-[WARN] warning message, might be effent the operation of PNP
+[WARN] warning message, might effect the operation of PNP 
 [CRIT] error message: PNP will not work without resolving the problem(s)
 [INFO] hint: it might be worth reading the appropriate documentation
 [DBG ] debugging message, hopefully showing the source of your problem
@@ -529,9 +529,11 @@ EOF
 }
 
 sub usage_no_config{
-	info_and_exit("-c | --config option not given",2);
+	info("-c | --config option not given",2);
+	info_and_exit("please specify the path to your nagios or icinga.cfg",2);
 }
 
 sub usage_no_mode{
-	info_and_exit("-m | --mode option not given",2);
+	info("-m | --mode option not given",2);
+	info_and_exit("Valid options are [@modes]",2);
 }
