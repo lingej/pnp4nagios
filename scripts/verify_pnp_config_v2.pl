@@ -412,7 +412,7 @@ sub info_and_exit {
 
 sub check_proc_npcd {
 	my $user = shift;
-	my $out = `ps -u $user -o cmd | grep npcd | grep -v grep`;
+	my $out = `ps -u $user -o cmd | grep /npcd | grep -v grep`;
 	my $rc = $?;
 	chomp $out;
 	#extract npcd.cfg 
