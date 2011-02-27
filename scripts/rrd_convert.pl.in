@@ -278,7 +278,6 @@ sub open_files(){
 	my $host = shift;
 	my $service = shift;
 	foreach my $ds (keys %ds_list){
-		create_dir($conf{TMP_DIR}."/".$host);
 		my $file = sprintf("%s/%s-%s-%s.restore",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
 		#print "Open Filehandle ".$file."\n";
 		open($FILEHANDLE{$ds}, ">", $file);
