@@ -393,12 +393,12 @@ sub manipulate_rrd_dump{
 		if(m/<row>/){
 			m/(.*<row>)/;
 			my $rowstart = $1;
-			@ROW = m{<v>[^<](.*?)<\/v>}gc;
+			@ROW = m{<v>([^<].*?)<\/v>}gc;
 			my $fh = 1;
 			foreach my $VAL (@ROW){
 				undef %ds_list;
 				$ds_list{$fh} = $fh;
-				write_to_files($rowstart."<v> ".$VAL." </v></row>\n");
+				write_to_files($rowstart."<v>".$VAL."</v></row>\n");
 				$fh++;
 			}
 			next;
