@@ -144,12 +144,11 @@ if( ! defined($opt_gm) ){
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
 	if($opt_gm ne "1"){
 		$conf{'GEARMAN_HOST'} = $opt_gm;
-		print_log("DEBUG: GEARMAN_HOST set by --gearman=$opt_gm",0);
 	}
   	if($conf{ENCRYPTION} == 1){
-		read_keyfile($conf{'KEY_FILE'});
-        # fill key up to 32 bytes 
-        $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
+	    read_keyfile($conf{'KEY_FILE'});
+            # fill key up to 32 bytes 
+            $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
 	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
 	}
     daemonize();
@@ -1204,7 +1203,7 @@ sub handle_signal {
             }
             elsif ( $opt_b && $opt_n ) {
                 print_log( "*** TIMEOUT: Deleting current file to avoid NPCD loops", 0 );
-                print_log( "*** TIMEOUT: Please check your npcd.cfg",                0 );
+                print_log( "*** TIMEOUT: Please check your process_perfdata.cfg",    0 );
             }
             if ($opt_b) {
                 my $pdfile = "$opt_b" . "-PID-" . $$;
@@ -1461,6 +1460,7 @@ sub read_keyfile {
 			last;
 		}
 		close(FH);
+		return 1;
 	}else{
 		print_log("Key File '$file' is not readable",0);
 		return 0;
