@@ -128,4 +128,4 @@ KEY = should_be_changed
 # The shared password will be read from this file.
 # Use either key or keyfile. Only the first 32
 # characters will be used.
-# KEYFILE = @sysconfdir@/secret.key 
+# KEY_FILE = @sysconfdir@/secret.key 
