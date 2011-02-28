@@ -72,7 +72,7 @@ my %const = (
 my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "RRA:AVERAGE:0.5:30:4320", "RRA:AVERAGE:0.5:360:5840", "RRA:MAX:0.5:1:2880", "RRA:MAX:0.5:5:2880", "RRA:MAX:0.5:30:4320", "RRA:MAX:0.5:360:5840", "RRA:MIN:0.5:1:2880", "RRA:MIN:0.5:5:2880", "RRA:MIN:0.5:30:4320", "RRA:MIN:0.5:360:5840", );
 
 Getopt::Long::Configure('bundling');
-my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b,$opt_gm, $opt_pidfile,$opt_daemon );
+my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b, $opt_gm, $opt_pidfile,$opt_daemon );
 my $opt_t = $conf{TIMEOUT};                            # Default Timeout
 my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
 GetOptions(
@@ -92,7 +92,7 @@ GetOptions(
     "config=s"   => \$opt_c,
     "n"          => \$opt_n,
     "npcd"       => \$opt_n,
-    "gearman"    => \$opt_gm,
+    "gearman:s"  => \$opt_gm,
     "daemon"     => \$opt_daemon,
     "pidfile=s"  => \$opt_pidfile,
 );
@@ -142,8 +142,12 @@ if( ! defined($opt_gm) ){
     main();
 }else{
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
+	if($opt_gm ne "1"){
+		$conf{'GEARMAN_HOST'} = $opt_gm;
+		print_log("DEBUG: GEARMAN_HOST set by --gearman=$opt_gm",0);
+	}
   	if($conf{ENCRYPTION} == 1){
-	read_keyfile($conf{'KEY_FILE'});
+		read_keyfile($conf{'KEY_FILE'});
         # fill key up to 32 bytes 
         $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
 	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
@@ -1389,7 +1393,7 @@ sub new_child {
         sigprocmask(SIG_UNBLOCK, $sigset)
             or die "Can't unblock SIGINT for fork: $!\n";
     
-        my $worker = Gearman::Worker->new;
+        my $worker = Gearman::Worker->new();
         $worker->job_servers($conf{'GEARMAN_HOST'});
         $worker->register_function("perfdata", 2, sub { return main(@_); });
         my %opt = ( 
