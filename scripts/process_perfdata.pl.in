@@ -54,6 +54,7 @@ my %conf = (
     REQUESTS_PER_CHILD => 20000,                   # Restart after a given count of requests
     ENCRYPTION         => 1,                       # Decrypt mod_gearman packets
     KEY                => 'should_be_changed',
+    KEY_FILE           => '@sysconfdir@/secret.key',
     UOM2TYPE          => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
 );
 
@@ -142,6 +143,7 @@ if( ! defined($opt_gm) ){
 }else{
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
   	if($conf{ENCRYPTION} == 1){
+	read_keyfile($conf{'KEY_FILE'});
         # fill key up to 32 bytes 
         $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
 	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
@@ -215,7 +217,7 @@ sub parse_env {
             $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
         }
         if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
-            print_log( "Gearman job data missmatch. Please check your encryption key.", 1 );
+            print_log( "Gearman job data missmatch. Please check your encryption key.", 0 );
             return %NAGIOS;
         }
     }
@@ -1441,7 +1443,25 @@ sub pidlock {
     }
 }
 
-
+#
+# Read crypt key
+#
+sub read_keyfile {
+	my $file = shift;
+	my $key = '';
+	if( -r $file){
+		open(FH, "<", $file);
+		while(<FH>){
+			chomp;
+			$conf{'KEY'} = $_;
+			last;
+		}
+		close(FH);
+	}else{
+		print_log("Key File '$file' is not readable",0);
+		return 0;
+	}
+}
 #
 #
 #
