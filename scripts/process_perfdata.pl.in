@@ -141,11 +141,13 @@ if( ! defined($opt_gm) ){
     alarm($opt_t);
     main();
 }else{
-    print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
+    print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 0 );
 	if($opt_gm ne "1"){
-		$conf{'GEARMAN_HOST'} = $opt_gm;
+	    $conf{'GEARMAN_HOST'} = $opt_gm;
+            print_log( "Gearman connection string is '$opt_gm'", 0 );
 	}
   	if($conf{ENCRYPTION} == 1){
+            print_log( "Encryptions is enabled", 0 );
 	    read_keyfile($conf{'KEY_FILE'});
             # fill key up to 32 bytes 
             $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
@@ -164,7 +166,7 @@ sub main {
     my $lines = 0;
     # Gearman Worker
     if ($opt_gm) {
-        print_log( "Gearman Worker Job start", 1 );
+        print_log( "Gearman Job start", 1 );
         %stats = init_stats();
         %NAGIOS = parse_env($job->arg);
         $lines = process_perfdata();
@@ -1189,11 +1191,11 @@ sub handle_signal {
         if($signal eq "INT" || $signal eq "TERM"){
             local($SIG{CHLD}) = 'IGNORE';   # we're going to kill our children
             kill $signal => keys %children;
-            print_log( "*** process_perfdata.pl terminated on signal $signal", 0 );
+            print_log( "*** process_perfdata.pl terminated on signal $signal", 1 );
             pidlock("remove");
             exit;                           # clean up with dignity
         }
-        print_log( "*** process_perfdata.pl received signal $signal (ignored)", 0 );
+        print_log( "*** process_perfdata.pl received signal $signal (ignored)", 1 );
     }else{
         if ( $signal eq "ALRM" ) {
             print_log( "*** TIMEOUT: Timeout after $opt_t secs. ***", 0 );
@@ -1356,7 +1358,7 @@ sub daemonize {
     while (1) {
         sleep;   # wait for a signal (i.e., child's death)
         for (my $i = $children; $i < $conf{'PREFORK'}; $i++) {
-            print_log("Starting new child (running = $i)",1);
+            print_log("starting new child (running = $i)",1);
             new_child();  # top up the child pool
         }
     }
@@ -1400,7 +1402,7 @@ sub new_child {
                     stop_if => sub { if ( $req > $conf{'REQUESTS_PER_CHILD'} ) { return 1;}; } 
                   );
         $worker->work( %opt );
-        print_log("max requests per child reached",3);
+        print_log("max requests per child reached (".$conf{'REQUESTS_PER_CHILD'}.")",1);
         # this exit is VERY important, otherwise the child will become
         # a producer of more and more children, forking yourself into
         # process death.
@@ -1460,9 +1462,10 @@ sub read_keyfile {
 			last;
 		}
 		close(FH);
+		print_log("Using encryption key specified in '$file'",0);
 		return 1;
 	}else{
-		print_log("Key File '$file' is not readable",0);
+		print_log("Using encryption key specified in ".$conf{'CFG_DIR'}."/process_perfdata.cfg",0);
 		return 0;
 	}
 }
