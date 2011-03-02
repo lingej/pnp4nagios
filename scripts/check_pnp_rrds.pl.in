@@ -107,13 +107,14 @@ else {
 }
 
 sub inspect_files {
-    my $found = 0;
-    my $TXT   = "";
+    my $file = $File::Find::name;
+    return unless m/\.xml$/;
+    return unless -f $file;
+    my $found = -1;
+    my $TXT   = "invalid xml file";
     my $host;
     my $service;
-    my $file = $File::Find::name;
     my $dir  = $File::Find::dir;
-    return unless -f $file;
     if ( $file =~ /\.xml/ ) {
         $XML_COUNT++;
         $service = basename($file);

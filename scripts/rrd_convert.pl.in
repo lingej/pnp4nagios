@@ -185,7 +185,7 @@ sub check_ds_list{
 }
 
 sub wanted_xml_files{
-	if(m/.xml/){
+	if(m/.xml$/){
        	#printf("File: %s\n",$File::Find::name);
         my $xmlfile = $File::Find::name;
         my ($rrdfile) = $xmlfile =~ /^(.*)\.xml$/;
