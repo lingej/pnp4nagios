@@ -20,7 +20,7 @@ foreach ($this->DS as $KEY=>$VAL) {
 		}
 		$opt[$i] = "-l0 --title \"Gearman Queue '$queue'\" ";
 		#
-		$ds_name[$i] = "Queue Statistics";
+		$ds_name[$i] = "$queue";
 		$def[$i] .= rrd::def("var$KEY", $VAL['RRDFILE'], $VAL['DS'], "AVERAGE") ;
 		$def[$i] .= rrd::line1("var$KEY", $color[$state], rrd::cut($state,16));
 		$def[$i] .= rrd::gprint("var$KEY", array('LAST', 'MAX', 'AVERAGE'), "%6.2lf".$VAL['UNIT']) ;
