@@ -142,16 +142,16 @@ if( ! defined($opt_gm) ){
     main();
 }else{
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 0 );
-	if($opt_gm =~ /:\d+/ ){
-	    $conf{'GEARMAN_HOST'} = $opt_gm;
-	}
-  	if($conf{ENCRYPTION} == 1){
-            print_log( "Encryptions is enabled", 0 );
-	    read_keyfile($conf{'KEY_FILE'});
-            # fill key up to 32 bytes 
-            $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
-	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
-	}
+    if($opt_gm =~ /:\d+/ ){
+        $conf{'GEARMAN_HOST'} = $opt_gm;
+    }
+    if($conf{ENCRYPTION} == 1){
+        print_log( "Encryptions is enabled", 0 );
+        read_keyfile($conf{'KEY_FILE'});
+        # fill key up to 32 bytes 
+        $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
+        $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
+    }
     daemonize();
 }
 
@@ -217,7 +217,7 @@ sub parse_env {
     if(defined $opt_gm){
         $job_data = decode_base64($job_data);
         if($conf{ENCRYPTION} == 1){
-            $job_data = $cypher->decrypt( $job_data )	    
+            $job_data = $cypher->decrypt( $job_data )        
         }
         my @LINE = split(/\t/, $job_data);
         %ENV = ();    # cleaning ENV
@@ -404,13 +404,13 @@ sub data2rrd {
             }
         }
 
-	    if ( uc($conf{'GLOBAL_RRD_STORAGE_TYPE'}) eq "MULTIPLE" ) {
-	        my $file = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . ".rrd";
+        if ( uc($conf{'GLOBAL_RRD_STORAGE_TYPE'}) eq "MULTIPLE" ) {
+            my $file = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . ".rrd";
             if ( -e $file ){
                 print_log("RRD_STORAGE_TYPE=MULTIPLE ignored because $file exists!", 1 ) if $i == 0;
-		        $data[$i]{rrd_storage_type} = "SINGLE";
+                $data[$i]{rrd_storage_type} = "SINGLE";
             }
-	    }
+        }
 
         if ( $data[$i]{rrd_storage_type} eq "MULTIPLE" ) {
             print_log( "DEBUG: MULTIPLE Storage Type", 3 );
@@ -1008,17 +1008,14 @@ sub parse_perfstring {
 
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
-                } 
-		else {
+                } else {
                     $p{rrd_max} = "U";
                 }
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
-                }
-		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
-		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
-                } 
-		else {
+                } elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+                    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } else {
                     $p{rrd_min} = "U";
                 }
                 $p{template}         = $CTPL{'TEMPLATE'};
@@ -1041,19 +1038,18 @@ sub parse_perfstring {
 
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
-                }
-                else {
+                } else {
                     $p{rrd_max} = "U";
                 }
+
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
-                }
-		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
-		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
-                } 
-                else {
+                } elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+                    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } else {
                     $p{rrd_min} = "U";
                 }
+
                 $p{template}         = $CTPL{'TEMPLATE'};
                 $p{dstype}           = $CTPL{'DSTYPE'};
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
@@ -1064,8 +1060,7 @@ sub parse_perfstring {
                 if ( $count == 1 ) {
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );    # Use the servicedesc.
                     $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};          # Use the servicedesc.
-                }
-                else {
+                } else {
                     $p{servicedesc}      = cleanup( $multi[0] );               # Use the multi servicedesc.
                     $p{disp_servicedesc} = $multi[0];                          # Use the multi servicedesc.
                 }
@@ -1077,8 +1072,7 @@ sub parse_perfstring {
         }
         data2rrd(@perfs) if ( $#perfs >= 0 );
         @perfs = ();
-    }
-    else {
+    } else {
 
         #
         # Normal Performance Data
@@ -1096,17 +1090,14 @@ sub parse_perfstring {
 
             if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                 $p{rrd_max} = $p{max};
-            }
-            else {
+            } else {
                 $p{rrd_max} = "U";
             }
             if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                 $p{rrd_min} = $p{min};
-            }
-	    elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
-		$p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
-	    } 
-            else {
+            } elsif ( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+                $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+            } else {
                 $p{rrd_min} = "U";
             }
 
@@ -1457,22 +1448,22 @@ sub pidlock {
 # Read crypt key
 #
 sub read_keyfile {
-	my $file = shift;
-	my $key = '';
-	if( -r $file){
-		open(FH, "<", $file);
-		while(<FH>){
-			chomp;
-			$conf{'KEY'} = $_;
-			last;
-		}
-		close(FH);
-		print_log("Using encryption key specified in '$file'",0);
-		return 1;
-	}else{
-		print_log("Using encryption key specified in ".$conf{'CFG_DIR'}."/process_perfdata.cfg",0);
-		return 0;
-	}
+    my $file = shift;
+    my $key = '';
+    if( -r $file){
+        open(FH, "<", $file);
+        while(<FH>){
+            chomp;
+            $conf{'KEY'} = $_;
+            last;
+        }
+        close(FH);
+        print_log("Using encryption key specified in '$file'",0);
+        return 1;
+    }else{
+        print_log("Using encryption key specified in ".$conf{'CFG_DIR'}."/process_perfdata.cfg",0);
+        return 0;
+    }
 }
 #
 #
