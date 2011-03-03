@@ -1453,7 +1453,6 @@ sub read_keyfile {
     if( -r $file){
         open(FH, "<", $file);
         while(<FH>){
-            chomp;
             $conf{'KEY'} = $_;
             last;
         }
