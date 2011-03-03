@@ -29,7 +29,7 @@ use strict;
 use POSIX;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line $name $ds_update $dstype);
 
 my %conf = (
     TIMEOUT           => "5",
@@ -798,6 +798,7 @@ sub parse_config {
 sub parse_rra_config {
     my $template     = shift;
     my $rra_template = "";
+    my @rrd_create = @default_rrd_create;
     if ( -e $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg" ) {
         $rra_template = $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg";
         print_log( "Reading $rra_template", 2 );
