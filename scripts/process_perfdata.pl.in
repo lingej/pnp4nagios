@@ -1396,7 +1396,7 @@ sub new_child {
                     on_complete => sub { $req++; }, 
                     stop_if => sub { if ( $req > $conf{'REQUESTS_PER_CHILD'} ) { return 1;}; } 
                   );
-        print_log("connecting to gearmand '".$conf{'REQUESTS_PER_CHILD'}."'",0);
+        print_log("connecting to gearmand '".$conf{'GEARMAN_HOST'}."'",0);
         $worker->work( %opt );
         print_log("max requests per child reached (".$conf{'REQUESTS_PER_CHILD'}.")",1);
         # this exit is VERY important, otherwise the child will become
