@@ -16,9 +16,6 @@ class Json_Controller extends System_Controller  {
     public function index(){
         // Disable auto-rendering
         $this->auto_render = FALSE;
-        if($this->view  == ""){
-            $this->view = $this->config->conf['overview-range'];
-        }
         // Service Details
         if($this->host != "" && $this->service != ""){
             $this->service = pnp::clean($this->service);

@@ -262,15 +262,27 @@ class Data_Model extends System_Model
     */
     public function readXML ($hostname, $servicedesc, $throw_exception=TRUE){
         $conf        = $this->config->conf;
-        $this->XML   = array();
-        $this->MACRO = array();
-        $this->MACRO['AUTH_SERVICEDESC'] = '';
-        $this->MACRO['AUTH_HOSTNAME'] = '';
-        $this->DS    = array();
-        $xml         = array();
         $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
+        $xml         = array();
         if (file_exists($xmlfile)) {
-            $xml = simplexml_load_file($xmlfile);
+			libxml_use_internal_errors(TRUE);
+			libxml_clear_errors(TRUE);
+            if(! $xml = simplexml_load_file($xmlfile) ){;
+				if( $throw_exception == TRUE ){
+					$errors = '<br>';
+					foreach(libxml_get_errors() as $error) {
+     					$errors .= $error->message."<br>";
+                    }
+                	throw new Kohana_Exception('error.xml-generic_error',$xmlfile, $errors);
+                }else{
+					return FALSE;
+				}
+			}
+            $this->XML   = array();
+            $this->MACRO = array();
+            $this->MACRO['AUTH_SERVICEDESC'] = '';
+            $this->MACRO['AUTH_HOSTNAME'] = '';
+            $this->DS    = array();
             // Throw excaption without a valid structure version
             if(!isset($xml->XML->VERSION) && $throw_exception == TRUE){
                 throw new Kohana_Exception('error.xml-structure-without-version-tag',$xmlfile);

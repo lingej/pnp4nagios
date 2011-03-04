@@ -28,9 +28,8 @@ use warnings;
 use strict;
 use POSIX;
 use Getopt::Long;
-use MIME::Base64;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line @lines $t @t $name $xact $warn $crit $min $max $unit $act $ds_create $ds_update @rrd_create $rrd_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line $name $ds_update $dstype);
 
 my %conf = (
     TIMEOUT           => "5",
@@ -54,6 +53,7 @@ my %conf = (
     REQUESTS_PER_CHILD => 20000,                   # Restart after a given count of requests
     ENCRYPTION         => 1,                       # Decrypt mod_gearman packets
     KEY                => 'should_be_changed',
+    KEY_FILE           => '@sysconfdir@/secret.key',
     UOM2TYPE          => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
 );
 
@@ -71,7 +71,7 @@ my %const = (
 my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "RRA:AVERAGE:0.5:30:4320", "RRA:AVERAGE:0.5:360:5840", "RRA:MAX:0.5:1:2880", "RRA:MAX:0.5:5:2880", "RRA:MAX:0.5:30:4320", "RRA:MAX:0.5:360:5840", "RRA:MIN:0.5:1:2880", "RRA:MIN:0.5:5:2880", "RRA:MIN:0.5:30:4320", "RRA:MIN:0.5:360:5840", );
 
 Getopt::Long::Configure('bundling');
-my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b,$opt_gm, $opt_pidfile,$opt_daemon );
+my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b, $opt_gm, $opt_pidfile,$opt_daemon );
 my $opt_t = $conf{TIMEOUT};                            # Default Timeout
 my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
 GetOptions(
@@ -91,12 +91,13 @@ GetOptions(
     "config=s"   => \$opt_c,
     "n"          => \$opt_n,
     "npcd"       => \$opt_n,
-    "gearman"    => \$opt_gm,
+    "gearman:s"  => \$opt_gm,
     "daemon"     => \$opt_daemon,
     "pidfile=s"  => \$opt_pidfile,
 );
 
 parse_config($opt_c);
+$conf{'GLOBAL_RRD_STORAGE_TYPE'} = uc($conf{'RRD_STORAGE_TYPE'}); # store the initial value for later use
 $opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 
 my %stats = init_stats();
@@ -139,12 +140,17 @@ if( ! defined($opt_gm) ){
     alarm($opt_t);
     main();
 }else{
-    print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 1 );
-  	if($conf{ENCRYPTION} == 1){
+    print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 0 );
+    if($opt_gm =~ /:\d+/ ){
+        $conf{'GEARMAN_HOST'} = $opt_gm;
+    }
+    if($conf{ENCRYPTION} == 1){
+        print_log( "Encryptions is enabled", 0 );
+        read_keyfile($conf{'KEY_FILE'});
         # fill key up to 32 bytes 
         $conf{'KEY'} = substr($conf{'KEY'},0,32) . chr(0) x ( 32 - length( $conf{'KEY'} ) );
-	    $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
-	}
+        $cypher = Crypt::Rijndael->new( $conf{'KEY'}, Crypt::Rijndael::MODE_ECB() );
+    }
     daemonize();
 }
 
@@ -154,44 +160,45 @@ if( ! defined($opt_gm) ){
 # Main function to switch to the right mode.
 sub main {
     my $job = shift;
-    $t0 = [gettimeofday];
+    my $t0 = [gettimeofday];
+    my $t1;
+    my $rt;
     my $lines = 0;
     # Gearman Worker
-    if ($opt_gm) {
+    if (defined $opt_gm) {
         print_log( "Gearman Worker Job start", 1 );
-        %stats = init_stats();
         %NAGIOS = parse_env($job->arg);
         $lines = process_perfdata();
-    }
-    # Bulk mode
-    elsif ( $opt_b && !$opt_n ) {
+        $t1 = [gettimeofday];
+        $rt = tv_interval $t0, $t1;
+        $stats{runtime} += $rt;
+        $stats{rows}++;
+        if( ( int $stats{timet} / 60 ) < ( int time / 60 )){
+            store_internals();
+            init_stats();
+        }
+        print_log( "Gearman job end (runtime ${rt}s) ...", 1 );
+        return 1;
+    } elsif ( $opt_b && !$opt_n ) {
+        # Bulk mode
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
         $lines = process_perfdata_file();
-    }
-    # Bulk mode with npcd
-    elsif ( $opt_b && $opt_n ) {
+    } elsif ( $opt_b && $opt_n ) {
+        # Bulk mode with npcd
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
         $lines = process_perfdata_file();
-    }
-    # Synchronous mode
-    else {
+    } else {
+        # Synchronous mode
         print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
         $lines = process_perfdata();
     }
-    $t1 = [gettimeofday];
     $rt = tv_interval $t0, $t1;
     $stats{runtime} = $rt;
     $stats{rows} = $lines;
-    if(defined($opt_gm)){
-        print_log( "Gearman job end (runtime ${rt}s) ...", 1 );
-        store_internals();
-        return 1;
-    }else{
-        store_internals();
-        print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
-        exit 0;
-    }
+    store_internals();
+    print_log( "PNP exiting (runtime ${rt}s) ...", 1 );
+    exit 0;
 }
 
 #
@@ -203,31 +210,40 @@ sub parse_env {
     $NAGIOS{DATATYPE} = "SERVICEPERFDATA";
 
     if(defined $opt_gm){
+        # Gearman Worker
         $job_data = decode_base64($job_data);
         if($conf{ENCRYPTION} == 1){
-            $job_data = $cypher->decrypt( $job_data )	    
+            $job_data = $cypher->decrypt( $job_data )        
         }
         my @LINE = split(/\t/, $job_data);
-        %ENV = ();    # cleaning ENV
         foreach my $k (@LINE) {
             $k =~ /([A-Z 0-9_]+)::(.*)$/;
-            $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+            $NAGIOS{$1} = $2 if ($2);
         }
-        if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
-            print_log( "Gearman job data missmatch. Please check your encryption key.", 1 );
+        if ( !$NAGIOS{HOSTNAME} ) {
+            print_log( "Gearman job data missmatch. Please check your encryption key.", 0 );
             return %NAGIOS;
         }
-    }
-
-    if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
-        print_log( "Cant find Nagios Environment. Exiting ....", 1 );
-        exit 2;
-    }
-    foreach my $key ( sort keys %ENV ) {
-        if ( $key =~ /^(NAGIOS|ICINGA)_(.*)/ ) {
-            $NAGIOS{$2} = $ENV{$key};
+	} elsif ( defined($opt_b) ){
+		# Bulk Mode
+        my @LINE = split(/\t/, $job_data);
+        foreach my $k (@LINE) {
+            $k =~ /([A-Z 0-9_]+)::(.*)$/;
+            $NAGIOS{$1} = $2 if ($2);
         }
-    }
+    }else{
+
+ 	    if ( ( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} ) ) {
+            print_log( "Cant find Nagios Environment. Exiting ....", 1 );
+            exit 2;
+        }
+        foreach my $key ( sort keys %ENV ) {
+            if ( $key =~ /^(NAGIOS|ICINGA)_(.*)/ ) {
+                $NAGIOS{$2} = $ENV{$key};
+            }
+        }
+
+	}
 
     if ($opt_d) {
         $NAGIOS{DATATYPE} = $opt_d;
@@ -304,19 +320,19 @@ sub process_perfdata_file {
         open( PDFILE, "< $pdfile" );
         my $count = 0;
         while (<PDFILE>) {
+			my $job_data = $_;
             $count++;
             print_log( "Processing Line $count", 2 );
             my @LINE = split(/\t/);
-            %ENV = ();    # cleaning ENV
-            foreach my $k (@LINE) {
-                $k =~ /([A-Z 0-9_]+)::(.*)$/;
-                $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
-            }
-            if ( $ENV{NAGIOS_SERVICEPERFDATA} || $ENV{NAGIOS_HOSTPERFDATA} ) {
-                parse_env();
+            %NAGIOS = ();    # cleaning %NAGIOS Hash
+            #foreach my $k (@LINE) {
+            #    $k =~ /([A-Z 0-9_]+)::(.*)$/;
+            #    $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+            #}
+            parse_env($job_data);
+            if ( $NAGIOS{SERVICEPERFDATA} || $NAGIOS{HOSTPERFDATA} ) {
                 process_perfdata();
-            }
-            else {
+            } else {
                 print_log( "No Perfdata. Skipping line $count", 2 );
                 $stats{skipped}++;
             }
@@ -392,6 +408,18 @@ sub data2rrd {
             }
         }
 
+        if ( uc($conf{'GLOBAL_RRD_STORAGE_TYPE'}) eq "MULTIPLE" ) {
+            my $file = $conf{RRDPATH} . "/" . $data[$i]{hostname} . "/" . $data[$i]{servicedesc} . ".rrd";
+            if ( -e $file ){
+                print_log("RRD_STORAGE_TYPE=MULTIPLE ignored because $file exists!", 1 ) if $i == 0;
+                $data[$i]{rrd_storage_type} = "SINGLE";
+            }
+        }
+
+		if ( $i == 0 ){
+        	$ds_update = "$data[$i]{timet}";
+        }
+
         if ( $data[$i]{rrd_storage_type} eq "MULTIPLE" ) {
             print_log( "DEBUG: MULTIPLE Storage Type", 3 );
             $DS = 1;
@@ -404,7 +432,7 @@ sub data2rrd {
 
             # DS is set to 1
             @ds_create = "DS:$DS:$data[$i]{dstype}:$data[$i]{rrd_heartbeat}:$data[$i]{rrd_min}:$data[$i]{rrd_max}";
-            $ds_update = ":$data[$i]{value}";
+            $ds_update = "$data[$i]{timet}:$data[$i]{value}";
             @rrd_state = write_rrd();
             @ds_create = ();
             $ds_update = "";
@@ -470,6 +498,7 @@ sub write_rrd {
 
             my $err = RRDs::error();
             if ($err) {
+            	print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 0 );
                 print_log( "RRDs::create ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
@@ -485,6 +514,7 @@ sub write_rrd {
             print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
             system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
             if ( $? > 0 ) {
+            	print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 0 );
                 print_log( "rrdtool create returns $?", 0 );
                 @rrd_state = ( $?, "create failed" );
                 $stats{error}++;
@@ -499,15 +529,16 @@ sub write_rrd {
     else {
         if ( $conf{USE_RRDs} == 1 ) {
             if ( $conf{RRD_DAEMON_OPTS} ) {
-                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
+                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $ds_update", 2 );
+                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$rrdfile", "$ds_update" );
             }
             else {
-                print_log( "RRDs::update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                RRDs::update( "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
+                print_log( "RRDs::update $rrdfile $ds_update", 2 );
+                RRDs::update( "$rrdfile", "$ds_update" );
             }
             my $err = RRDs::error();
             if ($err) {
+                print_log( "RRDs::update $rrdfile $ds_update", 0 );
                 print_log( "RRDs::update ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
@@ -521,14 +552,15 @@ sub write_rrd {
         else {
             print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.", 2 );
             if ( $conf{RRD_DAEMON_OPTS} ) {
-                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update");
+                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $ds_update", 2 );
+                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $ds_update");
             }
             else {
-                print_log( "$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
-                system("$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update");
+                print_log( "$conf{RRDTOOL} update $rrdfile $ds_update", 2 );
+                system("$conf{RRDTOOL} update $rrdfile $ds_update");
             }
             if ( $? > 0 ) {
+                print_log( "$conf{RRDTOOL} update $rrdfile $ds_update", 0 );
                 print_log( "rrdtool update returns $?", 0 );
                 @rrd_state = ( $?, "update failed" );
                 $stats{error}++;
@@ -779,6 +811,7 @@ sub parse_config {
 sub parse_rra_config {
     my $template     = shift;
     my $rra_template = "";
+    my @rrd_create = @default_rrd_create;
     if ( -e $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg" ) {
         $rra_template = $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg";
         print_log( "Reading $rra_template", 2 );
@@ -988,17 +1021,14 @@ sub parse_perfstring {
 
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
-                } 
-		else {
+                } else {
                     $p{rrd_max} = "U";
                 }
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
-                }
-		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
-		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
-                } 
-		else {
+                } elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+                    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } else {
                     $p{rrd_min} = "U";
                 }
                 $p{template}         = $CTPL{'TEMPLATE'};
@@ -1010,6 +1040,7 @@ sub parse_perfstring {
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
                 $p{auth_hostname}    = $NAGIOS{HOSTNAME};
+                $p{timet}            = $NAGIOS{TIMET};
                 push @perfs, {%p};
                 $count++;
             }
@@ -1021,19 +1052,18 @@ sub parse_perfstring {
 
                 if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                     $p{rrd_max} = $p{max};
-                }
-                else {
+                } else {
                     $p{rrd_max} = "U";
                 }
+
                 if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                     $p{rrd_min} = $p{min};
-                }
-		elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
-		    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
-                } 
-                else {
+                } elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+                    $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+                } else {
                     $p{rrd_min} = "U";
                 }
+
                 $p{template}         = $CTPL{'TEMPLATE'};
                 $p{dstype}           = $CTPL{'DSTYPE'};
                 $p{rrd_storage_type} = $CTPL{'RRD_STORAGE_TYPE'};
@@ -1041,11 +1071,11 @@ sub parse_perfstring {
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
                 $p{auth_hostname}    = $NAGIOS{HOSTNAME};
+                $p{timet}            = $NAGIOS{TIMET};
                 if ( $count == 1 ) {
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );    # Use the servicedesc.
                     $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};          # Use the servicedesc.
-                }
-                else {
+                } else {
                     $p{servicedesc}      = cleanup( $multi[0] );               # Use the multi servicedesc.
                     $p{disp_servicedesc} = $multi[0];                          # Use the multi servicedesc.
                 }
@@ -1057,8 +1087,7 @@ sub parse_perfstring {
         }
         data2rrd(@perfs) if ( $#perfs >= 0 );
         @perfs = ();
-    }
-    else {
+    } else {
 
         #
         # Normal Performance Data
@@ -1076,17 +1105,14 @@ sub parse_perfstring {
 
             if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {
                 $p{rrd_max} = $p{max};
-            }
-            else {
+            } else {
                 $p{rrd_max} = "U";
             }
             if ( $CTPL{'USE_MIN_ON_CREATE'} == 1 && defined $p{min} ) {
                 $p{rrd_min} = $p{min};
-            }
-	    elsif( $CTPL{'DSTYPE'} eq 'DERIVE' ){
-		$p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
-	    } 
-            else {
+            } elsif ( $CTPL{'DSTYPE'} eq 'DERIVE' ){
+                $p{rrd_min} = 0; # Add minimum value 0 if DSTYPE = DERIVE
+            } else {
                 $p{rrd_min} = "U";
             }
 
@@ -1101,6 +1127,7 @@ sub parse_perfstring {
             $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
             $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
             $p{auth_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
+            $p{timet}            = $NAGIOS{TIMET};
 
             push @perfs, {%p};
             $count++;
@@ -1189,7 +1216,7 @@ sub handle_signal {
             }
             elsif ( $opt_b && $opt_n ) {
                 print_log( "*** TIMEOUT: Deleting current file to avoid NPCD loops", 0 );
-                print_log( "*** TIMEOUT: Please check your npcd.cfg",                0 );
+                print_log( "*** TIMEOUT: Please check your process_perfdata.cfg",    0 );
             }
             if ($opt_b) {
                 my $pdfile = "$opt_b" . "-PID-" . $$;
@@ -1301,6 +1328,7 @@ sub read_internals {
 # 
 #
 sub process_internals {
+    my $last_rrd_dtorage_type = $conf{'RRD_STORAGE_TYPE'};
     $conf{'RRD_STORAGE_TYPE'} = "MULTIPLE";
     %NAGIOS = ( 
         HOSTNAME => '.pnp-internal',
@@ -1313,6 +1341,7 @@ sub process_internals {
         PERFDATA => "runtime=".$stats{runtime}."s rows=".$stats{rows}." errors=".$stats{error}." invalid=".$stats{invalid}." skipped=".$stats{skipped} ." update=".$stats{update}. " create=".$stats{create} 
     );
     parse_perfstring(  $NAGIOS{PERFDATA} );
+    $conf{'RRD_STORAGE_TYPE'} = $last_rrd_dtorage_type;
 }
 
 #
@@ -1320,7 +1349,7 @@ sub process_internals {
 #
 sub daemonize {
     if( defined($opt_daemon) ){
-        print_log("daemonite init",1);
+        print_log("daemonize init",1);
         chdir '/' or die "Can't chdir to /: $!";
         open STDIN,  '/dev/null'   or die "Can't read /dev/null: $!";
         open STDOUT, '>>/dev/null' or die "Can't write to /dev/null: $!";
@@ -1340,7 +1369,7 @@ sub daemonize {
     while (1) {
         sleep;   # wait for a signal (i.e., child's death)
         for (my $i = $children; $i < $conf{'PREFORK'}; $i++) {
-            print_log("Starting new child (running = $i)",1);
+            print_log("starting new child (running = $i)",1);
             new_child();  # top up the child pool
         }
     }
@@ -1376,15 +1405,16 @@ sub new_child {
         sigprocmask(SIG_UNBLOCK, $sigset)
             or die "Can't unblock SIGINT for fork: $!\n";
     
-        my $worker = Gearman::Worker->new;
+        my $worker = Gearman::Worker->new();
         $worker->job_servers($conf{'GEARMAN_HOST'});
         $worker->register_function("perfdata", 2, sub { return main(@_); });
         my %opt = ( 
                     on_complete => sub { $req++; }, 
                     stop_if => sub { if ( $req > $conf{'REQUESTS_PER_CHILD'} ) { return 1;}; } 
                   );
+        print_log("connecting to gearmand '".$conf{'GEARMAN_HOST'}."'",0);
         $worker->work( %opt );
-        print_log("max requests per child reached",3);
+        print_log("max requests per child reached (".$conf{'REQUESTS_PER_CHILD'}.")",1);
         # this exit is VERY important, otherwise the child will become
         # a producer of more and more children, forking yourself into
         # process death.
@@ -1430,7 +1460,26 @@ sub pidlock {
     }
 }
 
-
+#
+# Read crypt key
+#
+sub read_keyfile {
+    my $file = shift;
+    my $key = '';
+    if( -r $file){
+        open(FH, "<", $file);
+        while(<FH>){
+            $conf{'KEY'} = $_;
+            last;
+        }
+        close(FH);
+        print_log("Using encryption key specified in '$file'",0);
+        return 1;
+    }else{
+        print_log("Using encryption key specified in ".$conf{'CFG_DIR'}."/process_perfdata.cfg",0);
+        return 0;
+    }
+}
 #
 #
 #
