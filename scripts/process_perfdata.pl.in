@@ -179,20 +179,16 @@ sub main {
         }
         print_log( "Gearman job end (runtime ${rt}s) ...", 1 );
         return 1;
-    }
-
-    # Bulk mode
-    elsif ( $opt_b && !$opt_n ) {
+    } elsif ( $opt_b && !$opt_n ) {
+        # Bulk mode
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
         $lines = process_perfdata_file();
-    }
-    # Bulk mode with npcd
-    elsif ( $opt_b && $opt_n ) {
+    } elsif ( $opt_b && $opt_n ) {
+        # Bulk mode with npcd
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
         $lines = process_perfdata_file();
-    }
-    # Synchronous mode
-    else {
+    } else {
+        # Synchronous mode
         print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
         $lines = process_perfdata();
@@ -214,31 +210,40 @@ sub parse_env {
     $NAGIOS{DATATYPE} = "SERVICEPERFDATA";
 
     if(defined $opt_gm){
+        # Gearman Worker
         $job_data = decode_base64($job_data);
         if($conf{ENCRYPTION} == 1){
             $job_data = $cypher->decrypt( $job_data )        
         }
         my @LINE = split(/\t/, $job_data);
-        %ENV = ();    # cleaning ENV
         foreach my $k (@LINE) {
             $k =~ /([A-Z 0-9_]+)::(.*)$/;
-            $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+            $NAGIOS{$1} = $2 if ($2);
         }
-        if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
+        if ( !$NAGIOS{HOSTNAME} ) {
             print_log( "Gearman job data missmatch. Please check your encryption key.", 0 );
             return %NAGIOS;
         }
-    }
-
-    if (( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} )) {
-        print_log( "Cant find Nagios Environment. Exiting ....", 1 );
-        exit 2;
-    }
-    foreach my $key ( sort keys %ENV ) {
-        if ( $key =~ /^(NAGIOS|ICINGA)_(.*)/ ) {
-            $NAGIOS{$2} = $ENV{$key};
+	} elsif ( defined($opt_b) ){
+		# Bulk Mode
+        my @LINE = split(/\t/, $job_data);
+        foreach my $k (@LINE) {
+            $k =~ /([A-Z 0-9_]+)::(.*)$/;
+            $NAGIOS{$1} = $2 if ($2);
         }
-    }
+    }else{
+
+ 	    if ( ( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} ) ) {
+            print_log( "Cant find Nagios Environment. Exiting ....", 1 );
+            exit 2;
+        }
+        foreach my $key ( sort keys %ENV ) {
+            if ( $key =~ /^(NAGIOS|ICINGA)_(.*)/ ) {
+                $NAGIOS{$2} = $ENV{$key};
+            }
+        }
+
+	}
 
     if ($opt_d) {
         $NAGIOS{DATATYPE} = $opt_d;
@@ -315,19 +320,19 @@ sub process_perfdata_file {
         open( PDFILE, "< $pdfile" );
         my $count = 0;
         while (<PDFILE>) {
+			my $job_data = $_;
             $count++;
             print_log( "Processing Line $count", 2 );
             my @LINE = split(/\t/);
-            %ENV = ();    # cleaning ENV
-            foreach my $k (@LINE) {
-                $k =~ /([A-Z 0-9_]+)::(.*)$/;
-                $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
-            }
-            if ( $ENV{NAGIOS_SERVICEPERFDATA} || $ENV{NAGIOS_HOSTPERFDATA} ) {
-                parse_env();
+            %NAGIOS = ();    # cleaning %NAGIOS Hash
+            #foreach my $k (@LINE) {
+            #    $k =~ /([A-Z 0-9_]+)::(.*)$/;
+            #    $ENV{ 'NAGIOS_' . $1 } = $2 if ($2);
+            #}
+            parse_env($job_data);
+            if ( $NAGIOS{SERVICEPERFDATA} || $NAGIOS{HOSTPERFDATA} ) {
                 process_perfdata();
-            }
-            else {
+            } else {
                 print_log( "No Perfdata. Skipping line $count", 2 );
                 $stats{skipped}++;
             }
