@@ -18,8 +18,6 @@
 # TODO: 
 # perfdata spool dir ermitteln aus der npcd.cfg ( bulk+npcd, bulk und npcdmod )
 # permissions auf das spool dir
-# process_perfdata.cfg auslesen
-# wenn keine process_perfdata.cfg vorhanden, process_perfdata.pl parsen!!!
 # perfdata dir prüfen auf permission und rrdfiles
 #
 use strict;
@@ -27,19 +25,20 @@ use warnings;
 use Data::Dumper;
 use Getopt::Long;
 use File::Find;
-use Switch;
 use Term::ANSIColor;
 
-my $version='pnp4nagios-head';
+my $version = 'pnp4nagios-head';
 
 # process command line parameters
-use vars qw ( $help $debug $mode $MainCfg $last_check);
+use vars qw ( $help $debug $mode $vInfo $ppPerl $PNPCfg $MainCfg $last_check);
 Getopt::Long::Configure('bundling');
 GetOptions(
-    "h|help"     => \$help,
-    "d|debug"    => \$debug,
-    "m|mode=s"   => \$mode,
-    "c|config=s" => \$MainCfg,
+	"h|help"     => \$help,
+	"d|debug"    => \$debug,
+	"m|mode=s"   => \$mode,
+	"c|config=s" => \$MainCfg,
+	"P|ppPerl=s" => \$ppPerl,
+	"p|pnpcfg=s" => \$PNPCfg,
 );
 
 my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
@@ -55,8 +54,20 @@ if ( ! $MainCfg ){
 }
 
 if ( ! $mode ){
-	usage();;
+	usage();
 	usage_no_mode();
+	exit;
+}
+
+if ( ! $ppPerl ){
+	usage();
+	usage_no_ppperl();
+	exit;
+}
+
+if ( ! $PNPCfg ){
+	usage();
+	usage_no_pnpcfg();
 	exit;
 }
 
@@ -67,14 +78,13 @@ if( ! in_array(\@modes, $mode)){
 	exit;
 }
 my %statistics = (
-	'OK' => 0,
+	'OK'   => 0,
 	'WARN' => 0,
 	'CRIT' => 0,
 );
  
-my %cfg;
-my %commands;
-
+my %cfg      = ();
+my %commands = ();
 
 #
 # Begin
@@ -87,18 +97,18 @@ info("========== Starting Environment Checks ============",4);
 # 
 process_nagios_cfg();
 #
-# get the Product name
+# get the product name
 #
 my $product = get_product();
 if( $product eq 0 ){
 	info("Can´t determine product while reading $MainCfg", 4);
 	info_and_exit("$MainCfg does not look like a valid config file", 2);
 }else{
-	info("Running Product is '$product'", 0);
+	info("Running product is '$product'", 0);
 }
 
 #
-# Read objects cache file to get more informations 
+# Read objects cache file to get more information
 # Needs a running product
 #
 check_config_var('object_cache_file', 'exists', 'break');
@@ -110,6 +120,20 @@ if( -r $cfg{'object_cache_file'} ){
 	process_objects_file($cfg{'object_cache_file'});
 }else{
 	info_and_exit($cfg{'object_cache_file'}. " is not readable", 2);
+}
+
+#
+# Read process_perfdata.pl and process_perfdata.cfg
+#
+$ppPerl .= "/process_perfdata.pl" if (-d $ppPerl);
+if( -r $ppPerl ){
+	process_pp_pl($ppPerl);
+}else{
+	info_and_exit("$ppPerl is not readable", 2);
+}
+my $ppcfg = "$PNPCfg/process_perfdata.cfg";
+if( -r $ppcfg ){
+	process_npcd_cfg($ppcfg);
 }
 
 #
@@ -197,6 +221,16 @@ if($mode eq "bulk"){
 	check_config_var('service_perfdata_command', 'notexists');
 	check_config_var('host_perfdata_command', 'notexists');
 	check_config_var('broker_module', 'notexists', 'break');
+
+	# extract npcd.cfg path out of process list
+	my $npcd_cfg = "$PNPCfg/npcd.cfg";
+	$npcd_cfg .= "-sample" unless (-r "$npcd_cfg");
+	if( -r $npcd_cfg){
+		info("$npcd_cfg is readable",0);
+	}
+	# read npcd.cfg into %cfg
+	process_npcd_cfg($npcd_cfg);
+	check_config_var('perfdata_spool_dir', 'exists', 'break');
 }
 
 if($mode eq "bulk+npcd"){
@@ -258,12 +292,12 @@ if($mode eq "npcdmod"){
 	check_config_var('host_perfdata_file_processing_interval', 'notexists','break');
 	check_config_var('host_perfdata_file_processing_command', 'notexists','break');
 
-	# event_broker_option must be -1 or >= 12
-	$val = get_config_var('event_broker_options');
-	if($val == -1 || $val >= 12 ){
-		info("event_broker_option inside correct value range ($val)",0);
+	# event_broker_option must have enabled bits 2 and 3 (0b01100)
+	$val = get_config_var('event_broker_options') & 0x0c;
+	if($val == 12){
+		info("event_broker_option bits 2 and 3 enabled ($val)",0);
 	}else{
-		info_and_exit("event_broker_option not inside a valid range -1 || >= 12 ",2);
+		info_and_exit("event_broker_option bits 2 and/or 3 not enabled",2);
 	}
 
 	check_config_var('broker_module', 'exists', 'break');
@@ -345,11 +379,11 @@ sub check_command_definition {
 }
 
 #
-# Max 3 parameter
+# Max three parameters
 # 
 sub check_config_var {
 	my $key   = shift;
-    my $check = shift;
+	my $check = shift;
 	my $break = shift||0;
 	my $var = get_config_var($key);
 	if($check eq "exists"){
@@ -377,7 +411,7 @@ sub check_config_var {
 
 sub compare_config_var {
 	my $key     = shift;
-    my $compare = shift;
+	my $compare = shift;
 	my $break   = shift||0;
 	my $var     = get_config_var($key);
 	if( $var =~ /$compare/){
@@ -390,9 +424,9 @@ sub compare_config_var {
 sub check_perfdata_file_template {
 	$_ = shift;
 	if( /^DATATYPE::(HOST|SERVICE)PERFDATA/ ){
-		info("PERFDATA Template looks good",0);
+		info("PERFDATA template looks good",0);
 	}else{
-		info("PERFDATA looks suspect",2);
+		info("PERFDATA template looks suspect",2);
 	}
 }
 sub info {
@@ -400,7 +434,7 @@ sub info {
 	my $state  = shift;
 	$statistics{$states[$state]}++;
 	print color $colors[$state];
-	printf("[%4s]  ", $states[$state]);
+	printf("[%-4s]  ", $states[$state]);
 	print color 'reset';
 	printf("%s\n", $string);
 }
@@ -430,68 +464,89 @@ sub check_proc_npcd {
 }
 # process nagios.cfg
 sub process_nagios_cfg {
-    info ("Reading $MainCfg", 0);
-    open (NFILE, "$MainCfg") || info_and_exit("Failed to open '$MainCfg'. $! ", 2);
-    while (<NFILE>) {
-        process_main_cfg_line();
-    }
-    close (NFILE);
+	info ("Reading $MainCfg", 0);
+	open (NFILE, "$MainCfg") || info_and_exit("Failed to open '$MainCfg'. $! ", 2);
+	while (<NFILE>) {
+		process_main_cfg_line();
+	}
+	close (NFILE);
 }
 
 # process npcd.cfg
 sub process_npcd_cfg {
 	my $cfg_file = shift;
-	%cfg = ();
-    info ("Reading $cfg_file", 0);
-    open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
-    while (<NFILE>) {
-        process_main_cfg_line();
-    }
-    close (NFILE);
+	info ("Reading $cfg_file", 0);
+	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
+	while (<NFILE>) {
+		process_main_cfg_line();
+	}
+	close (NFILE);
 }
 
 # process main config line
 sub process_main_cfg_line {
-    chomp;
-    s/#.*//;
-    s/\s*$//;
-    return if (/^$/);
-    my ($par, $val) = /^(.*?)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
-    if (($par eq "") or ($val eq "")) {
-        info ("oddLine", "$_");
-        next;
-    }
-    return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
-
-    $cfg{"$par"} = $val;
+	chomp;
+	s/#.*//;
+	s/\s*$//;
+	return if (/^$/);
+	my ($par, $val) = /^(.*?)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
+	if (($par eq "") or ($val eq "")) {
+		info ("oddLine", "$_");
+		next;
+	}
+	return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
+	$cfg{"$par"} = $val;
 }
 
 # read config file
 sub process_objects_file {
-    my ($file) = @_;
-    my $cmd = "";
-    my $line = "";
-    info ("Reading $file", 0);
-    open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
-    while (<CFILE>) {
-        s/#.*//;
-        next if (/^$/);
-        chomp;
+	my ($file) = @_;
+	my $cmd = "";
+	my $line = "";
+	info ("Reading $file", 0);
+	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
+	while (<CFILE>) {
+		s/#.*//;
+		next if (/^$/);
+		chomp;
 		# count process_perf_data definitions
 		if (/process_perf_data\s+(\d)$/){
 			$process_perf_data_stats{$1}++;
 		}
-        next unless (/command_[name|line]/);
-        if (/command_name/) {
-            ($cmd) = /command_name\s*(.*)/;
-            next;
-        }
-        ($line) = /command_line\s*(.*)/ ;
-        $commands{"$cmd"} = "$line";
-        next unless (/process_perfdata.pl/);
-        my @cmd = split (/\s+/,$line);
-    }
-    close (CFILE);
+		next unless (/command_[name|line]/);
+		if (/command_name/) {
+			($cmd) = /command_name\s*(.*)/;
+			next;
+		}
+		($line) = /command_line\s*(.*)/ ;
+		$commands{"$cmd"} = "$line";
+		next unless (/process_perfdata.pl/);
+		my @cmd = split (/\s+/,$line);
+	}
+	close (CFILE);
+}
+
+# read config inside process_perfdata.pl
+sub process_pp_pl {
+	my $cfg_file = shift;
+	my $loop = 0;
+	info ("Reading $cfg_file", 0);
+	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
+	while (<NFILE>) {
+		chomp;
+		last if (/^\s*\);/);
+		s/#.*//;
+		s/\s*$//;
+		s/^\s+//;
+		next if (/^$/);
+		$loop++ if (/%conf/);
+		next unless ($loop);
+		my ($par, $val) = /^(.*?)\s?=>\s?(.*)/;    # shortest string
+		next unless ((defined $par) and (defined $val));
+		chop $val if ($val =~ /,$/);
+		$cfg{"$par"} = $val;
+	}
+	close (NFILE);
 }
 
 sub get_product {
@@ -505,15 +560,18 @@ sub get_product {
 }
 
 sub in_array{
-     my ($arr,$search_for) = @_;
-     my %items = map {$_ => 1} @$arr;
-     return (exists($items{$search_for}))?1:0;
+	my ($arr,$search_for) = @_;
+	my %items = map {$_ => 1} @$arr;
+	return (exists($items{$search_for}))?1:0;
 } 
 
 sub usage{
 print <<EOF;
 
-verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod] -c|--config=[path to nagios.cfg]
+verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod]
+                  -c|--config=[path to nagios.cfg]
+                  -p|--pnpcfg=[path to PNP config dir]
+                  -P|--ppperl=[path to process_perfdata.pl]
 
 This script will check certain settings/entries of your PNP environ-
 ment to assist you in finding problems when you are using PNP.
@@ -524,7 +582,7 @@ Output starts with a letter with the following meaning:
 [OK  ] ok message, will not affect the operation of PNP
 [WARN] warning message, might effect the operation of PNP 
 [CRIT] error message: PNP will not work without resolving the problem(s)
-[INFO] hint: it might be worth reading the appropriate documentation
+[HINT] hint: it might be worth reading the appropriate documentation
 [DBG ] debugging message, hopefully showing the source of your problem
 
 EOF
@@ -533,6 +591,16 @@ EOF
 sub usage_no_config{
 	info("-c | --config option not given",2);
 	info_and_exit("please specify the path to your nagios or icinga.cfg",2);
+}
+
+sub usage_no_pnpcfg{
+	info("-p | --pnpcfg option not given",2);
+	info_and_exit("please specify the path to your PNP config dir",2);
+}
+
+sub usage_no_ppperl{
+	info("-P | --ppperl option not given",2);
+	info_and_exit("please specify the path to process_perfdata.pl",2);
 }
 
 sub usage_no_mode{
