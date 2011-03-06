@@ -30,6 +30,8 @@ use File::Find;
 use Switch;
 use Term::ANSIColor;
 
+my $version='pnp4nagios-head';
+
 # process command line parameters
 use vars qw ( $help $debug $mode $MainCfg $last_check);
 Getopt::Long::Configure('bundling');
