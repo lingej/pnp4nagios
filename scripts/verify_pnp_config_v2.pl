@@ -171,17 +171,19 @@ if(config_var_exists($product.'_group') ){
 #
 
 if($mode eq "sync"){
-
+	my $command_line;
 	info("========== Checking Sync Mode Config  ============",4);
 
 	compare_config_var('process_performance_data',  '1', 'break');
 	compare_config_var('enable_environment_macros', '1');
 
 	check_config_var('service_perfdata_command', 'exists');
-	check_command_definition(get_config_var('service_perfdata_command'));
+	$command_line = check_command_definition(get_config_var('service_perfdata_command'));
+	check_process_perfdata_pl($command_line);
 
 	check_config_var('host_perfdata_command', 'exists');
-	check_command_definition(get_config_var('host_perfdata_command'));
+	$command_line = check_command_definition(get_config_var('host_perfdata_command'));
+	check_process_perfdata_pl($command_line);
 
 	# Options not allowed in sync mode
 	check_config_var('service_perfdata_file', 'notexists','break');
@@ -198,7 +200,7 @@ if($mode eq "sync"){
 }
 
 if($mode eq "bulk"){
-
+	my $command_line;
 	info("========== Checking Bulk Mode Config  ============",4);
 	
 	compare_config_var('process_performance_data', '1', 'break');
@@ -208,7 +210,8 @@ if($mode eq "bulk"){
 	check_config_var('service_perfdata_file_mode', 'exists','break');
 	check_config_var('service_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('service_perfdata_file_processing_command', 'exists','break');
-	check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
 
 	check_config_var('host_perfdata_file', 'exists','break');
 	check_config_var('host_perfdata_file_template', 'exists','break');
@@ -216,7 +219,9 @@ if($mode eq "bulk"){
 	check_config_var('host_perfdata_file_mode', 'exists','break');
 	check_config_var('host_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('host_perfdata_file_processing_command', 'exists','break');
-	check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
+
 	# Options not allowed in bulk mode
 	check_config_var('service_perfdata_command', 'notexists');
 	check_config_var('host_perfdata_command', 'notexists');
@@ -224,7 +229,7 @@ if($mode eq "bulk"){
 }
 
 if($mode eq "bulk+npcd"){
-
+	my $command_line;
 	info("========== Checking Bulk Mode + NPCD Config  ============",4);
 	
 	compare_config_var('process_performance_data', '1', 'break');
@@ -234,7 +239,8 @@ if($mode eq "bulk+npcd"){
 	check_config_var('service_perfdata_file_mode', 'exists','break');
 	check_config_var('service_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('service_perfdata_file_processing_command', 'exists','break');
-	check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
 
 	check_config_var('host_perfdata_file', 'exists','break');
 	check_config_var('host_perfdata_file_template', 'exists','break');
@@ -242,7 +248,9 @@ if($mode eq "bulk+npcd"){
 	check_config_var('host_perfdata_file_mode', 'exists','break');
 	check_config_var('host_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('host_perfdata_file_processing_command', 'exists','break');
-	check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
+
 	# Options not allowed in bulk mode
 	check_config_var('service_perfdata_command', 'notexists');
 	check_config_var('host_perfdata_command', 'notexists');
@@ -363,9 +371,11 @@ sub check_command_definition {
 	my $var = $commands{$key};
 	if(exists $commands{$key}){
 		info("Command $key is defined ('$var')",0);
+		return $commands{$key};
 	}else{
 		info_and_exit("Command $key is not defined",2);
 	}
+	
 }
 
 #
@@ -515,6 +525,22 @@ sub process_objects_file {
 	}
 	close (CFILE);
 }
+
+sub check_process_perfdata_pl {
+	my $command_line = shift;
+	my $path = '';
+	if( $command_line =~ /\s?([^\s]*)\/process_perfdata.pl\s?/ ){
+		$path = $1;
+		if( -x "$path/process_perfdata.pl" ){
+			info("Script $path/process_perfdata.pl is executable",0);
+		}else{
+			info_and_exit("Script $path/process_perfdata.pl is not executable",2);
+		}
+	}else{
+		info_and_exit("Can´t find path to process_perfdata.pl",2);
+	}	
+}
+
 
 # read config inside process_perfdata.pl
 sub process_pp_pl {
