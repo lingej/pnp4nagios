@@ -264,11 +264,7 @@ if($mode eq "bulk+npcd"){
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
 	#print Dumper \%cfg;
-	if(-x $cfg{'perfdata_file_run_cmd'}){
-		info("'".$cfg{'perfdata_file_run_cmd'}."' is executable",0);
-	}else{	
-		info_and_exit("'".$cfg{'perfdata_file_run_cmd'}."' is not executable",2);
-	}
+	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
 
 if($mode eq "npcdmod"){
@@ -309,9 +305,12 @@ if($mode eq "npcdmod"){
 		info("npcdmod.o config file is $npcdmod_npcd_cfg",0);
 		if( -r $npcdmod_npcd_cfg){
 			info("$npcdmod_npcd_cfg used by npcdmod.o is readable",0);
+		}else{
+			info_and_exit("$npcdmod_npcd_cfg used by npcdmod.o is not readable",2);
 		}
 	}else{
-		info("can´t extract path to npcd.cfg out of your broker_module definition",2);
+		info("broker_module definition looks suspect '$val'",2);
+		info_and_exit("Can´t extract path to npcd.cfg out of your broker_module definition",2);
 	}		
 	# extract npcd.cfg path out of process list
 	my $npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
@@ -326,11 +325,7 @@ if($mode eq "npcdmod"){
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
 	#print Dumper \%cfg;
-	if(-x $cfg{'perfdata_file_run_cmd'}){
-		info("'".$cfg{'perfdata_file_run_cmd'}."' is executable",0);
-	}else{	
-		info_and_exit("'".$cfg{'perfdata_file_run_cmd'}."' is not executable",2);
-	}
+	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
 
 
@@ -464,7 +459,7 @@ sub check_proc_npcd {
 }
 # process nagios.cfg
 sub process_nagios_cfg {
-	info ("Reading $MainCfg", 0);
+	info ("Reading $MainCfg", 4);
 	open (NFILE, "$MainCfg") || info_and_exit("Failed to open '$MainCfg'. $! ", 2);
 	while (<NFILE>) {
 		process_main_cfg_line();
@@ -475,7 +470,7 @@ sub process_nagios_cfg {
 # process npcd.cfg
 sub process_npcd_cfg {
 	my $cfg_file = shift;
-	info ("Reading $cfg_file", 0);
+	info ("Reading $cfg_file", 4);
 	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
 	while (<NFILE>) {
 		process_main_cfg_line();
@@ -486,9 +481,10 @@ sub process_npcd_cfg {
 # process main config line
 sub process_main_cfg_line {
 	chomp;
+	return if (/^$/);
+	return if (/^#/);
 	s/#.*//;
 	s/\s*$//;
-	return if (/^$/);
 	my ($par, $val) = /^(.*?)\s?=\s?(.*+)/;    # shortest string (broker module contains multiple equal signs)
 	if ( ($par eq "") ) {
 		info ("oddLine -> $_" ,4);
@@ -503,7 +499,7 @@ sub process_objects_file {
 	my ($file) = @_;
 	my $cmd = "";
 	my $line = "";
-	info ("Reading $file", 0);
+	info ("Reading $file", 4);
 	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
 	while (<CFILE>) {
 		s/#.*//;
@@ -546,7 +542,7 @@ sub check_process_perfdata_pl {
 sub process_pp_pl {
 	my $cfg_file = shift;
 	my $loop = 0;
-	info ("Reading $cfg_file", 0);
+	info ("Reading $cfg_file", 4);
 	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
 	while (<NFILE>) {
 		chomp;
