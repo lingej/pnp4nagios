@@ -221,16 +221,6 @@ if($mode eq "bulk"){
 	check_config_var('service_perfdata_command', 'notexists');
 	check_config_var('host_perfdata_command', 'notexists');
 	check_config_var('broker_module', 'notexists', 'break');
-
-	# extract npcd.cfg path out of process list
-	my $npcd_cfg = "$PNPCfg/npcd.cfg";
-	$npcd_cfg .= "-sample" unless (-r "$npcd_cfg");
-	if( -r $npcd_cfg){
-		info("$npcd_cfg is readable",0);
-	}
-	# read npcd.cfg into %cfg
-	process_npcd_cfg($npcd_cfg);
-	check_config_var('perfdata_spool_dir', 'exists', 'break');
 }
 
 if($mode eq "bulk+npcd"){
