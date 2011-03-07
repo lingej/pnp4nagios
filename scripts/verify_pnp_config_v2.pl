@@ -326,6 +326,8 @@ if($mode eq "npcdmod"){
 	process_npcd_cfg($npcd_cfg);
 	#print Dumper \%cfg;
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
+	check_config_var('perfdata_spool_dir', 'exists', 'break');
+	check_perfdata_spool_dir($cfg{'perfdata_spool_dir'});
 }
 
 
@@ -537,6 +539,24 @@ sub check_process_perfdata_pl {
 	}	
 }
 
+sub check_perfdata_spool_dir {
+	my $dir = shift;
+	if( -d $dir ){
+		info("Spool direcory '$dir' exists",0);
+	}else{
+		info_and_exit("Spool directory $dir does not exists",2);
+	}
+}
+
+# 
+sub check_perfdata_dir {
+	my $dir =  shift;
+	if( -d $dir ){
+		info("Perfdata direcory '$dir' exists",0);
+	}else{
+		info_and_exit("Perfdata directory $dir does not exists",2);
+	}
+}
 
 # read config inside process_perfdata.pl
 sub process_pp_pl {
