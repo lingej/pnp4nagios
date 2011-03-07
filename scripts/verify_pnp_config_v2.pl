@@ -127,7 +127,7 @@ if( -r $cfg{'object_cache_file'} ){
 #
 $ppPerl .= "/process_perfdata.pl" if (-d $ppPerl);
 if( -r $ppPerl ){
-	process_pp_pl($ppPerl);
+	#process_pp_pl($ppPerl);
 }else{
 	info_and_exit("$ppPerl is not readable", 2);
 }
@@ -489,10 +489,10 @@ sub process_main_cfg_line {
 	s/#.*//;
 	s/\s*$//;
 	return if (/^$/);
-	my ($par, $val) = /^(.*?)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
-	if (($par eq "") or ($val eq "")) {
-		info ("oddLine", "$_");
-		next;
+	my ($par, $val) = /^(.*?)\s?=\s?(.*+)/;    # shortest string (broker module contains multiple equal signs)
+	if ( ($par eq "") ) {
+		info ("oddLine -> $_" ,4);
+		return;;
 	}
 	return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
 	$cfg{"$par"} = $val;
