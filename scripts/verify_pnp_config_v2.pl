@@ -37,7 +37,6 @@ GetOptions(
 	"d|debug"    => \$debug,
 	"m|mode=s"   => \$mode,
 	"c|config=s" => \$MainCfg,
-	"P|ppPerl=s" => \$ppPerl,
 	"p|pnpcfg=s" => \$PNPCfg,
 );
 
@@ -56,12 +55,6 @@ if ( ! $MainCfg ){
 if ( ! $mode ){
 	usage();
 	usage_no_mode();
-	exit;
-}
-
-if ( ! $ppPerl ){
-	usage();
-	usage_no_ppperl();
 	exit;
 }
 
@@ -628,11 +621,6 @@ sub usage_no_config{
 sub usage_no_pnpcfg{
 	info("-p | --pnpcfg option not given",2);
 	info_and_exit("please specify the path to your PNP config dir",2);
-}
-
-sub usage_no_ppperl{
-	info("-P | --ppperl option not given",2);
-	info_and_exit("please specify the path to process_perfdata.pl",2);
 }
 
 sub usage_no_mode{
