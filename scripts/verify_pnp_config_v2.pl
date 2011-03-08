@@ -116,14 +116,8 @@ if( -r $cfg{'object_cache_file'} ){
 }
 
 #
-# Read process_perfdata.pl and process_perfdata.cfg
+# Read process_perfdata.cfg
 #
-$ppPerl .= "/process_perfdata.pl" if (-d $ppPerl);
-if( -r $ppPerl ){
-	#process_pp_pl($ppPerl);
-}else{
-	info_and_exit("$ppPerl is not readable", 2);
-}
 my $ppcfg = "$PNPCfg/process_perfdata.cfg";
 if( -r $ppcfg ){
 	process_npcd_cfg($ppcfg);
@@ -164,19 +158,14 @@ if(config_var_exists($product.'_group') ){
 #
 
 if($mode eq "sync"){
-	my $command_line;
 	info("========== Checking Sync Mode Config  ============",4);
 
 	compare_config_var('process_performance_data',  '1', 'break');
 	compare_config_var('enable_environment_macros', '1');
 
 	check_config_var('service_perfdata_command', 'exists');
-	$command_line = check_command_definition(get_config_var('service_perfdata_command'));
-	check_process_perfdata_pl($command_line);
 
 	check_config_var('host_perfdata_command', 'exists');
-	$command_line = check_command_definition(get_config_var('host_perfdata_command'));
-	check_process_perfdata_pl($command_line);
 
 	# Options not allowed in sync mode
 	check_config_var('service_perfdata_file', 'notexists','break');
@@ -190,10 +179,19 @@ if($mode eq "sync"){
 	check_config_var('host_perfdata_file_processing_interval', 'notexists','break');
 	check_config_var('host_perfdata_file_processing_command', 'notexists','break');
 	check_config_var('broker_module', 'notexists', 'break');
+
+	info(ucfirst($product)." config looks good so far",4);
+	info("========== Checking config values ============",4);
+	my $command_line;
+
+	$command_line = check_command_definition(get_config_var('service_perfdata_command'));
+	check_process_perfdata_pl($command_line);
+
+	$command_line = check_command_definition(get_config_var('host_perfdata_command'));
+	check_process_perfdata_pl($command_line);
 }
 
 if($mode eq "bulk"){
-	my $command_line;
 	info("========== Checking Bulk Mode Config  ============",4);
 	
 	compare_config_var('process_performance_data', '1', 'break');
@@ -203,8 +201,6 @@ if($mode eq "bulk"){
 	check_config_var('service_perfdata_file_mode', 'exists','break');
 	check_config_var('service_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('service_perfdata_file_processing_command', 'exists','break');
-	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
-	check_process_perfdata_pl($command_line);
 
 	check_config_var('host_perfdata_file', 'exists','break');
 	check_config_var('host_perfdata_file_template', 'exists','break');
@@ -212,17 +208,24 @@ if($mode eq "bulk"){
 	check_config_var('host_perfdata_file_mode', 'exists','break');
 	check_config_var('host_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('host_perfdata_file_processing_command', 'exists','break');
-	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
-	check_process_perfdata_pl($command_line);
 
 	# Options not allowed in bulk mode
 	check_config_var('service_perfdata_command', 'notexists');
 	check_config_var('host_perfdata_command', 'notexists');
 	check_config_var('broker_module', 'notexists', 'break');
+
+	info(ucfirst($product)." config looks good so far",4);
+	info("========== Checking config values ============",4);
+	my $command_line;
+
+	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
+
+	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
 }
 
 if($mode eq "bulk+npcd"){
-	my $command_line;
 	info("========== Checking Bulk Mode + NPCD Config  ============",4);
 	
 	compare_config_var('process_performance_data', '1', 'break');
@@ -232,8 +235,6 @@ if($mode eq "bulk+npcd"){
 	check_config_var('service_perfdata_file_mode', 'exists','break');
 	check_config_var('service_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('service_perfdata_file_processing_command', 'exists','break');
-	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
-	check_process_perfdata_pl($command_line);
 
 	check_config_var('host_perfdata_file', 'exists','break');
 	check_config_var('host_perfdata_file_template', 'exists','break');
@@ -241,13 +242,21 @@ if($mode eq "bulk+npcd"){
 	check_config_var('host_perfdata_file_mode', 'exists','break');
 	check_config_var('host_perfdata_file_processing_interval', 'exists','break');
 	check_config_var('host_perfdata_file_processing_command', 'exists','break');
-	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
-	check_process_perfdata_pl($command_line);
 
 	# Options not allowed in bulk mode
 	check_config_var('service_perfdata_command', 'notexists');
 	check_config_var('host_perfdata_command', 'notexists');
 	check_config_var('broker_module', 'notexists', 'break');
+
+	info(ucfirst($product)." config looks good so far",4);
+	info("========== Checking config values ============",4);
+	my $command_line;
+
+	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
+
+	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	check_process_perfdata_pl($command_line);
 
 	my $npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
 	
@@ -315,6 +324,10 @@ if($mode eq "npcdmod"){
 	}else{
 		info("npcd and npcdmod.o are not using the same config file($npcd_cfg<=>$npcdmod_npcd_cfg)",1);
 	}
+	
+	info(ucfirst($product)." config looks good so far",4);
+	info("========== Checking config values ============",4);
+
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
 	#print Dumper \%cfg;
