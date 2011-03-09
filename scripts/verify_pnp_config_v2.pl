@@ -577,12 +577,12 @@ sub check_usrgrp {
 	if ($uid) {
 		my $fuid = (stat("$file"))[4];
 		my $fname = getpwuid($fuid);
-		info ("$file: owner is $fname instead of $user",2) if ($fuid != $uid);
+		info ("$file: owner is $fname",2) if ($fuid != $uid);
 	}
 	if ($gid) {
 		my $fgid = (stat("$file"))[5];
 		my $fgroup = getpwuid($fgid);
-		info ("$file: group is $fname instead of $user",2) if ($fuid != $uid);
+		info ("$file: group is $fgroup",2) if ($fgid != $gid);
 	}
 }
 
