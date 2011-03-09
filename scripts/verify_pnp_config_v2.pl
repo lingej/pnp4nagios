@@ -16,9 +16,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 # TODO: 
-# perfdata spool dir ermitteln aus der npcd.cfg ( bulk+npcd, bulk und npcdmod )
-# permissions auf das spool dir
-# perfdata dir prüfen auf permission und rrdfiles
 #
 use strict;
 use warnings;
@@ -78,6 +75,8 @@ my %statistics = (
  
 my %cfg      = ();
 my %commands = ();
+my $uid      = 0;
+my $gid      = 0;
 
 #
 # Begin
@@ -129,7 +128,7 @@ if( -r $ppcfg ){
 
 if(config_var_exists($product.'_user') ){
 	my $user = get_config_var($product.'_user');
-	my $uid  = getpwnam($user);
+	$uid  = getpwnam($user);
 	info( "Effective User is '$user'", 0);
 	if($uid){
 		info("User $user exists with ID '$uid'", 0 );
@@ -142,7 +141,7 @@ if(config_var_exists($product.'_user') ){
 
 if(config_var_exists($product.'_group') ){
 	my $group = get_config_var($product.'_group');
-	my $gid  = getgrnam($group);
+	$gid  = getgrnam($group);
 	info( "Effective Group is '$group'", 0);
 	if($gid){
 		info("Group $group exists with ID '$gid'", 0 );
@@ -340,13 +339,13 @@ if($mode eq "npcdmod"){
 #global tests
 info("========== Starting global checks ============",4);
 if($process_perf_data_stats{1} == 0){
-	info("process_perf_data 1 is not set for all of your Hosts/Services",2);
+	info("process_perf_data 1 is not set for any of your hosts/services",2);
 } 
 if($process_perf_data_stats{0} > 0){
-	info("'process_perf_data 0' is set for ".$process_perf_data_stats{0}." of your Hosts/Services",1);
+	info("'process_perf_data 0' is set for ".$process_perf_data_stats{0}." of your hosts/services",1);
 } 
 if($process_perf_data_stats{1} > 0){
-	info("'process_perf_data 1' is set for ".$process_perf_data_stats{1}." of your Hosts/Services",0);
+	info("'process_perf_data 1' is set for ".$process_perf_data_stats{1}." of your hosts/services",0);
 } 
 
 exit;
@@ -548,9 +547,10 @@ sub check_process_perfdata_pl {
 sub check_perfdata_spool_dir {
 	my $dir = shift;
 	if( -d $dir ){
-		info("Spool direcory '$dir' exists",0);
+		info("Spool directory '$dir' exists",0);
+		find(\&chk_perm, "$dir");
 	}else{
-		info_and_exit("Spool directory $dir does not exists",2);
+		info_and_exit("Spool directory $dir does not exist",2);
 	}
 }
 
@@ -558,9 +558,31 @@ sub check_perfdata_spool_dir {
 sub check_perfdata_dir {
 	my $dir =  shift;
 	if( -d $dir ){
-		info("Perfdata direcory '$dir' exists",0);
+		info("Perfdata directory '$dir' exists",0);
+		find(\&chk_perm, "$dir");
 	}else{
-		info_and_exit("Perfdata directory $dir does not exists",2);
+		info_and_exit("Perfdata directory $dir does not exist",2);
+	}
+}
+
+sub check_perm {
+	-d && $_ ne "." && check_usrgrp ($_);
+	my $f = "$File::Find::name";
+	return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
+	check_usrgrp ($f);
+}
+
+sub check_usrgrp {
+	my $file = shift;
+	if ($uid) {
+		my $fuid = (stat("$file"))[4];
+		my $fname = getpwuid($fuid);
+		info ("$file: owner is $fname instead of $user",2) if ($fuid != $uid);
+	}
+	if ($gid) {
+		my $fgid = (stat("$file"))[5];
+		my $fgroup = getpwuid($fgid);
+		info ("$file: group is $fname instead of $user",2) if ($fuid != $uid);
 	}
 }
 
