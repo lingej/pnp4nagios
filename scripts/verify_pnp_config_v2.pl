@@ -548,7 +548,7 @@ sub check_perfdata_spool_dir {
 	my $dir = shift;
 	if( -d $dir ){
 		info("Spool directory '$dir' exists",0);
-		find(\&chk_perm, "$dir");
+		find(\&check_perm, "$dir");
 	}else{
 		info_and_exit("Spool directory $dir does not exist",2);
 	}
@@ -559,7 +559,7 @@ sub check_perfdata_dir {
 	my $dir =  shift;
 	if( -d $dir ){
 		info("Perfdata directory '$dir' exists",0);
-		find(\&chk_perm, "$dir");
+		find(\&check_perm, "$dir");
 	}else{
 		info_and_exit("Perfdata directory $dir does not exist",2);
 	}
