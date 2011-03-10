@@ -27,7 +27,7 @@ use Term::ANSIColor;
 my $version = 'pnp4nagios-head';
 
 # process command line parameters
-use vars qw ( $help $debug $mode $vInfo $ppPerl $PNPCfg $MainCfg $last_check);
+use vars qw ( $help $debug $mode $vInfo $PNPCfg $MainCfg $last_check);
 Getopt::Long::Configure('bundling');
 GetOptions(
 	"h|help"     => \$help,
@@ -112,6 +112,13 @@ if( -r $cfg{'object_cache_file'} ){
 	process_objects_file($cfg{'object_cache_file'});
 }else{
 	info_and_exit($cfg{'object_cache_file'}. " is not readable", 2);
+}
+
+#
+# Read resource.cfg
+#
+if( defined $cfg{'resource_file'} ){
+	process_npcd_cfg($cfg{'resource_file'});
 }
 
 #
@@ -492,7 +499,7 @@ sub process_main_cfg_line {
 	return if (/^#/);
 	s/#.*//;
 	s/\s*$//;
-	my ($par, $val) = /^(.*?)\s?=\s?(.*+)/;    # shortest string (broker module contains multiple equal signs)
+	my ($par, $val) = /^(.*?)\s?=\s?(.+)/;    # shortest string (broker module contains multiple equal signs)
 	if ( ($par eq "") ) {
 		info ("oddLine -> $_" ,4);
 		return;;
@@ -534,14 +541,21 @@ sub check_process_perfdata_pl {
 	my $path = '';
 	if( $command_line =~ /\s?([^\s]*)\/process_perfdata.pl\s?/ ){
 		$path = $1;
+		if ($path =~ /(\$USER\d+\$)/) {
+			if (exists $cfg{"$1"}) {
+				my $val = $cfg{"$1"};
+				$path =~ s/\$USER\d+\$/$val/;
+			}
+		}
 		if( -x "$path/process_perfdata.pl" ){
 			info("Script $path/process_perfdata.pl is executable",0);
 		}else{
 			info_and_exit("Script $path/process_perfdata.pl is not executable",2);
 		}
+		process_pp_pl ("$path/process_perfdata.pl");
 	}else{
 		info_and_exit("Can´t find path to process_perfdata.pl",2);
-	}	
+	}
 }
 
 sub check_perfdata_spool_dir {
@@ -631,7 +645,6 @@ print <<EOF;
 verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod]
                   -c|--config=[path to nagios.cfg]
                   -p|--pnpcfg=[path to PNP config dir]
-                  -P|--ppperl=[path to process_perfdata.pl]
 
 This script will check certain settings/entries of your PNP environ-
 ment to assist you in finding problems when you are using PNP.
