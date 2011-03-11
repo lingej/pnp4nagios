@@ -188,6 +188,7 @@ if($mode eq "sync"){
 
 	$command_line = check_command_definition(get_config_var('host_perfdata_command'));
 	check_process_perfdata_pl($command_line);
+
 }
 
 if($mode eq "bulk"){
@@ -347,6 +348,9 @@ if($process_perf_data_stats{0} > 0){
 if($process_perf_data_stats{1} > 0){
 	info("'process_perf_data 1' is set for ".$process_perf_data_stats{1}." of your hosts/services",0);
 } 
+
+check_config_var('RRDPATH', 'exists', 'break');
+check_perfdata_dir(get_config_var('RRDPATH'));
 
 exit;
 
