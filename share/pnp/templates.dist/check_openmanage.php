@@ -176,9 +176,8 @@ foreach ($DS as $i) {
     }
 	
     # ENCLOSURE TEMPERATURES (Celcius)
-    if(preg_match('/^enclosure_(?<id>.+?)_temp_\d+$/', $NAME[$i], $matches)
-       || preg_match('/^e(?<id>.+?)t\d+$/', $NAME[$i], $matches)){
-	$this_id = $matches['id'];
+    if(preg_match('/^enclosure_(.+?)_temp_\d+$/', $NAME[$i], $matches) || preg_match('/^e(.+?)t\d+$/', $NAME[$i], $matches)){
+	$this_id = $matches[1];
 
 	if ($enclosure_id != $this_id) {
 	    $e = 0;
