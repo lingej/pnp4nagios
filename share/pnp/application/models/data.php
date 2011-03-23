@@ -749,23 +749,40 @@ class Data_Model extends System_Model
     public function buildPageStruct($page,$view){
         $servicelist = array();
         $this->parse_page_cfg($page);
-        $hosts = $this->getHostsByPage();
         # No regex so we keep the order defined by config
         if($this->PAGE_DEF['use_regex'] == 0){
-            #loop through page definitions 
+            # Loop through graph definitions 
             foreach($this->PAGE_GRAPH as $graph){
-                $hosts_to_search_for = explode(",", $graph['host_name']);
-                foreach($hosts_to_search_for as $host){
-                    if(in_array($host, $hosts)){
-                        $services = $this->getServices($host);
-                        foreach($services as $service) {
-                            // search for definition
-                            $data = $this->filterServiceByPage($host,$service);
-                            if($data){
-                                $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
+                # If the source is not configured, set it to NULL
+                if ( ! isset($graph['source']) ) {
+                    $graph['source'] = NULL;
+                }
+                # Loop through host definitions of this graph
+                foreach(explode(",", $graph['host_name']) as $host){
+                    # Verify this is a valid host
+                    # TODO: should be coded cleaner
+                    $found = 0;
+                    foreach( $this->getHosts() as $allhost){
+                        if(preg_match("/$host/",$allhost['name'])){
+                            $found = 1;
+                            continue;
+                        }
+                    }
+                    if ( ! $found ) { continue; }
+                    # Loop through service definition of this graph
+                    foreach(explode(",", $graph['service_desc']) as $service) {
+                        # Verify this is a valid service
+                        # TODO: should be coded cleaner
+                        $found = 0;
+                        foreach( $this->getServices($host) as $allservices){
+                            if(preg_match("/$service/",$allservices['name'])){
+                                $found = 1;
+                                continue;
                             }
                         }
-                    }    
+                        if ( ! $found ) { continue; }
+                        $servicelist[] = array( 'host' => $host, 'service' => $service, 'source' => $graph['source']);
+                    }
                 }
             }
         }else{
