@@ -12,7 +12,8 @@ npcd \- Nagios Performance C Daemon
 .B -d | --daemon
 ]
 (
-.I -f | --config )
+.I -f | --config
+)
 <configfile>
 .SH DESCRIPTION
 The
@@ -38,7 +39,7 @@ Path to the
 .B npcd
 config file (typically @sysconfdir@/npcd.cfg).
 .SH "RETURN VALUE"
-On sucess starting
+On success starting
 .B npcd
 0 is returned.
 .SH ERRORS
@@ -48,8 +49,6 @@ On error starting
 .SH FILES
 .br
 .nf
-.\" set tabstop to longest possible filename, plus a wee bit
-.ta \w'/usr/lib/perl/getopts.pl   'u
 \fI@sysconfdir@/npcd.cfg\fR	default config file
 .SH AUTHORS
 Joerg Linge <pitchfork@pnp4nagios.org>, 
