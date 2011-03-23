@@ -7,18 +7,9 @@
 .SH NAME
 npcd \- Nagios Performance C Daemon
 .SH SYNOPSIS
-.B npcd
-[
-.B -d | --daemon
-]
-(
-.I -f | --config
-)
-<configfile>
+\fB npcd\fR [ \fB-d | --daemon\fR ] ( \fB-f | --config\fR ) \fI<configfile>
 .SH DESCRIPTION
-The
-.I npcd
-is a daemon processing nagios performance data.
+The \fBnpcd\fR is a daemon processing nagios performance data.
 .PP
 For more information you can visit pnp4nagios website:
 .IP
@@ -29,23 +20,15 @@ and SourceForge project:
 http://pnp4nagios.sourceforge.net
 .SH OPTIONS
 .TP
-.B \-d, \--daemon
-Run
-.B npcd
-as daemon in the background.
+\fB\-d, \--daemon
+Run \fBnpcd\fR as daemon in the background.
 .TP
-.I \-f, \--config <configfile>
-Path to the
-.B npcd
-config file (typically @sysconfdir@/npcd.cfg).
+\fB\-f, \--config\fR \fI<configfile>
+Path to the \fBnpcd\fR config file (typically @sysconfdir@/npcd.cfg).
 .SH "RETURN VALUE"
-On success starting
-.B npcd
-0 is returned.
+On success starting \fBnpcd\fR 0 is returned.
 .SH ERRORS
-On error starting
-.B npcd
-1 is returned.
+On error starting \fBnpcd\fR 1 is returned.
 .SH FILES
 .br
 .nf
