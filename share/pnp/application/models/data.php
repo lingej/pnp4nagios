@@ -752,7 +752,7 @@ class Data_Model extends System_Model
         $hosts = $this->getHostsByPage();
         # No regex so we keep the order defined by config
         if($this->PAGE_DEF['use_regex'] == 0){
-            #loop through page definitions 
+            #Loop through graph definitions 
             foreach($this->PAGE_GRAPH as $graph){
                 $hosts_to_search_for = explode(",", $graph['host_name']);
                 foreach($hosts_to_search_for as $host){
@@ -760,9 +760,10 @@ class Data_Model extends System_Model
                         $services = $this->getServices($host);
                         foreach($services as $service) {
                             // search for definition
-                            $data = $this->filterServiceByPage($host,$service);
+                            $data = $this->filterServiceByPage($graph,$host,$service);
                             if($data){
                                 $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
+				
                             }
                         }
                     }    
@@ -773,7 +774,7 @@ class Data_Model extends System_Model
                 $services = $this->getServices($host);
                 foreach($services as $service) {
                     // search for definition
-                    $data = $this->filterServiceByPage($host,$service);
+                    $data = $this->filterServiceByPage($this->PAGE_GRAPH,$host,$service);
                     if($data){
                         $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
                     }
@@ -873,7 +874,7 @@ class Data_Model extends System_Model
         return FALSE;
     }
 
-    private function filterServiceByPage($host,$service){
+    private function filterServiceByPage($g,$host,$service){
         $data = array();
         if(isset($this->PAGE_DEF['use_regex']) && $this->PAGE_DEF['use_regex'] == 1){
             // Search Host by regex
@@ -897,25 +898,23 @@ class Data_Model extends System_Model
                 }
             }
         }else{
-            foreach( $this->PAGE_GRAPH as $g ){
-                $hosts_to_search_for = explode(",", $g['host_name']);
-                $services_to_search_for = explode(",", $g['service_desc']);
-                if(isset($g['host_name']) && in_array($host ,$hosts_to_search_for) ){
-                    if(isset($g['service_desc']) && in_array($service['name'] ,$services_to_search_for) ){
-                        $data['service_desc'] = $g['service_desc'];
-                        $data['host_name'] = $g['host_name'];
-                        $data['source'] = NULL;
-                        // if we only want a single image 
-                        if(isset($g['source'])){
-                            $this->readXML($host,$service['name']);
-                            $this->includeTemplate($this->DS[0]['TEMPLATE']);
-                            $source = intval($g['source']);
-                            if(array_key_exists($source,$this->RRD['def'])){
-                                $data['source'] = $source;
-                            }
+            $hosts_to_search_for = explode(",", $g['host_name']);
+            $services_to_search_for = explode(",", $g['service_desc']);
+            if(isset($g['host_name']) && in_array($host ,$hosts_to_search_for) ){
+                if(isset($g['service_desc']) && in_array($service['name'] ,$services_to_search_for) ){
+                    $data['service_desc'] = $g['service_desc'];
+                    $data['host_name'] = $g['host_name'];
+                    $data['source'] = NULL;
+                    // if we only want a single image 
+                    if(isset($g['source'])){
+                        $this->readXML($host,$service['name']);
+                        $this->includeTemplate($this->DS[0]['TEMPLATE']);
+                        $source = intval($g['source']);
+                        if(array_key_exists($source,$this->RRD['def'])){
+                            $data['source'] = $source;
                         }
-                        return $data;
                     }
+                    return $data;
                 }
             }
         }
