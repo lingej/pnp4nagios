@@ -108,8 +108,32 @@ install-init:
 install-config:
 	cd $(SRC_CONFIG) && $(MAKE) $@
 
+	@echo ""
+	@echo "*** PNP4Nagios sample config files installed ***"
+	@echo ""
+	@echo "Please run 'make install-init' if you want to use"
+	@echo "BULK Mode with NPCD"
+	@echo ""
+	@echo ""
+	@echo ""
+
 install-webconf:
 	cd $(SRC_CONFIG) && $(MAKE) $@
+
+
+	@echo ""
+	@echo "*** Apache config file installed ***"
+	@echo ""
+	@echo "Restart your apache webserver to activete your changes."
+	@echo ""
+	@echo "Please run 'make install-config' to install sample"
+	@echo "configuration files"
+	@echo ""
+	@echo "Please run 'make install-init' if you want to use"
+	@echo "BULK Mode with NPCD"
+	@echo ""
+	@echo ""
+	@echo ""
 
 install-plugins:
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
@@ -124,15 +148,6 @@ install:
 
 	cd $(SRC_SCRIPTS) && $(MAKE) $@
 	cd $(SRC_CONFIG) && $(MAKE) $@
-	$(MAKE) install-basic
-
-install-unstripped:
-	cd $(SRC_BASE) && $(MAKE) $@
-	cd $(SRC_SHARE) && $(MAKE) $@
-	cd $(SRC_SCRIPTS) && $(MAKE) $@
-	$(MAKE) install-basic
-
-install-basic:
 
 	@echo ""
 	@echo "*** Main program, Scripts and HTML files installed ***"
@@ -149,5 +164,15 @@ install-basic:
 	@echo ""
 	@echo ""
 
-fullinstall: install install-webconf install-init install-config
+install-unstripped:
+	cd $(SRC_BASE) && $(MAKE) $@
+	cd $(SRC_SHARE) && $(MAKE) $@
+	cd $(SRC_SCRIPTS) && $(MAKE) $@
+	$(MAKE) install-basic
+
+fullinstall: install install-webconf install-config install-init
+
+	@echo ""
+	@echo "*** Main program, Scripts and HTML files installed ***"
+	@echo ""
 

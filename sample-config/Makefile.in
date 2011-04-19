@@ -10,6 +10,7 @@ INSTALL_OPTS=@INSTALL_OPTS@
 PERFDATADIR=@PERFDATA_DIR@
 DATAROOTDIR=@datarootdir@
 PKG_NAME=@PKG_NAME@
+PKG_VERSION=@PKG_VERSION@
 HTTPD_CONF=@HTTPD_CONF@
 CP=@CP@
 
@@ -47,8 +48,28 @@ install-config:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/check_commands
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/pages
 	
-	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR)
-	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/process_perfdata.cfg-sample $(DESTDIR)$(SYSCONFDIR)
+	if [ -e $(DESTDIR)$(SYSCONFDIR)/config.php ] ;then \
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR)/config.php.$(PKG_VERSION); \
+	else\
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR); \
+	fi
+		
+	if [ ! -e $(DESTDIR)$(SYSCONFDIR)/config_local.php ] ;then \
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR)/config_local.php; \
+	fi
+		
+	if [ -e $(DESTDIR)$(SYSCONFDIR)/process_perfdata.cfg ] ;then \
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/process_perfdata.cfg-sample $(DESTDIR)$(SYSCONFDIR)/process_perfdata.cfg.$(PKG_VERSION); \
+	else\
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/process_perfdata.cfg-sample $(DESTDIR)$(SYSCONFDIR)/process_perfdata.cfg; \
+	fi
+		
+	if [ -e $(DESTDIR)$(SYSCONFDIR)/npcd.cfg ] ;then \
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)/npcd.cfg.$(PKG_VERSION); \
+	else\
+		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)/npcd.cfg; \
+	fi
+		
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/rra.cfg-sample $(DESTDIR)$(SYSCONFDIR)
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  misccommands.cfg-sample $(DESTDIR)$(SYSCONFDIR)
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  nagios.cfg-sample $(DESTDIR)$(SYSCONFDIR)
@@ -57,18 +78,8 @@ install-config:
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/check_commands/check_all_local_disks.cfg-sample $(DESTDIR)$(SYSCONFDIR)/check_commands
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/pages/web_traffic.cfg-sample $(DESTDIR)$(SYSCONFDIR)/pages
 
-	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)
-
-	@echo ""
-	@echo "*** PNP4Nagios sample config files installed ***"
-	@echo ""
-
 install-webconf: 
 
 	$(INSTALL) -m 755 -d $(DESTDIR)$(HTTPD_CONF)
 	$(INSTALL) -m 644 httpd.conf $(DESTDIR)$(HTTPD_CONF)/$(PKG_NAME).conf
-
-	@echo ""
-	@echo "*** Apache config file installed ***"
-	@echo ""
 	
