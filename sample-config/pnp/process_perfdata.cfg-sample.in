@@ -5,8 +5,8 @@
 
 #
 # process_perfdata.pl Timeout in seconds 
-#
-TIMEOUT = 5
+#  
+TIMEOUT = 15 
 
 #
 # Use RRDs Perl module
@@ -94,12 +94,12 @@ STATS_DIR = @localstatedir@/stats
 # Gearman Worker Config
 # Only used while running as gearman worker
 #
-# How many Child processes
+# How many child processes
 #
-PREFORK = 2
+PREFORK = 1
 
 #
-# Gearman Server to connect to
+# Gearman server to connect to
 # 
 GEARMAN_HOST = localhost:4730
 

@@ -32,29 +32,29 @@ use Time::HiRes qw(gettimeofday tv_interval);
 use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line $name $ds_update $dstype);
 
 my %conf = (
-    TIMEOUT           => "5",
-    CFG_DIR           => "@sysconfdir@/",
-    USE_RRDs          => 1,
-    RRDPATH           => "@PERFDATA_DIR@",
-    RRDTOOL           => "@RRDTOOL@",
-    RRD_STORAGE_TYPE  => "SINGLE",
-    RRD_HEARTBEAT     => 8640,
-    RRA_STEP          => 60,
-    RRA_CFG           => "@sysconfdir@/rra.cfg",
-    STATS_DIR         => "@localstatedir@/stats",
-    LOG_FILE          => "@PERFDATA_LOG@",
-    LOG_FILE_MAX_SIZE => "10485760",               #Truncate after 10MB
-    LOG_LEVEL         => @DEBUG@,
-    XML_ENC           => "UTF-8",
-    XML_UPDATE_DELAY  => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
-    RRD_DAEMON_OPTS   => "",
-    GEARMAN_HOST      => "localhost:4730",                        # How many gearman worker childs to start 
-    PREFORK           => 2,                        # How many gearman worker childs to start 
+    TIMEOUT            => 15,
+    CFG_DIR            => "@sysconfdir@/",
+    USE_RRDs           => 1,
+    RRDPATH            => "@PERFDATA_DIR@",
+    RRDTOOL            => "@RRDTOOL@",
+    RRD_STORAGE_TYPE   => "SINGLE",
+    RRD_HEARTBEAT      => 8640,
+    RRA_STEP           => 60,
+    RRA_CFG            => "@sysconfdir@/rra.cfg",
+    STATS_DIR          => "@localstatedir@/stats",
+    LOG_FILE           => "@PERFDATA_LOG@",
+    LOG_FILE_MAX_SIZE  => "10485760",               #Truncate after 10MB
+    LOG_LEVEL          => @DEBUG@,
+    XML_ENC            => "UTF-8",
+    XML_UPDATE_DELAY   => 0,                        # Write XML only if file is older then XML_UPDATE_DELAY seconds
+    RRD_DAEMON_OPTS    => "",
+    GEARMAN_HOST       => "localhost:4730",                        # How many gearman worker childs to start 
+    PREFORK            => 2,                        # How many gearman worker childs to start 
     REQUESTS_PER_CHILD => 20000,                   # Restart after a given count of requests
     ENCRYPTION         => 1,                       # Decrypt mod_gearman packets
     KEY                => 'should_be_changed',
     KEY_FILE           => '@sysconfdir@/secret.key',
-    UOM2TYPE          => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
+    UOM2TYPE           => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
 );
 
 my %const = (
@@ -137,9 +137,14 @@ init_signals();
 my %children = ();       # keys are current child process IDs
 my $children = 0;        # current number of children
 if( ! defined($opt_gm) ){
-    alarm($opt_t);
+    #
+    # synchronos / bulk / npcd mode
+    #
     main();
 }else{
+    #
+    # Gearman worker main loop
+    #
     print_log( "process_perfdata.pl-$const{VERSION} Gearman Worker Daemon", 0 );
     if($opt_gm =~ /:\d+/ ){
         $conf{'GEARMAN_HOST'} = $opt_gm;
@@ -181,14 +186,18 @@ sub main {
         return 1;
     } elsif ( $opt_b && !$opt_n ) {
         # Bulk mode
+    	alarm($opt_t);
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
         $lines = process_perfdata_file();
     } elsif ( $opt_b && $opt_n ) {
         # Bulk mode with npcd
+    	alarm($opt_t);
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
         $lines = process_perfdata_file();
     } else {
         # Synchronous mode
+	$opt_t = 5 if $opt_t > 5; # maximum timeout
+    	alarm($opt_t);
         print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
         $lines = process_perfdata();
