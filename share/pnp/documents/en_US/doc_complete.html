@@ -248,7 +248,7 @@ Using this storage format the size of the files will stay the same over time. Pe
 
 <h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
 <div class="level2">
-<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 86280 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 99.84%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 96243 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 99.33%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
 <p>
 
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
@@ -369,6 +369,17 @@ This mode is similar to “Bulk Mode with NPCD” and it is exactly the same fun
 
 </div>
 
+<h2><a name="gearman_mode" id="gearman_mode">Gearman Mode</a></h2>
+<div class="level2">
+
+<p>
+
+<a href="/_detail/gearman.png?id=pnp-0.6%3Adoc_complete" class="media" title="gearman.png"><img src="/_media/gearman.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>
+TODO
+</p>
+
+</div>
+
 <h2><a name="the_decision" id="the_decision">The decision</a></h2>
 <div class="level2">
 
@@ -404,7 +415,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.10.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.11.tar.gz</a>
 </p>
 
 </div>
@@ -424,7 +435,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Sun Jan 16 00:55:01 CET 2011
+Last Update: Wed Apr 20 14:55:01 CEST 2011
 </p>
 
 </div>
@@ -436,8 +447,23 @@ Last Update: Sun Jan 16 00:55:01 CET 2011
 
 <strong>pnp-0.6.12 ??/??/2011</strong>
 </p>
+<ul>
+<li class="level1"><div class="li"> Feature: mod_gearman support added</div>
+</li>
+<li class="level1"><div class="li"> Feature: rrd_convert.pl is now able to convert all RRDs from RRD_STORAGE_TYPE=SINGLE to RRD_STORAGE_TYPE=MULTIPLE</div>
+</li>
+<li class="level1"><div class="li"> Feature: New template check_gearman.php</div>
+</li>
+<li class="level1"><div class="li"> Feature: Install process_perfdata.cfg and npcd.cfg by default</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  rrd_convert.pl is now able to parse xml dumps created by rrdtool 1.4.x  </div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  process_perfdata.pl default timeout value set to 15 second</div>
+</li>
+</ul>
 
 <p>
+
 <strong>pnp-0.6.11 01/15/2011</strong>
 </p>
 <ul>
@@ -1273,7 +1299,61 @@ Because there is more data to process than in synchronous mode <code>process_per
 
 <p>
 
-<a href="/_detail/bulk-npcd.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> The configuration is identical to the Bulk Mode except for the used command. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
+<a href="/_detail/bulk-npcd.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> The configuration is identical to the Bulk Mode except for the used command. 
+Processing of performance data has to be enabled in <code>nagios.cfg</code>
+
+</p>
+<pre class="code"> process_performance_data=1</pre>
+
+<p>
+
+Additionally some new directives are required
+</p>
+<pre class="code">
+#
+# service performance data
+#
+service_perfdata_file=/usr/local/pnp4nagios/var/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+#
+# host performance data starting with Nagios 3.0
+# 
+host_perfdata_file=/usr/local/pnp4nagios/var/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+</pre>
+
+<p>
+
+<strong>Attention:</strong> Please note that these template definitions differ from the ones delivered in <code>nagios.cfg</code>!
+</p>
+
+<p>
+The directives and their meaning:
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> path to the temporary file which should contain the performance data.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> <a href="/pnp-0.6/perfdata_file_template" class="wikilink2" title="pnp-0.6:perfdata_file_template" rel="nofollow">format</a> of the temporary file. Data will be defined using Nagios macros.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> option “a” specifies that data is to be appended to the file.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> the interval is 15 seconds</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_command</strong></code> the command to be called during the interval.</div>
+</li>
+</ul>
+
+<p>
+
+The used commands have to be announced to Nagios. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
 </p>
 <pre class="code">
 define command{
@@ -1366,6 +1446,16 @@ Excerpt from nagios.log
 [1277545053] npcdmod: Ready to run to have some fun!
 [1277545053] Event broker module &#039;/usr/local/pnp4nagios/lib/npcdmod.o&#039; initialized successfully.
 </pre>
+
+</div>
+
+<h2><a name="gearman_mode1" id="gearman_mode1">Gearman Mode</a></h2>
+<div class="level2">
+
+<p>
+
+TODO
+</p>
 
 <p>
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/verify" class="wikilink1" title="pnp-0.6:verify">checking the functionality</a>
@@ -2466,7 +2556,7 @@ Example:
 <pre class="code">
 define command {
   command_name check_nrpe
-  command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -C $ARG1$ -a &quot;$ARG2$&quot;
+  command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a &quot;$ARG2$&quot;
 }
 </pre>
 

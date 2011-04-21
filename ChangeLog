@@ -5,6 +5,7 @@
   * Feature: Install process_perfdata.cfg and npcd.cfg by default
   * Bugfix:  rrd_convert.pl is now able to parse xml dumps created by rrdtool 1.4.x  
   * Bugfix:  process_perfdata.pl default timeout value set to 15 second
+  * Info: Version used by OMD-0.48 [[http://omdistro.org|OMD]]
 
 **pnp-0.6.11 01/15/2011**
   * Bugfix: urldecoding fixed 

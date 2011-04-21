@@ -189,7 +189,63 @@ define command{
 
 <p>
 
-<a href="/_detail/bulk-npcd.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Die Konfiguration ist identisch mit dem “Bulk Mode”, einzig das verwendete Command ist leicht abgewandelt. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
+<a href="/_detail/bulk-npcd.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Die Konfiguration ist identisch mit dem “Bulk Mode”, einzig das verwendete Command ist leicht abgewandelt.
+</p>
+
+<p>
+Auch hier muss die Verarbeitung der Performance-Daten in der <code>nagios.cfg</code> eingeschaltet werden.
+
+</p>
+<pre class="code"> process_performance_data=1</pre>
+
+<p>
+
+Zusätzlich werden einige neue Parameter benötigt.
+</p>
+<pre class="code">
+#
+# Service Performance-Daten
+#
+service_perfdata_file=/usr/local/pnp4nagios/var/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+#
+# Host Performance-Daten ab Nagios 3.x
+# 
+host_perfdata_file=/usr/local/pnp4nagios/var/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+</pre>
+
+<p>
+<strong>Achtung:</strong> Die Template-Definitionen weichen von denen in der Original-nagios.cfg ab!
+</p>
+
+<p>
+Die Parameter und deren Bedeutung im Einzelnen:
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> Der Pfad zur temporären Datei, in der die Daten gesammelt werden sollen.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das <a href="/de/pnp-0.6/perfdata_file_template" class="wikilink2" title="de:pnp-0.6:perfdata_file_template" rel="nofollow">Format</a> der temporären Datei. Hier werden die Daten über Nagios-Macros definiert.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> Die Option “a” definiert, dass an die Datei angehangen werden soll.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> Das Intervall beträgt 15 Sekunden</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_command</strong></code> das Command, das im definierten Intervall aufgerufen werden soll.</div>
+</li>
+</ul>
+
+<p>
+
+Die verwendeten Commands müssen Nagios wiederum bekannt gegeben werden. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
 </p>
 <pre class="code">
 define command{
@@ -238,7 +294,7 @@ Weitere Informationen zu NPCD findet ihr <a href="/de/pnp-0.6/npcd" class="wikil
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD" [6347-8483] -->
+<!-- SECTION "Bulk Mode with NPCD" [6347-10494] -->
 <h2><a name="bulk_mode_with_npcd_und_npcdmod" id="bulk_mode_with_npcd_und_npcdmod">Bulk Mode with NPCD und npcdmod</a></h2>
 <div class="level2">
 
@@ -293,10 +349,20 @@ Auszug aus den nagios.log
 [1277545053] Event broker module &#039;/usr/local/pnp4nagios/lib/npcdmod.o&#039; initialized successfully.
 </pre>
 
+</div>
+<!-- SECTION "Bulk Mode with NPCD und npcdmod" [10495-12280] -->
+<h2><a name="gearman_mode" id="gearman_mode">Gearman Mode</a></h2>
+<div class="level2">
+
+<p>
+
+TODO
+</p>
+
 <p>
 <a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion prüfen</a>
 
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD und npcdmod" [8484-] -->
+<!-- SECTION "Gearman Mode" [12281-] -->

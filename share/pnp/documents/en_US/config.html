@@ -174,7 +174,61 @@ Because there is more data to process than in synchronous mode <code>process_per
 
 <p>
 
-<a href="/_detail/bulk-npcd.png?id=pnp-0.6%3Aconfig" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> The configuration is identical to the Bulk Mode except for the used command. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
+<a href="/_detail/bulk-npcd.png?id=pnp-0.6%3Aconfig" class="media" title="bulk-npcd.png"><img src="/_media/bulk-npcd.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> The configuration is identical to the Bulk Mode except for the used command. 
+Processing of performance data has to be enabled in <code>nagios.cfg</code>
+
+</p>
+<pre class="code"> process_performance_data=1</pre>
+
+<p>
+
+Additionally some new directives are required
+</p>
+<pre class="code">
+#
+# service performance data
+#
+service_perfdata_file=/usr/local/pnp4nagios/var/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+#
+# host performance data starting with Nagios 3.0
+# 
+host_perfdata_file=/usr/local/pnp4nagios/var/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+</pre>
+
+<p>
+
+<strong>Attention:</strong> Please note that these template definitions differ from the ones delivered in <code>nagios.cfg</code>!
+</p>
+
+<p>
+The directives and their meaning:
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> path to the temporary file which should contain the performance data.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> <a href="/pnp-0.6/perfdata_file_template" class="wikilink2" title="pnp-0.6:perfdata_file_template" rel="nofollow">format</a> of the temporary file. Data will be defined using Nagios macros.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> option “a” specifies that data is to be appended to the file.</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> the interval is 15 seconds</div>
+</li>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_command</strong></code> the command to be called during the interval.</div>
+</li>
+</ul>
+
+<p>
+
+The used commands have to be announced to Nagios. If you used the <a href="http://nagios.sourceforge.net/docs/3_0/quickstart.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/quickstart.html"  rel="nofollow">quickstart installation guides</a> for Nagios you can modify the definitions in commands.cfg.
 </p>
 <pre class="code">
 define command{
@@ -213,7 +267,7 @@ The option <code>-d</code> starts NPCD as a daemon in the background.
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD" [5803-7480] -->
+<!-- SECTION "Bulk Mode with NPCD" [5803-9393] -->
 <h2><a name="bulk_mode_with_npcd_and_npcdmod" id="bulk_mode_with_npcd_and_npcdmod">Bulk Mode with NPCD and npcdmod</a></h2>
 <div class="level2">
 
@@ -268,10 +322,20 @@ Excerpt from nagios.log
 [1277545053] Event broker module &#039;/usr/local/pnp4nagios/lib/npcdmod.o&#039; initialized successfully.
 </pre>
 
+</div>
+<!-- SECTION "Bulk Mode with NPCD and npcdmod" [9394-11057] -->
+<h2><a name="gearman_mode" id="gearman_mode">Gearman Mode</a></h2>
+<div class="level2">
+
+<p>
+
+TODO
+</p>
+
 <p>
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/verify" class="wikilink1" title="pnp-0.6:verify">checking the functionality</a>
 
 </p>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD and npcdmod" [7481-] -->
+<!-- SECTION "Gearman Mode" [11058-] -->
