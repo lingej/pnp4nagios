@@ -33,6 +33,7 @@ INSTALL_OPTS=@INSTALL_OPTS@
 DATAROOTDIR=@datarootdir@
 
 CP=@CP@
+PERL=@PERL@
 
 none:
 	@echo "Please supply a command line argument (i.e. 'make all').  Other targets are:"
@@ -52,6 +53,9 @@ all:
 	@echo ""
 	@echo "  make install"
 	@echo "     - This installs the main program and HTML files"
+	@echo ""
+	@echo "  make fullinstall"
+	@echo "     - This installs the main program, runlevel scripts, config and HTML files"
 	@echo ""
 	@echo "Enjoy."
 	@echo ""
@@ -172,7 +176,10 @@ install-unstripped:
 
 fullinstall: install install-webconf install-config install-init
 
+	$(PERL) summary fullinstall
 	@echo ""
 	@echo "*** Main program, Scripts and HTML files installed ***"
+	@echo ""
+	@echo "Enjoy."
 	@echo ""
 

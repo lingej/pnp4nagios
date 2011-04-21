@@ -46,14 +46,15 @@ printf ("  RRD Files stored in:              %s\n","@PERFDATA_DIR@");
 printf ("  process_perfdata.pl Logfile:      %s\n","@PERFDATA_LOG@");
 printf ("  Perfdata files (NPCD) stored in:  %s\n","@PERFDATA_SPOOL_DIR@");
 printf ("\n");
-printf ("  Web Interface Options:");
+printf ("  Web Interface Options:\n");
 printf ("  -------------------------         -------------------\n");
 printf ("  HTML URL:                         %s\n","http://localhost@BASE_URL@");
 printf ("  Apache Config File:               %s\n","@HTTPD_CONF@/@PKG_NAME@.conf");
+if( $#ARGV == -1){
 printf ("\n\n"); 
 printf ("  Review the options above for accuracy.  If they look okay,\n");
 printf ("  type 'make all' to compile.\n");
-
+}
 if($conf{USE_RRDs} == 0){
     print "\n\n";
     print "  WARNING: The RRDs Perl Modules are not found on your system\n";
