@@ -89,69 +89,56 @@ zeigt, welche Optionen möglich sind.<br/>
 <br/>
 
 Ein
-
 </p>
-<pre class="code"> make all</pre>
+<pre class="code">make all</pre>
 
 <p>
-
 kompiliert nun die in C geschriebenen Komponenten wie NPCD
-
 </p>
-<pre class="code"> make install</pre>
+<pre class="code">make install</pre>
 
 <p>
-
 kopiert alles an die richtige Stelle im Filesystem. Die Pfade wurden ja beim ./configure bereits gezeigt.
 </p>
 
 <p>
 Nach der Installation der Programm- und <acronym title="HyperText Markup Language">HTML</acronym>-Dateien wird mit 
-
 </p>
-<pre class="code"> make install-webconf</pre>
+<pre class="code">make install-webconf</pre>
 
 <p>
-
 eine Konfigurationsdatei in das Konfigurationsverzeichnis des Apache-Web-Servers kopiert.
 </p>
 
 <p>
 Optional kann noch
-
 </p>
-<pre class="code"> make install-config</pre>
+<pre class="code">make install-config</pre>
 
 <p>
-
 aufgerufen werden. Damit werden Config-Files für process_perfdata.pl und npcd nach etc/pnp kopiert. 
 </p>
 
 <p>
 Wird das INIT Script für den NPCD benötigt, so sorgt
-
 </p>
-<pre class="code"> make install-init</pre>
+<pre class="code">make install-init</pre>
 
 <p>
-
 für die Installation nach /etc/init.d 
 </p>
 
 <p>
 Zusammenfassen lassen sich diese einzelnen Commands durch
 </p>
-
-<p>
-   make fullinstall
-</p>
+<pre class="code">make fullinstall</pre>
 
 <p>
 <strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei für den Web-Server ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
 </p>
 
 </div>
-<!-- SECTION "Make und Co" [386-3693] -->
+<!-- SECTION "Make und Co" [386-3752] -->
 <h2><a name="update" id="update">Update</a></h2>
 <div class="level2">
 
@@ -168,7 +155,7 @@ Sie können die Schritte <code>make install-webconf</code> und <code>make instal
 </p>
 
 </div>
-<!-- SECTION "Update" [3694-4429] -->
+<!-- SECTION "Update" [3753-4488] -->
 <h2><a name="die_komponenten" id="die_komponenten">Die Komponenten</a></h2>
 <div class="level2">
 
@@ -210,4 +197,4 @@ Die Config-Datei config.php für das Web-Frontend in
 </p>
 
 </div>
-<!-- SECTION "Die Komponenten" [4430-] -->
+<!-- SECTION "Die Komponenten" [4489-] -->
