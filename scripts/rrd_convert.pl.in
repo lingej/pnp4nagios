@@ -59,7 +59,7 @@ GetOptions(
     "c|check_command=s"    => \$opt_c,
     "p|cfg_dir=s"          => \$opt_p,
     "l|list_commands"      => \$opt_l,
-	"x|no_structure_check" => \$opt_x,
+    "x|no_structure_check" => \$opt_x,
     "d|dry-run"            => \$conf{DRY_RUN},
     "t|tmp_dir=s"          => \$conf{TMP_DIR},
     "force"                => \$conf{FORCE},
@@ -83,7 +83,6 @@ my %FILEHANDLE;
 
 my @commands; # list of commands
 my @worklist; # list of found xml files
-my @oldfiles; # list of old xml files
 
 my %ds_list;
 my %original_ds_list;
@@ -108,7 +107,7 @@ sub main{
 		exit;
 	}
 	if($#worklist+1 > 0 ){
-		my $answer = read_choice("Start Converter [n|Y]?");
+		my $answer = read_choice("Start Converter [n|y]?");
 		unless ( $answer =~ m/^y$/i ){
 			print "Exit...\n";
 			exit;
@@ -192,7 +191,6 @@ sub wanted_xml_files{
 		$rrdfile .= ".rrd";
 		my $mtime = (stat($xmlfile))[9];
 		if ( $mtime < $max_age ){
-			push(@oldfiles, $xmlfile);
 			$stats{old_xml}++;
 			return;
 		}
@@ -237,7 +235,7 @@ sub summary{
 	printf "%-40s %s\n"  ,"XML Files analyzed",$#commands+1;
 	printf "%-40s %s\n"  ,"XML Files found",$#worklist+1;
 	printf "%-40s %s\n"  ,"XML Files without RRD",$stats{'xml_without_rrd'};
-	printf "%-40s %s\n"  ,"Old XML Files ignored",$#oldfiles+1;
+	printf "%-40s %s\n"  ,"Old XML Files ignored",$stats{'old_xml'};
 	printf "%-40s %s\n"  ,"Number of unique check_commands",$#uniqed+1;
 	if($conf{DRY_RUN} == 1){
 		printf "%-40s %s\n"  ,"Dry run?","[YES]";
