@@ -13,7 +13,7 @@ AC_DEFINE([DEFAULT_NAGIOS_GROUP], [nagios], [Default Nagios Group])
 PKG_NAME=pnp4nagios
 PKG_VERSION="0.6.12"
 PKG_HOME_URL="http://www.pnp4nagios.org/pnp/start"
-PKG_REL_DATE="??-??-2011"
+PKG_REL_DATE="04-22-2011"
 AC_SUBST(PKG_NAME)
 AC_SUBST(PKG_VERSION)
 AC_SUBST(PKG_HOME_URL)
