@@ -7,7 +7,7 @@
 .SH NAME
 npcd \- Nagios Performance C Daemon
 .SH SYNOPSIS
-\fBnpcd\fR [ \fB-d | --daemon\fR ] ( \fB-f | --config\fR ) \fI<configfile>
+\fBnpcd\fR [ \fB\-d | \--daemon\fR ] ( \fB\-f | \--config\fR ) \fI<configfile>
 .SH DESCRIPTION
 The \fBnpcd\fR is a daemon processing nagios performance data.
 .PP
