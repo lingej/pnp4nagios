@@ -33,6 +33,7 @@ my $opt_p    = "@PERFDATA_DIR@";
 my $opt_ncmd = "/usr/local/nagios/var/rw/nagios.cmd";
 my $opt_phost = "";
 my $opt_pservice = "";
+my $opt_ignore;
 my $VERSION  = "@PKG_VERSION@";
 my $PROGNAME = basename($0);
 my $PASV = 0;
@@ -56,9 +57,10 @@ GetOptions(
     "a=i"        => \$opt_a,
     "p=s"        => \$opt_p,
     "rrdpath=s"  => \$opt_p,
-    "passiv-hostname=s" => \$opt_phost,
+    "passiv-hostname=s"    => \$opt_phost,
     "passiv-servicedesc=s" => \$opt_pservice,
-    "nagios-cmd=s" => \$opt_ncmd,
+    "nagios-cmd=s"         => \$opt_ncmd,
+    "ignore-hosts=s"       => \$opt_ignore,
 ) or print_help();
 
 
@@ -116,10 +118,15 @@ sub inspect_files {
     my $service;
     my $dir  = $File::Find::dir;
     if ( $file =~ /\.xml/ ) {
-        $XML_COUNT++;
         $service = basename($file);
         $host    = dirname($file);
         $host    = basename($host);
+
+    	if ( defined $opt_ignore && $host =~ $opt_ignore ) {
+        	return;
+    	}
+
+    	$XML_COUNT++;
         open F, $file or print "couldn't open $file\n" && return;
         while (<F>) {
             if (m/<RC>(.*)<\/RC>/) {
@@ -211,6 +218,8 @@ sub print_usage () {
     print "       Default: $opt_p\n";
     print "  -t,--timeout Max Plugin Runtime.\n";
     print "       Default: $opt_t Seconds\n";
+    print "  --ignore-hosts \n";
+    print "       Regular expression to ignore a set of hosts";
     print "\n\n";
     print "  --passiv-hostname=\n";
     print "       Nagios Hostname\n";
