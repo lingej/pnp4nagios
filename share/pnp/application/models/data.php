@@ -265,19 +265,19 @@ class Data_Model extends System_Model
         $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
         $xml         = array();
         if (file_exists($xmlfile)) {
-			libxml_use_internal_errors(TRUE);
-			libxml_clear_errors(TRUE);
+            libxml_use_internal_errors(TRUE);
+            libxml_clear_errors(TRUE);
             if(! $xml = simplexml_load_file($xmlfile) ){;
-				if( $throw_exception == TRUE ){
-					$errors = '<br>';
-					foreach(libxml_get_errors() as $error) {
-     					$errors .= $error->message."<br>";
+                if( $throw_exception == TRUE ){
+                    $errors = '<br>';
+                    foreach(libxml_get_errors() as $error) {
+                         $errors .= $error->message."<br>";
                     }
-                	throw new Kohana_Exception('error.xml-generic_error',$xmlfile, $errors);
+                    throw new Kohana_Exception('error.xml-generic_error',$xmlfile, $errors);
                 }else{
-					return FALSE;
-				}
-			}
+                    return FALSE;
+                }
+            }
             $this->XML   = array();
             $this->MACRO = array();
             $this->MACRO['AUTH_SERVICEDESC'] = '';
@@ -350,8 +350,8 @@ class Data_Model extends System_Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE;
-				$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
-				$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
+                $tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+                $tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
                 if(isset($this->RRD['ds_name'][$key]) ){
                      $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
@@ -384,8 +384,8 @@ class Data_Model extends System_Model
                     $tmp_struct['TEMPLATE_FILE'] = $this->TEMPLATE_FILE;;
                     $tmp_struct['SOURCE']        = $key;
                     $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$v]['cmd'] . " " . $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
-					$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
-					$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
+                    $tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+                    $tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
                     if(isset($this->RRD['ds_name'][$key]) ){
                         $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                     }elseif(array_key_exists($i, $this->DS)){
@@ -419,8 +419,8 @@ class Data_Model extends System_Model
                 $tmp_struct['SOURCE']        = $key;
                 $tmp_struct['RRD_CALL']      = $this->TIMERANGE[$view]['cmd'] . " ". $this->RRD['opt'][$key] . " " . $this->RRD['def'][$key];
                 $tmp_struct['TIMERANGE']     = $this->TIMERANGE[$view];
-				$tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
-				$tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
+                $tmp_struct['GRAPH_WIDTH']   = $this->getGraphDimensions('width',  $tmp_struct['RRD_CALL']);
+                $tmp_struct['GRAPH_HEIGHT']  = $this->getGraphDimensions('height', $tmp_struct['RRD_CALL']);
                 if(isset($this->RRD['ds_name'][$key]) ){
                     $tmp_struct['ds_name']   = $this->RRD['ds_name'][$key];
                 }elseif(array_key_exists($i, $this->DS)){
@@ -529,31 +529,31 @@ class Data_Model extends System_Model
         return TRUE;        
     }
 
-	#
-	#
-	#
-	private function getGraphDimensions($search, $command){
-		if($search == 'width'){
-			if(preg_match_all('/(-w|--width|--width=)\s([0-9]+)\s/i',$command,$match)){
-				$value = array_pop($match[2]); 
-				return $value;
-			}else{
-				return $this->config->conf['graph_width'];
-			}
-		}
-		if($search == 'height'){
-			if(preg_match_all('/(-h|--height|--height=)\s([0-9]+)\s/i',$command,$match)){
-				$value = array_pop($match[2]); 
-				return $value;
-			}else{
-				return $this->config->conf['graph_height'];
-			}
-		}
-		return FALSE;
-	}
     #
-	#
-	#
+    #
+    #
+    private function getGraphDimensions($search, $command){
+        if($search == 'width'){
+            if(preg_match_all('/(-w|--width|--width=)\s([0-9]+)\s/i',$command,$match)){
+                $value = array_pop($match[2]); 
+                return $value;
+            }else{
+                return $this->config->conf['graph_width'];
+            }
+        }
+        if($search == 'height'){
+            if(preg_match_all('/(-h|--height|--height=)\s([0-9]+)\s/i',$command,$match)){
+                $value = array_pop($match[2]); 
+                return $value;
+            }else{
+                return $this->config->conf['graph_height'];
+            }
+        }
+        return FALSE;
+    }
+    #
+    #
+    #
     private function array_reindex($data){
         $i=0;
         foreach($data as $d){
@@ -763,7 +763,7 @@ class Data_Model extends System_Model
                             $data = $this->filterServiceByPage($graph,$host,$service);
                             if($data){
                                 $servicelist[] = array( 'host' => $host, 'service' => $service['name'], 'source' => $data['source']);
-				
+                
                             }
                         }
                     }    
