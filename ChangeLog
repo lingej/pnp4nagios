@@ -1,5 +1,6 @@
 **pnp-0.6.13 ??/??/2011**
   * Feature: New option --ignore-hosts added to check_pnp_rrds.pl ( by Jochen Bern )
+  + Bugfix:  rrd_convert.pl: parse_xml_filename() regex fix
 
 **pnp-0.6.12 04/22/2011**
   * Feature: mod_gearman support added

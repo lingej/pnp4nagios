@@ -223,7 +223,7 @@ sub wanted_xml_files{
 sub parse_xml_filename{
 	my $xmlfile = shift;
 	$_ = $xmlfile;
-	if( m/([0-9a-z\-_]+)\/([0-9a-z\-_]+)\.xml$/i ){
+        if( m/([^\/]+)\/([^\/]+)\.xml$/i ){
 		return ($1, $2);
 	}
 }
