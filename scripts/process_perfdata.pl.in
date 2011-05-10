@@ -117,15 +117,15 @@ if ( $conf{USE_RRDs} == 1 ) {
 #
 if ( defined($opt_gm) ) {
     unless ( eval "use Gearman::Worker;1" ) {
-        print "Gearman::Worker module not found\n";
+        print "Perl module Gearman::Worker not found\n";
         exit 1;
     }
     unless ( eval "use MIME::Base64;1" ) {
-        print "MIME::Base64 module not found\n";
+        print "Perl module MIME::Base64 not found\n";
         exit 1;
     }
     unless ( eval "use Crypt::Rijndael;1" ) {
-        print "Crypt::Rijndael module not found\n";
+        print "Perl module Crypt::Rijndael not found\n";
         exit 1;
     }
 }
