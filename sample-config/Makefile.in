@@ -47,11 +47,8 @@ install-config:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/check_commands
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/pages
 	
-	if [ -e $(DESTDIR)$(SYSCONFDIR)/config.php ] ;then \
-		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR)/config.php.$(PKG_VERSION); \
-	else\
-		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR); \
-	fi
+	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR)/config.php.$(PKG_VERSION); \
+	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR); \
 		
 	if [ ! -e $(DESTDIR)$(SYSCONFDIR)/config_local.php ] ;then \
 		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/config.php $(DESTDIR)$(SYSCONFDIR)/config_local.php; \
