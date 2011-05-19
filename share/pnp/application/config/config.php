@@ -120,3 +120,12 @@ $config['doc_language'] = array("en_US", "de_DE");
  * Default template dirs
  */
 $config['template_dirs'] = array(DOCROOT."/templates",DOCROOT."/templates.dist");
+/*
+ * Default graph dimensions 
+ */
+$config['graph_width']  = "500";
+$config['graph_height'] = "100";
+$config['zgraph_width']  = "500";
+$config['zgraph_height'] = "100";
+$config['pdf_width']    = "675";
+$config['pdf_height']   = "100";

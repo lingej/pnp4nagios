@@ -14,8 +14,8 @@ class Zoom_Controller extends System_Controller  {
         parent::__construct();
         $this->template          = $this->add_view('zoom');
         $this->tpl               = $this->input->get('tpl');
-        $this->graph_width       = $this->input->get('graph_width');
-        $this->graph_height      = $this->input->get('graph_height');
+        $this->graph_width       = $this->config->conf['zgraph_width'];
+        $this->graph_height      = $this->config->conf['zgraph_height'];
     }
 
     public function index()

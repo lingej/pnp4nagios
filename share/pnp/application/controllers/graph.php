@@ -13,8 +13,8 @@ class Graph_Controller extends System_Controller  {
         parent::__construct();
         $this->template->graph   = $this->add_view('graph');
         $this->template->zoom_header   = $this->add_view('zoom_header');
-        $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
-        $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
+        $this->template->zoom_header->graph_width  = ($this->config->conf['zgraph_width'] + 140);
+        $this->template->zoom_header->graph_height = ($this->config->conf['zgraph_height'] + 230);
         $this->template->graph->icon_box           = $this->add_view('icon_box');
         $this->template->graph->icon_box->position = "graph";
         $this->template->graph->icon_box->xml_icon = TRUE;
@@ -51,9 +51,7 @@ class Graph_Controller extends System_Controller  {
             $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']); 
 
             $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
-        	$this->template->graph->graph_content->graph_width = ($this->data->STRUCT[0]['GRAPH_WIDTH'] + 85);
-        	$this->template->zoom_header->graph_width  = ($this->data->STRUCT[0]['GRAPH_WIDTH'] + 140);
-        	$this->template->zoom_header->graph_height = ($this->data->STRUCT[0]['GRAPH_HEIGHT'] + 230);
+            $this->template->graph->graph_content->graph_width = ($this->data->STRUCT[0]['GRAPH_WIDTH'] + 85);
             // Status Box Vars
             $this->template->graph->status_box->host     = $this->data->MACRO['DISP_HOSTNAME'];
             $this->template->graph->status_box->lhost    = $this->data->MACRO['HOSTNAME'];

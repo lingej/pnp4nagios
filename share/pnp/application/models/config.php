@@ -18,7 +18,13 @@ class Config_Model extends System_Model
         }
 
         # Default Values
-        $conf['doc_language'] = Kohana::config('core.doc_language');
+        $conf['doc_language']   = Kohana::config('core.doc_language');
+        $conf['graph_width']    = Kohana::config('core.graph_width');
+        $conf['graph_height']   = Kohana::config('core.graph_height');
+        $conf['zgraph_width']   = Kohana::config('core.zgraph_width');
+        $conf['zgraph_height']  = Kohana::config('core.zgraph_height');
+        $conf['pdf_width']      = Kohana::config('core.pdf_width');
+        $conf['pdf_height']     = Kohana::config('core.pdf_height');
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {
