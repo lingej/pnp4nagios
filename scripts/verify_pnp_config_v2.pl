@@ -40,8 +40,8 @@ GetOptions(
 
 my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
 my @products = ("nagios", "icinga");
-my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "DEBG");
-my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "black on_red");
+my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "HINT", "DBG");
+my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "bold yellow", "black on_red");
 my %process_perf_data_stats = (0 => 0, 1 => 0);
 my %stats = ();
 
@@ -128,8 +128,16 @@ if( defined $cfg{'resource_file'} ){
 # Read process_perfdata.cfg
 #
 my $ppcfg = "$PNPCfg/process_perfdata.cfg";
-if( -r $ppcfg ){
-	process_npcd_cfg($ppcfg);
+process_perfdata_cfg($ppcfg);
+
+#
+# Read etc/pnp_release file if exists
+#
+if( -r "$PNPCfg/pnp4nagios_release" ){ 
+	process_perfdata_cfg("$PNPCfg/pnp4nagios_release");
+	info("Found PNP4Nagios version ".get_config_var('PKG_VERSION'), 0);
+}else{
+	info("No pnp4nagios_release file found. This might be an older Version of PNP4Nagios", 0);
 }
 
 #
@@ -275,7 +283,7 @@ if($mode eq "bulk+npcd"){
 	}
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
-	info("Dumper \$cfg", 5);
+	info("Dumper \$cfg", 6);
 	print Dumper \%cfg if $debug;
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
@@ -341,7 +349,7 @@ if($mode eq "npcdmod"){
 
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
-	info("Dumper: \$cfg", 5);
+	info("Dumper: \$cfg", 6);
 	print Dumper \%cfg if $debug;
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 	check_config_var('perfdata_spool_dir', 'exists', 'break');
@@ -415,7 +423,7 @@ sub check_config_var {
 			info("$key is defined ($key=$var)",0);
 			$last_check = 1;
 		}else{
-			info("$key is not defined in $MainCfg",2);
+			info("$key is not defined",2);
 			$last_check = 0;
 			exit if $break; 
 		}
@@ -457,7 +465,7 @@ sub info {
 	my $string = shift;
 	my $state  = shift;
 	$stats{$state}++;
-	return if $state == 5 and not defined $debug;
+	return if $state == 6 and not defined $debug;
 	$statistics{$states[$state]}++;
 	print color $colors[$state];
 	printf("[%-4s]", $states[$state]);
@@ -477,9 +485,9 @@ sub check_proc_npcd {
 	my $out = `ps -u $user -o cmd | grep /npcd | grep -v grep`;
 	my $rc = $?;
 	chomp $out;
-	info("Check process: 'ps -u $user -o cmd | grep /npcd | grep -v grep'", 5);
-	info("Result: $out", 5);
-	info("Returncode: $rc", 5);
+	info("Check process: 'ps -u $user -o cmd | grep /npcd | grep -v grep'", 6);
+	info("Result: $out", 6);
+	info("Returncode: $rc", 6);
 	#extract npcd.cfg 
 	$out =~ /-f\s(\S+)$/;
 	my $npcd_cfg = $1;
@@ -501,10 +509,35 @@ sub process_nagios_cfg {
 	close (NFILE);
 }
 
+# process process_perfdata.cfg
+sub process_perfdata_cfg {
+	my $cfg_file = shift;
+	if ( -r $cfg_file ){
+		info ("Reading $cfg_file", 4);
+	}else{
+		info ("$cfg_file does not exist", 4);
+		info ("this file is needed to get more informations about your system", 5);
+		info_and_exit("no further processing possible",2);
+	}
+		
+	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
+	while (<NFILE>) {
+		process_main_cfg_line();
+	}
+	close (NFILE);
+}
+
 # process npcd.cfg
 sub process_npcd_cfg {
 	my $cfg_file = shift;
-	info ("Reading $cfg_file", 4);
+	if ( -r $cfg_file ){
+		info ("Reading $cfg_file", 4);
+	}else{
+		info ("$cfg_file does not exist", 4);
+		info ("this file is needed to get more informations about your system", 5);
+		info_and_exit("no further processing possible",2);
+	}
+		
 	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
 	while (<NFILE>) {
 		process_main_cfg_line();
@@ -587,7 +620,7 @@ sub check_perfdata_spool_dir {
 	}
 	my @files = <$dir/*>;
 	my $count = @files;
-	if($count >= 1){
+	if($count > 1){
 		info("$count files in $dir", 1);
 	}else{
 		info("$dir is empty", 0);
