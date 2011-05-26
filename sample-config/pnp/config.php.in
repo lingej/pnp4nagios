@@ -37,8 +37,8 @@ $conf['graph_height'] = "100";
 #
 # RRDTool image size of graphs in zoom window
 #
-$conf['zgraph_width'] = "750";
-$conf['zgraph_height'] = "450";
+$conf['zgraph_width'] = "500";
+$conf['zgraph_height'] = "100";
 #
 # RRDTool image size of PDFs
 #
