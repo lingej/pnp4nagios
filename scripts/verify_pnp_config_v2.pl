@@ -22,6 +22,7 @@ use warnings;
 use Data::Dumper;
 use Getopt::Long;
 use File::Find;
+use File::Glob;
 use Term::ANSIColor;
 
 my $version = 'pnp4nagios-head';
@@ -39,9 +40,10 @@ GetOptions(
 
 my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
 my @products = ("nagios", "icinga");
-my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO");
-my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue");
+my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "DEBG");
+my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "black on_red");
 my %process_perf_data_stats = (0 => 0, 1 => 0);
+my %stats = ();
 
 if ( ! $MainCfg ){
 	usage();
@@ -83,6 +85,7 @@ my $gid      = 0;
 #
 
 info("========== Starting Environment Checks ============",4);
+info("Version: ".$version,4);
 
 #
 # Read Main config file
@@ -167,11 +170,11 @@ if($mode eq "sync"){
 	info("========== Checking Sync Mode Config  ============",4);
 
 	compare_config_var('process_performance_data',  '1', 'break');
-	compare_config_var('enable_environment_macros', '1');
+	compare_config_var('enable_environment_macros', '1', 'break');
 
-	check_config_var('service_perfdata_command', 'exists');
+	check_config_var('service_perfdata_command', 'exists', 'break');
 
-	check_config_var('host_perfdata_command', 'exists');
+	check_config_var('host_perfdata_command', 'exists', 'break');
 
 	# Options not allowed in sync mode
 	check_config_var('service_perfdata_file', 'notexists','break');
@@ -217,8 +220,8 @@ if($mode eq "bulk"){
 	check_config_var('host_perfdata_file_processing_command', 'exists','break');
 
 	# Options not allowed in bulk mode
-	check_config_var('service_perfdata_command', 'notexists');
-	check_config_var('host_perfdata_command', 'notexists');
+	check_config_var('service_perfdata_command', 'notexists', 'break');
+	check_config_var('host_perfdata_command', 'notexists', 'break');
 	check_config_var('broker_module', 'notexists', 'break');
 
 	info(ucfirst($product)." config looks good so far",4);
@@ -251,8 +254,8 @@ if($mode eq "bulk+npcd"){
 	check_config_var('host_perfdata_file_processing_command', 'exists','break');
 
 	# Options not allowed in bulk mode
-	check_config_var('service_perfdata_command', 'notexists');
-	check_config_var('host_perfdata_command', 'notexists');
+	check_config_var('service_perfdata_command', 'notexists', 'break');
+	check_config_var('host_perfdata_command', 'notexists', 'break');
 	check_config_var('broker_module', 'notexists', 'break');
 
 	info(ucfirst($product)." config looks good so far",4);
@@ -272,7 +275,8 @@ if($mode eq "bulk+npcd"){
 	}
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
-	#print Dumper \%cfg;
+	info("Dumper \$cfg", 5);
+	print Dumper \%cfg if $debug;
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
 
@@ -307,8 +311,8 @@ if($mode eq "npcdmod"){
 
 	$val = get_config_var('broker_module');
 	# extract npcd.cfg patch out of broker_module definition 
-	$val =~ /npcdmod\.o\s+config_file=(.*)$/;
 	my $npcdmod_npcd_cfg;
+	$val =~ /npcdmod\.o\s+config_file=(.*)$/;
 	if($1){
 		$npcdmod_npcd_cfg=$1;
 		info("npcdmod.o config file is $npcdmod_npcd_cfg",0);
@@ -337,7 +341,8 @@ if($mode eq "npcdmod"){
 
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
-	#print Dumper \%cfg;
+	info("Dumper: \$cfg", 5);
+	print Dumper \%cfg if $debug;
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 	check_config_var('perfdata_spool_dir', 'exists', 'break');
 	check_perfdata_spool_dir($cfg{'perfdata_spool_dir'});
@@ -359,7 +364,13 @@ if($process_perf_data_stats{1} > 0){
 check_config_var('RRDPATH', 'exists', 'break');
 check_perfdata_dir(get_config_var('RRDPATH'));
 
+info("Check finished...",4);
+#print Dumper \%stats;
 exit;
+
+#
+# Helper Functions
+#
 
 sub config_var_exists {
 	my $key = shift;
@@ -445,18 +456,20 @@ sub check_perfdata_file_template {
 sub info {
 	my $string = shift;
 	my $state  = shift;
+	$stats{$state}++;
+	return if $state == 5 and not defined $debug;
 	$statistics{$states[$state]}++;
 	print color $colors[$state];
-	printf("[%-4s]  ", $states[$state]);
+	printf("[%-4s]", $states[$state]);
 	print color 'reset';
-	printf("%s\n", $string);
+	printf("  %s\n", $string);
 }
 
 sub info_and_exit {
 	my $string = shift;
-	my $rc = shift;
-	info($string, $rc);
-	exit $rc;
+	my $state = shift;
+	info($string, $state);
+	exit $state;
 }
 
 sub check_proc_npcd {
@@ -464,14 +477,17 @@ sub check_proc_npcd {
 	my $out = `ps -u $user -o cmd | grep /npcd | grep -v grep`;
 	my $rc = $?;
 	chomp $out;
+	info("Check process: 'ps -u $user -o cmd | grep /npcd | grep -v grep'", 5);
+	info("Result: $out", 5);
+	info("Returncode: $rc", 5);
 	#extract npcd.cfg 
 	$out =~ /-f\s(\S+)$/;
 	my $npcd_cfg = $1;
 	if($rc == 0){
 		info("npcd daemon is running",0);
 	}else{
-		info("npcd daemon is not running ($rc)",2);
-		info_and_exit("we need a running npcd to process data.",4);
+		info("npcd daemon is not running",2);
+		info_and_exit("A running npcd daemon is needed to process data.",4);
 	}
 	return $npcd_cfg;
 }
@@ -503,7 +519,7 @@ sub process_main_cfg_line {
 	return if (/^#/);
 	s/#.*//;
 	s/\s*$//;
-	my ($par, $val) = /^(.*?)\s?=\s?(.+)/;    # shortest string (broker module contains multiple equal signs)
+	my ($par, $val) = /^([^=\s]+)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
 	if ( ($par eq "") ) {
 		info ("oddLine -> $_" ,4);
 		return;;
@@ -556,7 +572,7 @@ sub check_process_perfdata_pl {
 		}else{
 			info_and_exit("Script $path/process_perfdata.pl is not executable",2);
 		}
-		process_pp_pl ("$path/process_perfdata.pl");
+		#process_pp_pl ("$path/process_perfdata.pl");
 	}else{
 		info_and_exit("Can´t find path to process_perfdata.pl",2);
 	}
@@ -566,10 +582,16 @@ sub check_perfdata_spool_dir {
 	my $dir = shift;
 	if( -d $dir ){
 		info("Spool directory '$dir' exists",0);
-		find(\&check_perm, "$dir");
 	}else{
 		info_and_exit("Spool directory $dir does not exist",2);
 	}
+	my @files = <$dir/*>;
+	my $count = @files;
+	if($count >= 1){
+		info("$count files in $dir", 1);
+	}else{
+		info("$dir is empty", 0);
+	}		
 }
 
 # 
@@ -584,7 +606,7 @@ sub check_perfdata_dir {
 }
 
 sub check_perm {
-	-d && $_ ne "." && check_usrgrp ($_);
+	-d && $_ ne ".";
 	my $f = "$File::Find::name";
 	return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
 	check_usrgrp ($f);
