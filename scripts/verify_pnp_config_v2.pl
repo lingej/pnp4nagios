@@ -42,8 +42,8 @@ my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
 my @products = ("nagios", "icinga");
 my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "HINT", "DBG");
 my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "bold yellow", "black on_red");
-my %process_perf_data_stats = (0 => 0, 1 => 0);
-my %stats = ();
+my %process_perf_data_stats = ('noperf' => 0, 0 => 0, 1 => 0);
+my %stats = ( 0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 =>0 );
 
 if ( ! $MainCfg ){
 	usage();
@@ -69,16 +69,25 @@ if( ! in_array(\@modes, $mode)){
 	info("Valid modes are [@modes]",2);
 	exit;
 }
+
 my %statistics = (
 	'OK'   => 0,
 	'WARN' => 0,
 	'CRIT' => 0,
 );
- 
+
+my %sizing = (
+	'sync'      => 50,
+	'bulk'      => 500,
+	'bulk+npcd' => 10000,
+	'npcdmod'   => 10000,
+);
+
 my %cfg      = ();
 my %commands = ();
 my $uid      = 0;
 my $gid      = 0;
+my $process_perfdata_cfg = 0;
 
 #
 # Begin
@@ -107,6 +116,7 @@ if( $product eq 0 ){
 # Needs a running product
 #
 check_config_var('object_cache_file', 'exists', 'break');
+check_config_var('status_file', 'exists', 'break');
 
 #
 # Read objects.cache file
@@ -127,6 +137,13 @@ if( defined $cfg{'resource_file'} ){
 #
 # Read process_perfdata.cfg
 #
+if ( ! -d $PNPCfg ){
+	info_and_exit("Directory $PNPCfg does not exist",2);
+}
+if ( ! -d "$PNPCfg/check_commands" ){
+	info("Directory $PNPCfg/check_commands does not exist",2);
+	info_and_exit("$PNPCfg does not looks like an PNP4Nagios config directory",2);
+}
 my $ppcfg = "$PNPCfg/process_perfdata.cfg";
 process_perfdata_cfg($ppcfg);
 
@@ -134,7 +151,7 @@ process_perfdata_cfg($ppcfg);
 # Read etc/pnp_release file if exists
 #
 if( -r "$PNPCfg/pnp4nagios_release" ){ 
-	process_perfdata_cfg("$PNPCfg/pnp4nagios_release");
+	process_pnp4nagios_release("$PNPCfg/pnp4nagios_release");
 	info("Found PNP4Nagios version ".get_config_var('PKG_VERSION'), 0);
 }else{
 	info("No pnp4nagios_release file found. This might be an older Version of PNP4Nagios", 0);
@@ -177,34 +194,35 @@ if(config_var_exists($product.'_group') ){
 if($mode eq "sync"){
 	info("========== Checking Sync Mode Config  ============",4);
 
-	compare_config_var('process_performance_data',  '1', 'break');
-	compare_config_var('enable_environment_macros', '1', 'break');
+	compare_config_var('process_performance_data',  '1');
+	compare_config_var('enable_environment_macros', '1');
 
-	check_config_var('service_perfdata_command', 'exists', 'break');
-
-	check_config_var('host_perfdata_command', 'exists', 'break');
+	check_config_var('service_perfdata_command', 'exists');
+	check_config_var('host_perfdata_command', 'exists');;
+	last_info("Needed config Options are missing.",5,$last_check);
 
 	# Options not allowed in sync mode
-	check_config_var('service_perfdata_file', 'notexists','break');
-	check_config_var('service_perfdata_file_template', 'notexists','break');
-	check_config_var('service_perfdata_file_mode', 'notexists','break');
-	check_config_var('service_perfdata_file_processing_interval', 'notexists','break');
-	check_config_var('service_perfdata_file_processing_command', 'notexists','break');
-	check_config_var('host_perfdata_file', 'notexists','break');
-	check_config_var('host_perfdata_file_template', 'notexists','break');
-	check_config_var('host_perfdata_file_mode', 'notexists','break');
-	check_config_var('host_perfdata_file_processing_interval', 'notexists','break');
-	check_config_var('host_perfdata_file_processing_command', 'notexists','break');
-	check_config_var('broker_module', 'notexists', 'break');
+	check_config_var('service_perfdata_file', 'notexists');
+	check_config_var('service_perfdata_file_template', 'notexists');
+	check_config_var('service_perfdata_file_mode', 'notexists');
+	check_config_var('service_perfdata_file_processing_interval', 'notexists');
+	check_config_var('service_perfdata_file_processing_command', 'notexists',);
+	check_config_var('host_perfdata_file', 'notexists');
+	check_config_var('host_perfdata_file_template', 'notexists');
+	check_config_var('host_perfdata_file_mode', 'notexists');
+	check_config_var('host_perfdata_file_processing_interval', 'notexists');
+	check_config_var('host_perfdata_file_processing_command', 'notexists');
+	check_config_var('broker_module', 'notexists');
+	last_info("Config options are not allowed in sync mode. http://docs.pnp4nagios.org",5,$last_check);
 
 	info(ucfirst($product)." config looks good so far",4);
 	info("========== Checking config values ============",4);
 	my $command_line;
 
-	$command_line = check_command_definition(get_config_var('service_perfdata_command'));
+	$command_line = check_command_definition('service_perfdata_command');
 	check_process_perfdata_pl($command_line);
 
-	$command_line = check_command_definition(get_config_var('host_perfdata_command'));
+	$command_line = check_command_definition('host_perfdata_command');
 	check_process_perfdata_pl($command_line);
 
 }
@@ -212,74 +230,77 @@ if($mode eq "sync"){
 if($mode eq "bulk"){
 	info("========== Checking Bulk Mode Config  ============",4);
 	
-	compare_config_var('process_performance_data', '1', 'break');
-	check_config_var('service_perfdata_file', 'exists','break');
-	check_config_var('service_perfdata_file_template', 'exists','break');
+	compare_config_var('process_performance_data', '1');
+	check_config_var('service_perfdata_file', 'exists');
+	check_config_var('service_perfdata_file_template', 'exists');
 	check_perfdata_file_template(get_config_var('service_perfdata_file_template'));
-	check_config_var('service_perfdata_file_mode', 'exists','break');
-	check_config_var('service_perfdata_file_processing_interval', 'exists','break');
-	check_config_var('service_perfdata_file_processing_command', 'exists','break');
+	check_config_var('service_perfdata_file_mode', 'exists');
+	check_config_var('service_perfdata_file_processing_interval', 'exists');
+	check_config_var('service_perfdata_file_processing_command', 'exists');
 
-	check_config_var('host_perfdata_file', 'exists','break');
-	check_config_var('host_perfdata_file_template', 'exists','break');
+	check_config_var('host_perfdata_file', 'exists');
+	check_config_var('host_perfdata_file_template', 'exists');
 	check_perfdata_file_template(get_config_var('host_perfdata_file_template'));
-	check_config_var('host_perfdata_file_mode', 'exists','break');
-	check_config_var('host_perfdata_file_processing_interval', 'exists','break');
-	check_config_var('host_perfdata_file_processing_command', 'exists','break');
+	check_config_var('host_perfdata_file_mode', 'exists');
+	check_config_var('host_perfdata_file_processing_interval', 'exists');
+	check_config_var('host_perfdata_file_processing_command', 'exists');
+	last_info("Needed config Options are missing.",5,$last_check);
 
 	# Options not allowed in bulk mode
-	check_config_var('service_perfdata_command', 'notexists', 'break');
-	check_config_var('host_perfdata_command', 'notexists', 'break');
-	check_config_var('broker_module', 'notexists', 'break');
+	check_config_var('service_perfdata_command', 'notexists');
+	check_config_var('host_perfdata_command', 'notexists');
+	check_config_var('broker_module', 'notexists');
+	last_info("Config options are not allowed in bulk mode",5,$last_check);
 
 	info(ucfirst($product)." config looks good so far",4);
 	info("========== Checking config values ============",4);
 	my $command_line;
 
-	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
+	$command_line = check_command_definition('service_perfdata_file_processing_command');
 	check_process_perfdata_pl($command_line);
 
-	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
+	$command_line = check_command_definition('host_perfdata_file_processing_command');
 	check_process_perfdata_pl($command_line);
 }
 
 if($mode eq "bulk+npcd"){
 	info("========== Checking Bulk Mode + NPCD Config  ============",4);
 	
-	compare_config_var('process_performance_data', '1', 'break');
-	check_config_var('service_perfdata_file', 'exists','break');
-	check_config_var('service_perfdata_file_template', 'exists','break');
+	compare_config_var('process_performance_data', '1');
+	check_config_var('service_perfdata_file', 'exists');
+	check_config_var('service_perfdata_file_template', 'exists');
 	check_perfdata_file_template(get_config_var('service_perfdata_file_template'));
-	check_config_var('service_perfdata_file_mode', 'exists','break');
-	check_config_var('service_perfdata_file_processing_interval', 'exists','break');
-	check_config_var('service_perfdata_file_processing_command', 'exists','break');
+	check_config_var('service_perfdata_file_mode', 'exists');
+	check_config_var('service_perfdata_file_processing_interval', 'exists');
+	check_config_var('service_perfdata_file_processing_command', 'exists');
 
-	check_config_var('host_perfdata_file', 'exists','break');
-	check_config_var('host_perfdata_file_template', 'exists','break');
+	check_config_var('host_perfdata_file', 'exists');
+	check_config_var('host_perfdata_file_template', 'exists');
 	check_perfdata_file_template(get_config_var('host_perfdata_file_template'));
-	check_config_var('host_perfdata_file_mode', 'exists','break');
-	check_config_var('host_perfdata_file_processing_interval', 'exists','break');
-	check_config_var('host_perfdata_file_processing_command', 'exists','break');
+	check_config_var('host_perfdata_file_mode', 'exists');
+	check_config_var('host_perfdata_file_processing_interval', 'exists');
+	check_config_var('host_perfdata_file_processing_command', 'exists');
+	last_info("Needed config Options are missing. http://docs.pnp4nagios.org",5,$last_check);
 
 	# Options not allowed in bulk mode
-	check_config_var('service_perfdata_command', 'notexists', 'break');
-	check_config_var('host_perfdata_command', 'notexists', 'break');
-	check_config_var('broker_module', 'notexists', 'break');
+	check_config_var('service_perfdata_command', 'notexists');
+	check_config_var('host_perfdata_command', 'notexists');
+	check_config_var('broker_module', 'notexists');
+	last_info("Config options are not allowed in bulk mode with npcd",5,$last_check);
 
 	info(ucfirst($product)." config looks good so far",4);
 	info("========== Checking config values ============",4);
 	my $command_line;
 
-	$command_line = check_command_definition(get_config_var('service_perfdata_file_processing_command'));
-	check_process_perfdata_pl($command_line);
-
-	$command_line = check_command_definition(get_config_var('host_perfdata_file_processing_command'));
-	check_process_perfdata_pl($command_line);
+	$command_line = check_command_definition('service_perfdata_file_processing_command');
+	$command_line = check_command_definition('host_perfdata_file_processing_command');
 
 	my $npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
 	
 	if( -r $npcd_cfg){
 		info("$npcd_cfg is used by npcd and readable",0);
+	}else{
+		info_and_exit("$npcd_cfg is not readable",0);
 	}
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
@@ -293,21 +314,24 @@ if($mode eq "npcdmod"){
 
 	info("========== Checking npcdmod Mode Config  ============",4);
 
-	compare_config_var('process_performance_data', '1', 'break');
-	check_config_var('event_broker_options', 'exists');
+	compare_config_var('process_performance_data', '1');
+	last_info         ("Needed config Options are missing. http://docs.pnp4nagios.org",5,$last_check);
+	
 	# Options not allowed in sync mode
-	check_config_var('service_perfdata_file', 'notexists','break');
-	check_config_var('service_perfdata_file_template', 'notexists','break');
-	check_config_var('service_perfdata_file_mode', 'notexists','break');
-	check_config_var('service_perfdata_file_processing_interval', 'notexists','break');
-	check_config_var('service_perfdata_file_processing_command', 'notexists','break');
-	check_config_var('host_perfdata_file', 'notexists','break');
-	check_config_var('host_perfdata_file_template', 'notexists','break');
-	check_config_var('host_perfdata_file_mode', 'notexists','break');
-	check_config_var('host_perfdata_file_processing_interval', 'notexists','break');
-	check_config_var('host_perfdata_file_processing_command', 'notexists','break');
+	check_config_var('service_perfdata_file', 'notexists');
+	check_config_var('service_perfdata_file_template', 'notexists');
+	check_config_var('service_perfdata_file_mode', 'notexists');
+	check_config_var('service_perfdata_file_processing_interval', 'notexists');
+	check_config_var('service_perfdata_file_processing_command', 'notexists');
+	check_config_var('host_perfdata_file', 'notexists');
+	check_config_var('host_perfdata_file_template', 'notexists');
+	check_config_var('host_perfdata_file_mode', 'notexists');
+	check_config_var('host_perfdata_file_processing_interval', 'notexists');
+	check_config_var('host_perfdata_file_processing_command', 'notexists');
+	last_info("Config options are not allowed in bulk mode with npcd",5,$last_check);
 
 	# event_broker_option must have enabled bits 2 and 3 (0b01100)
+	check_config_var  ('event_broker_options', 'exists');
 	$val = get_config_var('event_broker_options') & 0x0c;
 	if($val == 12){
 		info("event_broker_option bits 2 and 3 enabled ($val)",0);
@@ -341,7 +365,7 @@ if($mode eq "npcdmod"){
 	if($npcd_cfg eq $npcdmod_npcd_cfg){
 		info("npcd and npcdmod.o are using the same config file ($npcd_cfg)",0);
 	}else{
-		info("npcd and npcdmod.o are not using the same config file($npcd_cfg<=>$npcdmod_npcd_cfg)",1);
+		info_and_exit("npcd and npcdmod.o are not using the same config file($npcd_cfg<=>$npcdmod_npcd_cfg)",2);
 	}
 	
 	info(ucfirst($product)." config looks good so far",4);
@@ -359,8 +383,12 @@ if($mode eq "npcdmod"){
 
 #global tests
 info("========== Starting global checks ============",4);
+process_status_file();
 if($process_perf_data_stats{1} == 0){
 	info("process_perf_data 1 is not set for any of your hosts/services",2);
+} 
+if($process_perf_data_stats{'noperf'} > 0){
+	info($process_perf_data_stats{0}." of your services are not providing performance data",1);
 } 
 if($process_perf_data_stats{0} > 0){
 	info("'process_perf_data 0' is set for ".$process_perf_data_stats{0}." of your hosts/services",1);
@@ -369,11 +397,15 @@ if($process_perf_data_stats{1} > 0){
 	info("'process_perf_data 1' is set for ".$process_perf_data_stats{1}." of your hosts/services",0);
 } 
 
+if ( get_config_var('LOG_LEVEL') gt 0 ){
+	info("Logging is enabled in process_perfdata.cfg. This will reduce the overall performance of PNP4Nagios",1)
+}
+
+check_rrdtool();
 check_config_var('RRDPATH', 'exists', 'break');
 check_perfdata_dir(get_config_var('RRDPATH'));
 
-info("Check finished...",4);
-#print Dumper \%stats;
+print_stats();
 exit;
 
 #
@@ -394,19 +426,44 @@ sub get_config_var {
 	if(exists $cfg{$key}){
 		return $cfg{$key};
 	}else{
-		return 0;
+		return undef;
 	}
 }
 
 sub check_command_definition {
-	my $key = shift;
-	my $var = $commands{$key};
+	my $option = shift;
+	my $key = get_config_var($option);
+	my $val = $commands{$key};
 	if(exists $commands{$key}){
-		info("Command $key is defined ('$var')",0);
-		return $commands{$key};
+		info("Command $key is defined",0);
+		info("'$val'",0);
 	}else{
 		info_and_exit("Command $key is not defined",2);
 	}
+	if($mode eq "sync"){
+		if( $val =~ m/process_perfdata.pl$/ or $val =~ m/process_perfdata.pl\s+-d\s+HOSTPERFDATA/ ){
+			info ( "Command looks good",0 );
+		}else{
+			info_and_exit ( "Command looks suspect ($val)",2 );
+		}
+	}
+	if($mode eq "bulk"){
+		if( $val =~ m/process_perfdata.pl\s+--bulk=/){
+			info ( "Command looks good",0 );
+		}else{
+			info_and_exit ( "Command looks suspect ($val)",2 );
+		}
+	}
+	if($mode eq "bulk+npcd"){
+		my $dump_file = get_config_var( $option =~m/(.*)_processing_command/ );
+		#print "$dump_file\n";
+		if( $val =~ m#/bin/mv\s$dump_file#){
+			info ( "Command looks good",0 );
+		}else{
+			info_and_exit ( "Command looks suspect ($val)",2 );
+		}
+	}
+	return $commands{$key};
 	
 }
 
@@ -419,23 +476,24 @@ sub check_config_var {
 	my $break = shift||0;
 	my $var = get_config_var($key);
 	if($check eq "exists"){
-		if($var){
-			info("$key is defined ($key=$var)",0);
-			$last_check = 1;
+		if(defined($var)){
+			info("$key is defined",0);
+			info("$key=$var",0);
+			#$last_check = 0;
 		}else{
 			info("$key is not defined",2);
-			$last_check = 0;
+			$last_check++;
 			exit if $break; 
 		}
 	}
 	if($check eq "notexists"){
-		if( ! $var){
+		if( ! defined($var)){
 			#info("$key is not defined",0);
-			$last_check = 1;
+			#$last_check = 0;
 		}else{
 			info("$key is defined ($key=$var)",2);
 			info("$key is not allowed in mode '$mode'",2);
-			$last_check = 0;
+			$last_check++;
 			exit if $break; 
 		}
 	}
@@ -453,6 +511,7 @@ sub compare_config_var {
 		exit if $break;
 	}
 }
+
 sub check_perfdata_file_template {
 	$_ = shift;
 	if( /^DATATYPE::(HOST|SERVICE)PERFDATA/ ){
@@ -461,9 +520,12 @@ sub check_perfdata_file_template {
 		info("PERFDATA template looks suspect",2);
 	}
 }
+
 sub info {
 	my $string = shift;
 	my $state  = shift;
+	my $break  = shift||0;
+
 	$stats{$state}++;
 	return if $state == 6 and not defined $debug;
 	$statistics{$states[$state]}++;
@@ -473,11 +535,55 @@ sub info {
 	printf("  %s\n", $string);
 }
 
+sub last_info {
+	my $string = shift;
+	my $state  = shift;
+	my $break  = shift||0;
+	return if $break == 0;
+	info("$string ($break)", $state);
+	exit if $break > 0;
+}
 sub info_and_exit {
 	my $string = shift;
 	my $state = shift;
 	info($string, $state);
 	exit $state;
+}
+
+sub print_stats {
+	my $state = 0;
+	$state = 1 if $stats{1} > 0;
+	$state = 2 if $stats{2} > 0;
+	info(sprintf("Statistics: Warnings %d, Criticals %d",$stats{1}, $stats{2}),$state);
+	info("Checks finisched...", $state);
+}
+
+sub check_rrdtool {
+	info("Starting rrdtool checks ...",4);
+	check_config_var('RRDTOOL', 'exists', 'break');
+	my $rrdtool = get_config_var('RRDTOOL');
+	if ( -x $rrdtool ){
+		info("$rrdtool is executable",0);
+	}else{
+		info_and_exit("$rrdtool is not executable",2);
+	}
+	my @version = `$rrdtool`;
+	chomp $version[0];
+	info($version[0],0);
+	check_config_var('USE_RRDs', 'exists', 'break');
+	if(get_config_var('USE_RRDs')){
+		unless ( eval "use RRDs;1" ) {
+        		info("Perl RRDs modules are not loadable",1);
+    		}else{
+        		info("Perl RRDs modules are loadable",0);
+		}
+	}else{
+		unless ( eval "use RRDs;1" ) {
+        		info("Perl RRDs modules are not loadable and not enabled (USE_RRDs = 0)",1);
+    		}else{
+        		info("RRDs modules are loadable but not enabled (USE_RRDs = 0)",1);
+		}
+	}	
 }
 
 sub check_proc_npcd {
@@ -499,6 +605,7 @@ sub check_proc_npcd {
 	}
 	return $npcd_cfg;
 }
+
 # process nagios.cfg
 sub process_nagios_cfg {
 	info ("Reading $MainCfg", 4);
@@ -513,18 +620,46 @@ sub process_nagios_cfg {
 sub process_perfdata_cfg {
 	my $cfg_file = shift;
 	if ( -r $cfg_file ){
-		info ("Reading $cfg_file", 4);
+		if ( process_cfg($cfg_file) ){
+			$process_perfdata_cfg = 1;
+		}else{
+			$process_perfdata_cfg = 0;
+		}	 
+	}elsif(-e "$PNPCfg/process_perfdata.cfg-sample"){
+		info ("$cfg_file does not exist.",1);
+		info ("We will try to parse defaults out of process_perfdata.pl later on", 1);
+		info ("process_perfdata.cfg-sample exists in $PNPCfg", 5);
+		info ("Its recommended to rename process_perfdata.cfg-sample to process_perfdata.cfg", 5);
+		$process_perfdata_cfg = 0; # we have to parse process_perfdata.pl to get defaults
 	}else{
-		info ("$cfg_file does not exist", 4);
-		info ("this file is needed to get more informations about your system", 5);
-		info_and_exit("no further processing possible",2);
+		info ("$cfg_file does not exist.",1);
+		info ("We will try to parse defaults out of process_perfdata.pl later on", 1);
+		info ("Its recommended to place $cfg_file in $PNPCfg", 5);
+		info ("A sample file is installed by 'make install-config'", 5);
+		$process_perfdata_cfg = 0; # we have to parse process_perfdata.pl to get defaults
 	}
+}
+
+sub process_pnp4nagios_release {
+	my $cfg_file = shift;
+	if ( -r $cfg_file ){
+		process_cfg($cfg_file);
+	}
+}
+
+sub process_cfg {
+	my $cfg_file = shift;
+	if ( -r $cfg_file ){
+		info ("Reading $cfg_file", 4);
 		
-	open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
-	while (<NFILE>) {
-		process_main_cfg_line();
+		open (NFILE, "$cfg_file") || info_and_exit("Failed to open '$cfg_file'. $! ", 2);
+		while (<NFILE>) {
+			process_main_cfg_line();
+		}
+		close (NFILE);
+		return 1;
 	}
-	close (NFILE);
+	return 0;
 }
 
 # process npcd.cfg
@@ -561,7 +696,7 @@ sub process_main_cfg_line {
 	$cfg{"$par"} = $val;
 }
 
-# read config file
+# read object_file
 sub process_objects_file {
 	my ($file) = @_;
 	my $cmd = "";
@@ -572,19 +707,34 @@ sub process_objects_file {
 		s/#.*//;
 		next if (/^$/);
 		chomp;
-		# count process_perf_data definitions
-		if (/process_perf_data\s+(\d)$/){
-			$process_perf_data_stats{$1}++;
-		}
-		next unless (/command_[name|line]/);
 		if (/command_name/) {
 			($cmd) = /command_name\s*(.*)/;
 			next;
 		}
+		next unless ( /command_line/);
 		($line) = /command_line\s*(.*)/ ;
 		$commands{"$cmd"} = "$line";
 		next unless (/process_perfdata.pl/);
 		my @cmd = split (/\s+/,$line);
+	}
+	close (CFILE);
+}
+
+sub process_status_file {
+	my ($file) = get_config_var('status_file');
+	my $line = "";
+	info ("Reading $file", 4);
+	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
+	while (<CFILE>) {
+		s/#.*//;
+		next if (/^$/);
+		chomp;
+		# count process_perf_data definitions
+		if (/process_performance_data=(\d)$/){
+			$process_perf_data_stats{$1}++;
+		}elsif(/\sperformance_data=$/){
+			$process_perf_data_stats{'noperf'}++
+		}
 	}
 	close (CFILE);
 }
@@ -605,7 +755,7 @@ sub check_process_perfdata_pl {
 		}else{
 			info_and_exit("Script $path/process_perfdata.pl is not executable",2);
 		}
-		#process_pp_pl ("$path/process_perfdata.pl");
+		process_pp_pl ("$path/process_perfdata.pl") if $process_perfdata_cfg == 0;
 	}else{
 		info_and_exit("Can´t find path to process_perfdata.pl",2);
 	}
@@ -639,7 +789,7 @@ sub check_perfdata_dir {
 }
 
 sub check_perm {
-	-d && $_ ne ".";
+	-d ;
 	my $f = "$File::Find::name";
 	return unless (($f =~ /\/$/) or ($f =~ /rrd$|xml$/));
 	check_usrgrp ($f);
@@ -647,15 +797,16 @@ sub check_perm {
 
 sub check_usrgrp {
 	my $file = shift;
+	my $break = shift || 0;
 	if ($uid) {
 		my $fuid = (stat("$file"))[4];
 		my $fname = getpwuid($fuid);
-		info ("$file: owner is $fname",2) if ($fuid != $uid);
+		info ("$file: owner is $fname", 2, $break) if ($fuid != $uid);
 	}
 	if ($gid) {
 		my $fgid = (stat("$file"))[5];
 		my $fgroup = getpwuid($fgid);
-		info ("$file: group is $fgroup",2) if ($fgid != $gid);
+		info ("$file: group is $fgroup", 2, $break) if ($fgid != $gid);
 	}
 }
 
@@ -672,11 +823,11 @@ sub process_pp_pl {
 		s/\s*$//;
 		s/^\s+//;
 		next if (/^$/);
-		$loop++ if (/%conf/);
-		next unless ($loop);
-		my ($par, $val) = /^(.*?)\s?=>\s?(.*)/;    # shortest string
+		#$loop++ if (/%conf/);
+		#next unless ($loop);
+		my ($par, $val) = /([^\s]+)\s+=>\s+([^\s]+)/;    # shortest string
 		next unless ((defined $par) and (defined $val));
-		chop $val if ($val =~ /,$/);
+		$val =~ s/['",]//g;	
 		$cfg{"$par"} = $val;
 	}
 	close (NFILE);
