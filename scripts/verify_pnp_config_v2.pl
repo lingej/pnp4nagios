@@ -687,8 +687,9 @@ sub process_main_cfg_line {
 	return if (/^#/);
 	s/#.*//;
 	s/\s*$//;
-	my ($par, $val) = /^([^=\s]+)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
-	if ( ($par eq "") ) {
+	my ($par, $val) = /([^=\s]+)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
+	info("'$par' -> '$val'",6);
+	if ( (defined($par) && $par eq "") ) {
 		info ("oddLine -> $_" ,4);
 		return;;
 	}
