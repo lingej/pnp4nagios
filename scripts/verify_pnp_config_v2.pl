@@ -403,6 +403,7 @@ if ( get_config_var('LOG_LEVEL') gt 0 ){
 
 info("==== System sizing ====",4);
 info("TODO",4);
+print_sizing();
 
 info("==== Check statistics ====",4);
 print_stats();
@@ -557,6 +558,13 @@ sub print_stats {
 	$state = 2 if $stats{2} > 0;
 	info(sprintf("Warning: %d, Critical: %d",$stats{1}, $stats{2}),$state);
 	info("Checks finisched...", $state);
+}
+
+sub print_sizing {
+	my $size = $process_perf_data_stats{'host'} + $process_perf_data_stats{'host'} - $process_perf_data_stats{'noperf'};
+	if($size >= $sizing{&mode}){
+		info("Bad size",5);
+	}
 }
 
 sub check_rrdtool {
