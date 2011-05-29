@@ -15,7 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-# TODO: 
 #
 use strict;
 use warnings;
@@ -42,8 +41,14 @@ my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
 my @products = ("nagios", "icinga");
 my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "HINT", "DBG");
 my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "bold yellow", "black on_red");
-my %process_perf_data_stats = ('host' => 0, 'servcies' => 0, 'noperf' => 0, 0 => 0, 1 => 0);
+my %process_perf_data_stats = ('hosts' => 0, 'services' => 0, 'noperf' => 0, 'noperf_but_enabled' => 0 , 0 => 0, 1 => 0);
 my %stats = ( 0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 =>0 );
+my %sizing = (
+	50     => 'sync', 
+	200    => 'bulk',
+	5000   => 'bulk+npcd',
+	10000  => 'npcdmod',
+);
 
 if ( ! $MainCfg ){
 	usage();
@@ -76,12 +81,6 @@ my %statistics = (
 	'CRIT' => 0,
 );
 
-my %sizing = (
-	'sync'      => 50,
-	'bulk'      => 500,
-	'bulk+npcd' => 10000,
-	'npcdmod'   => 10000,
-);
 
 my %cfg      = ();
 my %commands = ();
@@ -94,7 +93,7 @@ my $process_perfdata_cfg = 0;
 #
 
 info("========== Starting Environment Checks ============",4);
-info("Version: ".$version,4);
+info("My Versios is: ".$version,4);
 
 #
 # Read Main config file
@@ -116,11 +115,6 @@ if( $product eq 0 ){
 # Needs a running product
 #
 check_config_var('object_cache_file', 'exists', 'break');
-check_config_var('status_file', 'exists', 'break');
-
-#
-# Read objects.cache file
-#
 if( -r $cfg{'object_cache_file'} ){ 
 	process_objects_file($cfg{'object_cache_file'});
 }else{
@@ -130,8 +124,11 @@ if( -r $cfg{'object_cache_file'} ){
 #
 # Read resource.cfg
 #
-if( defined $cfg{'resource_file'} ){
+check_config_var('resource_file', 'exists', 'break');
+if( -r $cfg{'resource_file'} ){
 	process_npcd_cfg($cfg{'resource_file'});
+}else{
+	info_and_exit($cfg{'resource_file'}. " is not readable", 2);
 }
 
 #
@@ -376,6 +373,7 @@ if($mode eq "npcdmod"){
 }
 	
 info("========== Starting global checks ============",4);
+check_config_var('status_file', 'exists', 'break');
 process_status_file();
 info("==== Starting rrdtool checks ====",4);
 check_rrdtool();
@@ -385,10 +383,13 @@ check_config_var('RRDPATH', 'exists', 'break');
 check_perfdata_dir(get_config_var('RRDPATH'));
 
 if($process_perf_data_stats{1} == 0){
-	info("process_perf_data 1 is not set for any of your hosts/services",2);
+	info("'process_perf_data 1' is not set for any of your hosts/services",2);
 } 
 if($process_perf_data_stats{'noperf'} > 0){
-	info($process_perf_data_stats{0}." of your services are not providing performance data",1);
+	info($process_perf_data_stats{'noperf'}." hosts/services are not providing performance data",1);
+} 
+if($process_perf_data_stats{'noperf_but_enabled'} > 0){
+	info("'process_perf_data 1' is set for ".$process_perf_data_stats{'noperf_but_enabled'}." hosts/services which are not providing performance data!",1);
 } 
 if($process_perf_data_stats{0} > 0){
 	info("'process_perf_data 0' is set for ".$process_perf_data_stats{0}." of your hosts/services",1);
@@ -402,12 +403,10 @@ if ( get_config_var('LOG_LEVEL') gt 0 ){
 }
 
 info("==== System sizing ====",4);
-info("TODO",4);
 print_sizing();
 
 info("==== Check statistics ====",4);
 print_stats();
-
 exit;
 
 #
@@ -525,7 +524,7 @@ sub check_perfdata_file_template {
 
 sub info {
 	my $string = shift;
-	my $state  = shift;
+	my $state  = shift||0;
 	my $break  = shift||0;
 
 	$stats{$state}++;
@@ -561,10 +560,23 @@ sub print_stats {
 }
 
 sub print_sizing {
-	my $size = $process_perf_data_stats{'host'} + $process_perf_data_stats{'host'} - $process_perf_data_stats{'noperf'};
-	if($size >= $sizing{&mode}){
-		info("Bad size",5);
+	my $object_count = ($process_perf_data_stats{'hosts'} + $process_perf_data_stats{'services'});
+	my $graph_count  = ($process_perf_data_stats{'hosts'} + $process_perf_data_stats{'services'});
+	info("$object_count hosts/service objects defined",0);
+	foreach my $limit ( sort {$a <=> $b} keys %sizing){
+		if($graph_count >= $limit and $sizing{$limit} eq $mode){
+			info("Use at least mode '".get_mode_by_size($graph_count)."' to reduce I/O",5);
+			last;
+		} 
 	}
+}
+
+sub get_mode_by_size {
+	my $graph_count = shift;
+	foreach my $limit ( sort {$a <=> $b} keys %sizing){
+		return $sizing{$limit} if $limit >= $graph_count;
+	}
+	return 'gearman';	
 }
 
 sub check_rrdtool {
@@ -590,7 +602,6 @@ sub check_rrdtool {
         		info("Perl RRDs modules are not loadable and not enabled (USE_RRDs = 0)",1);
     		}else{
         		info("RRDs modules are loadable but not enabled (USE_RRDs = 0)",1);
-        		info("Using the RRDs modules will reduce system resources like CPU and I/O used by pnp4nagios",5);
 		}
 	}	
 }
@@ -744,6 +755,7 @@ sub process_objects_file {
 sub process_status_file {
 	my ($file) = get_config_var('status_file');
 	my $line = "";
+	my $perfdata_found = 0;
 	info ("Reading $file", 4);
 	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
 	while (<CFILE>) {
@@ -753,8 +765,16 @@ sub process_status_file {
 		# count process_perf_data definitions
 		if (/process_performance_data=(\d)$/){
 			$process_perf_data_stats{$1}++;
-		}elsif(/\sperformance_data=$/){
+			if ( $perfdata_found == 0 && $1 == 1){
+				$process_perf_data_stats{'noperf_but_enabled'}++;
+			}
+		}
+		if(/\sperformance_data=$/){
 			$process_perf_data_stats{'noperf'}++;
+			$perfdata_found = 0;
+		}
+		if(/\sperformance_data=(.+)$/){
+			$perfdata_found = 1;
 		}
 		if(/^hoststatus /){
 			$process_perf_data_stats{'hosts'}++;
