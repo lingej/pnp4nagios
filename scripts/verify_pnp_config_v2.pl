@@ -304,7 +304,6 @@ if($mode eq "bulk+npcd"){
 	}
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
-	info("Dumper \$cfg", 6);
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
 
@@ -366,12 +365,13 @@ if($mode eq "npcdmod"){
 	}else{
 		info_and_exit("npcd and npcdmod.o are not using the same config file($npcd_cfg<=>$npcdmod_npcd_cfg)",2);
 	}
-	
+
 	info(ucfirst($product)." config looks good so far",4);
 	info("========== Checking config values ============",4);
 
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
+	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 
 }
 	
@@ -688,17 +688,18 @@ sub process_main_cfg_line {
 	return if (/^#/);
 	s/#.*//;
 	s/\s*$//;
-	my ($par, $val) = /([^=]+)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
-	$par = trim($par);
-	$val = trim($val);;
-	if ( (defined($par) && $par eq "") ) {
-		info ("oddLine -> $_" ,4);
-		return;;
+	if (my ($par, $val) = /([^=]+)\s?=\s?(.*)/){
+		$par = trim($par);
+		$val = trim($val);;
+		if ( (defined($par) && $par eq "") ) {
+			info ("oddLine -> $_" ,4);
+			return;;
+		}
+		# skip broker_module lines.
+		return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
+		info("'$par' -> '$val'",6);
+		$cfg{"$par"} = $val;
 	}
-	# skip broker_module lines.
-	return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
-	info("'$par' -> '$val'",6);
-	$cfg{"$par"} = $val;
 }
 
 sub trim {
