@@ -42,7 +42,7 @@ my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
 my @products = ("nagios", "icinga");
 my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "HINT", "DBG");
 my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "bold yellow", "black on_red");
-my %process_perf_data_stats = ('noperf' => 0, 0 => 0, 1 => 0);
+my %process_perf_data_stats = ('host' => 0, 'servcies' => 0, 'noperf' => 0, 0 => 0, 1 => 0);
 my %stats = ( 0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 =>0 );
 
 if ( ! $MainCfg ){
@@ -305,7 +305,6 @@ if($mode eq "bulk+npcd"){
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
 	info("Dumper \$cfg", 6);
-	print Dumper \%cfg if $debug;
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
 
@@ -373,17 +372,18 @@ if($mode eq "npcdmod"){
 
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
-	info("Dumper: \$cfg", 6);
-	print Dumper \%cfg if $debug;
-	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
-	check_config_var('perfdata_spool_dir', 'exists', 'break');
-	check_perfdata_spool_dir($cfg{'perfdata_spool_dir'});
+
 }
-
-
-#global tests
+	
 info("========== Starting global checks ============",4);
 process_status_file();
+info("==== Starting rrdtool checks ====",4);
+check_rrdtool();
+
+info("==== Starting directory checks ====",4);
+check_config_var('RRDPATH', 'exists', 'break');
+check_perfdata_dir(get_config_var('RRDPATH'));
+
 if($process_perf_data_stats{1} == 0){
 	info("process_perf_data 1 is not set for any of your hosts/services",2);
 } 
@@ -401,11 +401,12 @@ if ( get_config_var('LOG_LEVEL') gt 0 ){
 	info("Logging is enabled in process_perfdata.cfg. This will reduce the overall performance of PNP4Nagios",1)
 }
 
-check_rrdtool();
-check_config_var('RRDPATH', 'exists', 'break');
-check_perfdata_dir(get_config_var('RRDPATH'));
+info("==== System sizing ====",4);
+info("TODO",4);
 
+info("==== Check statistics ====",4);
 print_stats();
+
 exit;
 
 #
@@ -554,12 +555,11 @@ sub print_stats {
 	my $state = 0;
 	$state = 1 if $stats{1} > 0;
 	$state = 2 if $stats{2} > 0;
-	info(sprintf("Statistics: Warnings %d, Criticals %d",$stats{1}, $stats{2}),$state);
+	info(sprintf("Warning: %d, Critical: %d",$stats{1}, $stats{2}),$state);
 	info("Checks finisched...", $state);
 }
 
 sub check_rrdtool {
-	info("Starting rrdtool checks ...",4);
 	check_config_var('RRDTOOL', 'exists', 'break');
 	my $rrdtool = get_config_var('RRDTOOL');
 	if ( -x $rrdtool ){
@@ -582,6 +582,7 @@ sub check_rrdtool {
         		info("Perl RRDs modules are not loadable and not enabled (USE_RRDs = 0)",1);
     		}else{
         		info("RRDs modules are loadable but not enabled (USE_RRDs = 0)",1);
+        		info("Using the RRDs modules will reduce system resources like CPU and I/O used by pnp4nagios",5);
 		}
 	}	
 }
@@ -687,14 +688,24 @@ sub process_main_cfg_line {
 	return if (/^#/);
 	s/#.*//;
 	s/\s*$//;
-	my ($par, $val) = /([^=\s]+)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
-	info("'$par' -> '$val'",6);
+	my ($par, $val) = /([^=]+)\s?=\s?(.*)/;    # shortest string (broker module contains multiple equal signs)
+	$par = trim($par);
+	$val = trim($val);;
 	if ( (defined($par) && $par eq "") ) {
 		info ("oddLine -> $_" ,4);
 		return;;
 	}
+	# skip broker_module lines.
 	return if (($par eq "broker_module") and ($val !~ /npcdmod.o/));
+	info("'$par' -> '$val'",6);
 	$cfg{"$par"} = $val;
+}
+
+sub trim {
+	my $string = shift;
+	$string =~ s/^\s+//;
+	$string =~ s/\s+$//;
+	return $string;
 }
 
 # read object_file
@@ -734,7 +745,13 @@ sub process_status_file {
 		if (/process_performance_data=(\d)$/){
 			$process_perf_data_stats{$1}++;
 		}elsif(/\sperformance_data=$/){
-			$process_perf_data_stats{'noperf'}++
+			$process_perf_data_stats{'noperf'}++;
+		}
+		if(/^hoststatus /){
+			$process_perf_data_stats{'hosts'}++;
+		}
+		if(/^servicestatus /){
+			$process_perf_data_stats{'services'}++;
 		}
 	}
 	close (CFILE);
