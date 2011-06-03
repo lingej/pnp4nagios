@@ -111,6 +111,12 @@ class Rrdtool_Model extends System_Model
         }
 
         $command .= $RRD_CMD;
+
+	# Force empty vertical label
+        if( ! preg_match_all('/(-l|--vertical-label)/i',$command,$match)){
+            $command .= " --vertical-label=' ' ";
+        }
+
         $this->RRD_CMD = $command;
         $data  = $this->rrdtool_execute();
         if($data){

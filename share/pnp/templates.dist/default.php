@@ -24,7 +24,7 @@ foreach ($this->DS as $KEY=>$VAL) {
 	$warning  = "";
 	$warn_max = "";
 	$warn_min = "";
-	$vlabel   = "";
+	$vlabel   = " ";
 	$lower    = "";
 	$upper    = "";
 	
