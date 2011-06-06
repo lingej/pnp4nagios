@@ -117,7 +117,7 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/css/ui-multisite/images
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(DATAROOTDIR)/media/images
 
-	for file in pnp/media/css/*.css; \
+	for file in pnp/media/css/*.*; \
 		do $(INSTALL) -m 644 $(INSTALL_OPTS) $$file $(DESTDIR)$(DATAROOTDIR)/media/css; done
 
 	$(INSTALL) -m 644 $(INSTALL_OPTS) pnp/media/css/shadow.png $(DESTDIR)$(DATAROOTDIR)/media/css
