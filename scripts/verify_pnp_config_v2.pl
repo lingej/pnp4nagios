@@ -615,7 +615,7 @@ sub check_proc_npcd {
 	info("Result: $out", 6);
 	info("Returncode: $rc", 6);
 	#extract npcd.cfg 
-	$out =~ /-f\s(\S+)$/;
+	$out =~ /-f\s?(\S+)/;
 	my $npcd_cfg = $1;
 	if($rc == 0){
 		info("npcd daemon is running",0);
