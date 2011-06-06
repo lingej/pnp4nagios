@@ -24,6 +24,7 @@ class Special_Controller extends System_Controller  {
     }
 
     public function index(){
+	$this->url = "?tpl=".$this->tpl;
         $this->template->zoom_header   = $this->add_view('zoom_header');
         $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
         $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);

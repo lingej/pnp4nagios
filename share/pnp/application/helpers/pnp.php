@@ -87,9 +87,6 @@ class pnp_Core {
             $get[$key] = $value;
         }
         foreach($get as $key=>$value){
-	    if($key == "x1" || $key == "x2" || $key == "xw"){
-		continue;
-	    }
 	    if($value == ""){
 		continue;
 	    }

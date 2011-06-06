@@ -67,6 +67,7 @@ foreach($this->data->STRUCT as $key=>$value){
 	echo "</tr></table>\n";
 	echo "</div>\n";
    	echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
+	echo "<div style=\"position:relative;\">\n";
    	echo "<a href=\"".url::base(TRUE)."graph?host=" 
 		.$value['MACRO']['HOSTNAME'] . "&srv=" 
 		.$value['MACRO']['SERVICEDESC'] ."\" title=\""
@@ -74,7 +75,8 @@ foreach($this->data->STRUCT as $key=>$value){
 		.Kohana::lang('common.service',$value['MACRO']['DISP_SERVICEDESC']) . " " 
 		.Kohana::lang('common.datasource',$value['ds_name']) . " " 
 		."\">\n";
-	echo "<img src=\"".url::base(TRUE)."image?host=" . 
+	echo "<div start=".$value['TIMERANGE']['start']." end=".$value['TIMERANGE']['end']." style=\"width:".$value['GRAPH_WIDTH']."px; height:".$value['GRAPH_HEIGHT']."px; position:absolute; top:33px\" class=\"graph\" id=\"".$this->url."\" ></div>";
+	echo "<img class=graph src=\"".url::base(TRUE)."image?host=" . 
 		urlencode($value['MACRO']['HOSTNAME']) . 
 		"&srv=" . urlencode($value['MACRO']['SERVICEDESC']) . 
 		"&view=" . $value['VIEW'] . 
@@ -82,6 +84,7 @@ foreach($this->data->STRUCT as $key=>$value){
 		"&start=" . $value['TIMERANGE']['start'] .
 		"&end=" . $value['TIMERANGE']['end'] . 
 		"\"></a>\n";
+   	echo "</div>\n";
    	echo "</div><p>\n";
 }
 echo "</div>\n";
