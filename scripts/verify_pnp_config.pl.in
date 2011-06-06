@@ -40,13 +40,14 @@
 # 2010.12.07: 0.1.27 check socket; typos
 # 2010.12.17: 0.1.28 bugfix (performance data), option -O
 # 2010.12.19:        check permissions of perfdata dirs  
+# 2011.06.06: 0.1.29 bugfix (bulk-dir); new config directives
 
 use strict;
 use Getopt::Long;
 use File::Find;
 
 my $program = "Check Nagios/Icinga/PNP integration";
-my $version = "0.1.28";
+my $version = "0.1.29";
 my $help = 0;
 my $debug = 0;
 my $quiet = 0;
@@ -884,9 +885,11 @@ sub chk_param {
                 info ("noCmd","$NagiosCfg{\"$param\"}");
                 info ("LinkNagiosCfg2");
             } else {
-                my ($bulk_dir) = $commands{"$NagiosCfg{\"$param\"}"} =~ /bulk=(.*)/;
-                examine ("d;","Bulk-Dir","$bulk_dir");
-                info ("BulkDirWarn",$bulk_dir,"$PNPdir") unless ($bulk_dir =~ /$PNPdir/);
+                if (uc($mode) eq "BULK") {
+                    my ($bulk_dir) = $commands{"$NagiosCfg{\"$param\"}"} =~ /bulk=(.*)/;
+                    examine ("d;","Bulk-Dir","$bulk_dir");
+                    info ("BulkDirWarn",$bulk_dir,"$PNPdir") unless ($bulk_dir =~ /$PNPdir/);
+                }
             }
         }
         if ($param =~ /broker_module/) {
@@ -1122,6 +1125,7 @@ sub chk_npcdcfg {
     $NPCDcfg{identify_npcd} = "v;0|1;497";    # new since 0.4.11
     $NPCDcfg{perfdata_file} = "f;;558";
     $NPCDcfg{perfdata_spool_filename} = "f;;643";
+    $NPCDcfg{perfdata_file_processing_interval} = 'n;^\d+$';
     $err = 0;
 
 # try to set a file name if variable is unset
@@ -1182,9 +1186,13 @@ sub chk_ppcfg {
     if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
         $PPcfg{rrd_storage_type} = 'v;SINGLE|MULTIPLE;';
         $PPcfg{xml_update_delay} = 'n;^\d+$;';
-    }
-    if (($pnp_version =~ /^(\d+\.\d+)/) and ($1 >= 0.6)) {
         $PPcfg{stats_dir} = 'd;;';
+        $PPcfg{prefork} = 'n;^\d+$';
+        $PPcfg{gearman_host} = 'S;.*';
+        $PPcfg{requests_per_child} = 'n;^\d+$';
+        $PPcfg{encryption} = "v;0|1;";
+        $PPcfg{key} = "S;.*";
+        $PPcfg{key_file} = "S;.*";
     }
     $err = 0;
 
