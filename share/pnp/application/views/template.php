@@ -21,7 +21,7 @@ jQuery(window).load(
     jQuery('div.graph').each(function(){
 	var img_width = jQuery(this).next('img').width();
 	var rrd_width = parseInt(jQuery(this).css('width'));
-	var left = img_width - rrd_width - 30;
+	var left = img_width - rrd_width - <?php echo $this->config->conf['right_zoom_offset'] ?>;
 	jQuery(this).css('left', left);
 	jQuery(this).css('cursor', 'crosshair');
 	jQuery(this).attr('title', 'Click to zoom in');
