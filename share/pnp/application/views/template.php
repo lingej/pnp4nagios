@@ -34,11 +34,14 @@ jQuery(window).load(
     	if (!selection.width || !selection.height)
         	return;
 
-	var graph_width = jQuery(img).parent().find('img').width() - 97;
+	var graph_width = parseInt(jQuery(img).css('width'));
 	var link   = jQuery(img).attr('id');
 	var ostart = Math.abs(jQuery(img).attr('start'));
 	var oend   = Math.abs(jQuery(img).attr('end'));
-	var sec_per_px = Math.ceil(( oend - ostart ) / graph_width);
+	var delta  = (oend - ostart);
+	if( delta < 600 )
+	    delta = 600;
+	var sec_per_px = parseInt( delta / graph_width);
 	var start = ostart + Math.ceil( selection.x1 * sec_per_px );  
 	var end   = ostart + ( selection.x2 * sec_per_px );  
         window.location = link + '&start=' + start + '&end=' + end ; 
