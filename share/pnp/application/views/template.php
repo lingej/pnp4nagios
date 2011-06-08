@@ -23,7 +23,7 @@ jQuery(window).load(
 	var rrd_width = parseInt(jQuery(this).css('width'));
 	var left = img_width - rrd_width - <?php echo $this->config->conf['right_zoom_offset'] ?>;
 	jQuery(this).css('left', left);
-	jQuery(this).css('cursor', 'crosshair');
+	jQuery(this).css('cursor', 'e-resize');
 	jQuery(this).attr('title', 'Click to zoom in');
     });
 
