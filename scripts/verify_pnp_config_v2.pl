@@ -93,7 +93,7 @@ my $process_perfdata_cfg = 0;
 #
 
 info("========== Starting Environment Checks ============",4);
-info("My Versios is: ".$version,4);
+info("My version is: ".$version,4);
 
 #
 # Read Main config file
@@ -139,7 +139,7 @@ if ( ! -d $PNPCfg ){
 }
 if ( ! -d "$PNPCfg/check_commands" ){
 	info("Directory $PNPCfg/check_commands does not exist",2);
-	info_and_exit("$PNPCfg does not looks like an PNP4Nagios config directory",2);
+	info_and_exit("$PNPCfg does not look like a PNP4Nagios config directory",2);
 }
 my $ppcfg = "$PNPCfg/process_perfdata.cfg";
 process_perfdata_cfg($ppcfg);
@@ -151,7 +151,7 @@ if( -r "$PNPCfg/pnp4nagios_release" ){
 	process_pnp4nagios_release("$PNPCfg/pnp4nagios_release");
 	info("Found PNP4Nagios version ".get_config_var('PKG_VERSION'), 0);
 }else{
-	info("No pnp4nagios_release file found. This might be an older Version of PNP4Nagios", 0);
+	info("No pnp4nagios_release file found. This might be an older version of PNP4Nagios", 0);
 }
 
 #
@@ -174,7 +174,7 @@ if(config_var_exists($product.'_user') ){
 if(config_var_exists($product.'_group') ){
 	my $group = get_config_var($product.'_group');
 	$gid  = getgrnam($group);
-	info( "Effective Group is '$group'", 0);
+	info( "Effective group is '$group'", 0);
 	if($gid){
 		info("Group $group exists with ID '$gid'", 0 );
 	}else{
@@ -196,7 +196,7 @@ if($mode eq "sync"){
 
 	check_config_var('service_perfdata_command', 'exists');
 	check_config_var('host_perfdata_command', 'exists');;
-	last_info("Needed config Options are missing.",5,$last_check);
+	last_info("Needed config options are missing.",5,$last_check);
 
 	# Options not allowed in sync mode
 	check_config_var('service_perfdata_file', 'notexists');
@@ -277,7 +277,7 @@ if($mode eq "bulk+npcd"){
 	check_config_var('host_perfdata_file_mode', 'exists');
 	check_config_var('host_perfdata_file_processing_interval', 'exists');
 	check_config_var('host_perfdata_file_processing_command', 'exists');
-	last_info("Needed config Options are missing. http://docs.pnp4nagios.org",5,$last_check);
+	last_info("Needed config options are missing. http://docs.pnp4nagios.org",5,$last_check);
 
 	# Options not allowed in bulk mode
 	check_config_var('service_perfdata_command', 'notexists');
@@ -310,7 +310,7 @@ if($mode eq "npcdmod"){
 	info("========== Checking npcdmod Mode Config  ============",4);
 
 	compare_config_var('process_performance_data', '1');
-	last_info         ("Needed config Options are missing. http://docs.pnp4nagios.org",5,$last_check);
+	last_info         ("Needed config options are missing. http://docs.pnp4nagios.org",5,$last_check);
 	
 	# Options not allowed in sync mode
 	check_config_var('service_perfdata_file', 'notexists');
@@ -649,12 +649,12 @@ sub process_perfdata_cfg {
 		info ("$cfg_file does not exist.",1);
 		info ("We will try to parse defaults out of process_perfdata.pl later on", 1);
 		info ("process_perfdata.cfg-sample exists in $PNPCfg", 5);
-		info ("Its recommended to rename process_perfdata.cfg-sample to process_perfdata.cfg", 5);
+		info ("It is recommended to rename process_perfdata.cfg-sample to process_perfdata.cfg", 5);
 		$process_perfdata_cfg = 0; # we have to parse process_perfdata.pl to get defaults
 	}else{
 		info ("$cfg_file does not exist.",1);
 		info ("We will try to parse defaults out of process_perfdata.pl later on", 1);
-		info ("Its recommended to place $cfg_file in $PNPCfg", 5);
+		info ("It is recommended to place $cfg_file in $PNPCfg", 5);
 		info ("A sample file is installed by 'make install-config'", 5);
 		$process_perfdata_cfg = 0; # we have to parse process_perfdata.pl to get defaults
 	}
@@ -689,7 +689,7 @@ sub process_npcd_cfg {
 		info ("Reading $cfg_file", 4);
 	}else{
 		info ("$cfg_file does not exist", 4);
-		info ("this file is needed to get more informations about your system", 5);
+		info ("this file is needed to get more information about your system", 5);
 		info_and_exit("no further processing possible",2);
 	}
 		
