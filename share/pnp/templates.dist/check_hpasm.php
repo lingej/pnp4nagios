@@ -36,7 +36,7 @@ foreach($DS as $KEY => $VAL){
         $def[2] .= "GPRINT:var$KEY:LAST:\"%6.0lf $UNIT[$KEY] LAST \" ";
         $def[2] .= "GPRINT:var$KEY:MAX:\"%6.0lf $UNIT[$KEY] MAX \" ";
         $def[2] .= "GPRINT:var$KEY:AVERAGE:\"%6.2lf $UNIT[$KEY] AVERAGE \\n\" ";
-	$col_t;
+	$col_t++;
     }
 }
 ?>
