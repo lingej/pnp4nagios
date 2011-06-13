@@ -41,6 +41,7 @@
 # 2010.12.17: 0.1.28 bugfix (performance data), option -O
 # 2010.12.19:        check permissions of perfdata dirs  
 # 2011.06.06: 0.1.29 bugfix (bulk-dir); new config directives
+# 2011.06.12:        bugfix (grgid)
 
 use strict;
 use Getopt::Long;
@@ -1529,7 +1530,7 @@ sub chk_usrgrp {
     }
     if ($gid) {
         my $fgid = (stat("$file"))[5];
-        my $fgroup = getpwuid($fgid);
+        my $fgroup = getgrgid($fgid);
         info ("fileGroup","$file", "$fgroup", "$group") if ($fgid != $gid);
     }
 }
