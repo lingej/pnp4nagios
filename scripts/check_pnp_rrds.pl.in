@@ -174,13 +174,13 @@ if ( $XML_COUNT == 0 ) {
     exit 3;
 }
 
-if ( $RRD_ERRORS >= $opt_c || $XML_COUNT_AGE >= $opt_c ) {
-    $RC  = 2;
-    $OUT = "CRITICAL: ";
-}
 if ( $RRD_ERRORS >= $opt_w || $XML_COUNT_AGE >= $opt_w ) {
     $RC  = 1;
     $OUT = "WARNING: ";
+}
+if ( $RRD_ERRORS >= $opt_c || $XML_COUNT_AGE >= $opt_c ) {
+    $RC  = 2;
+    $OUT = "CRITICAL: ";
 }
 
 $OUT .= "$XML_COUNT XML Files checked. $RRD_ERRORS RRD Errors found. $XML_COUNT_AGE old XML Files found";
