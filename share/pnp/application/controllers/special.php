@@ -11,6 +11,7 @@ class Special_Controller extends System_Controller  {
     public function __construct()
     {
         parent::__construct();
+        $this->template        = $this->add_view('template');
         $this->template->graph = $this->add_view('graph');
         $this->tpl             = $this->input->get('tpl');
         $this->view            = $this->input->get('view');

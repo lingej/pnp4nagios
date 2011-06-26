@@ -11,7 +11,7 @@ class Docs_Controller extends System_Controller  {
     public function __construct()
     {
         parent::__construct();
-
+        $this->template                    = $this->add_view('template');
         $this->template->docs              = $this->add_view('docs');
         $this->template->docs->search_box  = $this->add_view('search_box');
         $this->template->docs->docs_box    = $this->add_view('docs_box');

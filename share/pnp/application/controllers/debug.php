@@ -12,6 +12,7 @@ class Debug_Controller extends System_Controller  {
     public function __construct()
     {
         parent::__construct();
+        $this->template          = $this->add_view('template');
         $this->template->debug   = $this->add_view('debug');
     }
 

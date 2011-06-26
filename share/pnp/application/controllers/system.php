@@ -101,7 +101,6 @@ class System_Controller extends Template_Controller {
                 }
             }
         }
-        $this->template = $this->add_view('template');
     }
 
     public function __call($method, $arguments)

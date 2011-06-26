@@ -10,7 +10,8 @@ class Page_Controller extends System_Controller  {
 
     public function __construct(){
         parent::__construct();
-        $this->template->page    = $this->add_view('page');
+        $this->template                = $this->add_view('template');
+        $this->template->page          = $this->add_view('page');
         $this->template->zoom_header   = $this->add_view('zoom_header');
         $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
         $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
