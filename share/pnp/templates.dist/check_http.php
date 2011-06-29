@@ -37,6 +37,6 @@ if ($CRIT[2] != "") {
 }
 $def[2] .= rrd::gradient("var1", "66CCFF", "0000ff", "$NAME[2]"); 
 $def[2] .= "LINE1:var1#333333 " ;
-$def[2] .= rrd::gprint("var1", array("LAST","MAX","AVERAGE"), "%6.2lf $UNIT[1]");
+$def[2] .= rrd::gprint("var1", array("LAST","MAX","AVERAGE"), "%6.2lf %s$UNIT[2]");
 
 ?>
