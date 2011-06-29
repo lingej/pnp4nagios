@@ -14,7 +14,7 @@
 <?php } ?>
 
 <div data-role="content">
-<ul data-role="listview" data-inset="false" data-theme="c" data-dividertheme="a">
+<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="a">
 <?php
 foreach($this->result as $host){
     printf("<li><a href=\"".url::base(TRUE)."mobile/host/%s\" data-transition=\"slide\">%s</a></li>", $host, $host);
