@@ -1,3 +1,16 @@
+<?php
+if($this->is_authorized == FALSE){
+?>
+<div data-role="content">
+<ul data-role="listview" data-inset="true" data-theme="e">
+<li><strong>Alert:&nbsp;</strong><?php echo Kohana::lang('error.not_authorized')?></li>
+</ul>
+</div><!-- /content -->
+<?php
+return;
+}
+?>
+
 <div data-role="content">
 <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
 <?php

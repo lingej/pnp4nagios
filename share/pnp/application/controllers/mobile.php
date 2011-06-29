@@ -30,6 +30,7 @@ class Mobile_Controller extends System_Controller  {
     public function host($host=NULL)
     {
 		$this->template->host = $this->add_view('mobile_host');
+		$this->is_authorized  = $this->auth->is_authorized($host);
 		$this->template->host->hostname = $host;
 		$this->template->host->services = $this->data->getServices($host);
     }
@@ -37,6 +38,7 @@ class Mobile_Controller extends System_Controller  {
     {
 		$this->template->graph = $this->add_view('mobile_graph');
 		$this->data->buildDataStruct($host,$service,$this->view);
+		$this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']);
     }
     public function search()
     {

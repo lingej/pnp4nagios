@@ -1,5 +1,16 @@
-<pre><? #print_r($this->data->STRUCT); ?></pre>
-<div data-role="collapsible-set">
+<?php
+if($this->is_authorized == FALSE){
+?>
+<div data-role="content">
+<ul data-role="listview" data-inset="true" data-theme="e">
+<li><strong>Alert:&nbsp;</strong><?php echo Kohana::lang('error.not_authorized')?></li>
+</ul>
+</div><!-- /content -->
+<?php
+return;
+}
+?>
+<div data-role="content" data-inset="true">
 <?php
 foreach($this->data->STRUCT as $d){
 	if($d['LEVEL'] == 0){
