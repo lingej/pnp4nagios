@@ -1,5 +1,5 @@
 Name:         pnp4nagios
-Version:      0.6.7
+Version:      0.6.13
 Release:      1
 License:      GNU Public License version 2
 Packager:     Olivier Raginel <babar@cern.ch>
@@ -32,6 +32,7 @@ This is the version with support for Gearman, suitable to use with mod_gearman.
     --libdir=%{_libdir}/%{name} \
     --sysconfdir=%{_sysconfdir}/%{name} \
     --localstatedir=%{_localstatedir} \
+    --mandir=%{_mandir} \
     --with-init-dir=%{_initrddir} \
     --with-layout=debian
 
