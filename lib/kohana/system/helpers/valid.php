@@ -90,15 +90,7 @@ class valid_Core {
 	 */
 	public static function ip($ip, $ipv6 = FALSE, $allow_private = TRUE)
 	{
-		// By default do not allow private and reserved range IPs
-		$flags = FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
-		if ($allow_private === TRUE)
-			$flags =  FILTER_FLAG_NO_RES_RANGE;
-
-		if ($ipv6 === TRUE)
-			return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flags);
-
-		return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flags | FILTER_FLAG_IPV4);
+		return (bool) preg_match('/(\d+).(\d+).(\d+).(\d+)/',$ip);
 	}
 
 	/**

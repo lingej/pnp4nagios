@@ -35,5 +35,4 @@ pnp_mmapfile *pnp_mmap_fopen(char *); /* open a file read-only via mmap() */
 int pnp_mmap_fclose(pnp_mmapfile *);
 char *pnp_mmap_fgets(pnp_mmapfile *);
 char *pnp_mmap_fgets_multiline(pnp_mmapfile *);
-
-extern pnp_strip(char *);
+extern void pnp_strip(char *);

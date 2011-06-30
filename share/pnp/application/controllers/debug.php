@@ -13,15 +13,10 @@ class Debug_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template->debug   = $this->add_view('debug');
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
     }
 
     public function index()
     {
-
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
         $this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" )
@@ -43,7 +38,7 @@ class Debug_Controller extends System_Controller  {
             }
             $services      = $this->data->getServices($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
-			$this->is_authorized = $this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']);
+			$this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']);
             $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
         }elseif(isset($this->host)){
             $this->host    = pnp::clean($this->host);

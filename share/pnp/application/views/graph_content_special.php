@@ -24,10 +24,12 @@ foreach($this->data->STRUCT as $key=>$value){
 	echo Kohana::lang('common.datasource',$value['ds_name'])."</td>\n";
     echo "<td align=right>";
     echo pnp::zoom_icon_special($this->tpl,
-         $value['TIMERANGE']['start'],
-         $value['TIMERANGE']['end'],
-         $value['SOURCE'],
-         $value['VIEW'])."</td>\n";
+		$value['TIMERANGE']['start'],
+		$value['TIMERANGE']['end'],
+		$value['SOURCE'],
+		$value['VIEW'],
+		$value['GRAPH_WIDTH'],
+		$value['GRAPH_HEIGHT'])."</td>\n";
 
     echo "</tr></table>\n";
     echo "</div>\n";

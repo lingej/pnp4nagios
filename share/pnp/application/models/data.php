@@ -3,7 +3,7 @@
 /**
  * Retrieves and manipulates current status of hosts (and services?)
  */
-class Data_Model extends Model
+class Data_Model extends System_Model
 {
 
     private $XML   = array();
@@ -46,6 +46,7 @@ class Data_Model extends Model
             }
         }
         if(sizeof($templates) > 0){
+            sort($templates);
             return $templates;
         }else{
             return FALSE;
@@ -174,7 +175,7 @@ class Data_Model extends Model
             }
             if($s['name'] == "_HOST_"){
                 // Check authorization
-                if($this->auth->is_authorized((string) $this->XML->NAGIOS_DISP_HOSTNAME, "_HOST_") === FALSE)
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_AUTH_HOSTNAME, "_HOST_") === FALSE)
                     continue;
  
                 $host[0]['name']             = "_HOST_";
@@ -184,7 +185,7 @@ class Data_Model extends Model
                 $host[0]['is_multi']         = (string) $this->XML->DATASOURCE[0]->IS_MULTI[0];
             }else{
                 // Check authorization
-                if($this->auth->is_authorized((string) $this->XML->NAGIOS_DISP_HOSTNAME, (string) $this->XML->NAGIOS_DISP_SERVICEDESC) === FALSE )
+                if($this->auth->is_authorized((string) $this->XML->NAGIOS_AUTH_HOSTNAME, (string) $this->XML->NAGIOS_AUTH_SERVICEDESC) === FALSE )
                     continue;
  
                 $services[$i]['name']        = $s['name'];
@@ -263,6 +264,8 @@ class Data_Model extends Model
         $conf        = $this->config->conf;
         $this->XML   = array();
         $this->MACRO = array();
+        $this->MACRO['AUTH_SERVICEDESC'] = '';
+        $this->MACRO['AUTH_HOSTNAME'] = '';
         $this->DS    = array();
         $xml         = array();
         $xmlfile     = $conf['rrdbase'].$hostname."/".$servicedesc.".xml";
@@ -771,7 +774,7 @@ class Data_Model extends Model
                 $this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
             }
         }else{
-            throw new Kohana_Exception('error.no-data-for-page', $page.".cfg" );
+            $this->ERROR = "ERROR: ". Kohana::lang('error.no-data-for-page', $page.".cfg" );
         }
     }
 

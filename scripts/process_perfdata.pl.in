@@ -349,6 +349,8 @@ sub data2rrd {
     $NAGIOS{XMLFILE}          = $conf{RRDPATH} . "/" . $data[0]{hostname} . "/" . $data[0]{servicedesc} . ".xml";
     $NAGIOS{SERVICEDESC}      = $data[0]{servicedesc};
     $NAGIOS{DISP_SERVICEDESC} = $data[0]{disp_servicedesc};
+    $NAGIOS{AUTH_SERVICEDESC} = $data[0]{auth_servicedesc} || "";
+    $NAGIOS{AUTH_HOSTNAME}    = $data[0]{auth_hostname} || "";
     $NAGIOS{MULTI_PARENT}     = "";
     $NAGIOS{MULTI_PARENT}     = $data[0]{multi_parent} || "";
     $TEMPLATE                 = $data[0]{template};
@@ -513,14 +515,82 @@ sub write_rrd {
     print_log( "DEBUG: UPD-> $ds_update", 3 );
 
     if ( !-e "$rrdfile" ) {
-        my @rrd_create = parse_rra_config($TEMPLATE);
-        return call_rrd( create => $rrdfile,
-            @rrd_create, @ds_create,
-            "--start" => $NAGIOS{TIMET},
-            "--step" => $conf{RRA_STEP} );
+        @rrd_create = parse_rra_config($TEMPLATE);
+        if ( $conf{USE_RRDs} == 1 ) {
+            print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
+            RRDs::create( "$rrdfile", @rrd_create, @ds_create, "--start=$NAGIOS{TIMET}", "--step=$conf{RRA_STEP}" );
+
+            my $err = RRDs::error();
+            if ($err) {
+                print_log( "RRDs::create ERROR $err", 0 );
+                @rrd_state = ( 1, $err );
+                $stats{error}++;
+            }
+            else {
+                print_log( "$rrdfile created", 2 );
+                @rrd_state = ( 0, "just created" );
+                $stats{create}++;
+            }
+        }
+        else {
+            print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.",                           2 );
+            print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
+            system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
+            if ( $? > 0 ) {
+                print_log( "rrdtool create returns $?", 0 );
+                @rrd_state = ( $?, "create failed" );
+                $stats{error}++;
+            }
+            else {
+                print_log( "rrdtool create returns $?", 1 );
+                @rrd_state = ( 0, "just created" );
+                $stats{create}++;
+            }
+        }
     }
     else {
-        return call_rrd( update => $rrdfile, "$NAGIOS{TIMET}$ds_update" );
+        if ( $conf{USE_RRDs} == 1 ) {
+            if ( $conf{RRD_DAEMON_OPTS} ) {
+                print_log( "RRDs::update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                RRDs::update( "--daemon=$conf{RRD_DAEMON_OPTS}", "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
+            }
+            else {
+                print_log( "RRDs::update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                RRDs::update( "$rrdfile", "$NAGIOS{TIMET}$ds_update" );
+            }
+            my $err = RRDs::error();
+            if ($err) {
+                print_log( "RRDs::update ERROR $err", 0 );
+                @rrd_state = ( 1, $err );
+                $stats{error}++;
+            }
+            else {
+                print_log( "$rrdfile updated", 2 );
+                @rrd_state = ( 0, "successful updated" );
+                $stats{update}++;
+            }
+        }
+        else {
+            print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.", 2 );
+            if ( $conf{RRD_DAEMON_OPTS} ) {
+                print_log( "$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                system("$conf{RRDTOOL} update --daemon=$conf{RRD_DAEMON_OPTS} $rrdfile $NAGIOS{TIMET}$ds_update");
+            }
+            else {
+                print_log( "$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update", 2 );
+                system("$conf{RRDTOOL} update $rrdfile $NAGIOS{TIMET}$ds_update");
+            }
+            if ( $? > 0 ) {
+                print_log( "rrdtool update returns $?", 0 );
+                @rrd_state = ( $?, "update failed" );
+                $stats{error}++;
+            }
+            else {
+                print_log( "rrdtool update returns $?", 1 );
+                @rrd_state = ( $?, "successful updated" );
+                $stats{update}++;
+            }
+        }
     }
 }
 
@@ -915,8 +985,6 @@ sub parse_perfstring {
     my %CTPL = ();
     $dstype = "GAUGE";
     my $perfstring = shift;
-    #$perfstring =~ s/\\/\//g;
-    #$perfstring =~ s/\//_/g;
     my $is_multi = "0";
     my @perfs;
     my @multi;
@@ -927,12 +995,13 @@ sub parse_perfstring {
     #
     # check_multi
     #
-    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)=/ ) {
+    if ( $perfstring =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)=/ ) {
         $is_multi = 1;
         print_log( "check_multi Perfdata start", 3 );
         my $count        = 0;
         my $check_multi_blockcount = 0;
-        my $multi_parent = cleanup( $NAGIOS{SERVICEDESC} );
+        my $multi_parent     = cleanup( $NAGIOS{SERVICEDESC} );
+        my $auth_servicedesc = $NAGIOS{DISP_SERVICEDESC};
         while ($perfstring) {
             ( $perfstring, %p ) = _parse($perfstring);
             if ( !$p{label} ) {
@@ -941,7 +1010,7 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
-            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_]+)::([a-zA-Z0-9\.\-_]+)::([^=]+)$/ ) {
+            if ( $p{label} =~ /^([a-zA-Z0-9\.\-_\s]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)$/ ) {
                 @multi = ( $1, $2, $3 );
                 if ( $count == 0 ) {
                     print_log( "DEBUG: First check_multi block", 3 );
@@ -949,6 +1018,7 @@ sub parse_perfstring {
                     # Keep servicedesc while processing the first block.
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
                     $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
+                    $p{auth_servicedesc} = $auth_servicedesc;
                     $p{multi}            = 1;
                     $p{multi_parent}     = $multi_parent;
                 }
@@ -959,6 +1029,7 @@ sub parse_perfstring {
                     $p{multi_parent}     = $multi_parent;
                     $p{servicedesc}      = cleanup( $multi[0] );    # Use the multi servicedesc.
                     $p{disp_servicedesc} = cleanup( $multi[0] );    # Use the multi servicedesc.
+                    $p{auth_servicedesc} = $auth_servicedesc;
                     data2rrd(@perfs) if ( $#perfs >= 0 );           # Process when a new block starts.
                     @perfs = ();                                    # Clear the perfs array.
                     # reset check_multi block count
@@ -989,6 +1060,7 @@ sub parse_perfstring {
                 $p{name}             = cleanup( $multi[2] );           # store the original label from check_multi header
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
+                $p{auth_hostname}    = $NAGIOS{HOSTNAME};
                 push @perfs, {%p};
                 $count++;
             }
@@ -1019,9 +1091,10 @@ sub parse_perfstring {
                 $p{rrd_heartbeat}    = $CTPL{'RRD_HEARTBEAT'};
                 $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
                 $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
+                $p{auth_hostname}    = $NAGIOS{HOSTNAME};
                 if ( $count == 1 ) {
                     $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );    # Use the servicedesc.
-                    $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};               # Use the servicedesc.
+                    $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};          # Use the servicedesc.
                 }
                 else {
                     $p{servicedesc}      = cleanup( $multi[0] );               # Use the multi servicedesc.
@@ -1029,6 +1102,7 @@ sub parse_perfstring {
                 }
                 $p{multi}        = $is_multi;
                 $p{multi_parent} = $multi_parent;
+                $p{auth_servicedesc} = $auth_servicedesc;          # Use the servicedesc.
                 push @perfs, {%p};
             }
         }
@@ -1074,8 +1148,10 @@ sub parse_perfstring {
             $p{multi}            = $is_multi;
             $p{hostname}         = cleanup( $NAGIOS{HOSTNAME} );
             $p{disp_hostname}    = $NAGIOS{DISP_HOSTNAME};
+            $p{auth_hostname}    = $NAGIOS{DISP_HOSTNAME};
             $p{servicedesc}      = cleanup( $NAGIOS{SERVICEDESC} );
             $p{disp_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
+            $p{auth_servicedesc} = $NAGIOS{DISP_SERVICEDESC};
 
             push @perfs, {%p};
             $count++;
@@ -1434,8 +1510,8 @@ sub print_help {
     Default: @sysconfdir@/process_perfdata.cfg
 
   Gearman Worker Options:
-    --gearman=127.0.0.1:4730 
-    Repeat for every gearman server you want to connect to
+    --gearman 
+    Start in gearman worker mode
     --daemon
     Run as daemon
     --pidfile=/var/run/process_perfdata.pid

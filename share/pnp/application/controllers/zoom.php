@@ -13,8 +13,6 @@ class Zoom_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template          = $this->add_view('zoom');
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
         $this->tpl               = $this->input->get('tpl');
         $this->graph_width       = $this->input->get('graph_width');
         $this->graph_height      = $this->input->get('graph_height');
@@ -22,9 +20,6 @@ class Zoom_Controller extends System_Controller  {
 
     public function index()
     {
-
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
         $this->source  = $this->input->get('source');
         $this->view    = "";
 
@@ -33,6 +28,21 @@ class Zoom_Controller extends System_Controller  {
         }else{
             $this->view = $this->config->conf['overview-range'];
         }
+
+		#
+		#  Limit startto 2000/01/01
+		#
+		$start_limit = strtotime("2000/01/01");
+		$this->start = abs((int)$this->start);
+		if($this->start < $start_limit)
+			$this->start = $start_limit;
+		#
+		# Limit end to now + one hour 
+		#	
+		$end_limit = time() + 3600;
+		$this->end = abs((int)$this->end);
+		if($this->end > $end_limit)
+			$this->end = $end_limit;
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 

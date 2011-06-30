@@ -15,8 +15,10 @@ class Graph_Controller extends System_Controller  {
         $this->template->zoom_header   = $this->add_view('zoom_header');
         $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
         $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
-        $this->host              = $this->input->get('host');
-        $this->service           = $this->input->get('srv');
+        $this->template->graph->icon_box           = $this->add_view('icon_box');
+        $this->template->graph->icon_box->position = "graph";
+        $this->template->graph->icon_box->xml_icon = TRUE;
+        $this->template->graph->icon_box->pdf_icon = TRUE;
     }
 
     public function index()
@@ -46,7 +48,7 @@ class Graph_Controller extends System_Controller  {
             $services      = $this->data->getServices($this->host);
             #print Kohana::debug($services);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
-            $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']); 
+            $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']); 
 
             $this->title = Kohana::lang('common.service-details') . " ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
         	$this->template->graph->graph_content->graph_width = ($this->data->STRUCT[0]['GRAPH_WIDTH'] + 85);
@@ -57,7 +59,7 @@ class Graph_Controller extends System_Controller  {
             $this->template->graph->status_box->lhost    = $this->data->MACRO['HOSTNAME'];
             $this->template->graph->status_box->service  = $this->data->MACRO['DISP_SERVICEDESC'];
             $this->template->graph->status_box->lservice = $this->data->MACRO['SERVICEDESC'];
-            $this->template->graph->status_box->timet    = date($this->config->conf['date_fmt'],$this->data->MACRO['TIMET']);
+            $this->template->graph->status_box->timet    = date($this->config->conf['date_fmt'],intval($this->data->MACRO['TIMET']));
             // Service Box Vars
             $this->template->graph->service_box->services = $services;
             $this->template->graph->service_box->host = $this->host;
@@ -79,7 +81,7 @@ class Graph_Controller extends System_Controller  {
             $this->template->graph->status_box->host    = $this->data->MACRO['DISP_HOSTNAME'];
             $this->template->graph->status_box->lhost   = $this->data->MACRO['HOSTNAME'];
             $this->template->graph->status_box->shost   = pnp::shorten($this->data->MACRO['DISP_HOSTNAME']);
-            $this->template->graph->status_box->timet   = date($this->config->conf['date_fmt'],$this->data->MACRO['TIMET']);
+            $this->template->graph->status_box->timet   = date($this->config->conf['date_fmt'],intval($this->data->MACRO['TIMET']));
             // Service Box Vars
             $this->template->graph->service_box->services = $services;
             $this->template->graph->service_box->host = $this->host;
@@ -87,21 +89,25 @@ class Graph_Controller extends System_Controller  {
             $this->template->graph->timerange_box = $this->add_view('timerange_box');
             $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
 
+            $this->template->graph->icon_box->xml_icon = FALSE;
+
             $this->title = Kohana::lang('common.service-overview', $this->host);
             foreach($services as $service){
                 if($service['state'] == 'active')
                        $this->data->buildDataStruct($this->host,$service['name'],$this->view);
             }
         }else{
-            $this->host = $this->data->getFirstHost();
-            if(isset($this->host)){
-                url::redirect("graph?host=".$this->host);
+			if($this->isAuthorizedFor('host_overview' ) ){
+                $this->host = $this->data->getFirstHost();
+                if(isset($this->host)){
+                    url::redirect("graph?host=".$this->host);
+				}else{
+                    throw new Kohana_Exception('error.get-first-host');
+				}
             }else{
-                throw new Kohana_Exception('error.get-first-host');
+                throw new Kohana_Exception('error.not_authorized_for_host_overview');
             }            
         }
-        $this->template->graph->icon_box      = $this->add_view('icon_box');
-        $this->template->graph->icon_box->position = "graph";
         $this->template->graph->logo_box      = $this->add_view('logo_box');
         $this->template->graph->header->title = $this->title;
     }

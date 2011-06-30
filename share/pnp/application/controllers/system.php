@@ -16,6 +16,7 @@ class System_Controller extends Template_Controller {
         $this->config     = new Config_Model();
         $this->rrdtool    = new Rrdtool_Model();
         $this->auth       = new Auth_Model();
+		#$this->system	  = new System_Model();
 
         $this->config->read_config();
         Kohana::config_set('locale.language',$this->config->conf['lang']);
@@ -31,6 +32,14 @@ class System_Controller extends Template_Controller {
         $this->service           = $this->input->get('srv',NULL);
         $this->controller        = Router::$controller;
 
+        if($this->host != NULL){
+		$this->host = urldecode($this->host);
+        }
+
+        if($this->service != NULL){
+		$this->service = urldecode($this->service);
+        }
+
         if(isset($_GET['view']) && $_GET['view'] != "" )
             $this->view = pnp::clean($_GET['view']);
 
@@ -42,23 +51,28 @@ class System_Controller extends Template_Controller {
             if($this->session->get("theme","new") == "new"){
                 if($this->theme){
                     # store $this->theme if available
+					Kohana::config_set('core.theme',$this->theme);
                     $this->session->set('theme', $this->theme );
                 }else{
                     # set $this->theme to default value 
                     $this->theme = $this->config->conf['ui-theme'];
+					Kohana::config_set('core.theme',$this->theme);
                 }
             # Sesion with theme info    
             }else{
                 if($this->theme && $this->theme != 'default'){
                     # store $this->theme if available
                     $this->session->set('theme', $this->theme );
+					Kohana::config_set('core.theme',$this->theme);
                 }elseif($this->theme == 'default'){
                     # reset to default theme 
                     $this->theme = $this->config->conf['ui-theme'];
                     $this->session->set('theme', $this->theme );
+					Kohana::config_set('core.theme',$this->theme);
                 }else{
                     # set $this->theme with session infos
                     $this->theme = $this->session->get('theme');
+					Kohana::config_set('core.theme',$this->theme);
                 }
             }
 

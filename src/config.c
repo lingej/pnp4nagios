@@ -62,8 +62,8 @@ void process_configfile(char *config_file) {
 	else {
 		while (feof(fh_config_file) == 0) {
 			line_number++;
+			temp = fgets(current_config_line, 1024, fh_config_file);
 			temp = NULL;
-			fgets(current_config_line, 1024, fh_config_file);
 			if (current_config_line == NULL) {
 				printf("Error reading config\n");
 				exit(1);
@@ -248,6 +248,9 @@ void process_configfile(char *config_file) {
 				;
 
 			else if (!strcmp(variable, "perfdata_spool_filename"))
+				;
+
+			else if (!strcmp(variable, "perfdata_file_processing_interval"))
 				;
 
 			else if (!strcmp(variable, "user")) {

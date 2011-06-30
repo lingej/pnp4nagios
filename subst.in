@@ -47,6 +47,7 @@ my $KOHANA_SYSTEM="@KOHANA_SYSTEM@";
 my $libdir="@libdir@";
 my $sysconfdir="@sysconfdir@";
 my $host_os="@host_os@";
+my $ac_configure_args="@ac_configure_args@";
 
 my $sbindir="@sbindir@";
 my $bindir="@bindir@";
@@ -123,6 +124,7 @@ while ($f = shift @ARGV) {
 		s|\@CP\@|$CP|g;
 		s|\@prefix\@|$prefix|g;
 		s|\@host_os\@|$host_os|g;
+		s|\@ac_configure_args\@|$ac_configure_args|g;
 		s|\$\{exec_prefix\}|$exec_prefix|g; # must be next to last
 		s|\$\{prefix\}|$prefix|g; # must be last
 		print OUT $_;

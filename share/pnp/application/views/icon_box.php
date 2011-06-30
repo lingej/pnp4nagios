@@ -18,7 +18,7 @@ if($this->config->conf['use_fpdf'] == 1 && $position == "basket"){
 if($this->config->conf['use_fpdf'] == 1 && $position == "page"){
 	echo "<a title=\"".Kohana::lang('common.title-pdf-link')."\" href=\"".url::base(TRUE)."pdf/page/".$this->page.$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/pdf.png\"></a>\n";
 }
-if($this->config->conf['show_xml_icon'] == 1 && $position == "graph"){
+if($this->config->conf['show_xml_icon'] == 1 && $position == "graph" && $xml_icon == TRUE){
 	$qsa  = pnp::addToUri(array(), False);
 	echo "<a title=\"".Kohana::lang('common.title-xml-link')."\" href=\"".url::base(TRUE)."xml".$qsa."\"><img class=\"icon\" src=\"".url::base()."media/images/xml.png\"></a>\n";
 }

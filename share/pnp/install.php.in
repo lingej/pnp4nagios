@@ -1,3 +1,5 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');?>
+<?php require('application/lib/jsonwrapper.php');?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -41,6 +43,10 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <tr>
 <th>Prefix</th>
 <td class="pass">@prefix@</td>
+</tr>
+<tr>
+<th>Configure Arguments</th>
+<td class="pass">./configure @ac_configure_args@</td>
 </tr>
 <tr>
 <th>RRD Storage</th>
@@ -105,6 +111,13 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i7">magic_quotes_gpc</a> is deprecated</td>
 <?php endif ?></tr>
 <?php if(function_exists('apache_get_modules')) : ?>
+<th>PHP socket extension</th>
+<?php if (function_exists('socket_create')): ?>
+<td class="pass">Pass</td>
+<?php else: $failed++ ?>
+<td class="fail"><a href="http://docs.pnp4nagios.org/faq/i11">PHP socket extension</a> not available</td>
+<?php endif ?>
+</tr>
 <th>Apache Rewrite Module</th>
 <?php if(in_array('mod_rewrite', apache_get_modules())) : ?>
 <td class="pass">Pass</td>
@@ -126,10 +139,10 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <table cellspacing="0">
 <tr>
 <th>PHP Version</th>
-<?php if (version_compare(PHP_VERSION, '5.2', '>=')): ?>
+<?php if (version_compare(PHP_VERSION, '5.1', '>=')): ?>
 <td class="pass"><?php echo PHP_VERSION ?></td>
 <?php else: $failed++ ?>
-<td class="fail">Kohana requires PHP 5.2 or newer, this version is <?php echo PHP_VERSION ?>.</td>
+<td class="fail">Kohana requires PHP 5.1 or newer, this version is <?php echo PHP_VERSION ?>.</td>
 <?php endif ?>
 </tr>
 <tr>
@@ -154,14 +167,6 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <td class="pass">Pass</td>
 <?php else: $failed++ ?>
 <td class="fail">PHP <a href="http://docs.pnp4nagios.org/faq/i3">reflection</a> is either not loaded or not compiled in.</td>
-<?php endif ?>
-</tr>
-<tr>
-<th>Filters Enabled</th>
-<?php if (function_exists('filter_list')): ?>
-<td class="pass">Pass</td>
-<?php else: $failed++ ?>
-<td class="fail">The <a href="http://docs.pnp4nagios.org/faq/i4">filter</a> extension is either not loaded or not compiled in.</td>
 <?php endif ?>
 </tr>
 <tr>
@@ -194,9 +199,9 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 
 <div id="results">
 <?php if ($failed > 0): ?>
-<p class="fail">@PKG_NAME@ may not work correctly with your environment. Remove or rename the <code>install<?php echo EXT ?></code> file on your own risk.</p>
+<p class="fail">@PKG_NAME@ may not work correctly with your environment. Remove or rename the <code><?php echo __FILE__ ?></code> file on your own risk.</p>
 <?php else: ?>
-<p class="pass">Your environment passed all requirements. Remove or rename the <code>install<?php echo EXT ?></code> file now.</p>
+<p class="pass">Your environment passed all requirements. Remove or rename the <code><?php echo __FILE__ ?></code> file now.</p>
 <?php endif ?>
 </div>
 

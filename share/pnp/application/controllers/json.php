@@ -11,8 +11,6 @@ class Json_Controller extends System_Controller  {
     public function __construct()
     {
         parent::__construct();
-        $this->host      = $this->input->get('host');
-        $this->service   = $this->input->get('srv');
     }
 
     public function index(){
@@ -27,7 +25,7 @@ class Json_Controller extends System_Controller  {
             $this->host    = pnp::clean($this->host);
             $services      = $this->data->getServices($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
-            if($this->auth->is_authorized($this->data->MACRO['DISP_HOSTNAME'], $this->data->MACRO['DISP_SERVICEDESC']) === FALSE){
+            if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 print json_encode("not authorized");
                 exit;
             }

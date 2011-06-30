@@ -87,8 +87,12 @@ The links to the correct URLs are created automagically.<br/>
 
 </p>
 
+<p>
+<strong>Tips</strong>: if you want to open the PNP window in your <em>main</em> frame (on the right of the menu) instead of a new page, just set <code>action_url_target=main</code> in your nagios cgi.cfg
+</p>
+
 </div>
-<!-- SECTION "Nagios 3.x" [888-3034] -->
+<!-- SECTION "Nagios 3.x" [888-3214] -->
 <h2><a name="popups" id="popups">Popups</a></h2>
 <div class="level2">
 
@@ -118,13 +122,13 @@ Definition:
 <pre class="code">
 define host {
    name       host-pnp
-   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=_HOST_
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=_HOST_
    register   0
 }
 
 define service {
    name       srv-pnp
-   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=$SERVICEDESC$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=$SERVICEDESC$
    register   0
 }
 </pre>
@@ -142,4 +146,4 @@ After a restart of Nagios (after modifying the definitions) the result might loo
 </p>
 
 </div>
-<!-- SECTION "Popups" [3035-] -->
+<!-- SECTION "Popups" [3215-] -->

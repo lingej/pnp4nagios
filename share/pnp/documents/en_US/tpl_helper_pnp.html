@@ -1,0 +1,90 @@
+
+
+
+<h1><a name="pnp_helper_functions" id="pnp_helper_functions">PNP Helper Functions</a></h1>
+<div class="level1">
+
+<p>
+
+PNP Helper functions are meant to simplify the creation of templates. In contrast to the rrd helper functions they don&#039;t call existing RRDtool functions.
+</p>
+
+</div>
+<!-- SECTION "PNP Helper Functions" [1-191] -->
+<h2><a name="pnpadjust_unit" id="pnpadjust_unit">pnp::adjust_unit</a></h2>
+<div class="level2">
+
+<p>
+
+(string,number,string,number) <strong>pnp::adjust_unit</strong> ( $value, $base=1000, $format=&#039;%.3lf&#039; )
+</p>
+
+<p>
+The purpose of this function is to “normalize” large numbers. Modern hard disks have reached sizes of several <acronym title="Gigabyte">GB</acronym> or TB and looking at numbers like 1521073648234 you begin to count the digits so it would be more convienient to translate the value. The same applies to network traffic.
+</p>
+
+<p>
+The function takes up to three parameters and returns an array with four elements in any case.
+</p>
+<ul>
+<li class="level1"><div class="li"> The first parameter to be passed is the number (including an “UOM”, if applicable)</div>
+</li>
+<li class="level1"><div class="li"> The second parameter is optional and defaults to “1000” (e.g. traffic), but might be “1024” (e.g. disk size) as well</div>
+</li>
+<li class="level1"><div class="li"> The third parameter is optional, defaults to &#039;%.3lf&#039;, and specifies the format of the value to be returned</div>
+</li>
+</ul>
+<pre class="code php"><span class="re0">$size</span> <span class="sy0">=</span> pnp<span class="sy0">::</span><span class="me2">adjust_unit</span><span class="br0">&#40;</span><span class="nu0">1521073648234</span><span class="sy0">,</span><span class="nu0">1024</span><span class="sy0">,</span><span class="st_h">'%7.3lf'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Please note that “$size” is an array consisting of four fields:
+</p>
+<pre class="code"> $size[0] := &quot;  1.383 T&quot;</pre>
+
+<p>
+contains the formatted value including the unit
+</p>
+<pre class="code"> $size[1] := &quot;1.383&quot;</pre>
+
+<p>
+contains the formatted number
+</p>
+<pre class="code"> $size[2] := &quot;T&quot;</pre>
+
+<p>
+contains the unit
+</p>
+<pre class="code"> $size[3] := &quot;1099511627776&quot;</pre>
+
+<p>
+contains the divisor
+</p>
+
+<p>
+Assuming check_disk returns “<acronym title="Megabyte">MB</acronym>” as UOM you can append that as well
+
+</p>
+<pre class="code php"><span class="re0">$disk</span> <span class="sy0">=</span> pnp<span class="sy0">::</span><span class="me2">adjust_unit</span><span class="br0">&#40;</span><span class="st0">&quot;1524MB&quot;</span><span class="sy0">,</span><span class="nu0">1024</span><span class="sy0">,</span><span class="st_h">'%7.3lf'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+
+will result in
+$disk[0] := “1.448 <acronym title="Gigabyte">GB</acronym>”
+</p>
+
+<p>
+<a href="/_detail/templates/check_disk_1.png?id=pnp-0.6%3Atpl_helper_pnp" class="media" title="templates:check_disk_1.png"><img src="/_media/templates/check_disk_1.png" class="media" alt="" /></a><br/>
+
+“old” check_disk template with %s directive<br/>
+
+</p>
+
+<p>
+<a href="/_detail/templates/check_disk_2.png?id=pnp-0.6%3Atpl_helper_pnp" class="media" title="templates:check_disk_2.png"><img src="/_media/templates/check_disk_2.png" class="media" alt="" /></a><br/>
+
+“new” check_disk template with pnp::adjust_unit
+
+</p>
+
+</div>
+<!-- SECTION "pnp::adjust_unit" [192-] -->

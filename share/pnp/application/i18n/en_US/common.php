@@ -38,4 +38,5 @@ $lang = array
 	'docs-home' => 'Home',
 	'docs-box-header' => 'Menu',
 	'docs-header' => 'Documentation Version %s',
+	'back' => 'back',
 );

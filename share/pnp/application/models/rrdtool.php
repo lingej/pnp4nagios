@@ -2,7 +2,7 @@
 /**
  * Retrieves and manipulates current status of hosts (and services?)
  */
-class Rrdtool_Model extends Model
+class Rrdtool_Model extends System_Model
 {
 
     private $RRD_CMD   = FALSE;
@@ -105,6 +105,9 @@ class Rrdtool_Model extends Model
         }
         if ($height > 0){
             $command .= " --height=$height";
+        }
+        if ($height < 32 ){
+            $command .= " --only-graph ";
         }
 
         $command .= $RRD_CMD;

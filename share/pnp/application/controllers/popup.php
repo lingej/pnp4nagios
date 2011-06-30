@@ -13,22 +13,17 @@ class Popup_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template          = $this->add_view('popup');
-        $this->host              = pnp::clean($this->input->get('host'));
-        $this->service           = pnp::clean($this->input->get('srv'));
     }
 
     public function index()
     {
-
-        $start   = $this->input->get('start');
-        $end     = $this->input->get('end');
-        $source  = $this->input->get('source');
-        $view    = "";
+        $this->source  = $this->input->get('source');
+        $this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
-            $view = pnp::clean($_GET['view']);
+            $this->view = pnp::clean($_GET['view']);
         }else{
-            $view = $this->config->conf['overview-range'];
+            $this->view = $this->config->conf['overview-range'];
         }
 
         if(isset($this->config->conf['popup-width']) &&$this->config->conf['popup-width'] != ""){ 
@@ -37,16 +32,18 @@ class Popup_Controller extends System_Controller  {
             $this->imgwidth = FALSE;
         }
 
-        $this->data->getTimeRange($start,$end,$view);
+        $this->data->getTimeRange($this->start,$this->end,$this->view);
 
         if(isset($this->host) && isset($this->service)){
-            $this->data->buildDataStruct($this->host,$this->service,$view);
+            $this->service = pnp::clean($this->service);
+            $this->host    = pnp::clean($this->host);
+            $this->data->buildDataStruct($this->host,$this->service,$this->view);
             $this->template->host      = $this->host;
             $this->template->srv       = $this->service;
-            $this->template->view      = $view;
-            $this->template->source    = $source;
-            $this->template->end       = $end;
-            $this->template->start     = $start;
+            $this->template->view      = $this->view;
+            $this->template->source    = $this->source;
+            $this->template->end       = $this->end;
+            $this->template->start     = $this->start;
             $this->template->imgwidth  = $this->imgwidth;
         }else{
             url::redirect("/graph");

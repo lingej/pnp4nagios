@@ -87,14 +87,15 @@ $conf['multisite_site'] = "";
 
 #
 # check authorization against mk_livestatus API 
-# Available since 0.6.7
+# Available since 0.6.10
 #
 $conf['auth_enabled'] = FALSE;
 
 #
 # Livestatus socket path
-#
-$conf['livestatus_socket'] = "/usr/local/nagios/var/rw/live";
+# 
+#$conf['livestatus_socket'] = "tcp:localhost:6557";
+$conf['livestatus_socket'] = "unix:/usr/local/nagios/var/rw/live";
 
 #
 # Which user is allowed to see all services or all hosts?

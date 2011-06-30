@@ -76,7 +76,10 @@ static void start_daemon(const char *log_name, int facility) {
 		exit(EXIT_SUCCESS);
 
 	/* for core dump handling and better unmounting behavior */
-	chdir("/");
+	/* Its return should not be ignored.
+	 * npcd.c:79: warning: ignoring return value of ‘chdir’ */
+	if (chdir("/") != 0)
+		exit(EXIT_FAILURE);
 
 	/* change umask to defined value - be independet from parent umask */
 	umask(002);
@@ -111,6 +114,8 @@ int main(int argc, char **argv) {
 	FILE *fppid = NULL;
 
 	struct dirent **namelist;
+
+	load = 0.0;
 
 	if (process_arguments(argc, argv) == EXIT_FAILURE)
 		exit(EXIT_FAILURE);
@@ -202,9 +207,8 @@ int main(int argc, char **argv) {
 	/* beginn main loop */
 	while (1) {
 
-		/* read directory with perfdata files */
-
-		chdir(directory);
+		if (chdir(directory) != 0)
+			exit(EXIT_FAILURE);
 
 		/* is_file() filter may cause trouble on some systems
 		 * like Solaris or HP-UX that don't have a d-type
@@ -488,6 +492,9 @@ void * processfile(void *filename) {
 	char buffer[MAX_LOGMESSAGE_SIZE];
 	int result;
 	FILE *proc;
+
+	/* npcd.c:493: warning: ‘result’ may be used uninitialized in this function */
+	result = 0;
 
 	snprintf(command_line, sizeof(command_line), "%s %s %s %s/%s", command,
 			identmyself ? "-n" : "\b", command_args, directory, file);

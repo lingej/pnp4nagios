@@ -19,7 +19,11 @@ foreach ($this->DS as $KEY=>$VAL) {
 	$maximum  = "";
 	$minimum  = "";
 	$critical = "";
+	$crit_min = "";
+	$crit_max = "";
 	$warning  = "";
+	$warn_max = "";
+	$warn_min = "";
 	$vlabel   = "";
 	$lower    = "";
 	$upper    = "";
@@ -27,8 +31,20 @@ foreach ($this->DS as $KEY=>$VAL) {
 	if ($VAL['WARN'] != "") {
 		$warning = $VAL['WARN'];
 	}
+	if ($VAL['WARN_MAX'] != "") {
+		$warn_max = $VAL['WARN_MAX'];
+	}
+	if ($VAL['WARN_MIN'] != "") {
+		$warn_min = $VAL['WARN_MIN'];
+	}
 	if ($VAL['CRIT'] != "") {
 		$critical = $VAL['CRIT'];
+	}
+	if ($VAL['CRIT_MAX'] != "") {
+		$crit_max = $VAL['CRIT_MAX'];
+	}
+	if ($VAL['CRIT_MIN'] != "") {
+		$crit_min = $VAL['CRIT_MIN'];
 	}
 	if ($VAL['MIN'] != "") {
 		$lower = " --lower=" . $VAL['MIN'];
@@ -55,8 +71,20 @@ foreach ($this->DS as $KEY=>$VAL) {
 	if ($warning != "") {
 		$def[$KEY] .= rrd::hrule($warning, $_WARNRULE, "Warning  $warning \\n");
 	}
+	if ($warn_min != "") {
+		$def[$KEY] .= rrd::hrule($warn_min, $_WARNRULE, "Warning  (min)  $warn_min \\n");
+	}
+	if ($warn_max != "") {
+		$def[$KEY] .= rrd::hrule($warn_max, $_WARNRULE, "Warning  (max)  $warn_max \\n");
+	}
 	if ($critical != "") {
 		$def[$KEY] .= rrd::hrule($critical, $_CRITRULE, "Critical $critical \\n");
+	}
+	if ($crit_min != "") {
+		$def[$KEY] .= rrd::hrule($crit_min, $_CRITRULE, "Critical (min)  $crit_min \\n");
+	}
+	if ($crit_max != "") {
+		$def[$KEY] .= rrd::hrule($crit_max, $_CRITRULE, "Critical (max)  $crit_max \\n");
 	}
 	$def[$KEY] .= rrd::comment("Default Template\\r");
 	$def[$KEY] .= rrd::comment("Command " . $VAL['TEMPLATE'] . "\\r");
