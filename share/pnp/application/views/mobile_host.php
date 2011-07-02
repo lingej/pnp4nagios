@@ -18,7 +18,7 @@ foreach($services as $key=>$service){
 	if($key == 0)
 		printf("<li data-role=\"list-divider\">%s</li>\n", $service['hostname'] );
 		
- 	 printf("<li><a href=\"".url::base(TRUE)."mobile/graph/%s/%s\" data-transition=\"slide\"><img src=\"".url::base(TRUE)."image?host=%s&srv=%s&h=80&w=80&view=1\">%s</a></li>",
+ 	 printf("<li><a href=\"".url::base(TRUE)."mobile/graph/%s/%s\" data-transition=\"pop\"><img src=\"".url::base(TRUE)."image?host=%s&srv=%s&h=80&w=80&view=1\">%s</a></li>",
 		urlencode($service['hostname']),
 	 	urlencode($service['name']),
 	 	urlencode($service['hostname']),

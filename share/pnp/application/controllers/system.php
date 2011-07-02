@@ -205,5 +205,15 @@ class System_Controller extends Template_Controller {
                         return 0;
                 }
         }
-    }
+     }
+     public function isMobileDevice (){
+	     if( $this->session->get('classic-ui',1) == 1){
+             return FALSE;
+	     }
+         if ( preg_match('/'.$this->config->conf['mobile_devices'].'/', $_SERVER['HTTP_USER_AGENT'] ) ){
+             return TRUE;
+         }else{
+             return FALSE;
+         }
+     }
 }

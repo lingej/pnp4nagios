@@ -3,7 +3,7 @@
 <?php
 foreach($pages as $page){
 	$this->data->getPageDetails($page);
-  	printf("<li><a href=\"".url::base(TRUE)."mobile/pages/%s\" data-transition=\"slide\">%s</a></li>", $page, $this->data->PAGE_DEF['page_name']);
+  	printf("<li><a href=\"".url::base(TRUE)."mobile/pages/%s\" data-transition=\"pop\">%s</a></li>", $page, $this->data->PAGE_DEF['page_name']);
 }
 ?>
 </ul>

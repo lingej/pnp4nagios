@@ -1,4 +1,5 @@
 **pnp-0.6.14 ??/??/2011**
+  * Feature: Webinterface for Mobile devices based on jQuery Mobile ( http://jquerymobile.com/ )
   * Feature: Zoom based on jQuery plugin imgAreaSelect ( http://odyniec.net/projects/imgareaselect/ )
   * Bugfix: Fixed popups to work under nginx ( Joram Agten )
 

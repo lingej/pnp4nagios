@@ -130,3 +130,4 @@ $config['zgraph_height'] = "100";
 $config['pdf_width']     = "675";
 $config['pdf_height']    = "100";
 $config['right_zoom_offset'] = "30";
+$conf['mobile_devices'] = "iPhone";

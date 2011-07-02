@@ -47,6 +47,10 @@ class Graph_Controller extends System_Controller  {
             $this->host    = pnp::clean($this->host);
             $this->url     = "?host=".$this->host."&srv=".$this->service;
             $services      = $this->data->getServices($this->host);
+            #Landingpage for mobile devices
+            if($this->isMobileDevice()){
+                url::redirect( "mobile/host/".urlencode($this->host)."/".urlencode($this->service) );
+            }
             #print Kohana::debug($services);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
             $this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']); 
@@ -70,6 +74,10 @@ class Graph_Controller extends System_Controller  {
         }elseif($this->host != ""){
             $this->is_authorized = $this->auth->is_authorized($this->host); 
             $this->host    = pnp::clean($this->host);
+            #Landingpage for mobile devices
+            if($this->isMobileDevice()){
+                url::redirect( "mobile/host/".urlencode($this->host) );
+            }
             if($this->view == ""){
                 $this->view = $this->config->conf['overview-range'];
             }
@@ -93,16 +101,21 @@ class Graph_Controller extends System_Controller  {
             $this->title = Kohana::lang('common.service-overview', $this->host);
             foreach($services as $service){
                 if($service['state'] == 'active')
-                       $this->data->buildDataStruct($this->host,$service['name'],$this->view);
+                    $this->data->buildDataStruct($this->host,$service['name'],$this->view);
             }
         }else{
-			if($this->isAuthorizedFor('host_overview' ) ){
+            #Landingpage for mobile devices
+            if($this->isMobileDevice()){
+                url::redirect("mobile");
+				return;
+            }
+            if($this->isAuthorizedFor('host_overview' ) ){
                 $this->host = $this->data->getFirstHost();
                 if(isset($this->host)){
                     url::redirect("graph?host=".$this->host);
-				}else{
+                }else{
                     throw new Kohana_Exception('error.get-first-host');
-				}
+                }
             }else{
                 throw new Kohana_Exception('error.not_authorized_for_host_overview');
             }            

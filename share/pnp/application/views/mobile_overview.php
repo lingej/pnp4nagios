@@ -6,7 +6,7 @@ foreach($hosts as $host){
 	if( substr($host['name'], 0, 1) != $l ){
 		printf("<li data-role=\"list-divider\">%s</li>\n", strtoupper(substr($host['name'], 0, 1)) );
 	}
-    printf("<li><a href=\"".url::base(TRUE)."mobile/host/%s\" data-transition=\"slide\">%s</a></li>", $host['name'], $host['name']);
+    printf("<li><a href=\"".url::base(TRUE)."mobile/host/%s\" data-transition=\"pop\">%s</a></li>", $host['name'], $host['name']);
 	$l = substr($host['name'], 0, 1);
 }
 ?>

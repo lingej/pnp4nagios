@@ -234,4 +234,9 @@ $conf['template_dirs'][] = '@datarootdir@/templates.dist';
 #
 $conf['special_template_dir'] = '@datarootdir@/templates.special';
 
+#
+# Regex to detect mobile devices
+# This regex is evaluated against the USER_AGENT String
+#
+$conf['mobile_devices'] = 'iPhone|iPod|iPad|android';
 ?>

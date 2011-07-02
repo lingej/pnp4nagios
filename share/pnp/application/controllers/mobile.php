@@ -11,6 +11,7 @@ class Mobile_Controller extends System_Controller  {
     public function __construct()
     {
         parent::__construct();
+		$this->session->set('classic-ui',0);
         $this->template  = $this->add_view('mobile');
     }
 
@@ -57,6 +58,7 @@ class Mobile_Controller extends System_Controller  {
     }
     public function pages($page=NULL)
     {
+        $this->is_authorized=TRUE;
         if($this->view == ""){
             $this->view = $this->config->conf['overview-range'];
         }
@@ -85,6 +87,11 @@ class Mobile_Controller extends System_Controller  {
 		$this->data->buildDataStruct('__special',$this->tpl,$this->view);
 		$this->template->special = $this->add_view('mobile_graph_special');
     }
-	
-
+    public function goto($goto=FALSE)
+    {
+        if($goto == 'classic'){
+	        $this->session->set('classic-ui',1);
+            url::redirect("graph");    
+	    }
+    }
 }
