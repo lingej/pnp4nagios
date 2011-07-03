@@ -11,7 +11,7 @@ foreach($this->data->STRUCT as $d){
 		printf("<strong>%s</strong><br>\n", $d['TIMERANGE']['title']);
 	}
 	printf("%s<br>\n", $d['ds_name']);
-	printf("<img width=100%% src=\"".url::base(TRUE)."image?tpl=%s&view=%s&source=%s\"><br>\n", 
+	printf("<img style=\"max-width: 100%%\" src=\"".url::base(TRUE)."image?tpl=%s&view=%s&source=%s\"><br>\n", 
 		$this->tpl,
 		$d['VIEW'],
 		$d['SOURCE']
