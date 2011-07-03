@@ -12,6 +12,6 @@ if($this->data->getFirstSpecialTemplate() ){
 }
 ?>
 <li><a href="<?php echo url::base(TRUE)?>mobile/about" data-transition="pop">About</a></li>
-<li><a href="<?php echo url::base(TRUE)?>mobile/goto/classic" data-ajax="false" data-transition="pop">Classic UI</a></li>
+<li><a href="<?php echo url::base(TRUE)?>mobile/go/classic" data-ajax="false" data-transition="pop">Classic UI</a></li>
 </ul>
 </div><!-- /content -->
