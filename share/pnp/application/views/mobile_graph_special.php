@@ -1,4 +1,4 @@
-<div data-role="collapsible-set">
+<div data-role="content" data-inset="true">
 <?php
 
 if($this->data->MACRO['TITLE'])
