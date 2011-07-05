@@ -228,7 +228,7 @@ class rrd_Core {
         if($vname === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");   
         }
-        if($rrdfile === FALSE){
+        if($rpn === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Parameter 'rpn' is missing");   
         }
         $line = sprintf("VDEF:%s=%s ",$vname,$rpn);
