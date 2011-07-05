@@ -11,6 +11,7 @@ if($this->data->getFirstSpecialTemplate() ){
     echo "<li><a href=\"".url::base(TRUE)."mobile/special\" data-transition=\"pop\">Special Templates</a></li>"; 
 }
 ?>
+<li><a href="<?php echo url::base(TRUE)?>mobile/graph/.pnp-internal/runtime" data-transition="pop">PNP internal statistics</a></li>
 <li><a href="<?php echo url::base(TRUE)?>mobile/about" data-transition="pop">About</a></li>
 <li><a href="<?php echo url::base(TRUE)?>mobile/go/classic" data-ajax="false" data-transition="pop">Classic UI</a></li>
 </ul>
