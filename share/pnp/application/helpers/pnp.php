@@ -108,7 +108,7 @@ class pnp_Core {
     *     divisor  := number used to "normalize" value
     */
     public static function adjust_unit($value,$base=1000,$format='%.3lf'){
-        preg_match('/^([0-9\.,]+)\s*(\S?)(\S?)/',$value,$matches);
+        preg_match('/^(-?[0-9\.,]+)\s*(\S?)(\S?)/',$value,$matches);
 
         $mag = 0;
         while ($value >= $base){
