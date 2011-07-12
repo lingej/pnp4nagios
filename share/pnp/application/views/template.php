@@ -95,10 +95,6 @@ jQuery(document).ready(function(){
 
 
 });
-
-<?php if (!empty($zoom_header)) {
-     echo $zoom_header;
-} ?>
 </script>
 </head>
 <body>
