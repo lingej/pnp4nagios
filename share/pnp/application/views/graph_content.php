@@ -68,22 +68,28 @@ foreach($this->data->STRUCT as $key=>$value){
 	echo "</div>\n";
    	echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
 	echo "<div style=\"position:relative;\">\n";
-   	echo "<a href=\"".url::base(TRUE)."graph?host=" 
-		.$value['MACRO']['HOSTNAME'] . "&srv=" 
-		.$value['MACRO']['SERVICEDESC'] ."\" title=\""
+        $path = pnp::addToUri( array(
+                                'host'   => urlencode($value['MACRO']['HOSTNAME']),
+                                'srv'    => urlencode($value['MACRO']['SERVICEDESC']),
+                               ), FALSE
+                             );
+   	echo "<a href=\"".url::base(TRUE)."graph".$path 
+		."\" title=\""
 		.Kohana::lang('common.host',$value['MACRO']['DISP_HOSTNAME']) . " "
 		.Kohana::lang('common.service',$value['MACRO']['DISP_SERVICEDESC']) . " " 
 		.Kohana::lang('common.datasource',$value['ds_name']) . " " 
 		."\">\n";
 	echo "<div start=".$value['TIMERANGE']['start']." end=".$value['TIMERANGE']['end']." style=\"width:".$value['GRAPH_WIDTH']."px; height:".$value['GRAPH_HEIGHT']."px; position:absolute; top:33px\" class=\"graph\" id=\"".$this->url."\" ></div>";
-	echo "<img class=graph src=\"".url::base(TRUE)."image?host=" . 
-		urlencode($value['MACRO']['HOSTNAME']) . 
-		"&srv=" . urlencode($value['MACRO']['SERVICEDESC']) . 
-		"&view=" . $value['VIEW'] . 
-		"&source=" . $value['SOURCE'] . 
-		"&start=" . $value['TIMERANGE']['start'] .
-		"&end=" . $value['TIMERANGE']['end'] . 
-		"\"></a>\n";
+        $path = pnp::addToUri( array(
+                                'host'   => urlencode($value['MACRO']['HOSTNAME']),
+                                'srv'    => urlencode($value['MACRO']['SERVICEDESC']),
+                                'view'   => $value['VIEW'],
+                                'source' => $value['SOURCE'],
+                                'start'  => $value['TIMERANGE']['start'],
+                                'end'    => $value['TIMERANGE']['end']
+                               ), FALSE
+                             );
+        echo "<img class=\"graph\" src=\"".url::base(TRUE)."image" . $path . "\"></a>\n";
    	echo "</div>\n";
    	echo "</div><p>\n";
 }
