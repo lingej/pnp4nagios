@@ -59,8 +59,12 @@ class Page_Controller extends System_Controller  {
         }
         if(is_array($basket) && sizeof($basket) > 0){
             foreach($basket as $item){
-                list($host,$service) = explode("::",$item);
-                $this->data->buildDataStruct($host, $service, $this->view);
+                # explode host::service::source
+                $slices = explode("::",$item);
+		if(sizeof($slices) == 2)
+                    $this->data->buildDataStruct($slices[0], $slices[1], $this->view);
+		if(sizeof($slices) == 3)
+                    $this->data->buildDataStruct($slices[0], $slices[1], $this->view, $slices[2]);
             }
             $this->template->page->basket_box      = $this->add_view('basket_box');
             $this->template->page->header->title = Kohana::lang('common.page-basket');

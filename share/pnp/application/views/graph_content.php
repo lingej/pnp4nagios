@@ -53,8 +53,12 @@ foreach($this->data->STRUCT as $key=>$value){
 		$value['TIMERANGE']['start'],
 		$value['TIMERANGE']['end'])."</td>\n";
 	echo "<td align=right>";
-	echo pnp::add_to_basket_icon($value['MACRO']['HOSTNAME'],
-		$value['MACRO']['SERVICEDESC'])."</td>\n";
+	echo pnp::add_to_basket_icon(
+                $value['MACRO']['HOSTNAME'],
+		$value['MACRO']['SERVICEDESC'],
+                $value['SOURCE']
+             );
+        echo "</td>\n";
 	echo "<td align=right>";
 	echo pnp::zoom_icon($value['MACRO']['HOSTNAME'],
 		$value['MACRO']['SERVICEDESC'],

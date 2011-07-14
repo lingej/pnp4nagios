@@ -53,9 +53,13 @@ class pnp_Core {
     /*
     *
     */
-    public static function add_to_basket_icon($host,$service){
-        print "<span id=\"basket_action_add\"><a title=\"Add This Item\" id=\"".$host."::".$service."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span><br>\n";
-}
+    public static function add_to_basket_icon($host,$service,$source=FALSE){
+        if($source === FALSE){
+       	    print "<span id=\"basket_action_add\"><a title=\"Add this Service\" id=\"".$host."::".$service."\"><img width=12px height=12px src=\"".url::base()."media/images/add.png\"></a></span>\n";
+        }else{
+       	    print "<span id=\"basket_action_add\"><a title=\"Add this item\" id=\"".$host."::".$service."::".$source."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span>\n";
+        }
+    }
 
     /*
     *
@@ -87,7 +91,7 @@ class pnp_Core {
             $get[$key] = $value;
         }
         foreach($get as $key=>$value){
-	    if($value == ""){
+	    if($value === ''){
 		continue;
 	    }
 	    $uri .= $key."=".urlencode($value)."&";
