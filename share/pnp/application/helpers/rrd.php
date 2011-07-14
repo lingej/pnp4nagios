@@ -65,7 +65,7 @@ class rrd_Core {
      * Gradient Function
      * Concept by Stefan Triep
      */
-    public static function gradient($vname=FALSE, $start_color='#0000a0', $end_color='#f0f0f0', $label=FALSE, $steps=20){
+    public static function gradient($vname=FALSE, $start_color='#0000a0', $end_color='#f0f0f0', $label=FALSE, $steps=20, $lower=FALSE){
         if($vname === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");   
         }
@@ -90,9 +90,25 @@ class rrd_Core {
         $diff_b=$b2-$b1;
         $spline =  "";
         $spline_vname = "var".substr(sha1(rand()),1,4);
-        
+        if(preg_match('/^([0-9]{1,3})%$/', $lower, $matches)){
+            if($matches[1] > 100)
+                throw new Kohana_exception("rrd::". __FUNCTION__ . "() Lower gradient start > 100% is not allowed: '".$lower."'");
+            
+            $lower   = $matches[1];
+            $spline .= sprintf("CDEF:%sminimum=%s,100,/,%d,* ", $vname, $vname, $lower);
+        }elseif(preg_match('/^([0-9]+)$/', $lower, $matches)){
+            $lower   = $matches[1];
+            $spline .= sprintf("CDEF:%sminimum=%s,%d,- ", $vname, $vname, $lower);
+        }else{
+            $lower   = 0;
+            $spline .= sprintf("CDEF:%sminimum=%s,%s,- ", $vname, $vname, $vname);
+        }
+        # debug
+	# $spline .= sprintf("GPRINT:%sminimum:MAX:\"minumum %%lf\\n\" ",$vname);
         for ($i=$steps; $i>0; $i--){
-            $spline .=  sprintf("CDEF:%s%d=%s,100,/,%d,* ",$spline_vname,$i,$vname,round((100 / $steps) * $i) );
+            $spline .=  sprintf("CDEF:%s%d=%s,%sminimum,-,%d,/,%d,*,%sminimum,+ ",$spline_vname,$i,$vname,$vname,$steps,$i,$vname );
+            # debug
+	    # $spline .= sprintf("GPRINT:%s%d:MAX:\"%22d %%lf\\n\" ",$spline_vname,$i,$i);
         }    
         for ($i=$steps; $i>0; $i--){
             $factor=$i / $steps;
