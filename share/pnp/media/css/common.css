@@ -169,3 +169,11 @@ pre.code, pre.file {
     overflow: auto;
 }
 
+#basket_items { 
+    list-style-type: none; margin: 0; padding: 0; 
+}
+
+#basket_items li { 
+    margin: 0px 2px 2px 2px; height: 16px; 
+}
+

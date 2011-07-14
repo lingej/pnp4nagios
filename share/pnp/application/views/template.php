@@ -72,17 +72,29 @@ jQuery(document).ready(function(){
             }
         });
     });
-    jQuery("#basket_action_remove a").live("click", function(){
+    jQuery(".basket_action_remove a").live("click", function(){
         var item = (this.id)
         jQuery.ajax({
             type: "POST",
-            url: path + "ajax/basket/remove/"+item,
+            url: path + "ajax/basket/remove/",
             data: { item: item },
             success: function(msg){
                 jQuery("#basket_items").html(msg);
             }
         });
     });
+    jQuery("#basket_items" ).sortable({
+        update: function(event, ui) {
+	    var items = jQuery(this).sortable('toArray').toString();
+            jQuery.ajax({
+                type: "POST",
+                url: path + "ajax/basket/sort/",
+                data: { items: items }
+            });
+            window.location.reload()
+        }
+    });
+    jQuery("#basket_items" ).disableSelection();
     jQuery("#remove_timerange_session").click(function(){
         jQuery.ajax({
             type: "GET",

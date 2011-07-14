@@ -51,7 +51,8 @@ class Ajax_Controller extends System_Controller  {
             $basket = $this->session->get("basket");
             if(is_array($basket) && sizeof($basket) > 0){
                 foreach($basket as $item){
-                    echo "<span id=\"basket_action_remove\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</span><br>\n";
+                    #echo "<span id=\"basket_action_remove\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</span><br>\n";
+                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
                 }
             }
         }elseif($action == "add"){
@@ -66,7 +67,15 @@ class Ajax_Controller extends System_Controller  {
             }
             $this->session->set("basket", $basket);
             foreach($basket as $item){
-                echo "<span id=\"basket_action_remove\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</span><br>\n";
+                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
+            }
+        }elseif($action == "sort"){
+            $items = $_POST['items'];
+            $basket = explode(',', $items);
+            array_pop($basket);
+            $this->session->set("basket", $basket);
+            foreach($basket as $item){
+                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
             }
         }elseif($action == "remove"){
             $basket = $this->session->get("basket");
@@ -81,14 +90,14 @@ class Ajax_Controller extends System_Controller  {
             $basket = $new_basket;
             $this->session->set("basket", $basket);
             foreach($basket as $item){
-                echo "<span id=\"basket_action_remove\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</span><br>\n";
+                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
             }
         }elseif($action == "remove-all"){
             $this->session->delete("basket");
         }else{
             echo "Action $action not known";
         }
-           $basket = $this->session->get("basket");
+        $basket = $this->session->get("basket");
         if(is_array($basket) && sizeof($basket) == 0){
             echo "basket is empty";
         }else{
