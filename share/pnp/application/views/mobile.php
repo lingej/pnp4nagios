@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <?php echo html::stylesheet('media/css/jquery.mobile.min.css') ?>
+<?php echo html::stylesheet('media/css/mobile.css') ?>
 <?php echo html::script('media/js/jquery-min.js')?>
 <?php echo html::script('media/js/jquery.mobile.min.js')?>
 </head> 

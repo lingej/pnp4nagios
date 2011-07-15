@@ -5,7 +5,7 @@
 <div data-role="fieldcontain">
 <form action="search" method="post"> 
     <input type="search" name="term" id="search" value="" />
-	<button type="submit">Submit</button>
+	<button type="submit"><?php echo Kohana::lang('common.mobile-submit')?></button>
 </form>
 </div>
 
@@ -19,7 +19,6 @@
 foreach($this->result as $host){
     printf("<li><a href=\"".url::base(TRUE)."mobile/host/%s\" data-transition=\"pop\">%s</a></li>", $host, $host);
 }
-
 ?>
 </ul>
 </div><!-- /content -->

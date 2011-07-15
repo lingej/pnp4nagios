@@ -38,4 +38,12 @@ $lang = array
     'docs-home' => 'На главную',
     'docs-box-header' => 'Меню',
     'docs-header' => 'Версия документации %s',
+    'back' => 'back',
+    'mobile-all-hosts' => 'All Hosts',
+    'mobile-search-hosts' => 'Search Hosts',
+    'mobile-pages' => 'View Pages',
+    'mobile-special-templates' => 'View Special Templates',
+    'mobile-statistics' => 'View internal statistics',
+    'mobile-go-classic' => 'Classic UI',
+    'mobile-submit' => 'Submit',
 );
