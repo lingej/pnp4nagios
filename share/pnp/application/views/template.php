@@ -50,7 +50,7 @@ jQuery(window).load(
 
 });
 jQuery(document).ready(function(){
-    var path = "<?php echo url::base(TRUE)."index.php/"?>";
+    var path = "<?php echo url::base(TRUE)."/"?>";
     jQuery("img").fadeIn(1500);
     jQuery("#basket_action_add a").click(function(){
         var item = (this.id)
@@ -88,10 +88,12 @@ jQuery(document).ready(function(){
 	    var items = jQuery(this).sortable('toArray').toString();
             jQuery.ajax({
                 type: "POST",
-                url: path + "ajax/basket/sort/",
-                data: { items: items }
+                url: path + "ajax/basket/sort",
+                data: { items: items },
+                success: function(msg){
+                    window.location.reload() 
+                }
             });
-            window.location.reload()
         }
     });
     jQuery("#basket_items" ).disableSelection();
