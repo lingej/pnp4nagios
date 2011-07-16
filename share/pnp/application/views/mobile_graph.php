@@ -37,7 +37,6 @@ foreach($this->data->STRUCT as $d){
             $d['SOURCE']
         );    
     }
-    
 }
 ?>
 </div>
