@@ -12,6 +12,9 @@ class Page_Controller extends System_Controller  {
         parent::__construct();
         $this->template                = $this->add_view('template');
         $this->template->page          = $this->add_view('page');
+        $this->template->zoom_header   = $this->add_view('zoom_header');
+        $this->template->zoom_header->graph_width  = ($this->config->conf['graph_width'] + 140);
+        $this->template->zoom_header->graph_height = ($this->config->conf['graph_height'] + 230);
         $this->template->page->graph_content  = $this->add_view('graph_content');
         $this->template->page->graph_content->graph_width = ($this->config->conf['graph_width'] + 85);
         $this->template->page->graph_content->timerange_select = $this->add_view('timerange_select');
