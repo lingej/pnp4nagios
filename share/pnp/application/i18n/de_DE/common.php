@@ -46,4 +46,9 @@ $lang = array
     'mobile-statistics' => 'Interne PNP Statistiken',
     'mobile-go-classic' => 'Classic UI',
     'mobile-submit' => 'absenden',
+    'basket-empty' => 'Basket ist leer',
+    'basket-show' => 'Zeige Basket',
+    'basket-remove' => 'Entferne %s',
+    'basket-add-item' => 'Graphen zum Basket hinzuf&uuml;gen',
+    'basket-add-service' => 'Alle Graphen zum Basket hinzuf&uuml;gen',
 );

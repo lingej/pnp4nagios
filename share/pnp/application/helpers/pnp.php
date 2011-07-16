@@ -55,9 +55,9 @@ class pnp_Core {
     */
     public static function add_to_basket_icon($host,$service,$source=FALSE){
         if($source === FALSE){
-       	    print "<span id=\"basket_action_add\"><a title=\"Add this Service\" id=\"".$host."::".$service."\"><img width=12px height=12px src=\"".url::base()."media/images/add.png\"></a></span>\n";
+       	    print "<span id=\"basket_action_add\"><a title=\"".Kohana::lang('common.basket-add-service')."\" id=\"".$host."::".$service."\"><img width=12px height=12px src=\"".url::base()."media/images/add.png\"></a></span>\n";
         }else{
-       	    print "<span id=\"basket_action_add\"><a title=\"Add this item\" id=\"".$host."::".$service."::".$source."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span>\n";
+       	    print "<span id=\"basket_action_add\"><a title=\"".Kohana::lang('common.basket-add-item')."\" id=\"".$host."::".$service."::".$source."\"><img width=16px height=16px src=\"".url::base()."media/images/add.png\"></a></span>\n";
         }
     }
 

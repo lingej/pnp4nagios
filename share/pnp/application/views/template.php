@@ -63,15 +63,6 @@ jQuery(document).ready(function(){
             }
         });
     });
-    jQuery("#basket_action_remove-all a").click(function(){
-        jQuery.ajax({
-            type: "POST",
-            url: path + "ajax/basket/remove-all/",
-            success: function(msg){
-                jQuery("#basket_items").html(msg);
-            }
-        });
-    });
     jQuery(".basket_action_remove a").live("click", function(){
         var item = (this.id)
         jQuery.ajax({

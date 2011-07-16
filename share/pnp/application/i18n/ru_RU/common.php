@@ -46,4 +46,9 @@ $lang = array
     'mobile-statistics' => 'View internal statistics',
     'mobile-go-classic' => 'Classic UI',
     'mobile-submit' => 'Submit',
+    'basket-empty' => 'Basket is empty',
+    'basket-show' => 'Show basket',
+    'basket-remove' => 'Remove %s',
+    'basket-add-item' => 'Add this item to my basket',
+    'basket-add-service' => 'Add this service to my basket',
 );

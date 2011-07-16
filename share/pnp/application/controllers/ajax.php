@@ -51,8 +51,14 @@ class Ajax_Controller extends System_Controller  {
             $basket = $this->session->get("basket");
             if(is_array($basket) && sizeof($basket) > 0){
                 foreach($basket as $item){
-                    #echo "<span id=\"basket_action_remove\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</span><br>\n";
-                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
+                printf("<li class=\"ui-state-default %s\" id=\"%s\"><a title=\"%s\" id=\"%s\"><img width=12px height=12px src=\"%smedia/images/remove.png\"></a>%s</li>\n",
+                        "basket_action_remove",
+                        $item,
+                        $item,
+                        Kohana::lang('common.basket-remove', $item),
+                        url::base(),
+                        pnp::shorten($item)
+                      );
                 }
             }
         }elseif($action == "add"){
@@ -67,7 +73,14 @@ class Ajax_Controller extends System_Controller  {
             }
             $this->session->set("basket", $basket);
             foreach($basket as $item){
-                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
+                printf("<li class=\"ui-state-default %s\" id=\"%s\"><a title=\"%s\" id=\"%s\"><img width=12px height=12px src=\"%smedia/images/remove.png\"></a>%s</li>\n",
+                        "basket_action_remove",
+                        $item,
+                        $item,
+                        Kohana::lang('common.basket-remove', $item),
+                        url::base(),
+                        pnp::shorten($item)
+                      );
             }
         }elseif($action == "sort"){
             $items = $_POST['items'];
@@ -75,7 +88,14 @@ class Ajax_Controller extends System_Controller  {
             array_pop($basket);
             $this->session->set("basket", $basket);
             foreach($basket as $item){
-                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
+                printf("<li class=\"ui-state-default %s\" id=\"%s\"><a title=\"%s\" id=\"%s\"><img width=12px height=12px src=\"%smedia/images/remove.png\"></a>%s</li>\n",
+                        "basket_action_remove",
+                        $item,
+                        $item,
+                        Kohana::lang('common.basket-remove', $item),
+                        url::base(),
+                        pnp::shorten($item)
+                      );
             }
         }elseif($action == "remove"){
             $basket = $this->session->get("basket");
@@ -90,7 +110,14 @@ class Ajax_Controller extends System_Controller  {
             $basket = $new_basket;
             $this->session->set("basket", $basket);
             foreach($basket as $item){
-                    echo "<li class=\"ui-state-default basket_action_remove\" id=\"".$item."\"><a title=\"Remove ".$item."\" id=\"".$item."\"><img width=12px height=12px src=\"".url::base()."media/images/remove.png\"></a>".pnp::shorten($item)."</li>\n";
+                printf("<li class=\"ui-state-default %s\" id=\"%s\"><a title=\"%s\" id=\"%s\"><img width=12px height=12px src=\"%smedia/images/remove.png\"></a>%s</li>\n",
+                        "basket_action_remove",
+                        $item,
+                        $item,
+                        Kohana::lang('common.basket-remove', $item),
+                        url::base(),
+                        pnp::shorten($item)
+                      );
             }
         }elseif($action == "remove-all"){
             $this->session->delete("basket");
@@ -99,9 +126,9 @@ class Ajax_Controller extends System_Controller  {
         }
         $basket = $this->session->get("basket");
         if(is_array($basket) && sizeof($basket) == 0){
-            echo "basket is empty";
+            echo Kohana::lang('common.basket-empty');
         }else{
-            echo "<a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">show basket</a>";
+            echo "<div><a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">".Kohana::lang('common.basket-show')."</a></div>";
         }
     }
 
