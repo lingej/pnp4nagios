@@ -80,6 +80,7 @@ jQuery(document).ready(function(){
             data: { item: item },
             success: function(msg){
                 jQuery("#basket_items").html(msg);
+                window.location.reload() 
             }
         });
     });
