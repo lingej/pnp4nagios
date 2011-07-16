@@ -22,6 +22,7 @@ jQuery.noConflict();
             jQuery(this).attr('title', 'Click to zoom in');
         });
     
+	jQuery('img.goto').css('visibility', 'visible');
         jQuery('div.graph').imgAreaSelect({ handles: false, autoHide: true,
             fadeSpeed: 500, onSelectEnd: redirect, minHeight: '100' });
     
@@ -72,7 +73,53 @@ if(!empty($tpl)){
 	."&end=$end"
 	."&graph_height=$graph_height"
 	."&graph_width=$graph_width\">";
-} ?>
+} 
+$start_down = $this->data->TIMERANGE['start'] - intval(($this->data->TIMERANGE['end'] - $this->data->TIMERANGE['start']) / 2);
+$path = pnp::addToUri( array('start' => $start_down));
+printf("<a href=\"%s\" title=\"%s\"><img class=\"goto\" src=\"%s\" style=\"visibility: hidden; position:absolute; left:%dpx; bottom:-28px\"></a>\n",
+        $path,
+        "Move Start to ".date($this->config->conf['date_fmt'],$start_down),
+        url::base()."media/images/go-left.png",
+        10
+);
+
+$start_up   = $this->data->TIMERANGE['start'] + intval(($this->data->TIMERANGE['end'] - $this->data->TIMERANGE['start']) / 2);      
+$path = pnp::addToUri( array('start' => $start_up));         
+printf("<a href=\"%s\" title=\"%s\"><img class=\"goto\" src=\"%s\" style=\"visibility: hidden; position:absolute; left:%dpx; bottom:-28px\"></a>\n",
+        $path,
+        "Move Start to ".date($this->config->conf['date_fmt'],$start_up),
+        url::base()."media/images/go-right.png",
+        60
+);
+
+$path = pnp::addToUri( array('end' => time() ));         
+printf("<a href=\"%s\" title=\"%s\"><img class=\"goto\" src=\"%s\" style=\"visibility: hidden; position:absolute; right:%dpx; bottom:-28px\"></a>\n",
+        $path,
+        "Move End to ".date($this->config->conf['date_fmt'],time()),
+        url::base()."media/images/go-now.png",
+        10
+);
+
+$end_up = $this->data->TIMERANGE['end'] + intval(($this->data->TIMERANGE['end'] - $this->data->TIMERANGE['start']) / 2);
+$path = pnp::addToUri( array('end' => $end_up));
+printf("<a href=\"%s\" title=\"%s\"><img class=\"goto\" src=\"%s\" style=\"visibility: hidden; position:absolute; right:%dpx; bottom:-28px\"></a>\n",
+        $path,
+        "Move End to ".date($this->config->conf['date_fmt'],$end_up),
+        url::base()."media/images/go-right.png",
+        60
+);
+        
+$end_down = $this->data->TIMERANGE['end'] - intval(($this->data->TIMERANGE['end'] - $this->data->TIMERANGE['start']) / 2);
+$path = pnp::addToUri( array('end' => $end_down));
+printf("<a href=\"%s\" title=\"%s\"><img class=\"goto\" src=\"%s\" style=\"visibility: hidden; position:absolute; right:%dpx; bottom:-28px\"></a>\n",
+        $path,
+        "Move End to ".date($this->config->conf['date_fmt'],$end_down),
+        url::base()."media/images/go-left.png",
+        110
+);
+        
+
+?>
 </div>
 </div>
 </div>

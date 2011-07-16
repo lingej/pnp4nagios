@@ -94,7 +94,7 @@ foreach($this->data->STRUCT as $key=>$value){
                                ), FALSE
                              );
         echo "<img class=\"graph\" src=\"".url::base(TRUE)."image" . $path . "\"></a>\n";
-   	echo "</div>\n";
+        echo "</div>\n";
    	echo "</div><p>\n";
 }
 echo "</div>\n";
