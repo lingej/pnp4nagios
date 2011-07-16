@@ -23,6 +23,7 @@ $lang = array
     'timerange-selector-submit-button' => 'démarrer',
     'timerange-selector-clear-button'  => 'effacer',
     'timerange-selector-link'          => 'Plage de temps personnalisée',
+    'timerange-selector-overview'      => 'Overview',
     'start' => 'Début',
     'end' => 'Fin',
     'service-details' => 'Détails du service',

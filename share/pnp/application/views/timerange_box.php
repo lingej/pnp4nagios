@@ -13,6 +13,10 @@ if($start && $end){
 if($start && !$end){
 	echo "<a class=\"multi0\" href=\"".$path."\">".Kohana::lang('common.timerange-selector-link')."</a><br>\n"; 
 }
+
+$path  = pnp::addToUri(array('view' => ''));
+echo "<a class=\"multi0\" href=\"".$path."\">".Kohana::lang('common.timerange-overview-link')."</a><br>\n"; 
+
 foreach($this->config->views as $key=>$view){
 	$path = pnp::addToUri(array('view' => $key, 'start' => '', 'end' => ''));
 	echo "<a class=\"multi0\" href=\"".$path."\">".$view['title']."</a><br>\n"; 

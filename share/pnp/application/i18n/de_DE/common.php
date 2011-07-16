@@ -23,6 +23,7 @@ $lang = array
     'timerange-selector-submit-button' => 'absenden',
     'timerange-selector-clear-button'  => 'l&ouml;schen',
     'timerange-selector-link'          => 'Spezieller Zeitbereich',
+    'timerange-selector-overview'      => '&Uuml;bersicht',
     'start' => 'Start',
     'end' => 'Ende',
     'service-details' => 'Service-Details',

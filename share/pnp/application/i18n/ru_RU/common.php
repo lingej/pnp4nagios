@@ -23,6 +23,7 @@ $lang = array
     'timerange-selector-submit-button' => 'ввести',
     'timerange-selector-clear-button'  => 'очистить',
     'timerange-selector-link'          => 'Собственный интервал',
+    'timerange-selector-overview'      => 'Overview',
     'start' => 'Начало',
     'end' => 'Окончание',
     'service-details' => 'Подробности о службе',
