@@ -177,3 +177,7 @@ pre.code, pre.file {
     margin: 0px 2px 2px 2px; height: 16px; 
 }
 
+img.ui-datepicker-trigger {
+  position:relative;
+  bottom:-6px; 
+}
