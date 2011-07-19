@@ -27,5 +27,5 @@ $lang = array
     'remote_user_missing' => 'Удалённый пользователь не указан. Проверка аутентификации отменена. <a href="http://docs.pnp4nagios.org/faq/23">Read FAQ online</a>',
     'livestatus_socket_error' => 'Ошибка Livestatus сокета: %s (%s) <a href="http://docs.pnp4nagios.org/faq/24">Read FAQ online</a>',
     'not_authorized_for_host_overview' => 'Вы не авторизованы для доступа к странице обзора хоста.',
-    'xml-generic_error' => 'XML file "%s" not parsable.<p><strong>XML Errors:</strong>%s</p>',
+    'xml-generic_error' => 'Не удаётся распарсить XML файл "%s".<p><strong>Ошибки XML:</strong>%s</p>',
 );
