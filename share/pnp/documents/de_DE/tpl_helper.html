@@ -124,21 +124,21 @@ Ist $cf ein Array, so wird automatisch eine Legende formatiert ausgegeben.
 
 <p>
 
-string <strong>rrd::color</strong> ( $num )
+string <strong>rrd::color</strong> ( $num [, $num ])
 </p>
 
 <p>
-Liefert eine Farbe aus der <acronym title="HyperText Markup Language">HTML</acronym>-Farbtabelle
+Liefert eine Farbe aus der <acronym title="HyperText Markup Language">HTML</acronym>-Farbtabelle. Als zweites (optionales) Argument kann man einen Alpha-Wert angeben, der die Transparenz der Farbe festlegt. 
 </p>
 
 </div>
-<!-- SECTION "rrd::color" [1744-1844] -->
+<!-- SECTION "rrd::color" [1744-1964] -->
 <h2><a name="rrdgradient" id="rrdgradient">rrd::gradient</a></h2>
 <div class="level2">
 
 <p>
 
-string <strong>rrd::gradient</strong> ( $vname, [$start_color], [$end_color], [$label], [$steps] )
+string <strong>rrd::gradient</strong> ( $vname, [$start_color], [$end_color], [$label], [$steps], [$lower] )
 </p>
 
 <p>
@@ -152,7 +152,7 @@ Erzeugt einen Farbverlauf von $start_color nach $end_color
 </p>
 
 </div>
-<!-- SECTION "rrd::gradient" [1845-2125] -->
+<!-- SECTION "rrd::gradient" [1965-2255] -->
 <h2><a name="rrdcut" id="rrdcut">rrd::cut</a></h2>
 <div class="level2">
 
@@ -168,7 +168,7 @@ Diese Funktion ist hilfreich, wenn die Legende ausgerichtet werden soll, aber di
 </p>
 
 </div>
-<!-- SECTION "rrd::cut" [2126-2460] -->
+<!-- SECTION "rrd::cut" [2256-2590] -->
 <h2><a name="rrdticker" id="rrdticker">rrd::ticker</a></h2>
 <div class="level2">
 
@@ -188,7 +188,7 @@ Erzeugt einen farbigen Balken am oberen Rand des Graphen, der je nach OK, WARNIN
 </p>
 
 </div>
-<!-- SECTION "rrd::ticker" [2461-2837] -->
+<!-- SECTION "rrd::ticker" [2591-2967] -->
 <h2><a name="rrdalerter" id="rrdalerter">rrd::alerter</a></h2>
 <div class="level2">
 
@@ -208,4 +208,4 @@ Erzeugt Areas, die entsprechend der Werte OK, WARNING &amp; CRITICAL unterschied
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter" [2838-] -->
+<!-- SECTION "rrd::alerter" [2968-] -->

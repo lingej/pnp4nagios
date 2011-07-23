@@ -124,21 +124,21 @@ If $cf is an array the legend will be formatted automatically
 
 <p>
 
-string <strong>rrd::color</strong> ( $num )
+string <strong>rrd::color</strong> ( $num [, $num])
 </p>
 
 <p>
-Returns a color from the <acronym title="HyperText Markup Language">HTML</acronym> color table
+Returns a color from the <acronym title="HyperText Markup Language">HTML</acronym> color table. The second (optional) argument allows to specify an alpha value used to set the transparency of the selected color.
 </p>
 
 </div>
-<!-- SECTION "rrd::color" [1713-1811] -->
+<!-- SECTION "rrd::color" [1713-1936] -->
 <h2><a name="rrdgradient" id="rrdgradient">rrd::gradient</a></h2>
 <div class="level2">
 
 <p>
 
-string <strong>rrd::gradient</strong> ( $vname, [$start_color], [$end_color], [$label], [$steps] )
+string <strong>rrd::gradient</strong> ( $vname, [$start_color], [$end_color], [$label], [$steps], [$lower] )
 </p>
 
 <p>
@@ -152,7 +152,7 @@ Creates a color gradient from $start_color to $end_color
 </p>
 
 </div>
-<!-- SECTION "rrd::gradient" [1812-2089] -->
+<!-- SECTION "rrd::gradient" [1937-2224] -->
 <h2><a name="rrdcut" id="rrdcut">rrd::cut</a></h2>
 <div class="level2">
 
@@ -169,7 +169,7 @@ This function is helpful if legend needs to be justified but length of label is 
 </p>
 
 </div>
-<!-- SECTION "rrd::cut" [2090-2374] -->
+<!-- SECTION "rrd::cut" [2225-2509] -->
 <h2><a name="rrdticker" id="rrdticker">rrd::ticker</a></h2>
 <div class="level2">
 
@@ -189,7 +189,7 @@ Creates a colorized bar at the top of the chart which shows different colors dep
 </p>
 
 </div>
-<!-- SECTION "rrd::ticker" [2375-2745] -->
+<!-- SECTION "rrd::ticker" [2510-2880] -->
 <h2><a name="rrdalerter" id="rrdalerter">rrd::alerter</a></h2>
 <div class="level2">
 
@@ -209,4 +209,4 @@ Creates colorized areas, which show different colors depending on states OK, WAR
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter" [2746-] -->
+<!-- SECTION "rrd::alerter" [2881-] -->
