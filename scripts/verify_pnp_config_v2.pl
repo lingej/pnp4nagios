@@ -289,9 +289,6 @@ if($mode eq "bulk+npcd"){
 	info("========== Checking config values ============",4);
 	my $command_line;
 
-	$command_line = check_command_definition('service_perfdata_file_processing_command');
-	$command_line = check_command_definition('host_perfdata_file_processing_command');
-
 	my $npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
 	
 	if( -r $npcd_cfg){
@@ -301,6 +298,12 @@ if($mode eq "bulk+npcd"){
 	}
 	# read npcd.cfg into %cfg
 	process_npcd_cfg($npcd_cfg);
+	
+	check_config_var('perfdata_spool_dir', 'exists');
+	
+	$command_line = check_command_definition('service_perfdata_file_processing_command');
+	$command_line = check_command_definition('host_perfdata_file_processing_command');
+
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
 
@@ -457,10 +460,13 @@ sub check_command_definition {
 	}
 	if($mode eq "bulk+npcd"){
 		my $dump_file = get_config_var( $option =~m/(.*)_processing_command/ );
+		my $perfdata_spool_dir = get_config_var( 'perfdata_spool_dir');
 		#print "$dump_file\n";
-		if( $val =~ m#/bin/mv\s$dump_file#){
+		my $regex = qr/\/bin\/mv\s$dump_file\s$perfdata_spool_dir/;
+		if( $val =~ m/$regex/){
 			info ( "Command looks good",0 );
 		}else{
+			info ( "Regex = $regex", 4 );
 			info_and_exit ( "Command looks suspect ($val)",2 );
 		}
 	}
