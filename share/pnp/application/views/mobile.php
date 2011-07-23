@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes" />
+<?php echo html::link('media/images/home.png', 'apple-touch-icon', "") ?>
 <?php echo html::stylesheet('media/css/jquery.mobile.min.css') ?>
 <?php echo html::stylesheet('media/css/mobile.css') ?>
 <?php echo html::script('media/js/jquery-min.js')?>
