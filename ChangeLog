@@ -1,7 +1,9 @@
 **pnp-0.6.14 ??/??/2011**
   * Feature: Webinterface for mobile devices based on jQuery Mobile \\ ( http://jquerymobile.com/ )
   * Feature: Zoom based on jQuery plugin imgAreaSelect \\ ( http://odyniec.net/projects/imgareaselect/ )
-  * Bugfix:  Fixed popups to work under nginx \\ ( Joram Agten )
+  * Feature: New template check_mssql_health.php
+  * Bugfix:  Fixed popups to work under nginx ( Joram Agten )
+  * Bugfix:  Helper rrd::vdef() fixed 
   * Update:  jQuery update to 1.6.2
   * Update:  jQuery-ui update to 1.8.14
 
