@@ -6,21 +6,21 @@
 
 <p>
 
-Mit PNP4Nagios 0.6.14 ist ein Webinterface für Mobile Endgeräte in PNP4Nagios integriert worden.
+Mit PNP4Nagios 0.6.14 ist ein Webinterface für mobile Endgeräte in PNP4Nagios integriert worden.
 </p>
 
 <p>
-Das Design wurde mit <a href="http://jquerymobile.com/" class="urlextern" title="http://jquerymobile.com/"  rel="nofollow">jQuery Mobile</a> realisiert und ist somit mit den aktuellen Mobilen Browsern kompatibel. Auf der Liste der <a href="http://jquerymobile.com/gbs/" class="urlextern" title="http://jquerymobile.com/gbs/"  rel="nofollow">unterstützen Geräte</a> sind die einzelnen Browser aufgeführt und nach Grad der Unterstützung klassifiziert.
+Das Design wurde mit <a href="http://jquerymobile.com/" class="urlextern" title="http://jquerymobile.com/"  rel="nofollow">jQuery Mobile</a> realisiert und ist somit mit den aktuellen mobilen Browsern kompatibel. Auf der Liste der <a href="http://jquerymobile.com/gbs/" class="urlextern" title="http://jquerymobile.com/gbs/"  rel="nofollow">unterstützten Geräte</a> sind die einzelnen Browser aufgeführt und nach Grad der Unterstützung klassifiziert.
 </p>
 
 </div>
-<!-- SECTION "Mobile UI" [1-422] -->
+<!-- SECTION "Mobile UI" [1-423] -->
 <h1><a name="landing_page" id="landing_page">Landing Page</a></h1>
 <div class="level1">
 
 <p>
 
-Das Webinterface wurde so gestaltet, dass die üblichen Links auf das klassiche Interface abgefangen und auf die entsprechende Mobile Seite umgeleitet werden. Somit können weiterhin inerhalb der Nagios Mails Links zu PNP Graphen eingebunden werden, die je nach Endgerät auf die passende Seite verweisen.
+Das Webinterface wurde so gestaltet, dass die üblichen Links auf das klassische Interface abgefangen und auf die entsprechende mobile Seite umgeleitet werden. Somit können weiterhin innerhalb der Nagios-Mails Links zu PNP-Graphen eingebunden werden, die je nach Endgerät auf die passende Seite verweisen.
 
 </p>
 <table class="inline">
@@ -39,38 +39,38 @@ Das Webinterface wurde so gestaltet, dass die üblichen Links auf das klassiche 
 </table>
 
 </div>
-<!-- SECTION "Landing Page" [423-1016] -->
-<h1><a name="browser_erkennung" id="browser_erkennung">Browser Erkennung</a></h1>
+<!-- SECTION "Landing Page" [424-1019] -->
+<h1><a name="browser-erkennung" id="browser-erkennung">Browser-Erkennung</a></h1>
 <div class="level1">
 
 <p>
 
-Browser werden anhand ihres “User-Agent” Strings als Mobile Browser erkannt.
-Die Erkennung kann in der pnp4nagios/etc/config_local.php beeinflusst werden.
+Browser werden anhand ihres “User-Agent”-Strings als mobile Browser erkannt.
+Die Erkennung kann in der Datei <code>pnp4nagios/etc/<a href="/de/pnp-0.6/webfe_cfg" class="wikilink1" title="de:pnp-0.6:webfe_cfg">config_local.php</a></code> beeinflusst werden.
 </p>
 <pre class="code">
 $conf[&#039;mobile_devices&#039;] = &#039;iPhone|iPod|iPad|android&#039;;
 </pre>
 
 <p>
-Die Option &#039;mobile_devices&#039; beinhaltet einen Regulären Ausdruck welcher mit dem “User Agent” der Browsers verglichen wird.
+Die Option &#039;mobile_devices&#039; beinhaltet einen regulären Ausdruck, welcher mit dem “User Agent” des Browsers verglichen wird.
 </p>
 
 <p>
-Der “User Agent” eines Browsers wird im Webserver Access Log protokolliert und sieht für ein iOS Device in etwa wie folgt aus.
+Der “User Agent” eines Browsers wird im Webserver-Access-Log protokolliert und sieht für ein iOS-Device in etwa wie folgt aus.
 </p>
 <pre class="code">
 &quot;Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_1 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8B117 Safari/6531.22.7&quot;
 </pre>
 
 </div>
-<!-- SECTION "Browser Erkennung" [1017-1693] -->
+<!-- SECTION "Browser-Erkennung" [1020-1721] -->
 <h1><a name="screenshots" id="screenshots">Screenshots</a></h1>
 <div class="level1">
 
 <p>
 
-Screenschot aufgenommen mit einem iPhone und iOS 4.2
+Screenshot aufgenommen mit einem iPhone und iOS 4.2
 
 </p>
 <table class="inline">
@@ -86,4 +86,4 @@ Screenschot aufgenommen mit einem iPhone und iOS 4.2
 </table>
 
 </div>
-<!-- SECTION "Screenshots" [1694-] -->
+<!-- SECTION "Screenshots" [1722-] -->

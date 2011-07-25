@@ -120,25 +120,17 @@ Wird PNP nur mit der Angabe eines Hosts ( index.php?host=&lt;myserver&gt; ) aufg
 <p>
 Das Array $views[] legt fest, welche Zeitspannen die RRD-Graphen dargestellen sollen. Der Titel und die Anzahl der Graphen kann somit hier zentral definiert werden.
 </p>
-<pre class="code">$views[0][&quot;title&quot;] = &quot;4 Hours&quot;;
-$views[0][&quot;start&quot;] = ( 60*60*4 );
-
-$views[1][&quot;title&quot;] = &quot;24 Hours&quot;;
-$views[1][&quot;start&quot;] = ( 60*60*24 );
-
-$views[2][&quot;title&quot;] = &quot;One Week&quot;;
-$views[2][&quot;start&quot;] = ( 60*60*24*7 );
-
-$views[3][&quot;title&quot;] = &quot;One Month&quot;;
-$views[3][&quot;start&quot;] = ( 60*60*24*30 );
-
-$views[4][&quot;title&quot;] = &quot;One Year&quot;;
-$views[4][&quot;start&quot;] = ( 60*60*24*365 );
+<pre class="code">
+$views[] = array(&#039;title&#039; =&gt; &#039;One Hour&#039;,  &#039;start&#039; =&gt; (60*60) );
+$views[] = array(&#039;title&#039; =&gt; &#039;4 Hours&#039;,   &#039;start&#039; =&gt; (60*60*4) );
+$views[] = array(&#039;title&#039; =&gt; &#039;25 Hours&#039;,  &#039;start&#039; =&gt; (60*60*25) );
+$views[] = array(&#039;title&#039; =&gt; &#039;One Week&#039;,  &#039;start&#039; =&gt; (60*60*25*7) );
+$views[] = array(&#039;title&#039; =&gt; &#039;One Month&#039;, &#039;start&#039; =&gt; (60*60*24*32) );
+$views[] = array(&#039;title&#039; =&gt; &#039;One Year&#039;,  &#039;start&#039; =&gt; (60*60*24*380) );
 </pre>
 
 <p>
-
-Sie können hier auch weitere Views definieren ($views[5], …), sollten aber dabei berücksichtigen, dass im Normalfall ALLE definierten Views angezeigt werden.
+Sie können hier auch weitere Views definieren, sollten aber dabei berücksichtigen, dass im Normalfall ALLE definierten Views angezeigt werden.
 </p>
 
 <p>

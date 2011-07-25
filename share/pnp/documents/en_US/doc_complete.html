@@ -244,7 +244,7 @@ Using this storage format the size of the files will stay the same over time. Pe
 
 <h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
 <div class="level2">
-<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 103554 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 99.13%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 103554 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 98.78%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
 <p>
 
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
@@ -431,7 +431,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Sun Jul 17 15:55:01 CEST 2011
+Last Update: Sun Jul 24 21:55:01 CEST 2011
 </p>
 
 </div>
@@ -444,14 +444,18 @@ Last Update: Sun Jul 17 15:55:01 CEST 2011
 <strong>pnp-0.6.14 ??/??/2011</strong>
 </p>
 <ul>
-<li class="level1"><div class="li"> Feature: Webinterface for Mobile devices based on jQuery Mobile <br/>
+<li class="level1"><div class="li"> Feature: Webinterface for mobile devices based on jQuery Mobile <br/>
 ( <a href="http://jquerymobile.com/" class="urlextern" title="http://jquerymobile.com/"  rel="nofollow">http://jquerymobile.com/</a> )</div>
 </li>
 <li class="level1"><div class="li"> Feature: Zoom based on jQuery plugin imgAreaSelect <br/>
 ( <a href="http://odyniec.net/projects/imgareaselect/" class="urlextern" title="http://odyniec.net/projects/imgareaselect/"  rel="nofollow">http://odyniec.net/projects/imgareaselect/</a> )</div>
 </li>
-<li class="level1"><div class="li"> Bugfix: Fixed popups to work under nginx <br/>
+<li class="level1"><div class="li"> Bugfix:  Fixed popups to work under nginx <br/>
 ( Joram Agten )</div>
+</li>
+<li class="level1"><div class="li"> Update:  jQuery update to 1.6.2</div>
+</li>
+<li class="level1"><div class="li"> Update:  jQuery-ui update to 1.8.14</div>
 </li>
 </ul>
 
@@ -466,7 +470,7 @@ Last Update: Sun Jul 17 15:55:01 CEST 2011
 </li>
 <li class="level1"><div class="li"> Bugfix:  rrd_convert.pl: parse_xml_filename() regex fix</div>
 </li>
-<li class="level1"><div class="li"> Info: Version used by OMD-0.48 <a href="http://omdistro.org" class="urlextern" title="http://omdistro.org"  rel="nofollow">OMD</a></div>
+<li class="level1"><div class="li"> Info:    Version used by OMD-0.48 <a href="http://omdistro.org" class="urlextern" title="http://omdistro.org"  rel="nofollow">OMD</a></div>
 </li>
 </ul>
 
@@ -2067,24 +2071,16 @@ If PNP is called with a host only ( index.php?host=&lt;myserver&gt; ), the defin
 <p>
 The periods of time the RRD graphs will show are determined using the array $views[]. The title and number of graphs can be specified globally in this place
 </p>
-<pre class="code">$views[0][&quot;title&quot;] = &quot;4 Hours&quot;;
-$views[0][&quot;start&quot;] = ( 60*60*4 );
-
-$views[1][&quot;title&quot;] = &quot;24 Hours&quot;;
-$views[1][&quot;start&quot;] = ( 60*60*24 );
-
-$views[2][&quot;title&quot;] = &quot;One Week&quot;;
-$views[2][&quot;start&quot;] = ( 60*60*24*7 );
-
-$views[3][&quot;title&quot;] = &quot;One Month&quot;;
-$views[3][&quot;start&quot;] = ( 60*60*24*30 );
-
-$views[4][&quot;title&quot;] = &quot;One Year&quot;;
-$views[4][&quot;start&quot;] = ( 60*60*24*365 );
+<pre class="code">
+$views[] = array(&#039;title&#039; =&gt; &#039;One Hour&#039;,  &#039;start&#039; =&gt; (60*60) );
+$views[] = array(&#039;title&#039; =&gt; &#039;4 Hours&#039;,   &#039;start&#039; =&gt; (60*60*4) );
+$views[] = array(&#039;title&#039; =&gt; &#039;25 Hours&#039;,  &#039;start&#039; =&gt; (60*60*25) );
+$views[] = array(&#039;title&#039; =&gt; &#039;One Week&#039;,  &#039;start&#039; =&gt; (60*60*25*7) );
+$views[] = array(&#039;title&#039; =&gt; &#039;One Month&#039;, &#039;start&#039; =&gt; (60*60*24*32) );
+$views[] = array(&#039;title&#039; =&gt; &#039;One Year&#039;,  &#039;start&#039; =&gt; (60*60*24*380) );
 </pre>
 
 <p>
-
 You can add more views ($views[5], …) but please keep in mind that under normal circumstances ALL views you defined are shown.
 </p>
 

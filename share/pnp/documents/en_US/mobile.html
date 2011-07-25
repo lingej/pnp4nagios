@@ -1,0 +1,89 @@
+
+
+
+<h1><a name="mobile_ui" id="mobile_ui">Mobile UI</a></h1>
+<div class="level1">
+
+<p>
+
+Starting with PNP4Nagios 0.6.14 a web interface for mobile devices is integrated into PNP4Nagios. 
+</p>
+
+<p>
+The design was realised using <a href="http://jquerymobile.com/" class="urlextern" title="http://jquerymobile.com/"  rel="nofollow">jQuery Mobile</a> and hence is compatible to current mobile browsers. The list of the <a href="http://jquerymobile.com/gbs/" class="urlextern" title="http://jquerymobile.com/gbs/"  rel="nofollow">supported devices</a> shows a graded browser support chart.
+</p>
+
+</div>
+<!-- SECTION "Mobile UI" [1-356] -->
+<h1><a name="landing_page" id="landing_page">Landing Page</a></h1>
+<div class="level1">
+
+<p>
+
+The web interface was designed to intercept the calls to the classical interface and to redirect them to the appropriate mobile page. This way links to PNP graphs inside Nagios mails don&#039;t have to be changed and point to the correct page depending on the device type..
+
+</p>
+<table class="inline">
+	<tr class="row0">
+		<th class="col0"> Classic </th><th class="col1"> Mobile </th>
+	</tr>
+	<tr class="row1">
+		<td class="col0 leftalign"> /pnp4nagios/graph                         </td><td class="col1"> /pnp4nagios/mobile </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"> /pnp4nagios/graph?host=localhost          </td><td class="col1"> /pnp4nagios/mobile/host/localhost </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0"> /pnp4nagios/graph?host=localhost&amp;srv=ping </td><td class="col1"> /pnp4nagios/mobile/graph/localhost/ping </td>
+	</tr>
+</table>
+
+</div>
+<!-- SECTION "Landing Page" [357-913] -->
+<h1><a name="browser_recognition" id="browser_recognition">Browser recognition</a></h1>
+<div class="level1">
+
+<p>
+
+Browsers are recognised as mobile browsers by analysing the “user agent” string.
+The recognition can be influenced by changing <code>pnp4nagios/etc/<a href="/pnp-0.6/webfe_cfg" class="wikilink1" title="pnp-0.6:webfe_cfg">config_local.php</a></code>.
+</p>
+<pre class="code">
+$conf[&#039;mobile_devices&#039;] = &#039;iPhone|iPod|iPad|android&#039;;
+</pre>
+
+<p>
+The option &#039;mobile_devices&#039; contains a regular expression which is compared with the “user agent” string of the browser.
+</p>
+
+<p>
+The “user agent” string of a browser is logged in the web server access log. An entry for an iOS device looks similar to the following.
+</p>
+<pre class="code">
+&quot;Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_1 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8B117 Safari/6531.22.7&quot;
+</pre>
+
+</div>
+<!-- SECTION "Browser recognition" [914-1620] -->
+<h1><a name="screenshots" id="screenshots">Screenshots</a></h1>
+<div class="level1">
+
+<p>
+
+Screenshot taken with an iPhone and iOS 4.2
+
+</p>
+<table class="inline">
+	<tr class="row0">
+		<td class="col0"> <a href="/_detail/mobile-home.png?id=pnp-0.6%3Amobile" class="media" title="mobile-home.png"><img src="/_media/mobile-home.png?w=150" class="media" title=" Home Screen" alt=" Home Screen" width="150" /></a> </td><td class="col1"> Homescreen </td><td class="col2"> <a href="/_detail/mobile-loading.png?id=pnp-0.6%3Amobile" class="media" title="mobile-loading.png"><img src="/_media/mobile-loading.png?w=150" class="media" title=" Loading..." alt=" Loading..." width="150" /></a> </td><td class="col3"> Loading … </td>
+	</tr>
+	<tr class="row1">
+		<td class="col0"> <a href="/_detail/mobile-hostlist.png?id=pnp-0.6%3Amobile" class="media" title="mobile-hostlist.png"><img src="/_media/mobile-hostlist.png?w=150" class="media" title=" Hosts Liste " alt=" Hosts Liste " width="150" /></a> </td><td class="col1"> List of all hosts </td><td class="col2"> <a href="/_detail/mobile-servicelist.png?id=pnp-0.6%3Amobile" class="media" title="mobile-servicelist.png"><img src="/_media/mobile-servicelist.png?w=150" class="media" title=" Liste aller services" alt=" Liste aller services" width="150" /></a> </td><td class="col3"> List of all services of a host</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0"> <a href="/_detail/mobile-graphs.png?id=pnp-0.6%3Amobile" class="media" title="mobile-graphs.png"><img src="/_media/mobile-graphs.png?w=150" class="media" title=" Graphen" alt=" Graphen" width="150" /></a> </td><td class="col1"> Graph of a service </td><td class="col2"> </td><td class="col3"> </td>
+	</tr>
+</table>
+
+</div>
+<!-- SECTION "Screenshots" [1621-] -->
