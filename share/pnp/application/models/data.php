@@ -762,6 +762,10 @@ class Data_Model extends System_Model
                     if(sizeof($slices) == 3)
                         $this->buildDataStruct($slices[0], $slices[1], $view, $slices[2]);
                 }
+                # break on custom time ranges
+		if(isset($this->TIMERANGE['type']) && $this->TIMERANGE['type'] == "start-end"){
+                    break;
+                }
             }
         }
     }
