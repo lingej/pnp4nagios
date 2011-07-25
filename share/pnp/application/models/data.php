@@ -370,7 +370,7 @@ class Data_Model extends System_Model
             }
         return;
         }
-        if( $view == ""){
+        if( $view === ""){
             $v = 0;
             foreach($this->config->views as $view_key=>$view_val){
                 $i=0;
@@ -744,6 +744,26 @@ class Data_Model extends System_Model
                $timerange[$i]['cmd']     = " --start " . ($end - $this->config->views[$i]['start']) . " --end  $end" ;
            }
            $this->TIMERANGE = $timerange;
+    }
+
+    public function buildBasketStruct($basket,$view = NULL){
+        if(is_array($basket) && sizeof($basket) > 0){
+	    if($view == ""){
+                 $views = array_keys($this->config->views);
+            }else{
+		 $views = array($view);
+            }
+            foreach($views as $view){
+                foreach($basket as $item){
+                    # explode host::service::source
+                    $slices = explode("::",$item);
+                    if(sizeof($slices) == 2)
+                        $this->buildDataStruct($slices[0], $slices[1], $view);
+                    if(sizeof($slices) == 3)
+                        $this->buildDataStruct($slices[0], $slices[1], $view, $slices[2]);
+                }
+            }
+        }
     }
 
     public function buildPageStruct($page,$view){

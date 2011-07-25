@@ -57,18 +57,8 @@ class Page_Controller extends System_Controller  {
 
     public function basket(){
         $basket = $this->session->get("basket");
-        if($this->view == ""){
-            $this->view = $this->config->conf['overview-range'];
-        }
         if(is_array($basket) && sizeof($basket) > 0){
-            foreach($basket as $item){
-                # explode host::service::source
-                $slices = explode("::",$item);
-		if(sizeof($slices) == 2)
-                    $this->data->buildDataStruct($slices[0], $slices[1], $this->view);
-		if(sizeof($slices) == 3)
-                    $this->data->buildDataStruct($slices[0], $slices[1], $this->view, $slices[2]);
-            }
+            $this->data->buildBasketStruct($basket,$this->view);
             $this->template->page->basket_box      = $this->add_view('basket_box');
             $this->template->page->header->title = Kohana::lang('common.page-basket');
             $this->url = "basket?";

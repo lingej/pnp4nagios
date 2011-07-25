@@ -208,15 +208,7 @@ class Pdf_Controller extends System_Controller  {
         $this->data->getTimeRange($this->start,$this->end,$this->view);
         $basket = $this->session->get("basket");
         if(is_array($basket) && sizeof($basket) > 0){
-            foreach($basket as $item){
-                # explode host::service::source
-                $slices = explode("::",$item);
-                if(sizeof($slices) == 2)
-                    $this->data->buildDataStruct($slices[0], $slices[1], $this->view);
-                
-                if(sizeof($slices) == 3)
-                    $this->data->buildDataStruct($slices[0], $slices[1], $this->view, $slices[2]);
-            }
+             $this->data->buildBasketStruct($basket,$this->view);
         }
         //echo Kohana::debug($this->data->STRUCT);
         /*
