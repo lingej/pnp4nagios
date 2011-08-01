@@ -2018,6 +2018,16 @@ alle Services, die im Namen nach einem „_“  (mindestens) drei Ziffern haben 
 }</pre>
 
 <p>
+In einigen Fällen möchten Sie vielleicht die Anzeige auf einen Graphen beschränken. Um dies zu erreichen, können Sie die optionale Direktive “source” benutzen, gefolgt von einer Zahl, die die Position in der RRD-Datei angibt. Die Zählung beginnt ab 0
+
+</p>
+<pre class="code">define graph {
+       host_name       host1,host2,host3
+       service_desc    PING
+       source          1
+}</pre>
+
+<p>
 <a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/xport" class="wikilink1" title="de:pnp-0.6:xport">Datenexport</a>
 
 </p>

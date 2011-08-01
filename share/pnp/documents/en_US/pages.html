@@ -74,7 +74,16 @@ all services whose names contain an underscore followed by (at least) three digi
 }</pre>
 
 <p>
+In some cases you may want to limit the display to just one graph. To accomplish this you can use the optional directive “source” followed by a number specifying the position within the RRD file starting at 0
 
+</p>
+<pre class="code">define graph {
+       host_name       host1,host2,host3
+       service_desc    PING
+       source          1
+}</pre>
+
+<p>
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/xport" class="wikilink1" title="pnp-0.6:xport"> data export</a>
 
 </p>
