@@ -241,7 +241,7 @@ if($mode eq "bulk"){
 	check_config_var('host_perfdata_file_mode', 'exists');
 	check_config_var('host_perfdata_file_processing_interval', 'exists');
 	check_config_var('host_perfdata_file_processing_command', 'exists');
-	last_info("Needed config Options are missing.",5,$last_check);
+	last_info("Needed config options are missing.",5,$last_check);
 
 	# Options not allowed in bulk mode
 	check_config_var('service_perfdata_command', 'notexists');
@@ -340,7 +340,7 @@ if($mode eq "npcdmod"){
 	check_config_var('broker_module', 'exists', 'break');
 
 	$val = get_config_var('broker_module');
-	# extract npcd.cfg patch out of broker_module definition 
+	# extract npcd.cfg patch from broker_module definition 
 	my $npcdmod_npcd_cfg;
 	$val =~ /npcdmod\.o\s+config_file=(.*)$/;
 	if($1){
@@ -353,9 +353,9 @@ if($mode eq "npcdmod"){
 		}
 	}else{
 		info("broker_module definition looks suspect '$val'",2);
-		info_and_exit("Can´t extract path to npcd.cfg out of your broker_module definition",2);
+		info_and_exit("Can´t extract path to npcd.cfg from your broker_module definition",2);
 	}		
-	# extract npcd.cfg path out of process list
+	# extract npcd.cfg path from process list
 	my $npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
 	if( -r $npcd_cfg){
 		info("$npcd_cfg is used by npcd and readable",0);
@@ -562,7 +562,7 @@ sub print_stats {
 	$state = 1 if $stats{1} > 0;
 	$state = 2 if $stats{2} > 0;
 	info(sprintf("Warning: %d, Critical: %d",$stats{1}, $stats{2}),$state);
-	info("Checks finisched...", $state);
+	info("Checks finished...", $state);
 }
 
 sub print_sizing {
@@ -605,7 +605,7 @@ sub check_rrdtool {
 		}
 	}else{
 		unless ( eval "use RRDs;1" ) {
-        		info("Perl RRDs modules are not loadable and not enabled (USE_RRDs = 0)",1);
+        		info("Perl RRDs modules are neither loadable nor enabled (USE_RRDs = 0)",1);
     		}else{
         		info("RRDs modules are loadable but not enabled (USE_RRDs = 0)",1);
 		}
@@ -653,13 +653,13 @@ sub process_perfdata_cfg {
 		}	 
 	}elsif(-e "$PNPCfg/process_perfdata.cfg-sample"){
 		info ("$cfg_file does not exist.",1);
-		info ("We will try to parse defaults out of process_perfdata.pl later on", 1);
+		info ("We will try to parse defaults from process_perfdata.pl later on", 1);
 		info ("process_perfdata.cfg-sample exists in $PNPCfg", 5);
 		info ("It is recommended to rename process_perfdata.cfg-sample to process_perfdata.cfg", 5);
 		$process_perfdata_cfg = 0; # we have to parse process_perfdata.pl to get defaults
 	}else{
 		info ("$cfg_file does not exist.",1);
-		info ("We will try to parse defaults out of process_perfdata.pl later on", 1);
+		info ("We will try to parse defaults from process_perfdata.pl later on", 1);
 		info ("It is recommended to place $cfg_file in $PNPCfg", 5);
 		info ("A sample file is installed by 'make install-config'", 5);
 		$process_perfdata_cfg = 0; # we have to parse process_perfdata.pl to get defaults
@@ -858,7 +858,7 @@ sub check_usrgrp {
 	}
 	if ($gid) {
 		my $fgid = (stat("$file"))[5];
-		my $fgroup = getpwuid($fgid);
+		my $fgroup = getgrgid($fgid);
 		info ("$file: group is $fgroup", 2, $break) if ($fgid != $gid);
 	}
 }
