@@ -21,6 +21,21 @@ wobei &lt;format&gt; durch das jeweils gewünschte Format zu ersetzen ist.
 </p>
 
 <p>
+Sie können außerdem <code>wget</code> benutzen, um Bilder zu erzeugen und diese in regelmäßigen Reports einzufügen. Ein Beispiel:
+</p>
+<pre class="code">wget -O image.png &#039;http://&lt;user&gt;:&lt;pass&gt;@&lt;nagios-server&gt;/pnp4nagios/image?host=&lt;hostname&gt;&amp;srv=&lt;service&gt;&amp;view=2&amp;source=0&#039;</pre>
+
+<p>
+<code>view=&lt;n&gt;</code> begrenzt den Graphen auf die Zeitperiode, die in <code>config.php</code> definiert ist<br/>
+
+<code>source=&lt;n&gt;</code> zeigt nur eine Data-Source, wenn mehrere in der RRD-Datei vorhanden sind
+</p>
+
+<p>
+Anstatt <code>view</code> können Sie auch <code>start</code> und/oder <code>end</code> benutzen, um die Zeitspanne anzugeben. Details finden Sie in den <a href="/de/pnp-0.6/timeranges" class="wikilink1" title="de:pnp-0.6:timeranges">&quot;time ranges&quot;</a>.
+</p>
+
+<p>
 <a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">Templates</a>
 
 </p>
