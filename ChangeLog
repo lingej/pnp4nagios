@@ -1,4 +1,6 @@
-**pnp-0.6.14 ??/??/2011**
+**pnp-0.6.15 ??/??/2011**
+
+**pnp-0.6.14 08/05/2011**
   * Feature: Webinterface for mobile devices based on jQuery Mobile \\ ( http://jquerymobile.com/ )
   * Feature: Zoom based on jQuery plugin imgAreaSelect \\ ( http://odyniec.net/projects/imgareaselect/ )
   * Feature: New template check_mssql_health.php
