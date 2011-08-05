@@ -29,7 +29,7 @@ jQuery(window).load(
 
     jQuery('img.goto').css('visibility', 'visible');
     jQuery('div.graph').imgAreaSelect({ handles: false, autoHide: true,
-        fadeSpeed: 500, onSelectEnd: redirect, minHeight: '100' });
+        fadeSpeed: 500, onSelectEnd: redirect, minHeight: '<?php echo $this->config->conf['graph_height'] ?>' });
 
     function redirect(img, selection) {
     	if (!selection.width || !selection.height)
