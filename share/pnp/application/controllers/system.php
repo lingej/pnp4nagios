@@ -16,7 +16,7 @@ class System_Controller extends Template_Controller {
         $this->config     = new Config_Model();
         $this->rrdtool    = new Rrdtool_Model();
         $this->auth       = new Auth_Model();
-		#$this->system	  = new System_Model();
+	#$this->system	  = new System_Model();
 
         $this->config->read_config();
         Kohana::config_set('locale.language',$this->config->conf['lang']);
@@ -207,9 +207,9 @@ class System_Controller extends Template_Controller {
         }
      }
      public function isMobileDevice (){
-	     if( $this->session->get('classic-ui',0) == 1){
+	 if( $this->session->get('classic-ui',0) == 1){
              return FALSE;
-	     }
+	 }
          if ( preg_match('/'.$this->config->conf['mobile_devices'].'/', $_SERVER['HTTP_USER_AGENT'] ) ){
              return TRUE;
          }else{

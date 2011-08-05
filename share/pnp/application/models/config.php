@@ -26,6 +26,7 @@ class Config_Model extends System_Model
         $conf['pdf_width']         = Kohana::config('core.pdf_width');
         $conf['pdf_height']        = Kohana::config('core.pdf_height');
         $conf['right_zoom_offset'] = Kohana::config('core.right_zoom_offset');
+        $conf['mobile_devices']    = Kohana::config('core.mobile_devices');
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {
