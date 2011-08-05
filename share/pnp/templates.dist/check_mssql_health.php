@@ -247,8 +247,9 @@ foreach ($this->DS as $KEY=>$VAL) {
         $opt[$defcnt] = "--vertical-label \"Bytes\" --title \"Total sql server memory on $hostname\" ";
         $def[$defcnt] = "";
         $def[$defcnt] .= rrd::def("mem",$VAL['RRDFILE'],$VAL['DS'],"AVERAGE:reduce=LAST");
-        $def[$defcnt] .= rrd::area("mem","#111111");
-        $def[$defcnt] .= rrd::gprint("mem","AVERAGE","%.0lf Bytes") ;
+        $def[$defcnt] .= rrd::area("mem","#c3c3c3", "Memory");
+        $def[$defcnt] .= rrd::line1("mem","#111111");
+        $def[$defcnt] .= rrd::gprint("mem",array("MAX","AVERAGE", "LAST"),"%.1lf %SB") ;
         $defcnt++;
     }
     if(preg_match('/^buffer_cache_hit_ratio$/', $VAL['NAME'])) {
@@ -309,72 +310,34 @@ foreach ($this->DS as $KEY=>$VAL) {
         $def[1] .= rrd::def     ("var".$KEY, $VAL['RRDFILE'], $VAL['DS'], "AVERAGE") ;
         $def[1] .= rrd::line1   ("var".$KEY, rrd::color($KEY), rrd::cut($dsname, 12) ) ;
         $def[1] .= rrd::gprint  ("var".$KEY, array("LAST","MAX","AVERAGE"), "%3.6lf" );
-        
     }
 
-    if(preg_match('/^db_.*_free_pct/', $VAL['NAME'])) {
-        # if exists array dbs && > 0 -> next
-        if(isset($dbs)) continue;
-        # hash bauen mit tablespace als key
-        $dbs = array();
-        $dsnr = array();
-        $units = array();
-        $numds = 3;
-        $colors = array("#000000","#00ffff","#0000ff");
-        foreach ($DS as $t) {
-            if(preg_match('/^db_(.*)_free_pct/', $NAME[$t], $match)) {
-              $dbs[] = $match[1];
-            }
-            $dsnr[] = $DS[$t];
-            $act[] = $ACT[$t];
-            $units[] = $UNIT[$t];
-            $warn[] = $WARN[$t];
-            $crit[] = $CRIT[$t];
-            $warn_min[] = $WARN_MIN[$t];
-            $crit_min[] = $CRIT_MIN[$t];
-            $max[] = $MAX[$t];
-            $min[] = $MIN[$t];
+    if(preg_match('/^db_(.*)_free_pct/', $VAL['NAME'], $match)) {
+	$dsname = $match[1];
+	if(!defined($opt[1])){
+            $opt[1] = "--vertical-label \"%\" -l0 --title \"DB Freespace %\" ";
+	}
+	if(empty($def[1])){
+             $def[1] = "";
         }
-        foreach ($dbs as $key => $db) {
-            $db_free_pct = $dsnr[$key * $numds];
-            $db_free_mb = $dsnr[$key * $numds + 1];
-            $db_free_mb_val = $act[$key * $numds + 1];
-            $max_free_mb = $max[$key * $numds + 1];
-            $db_alloc_pct = $dsnr[$key * $numds + 2];
-            $unit_free_pct = $units[$key * $numds];
-            $unit_free_mb = $units[$key * $numds + 1];
-            $warn_free_pct = $warn_min[$key * $numds];
-            $crit_free_pct = $crit_min[$key * $numds];
-
-            $ds_name[$defcnt] = "DB free space %";
-            $opt[$defcnt] = "--vertical-label \"DB free space %\" -u102 -l0 --title \"Database $db free space \" ";
-            $def[$defcnt] =  rrd::def("free",$VAL['RRDFILE'],$db_free_pct,"AVERAGE") ;
-            $def[$defcnt] .= rrd::def("allocated",$VAL['RRDFILE'],$db_alloc_pct,"AVERAGE") ;
-            $def[$defcnt] .= rrd::def("freemb",$VAL['RRDFILE'],$db_free_mb,"AVERAGE") ;
-            $def[$defcnt] .= rrd::cdef("ar","free,$crit_free_pct,LE,free,0,GT,INF,UNKN,IF,UNKN,IF,ISINF,free,0,IF");
-            $def[$defcnt] .= rrd::cdef("ay","free,$warn_free_pct,LE,free,$crit_free_pct,GT,INF,UNKN,IF,UNKN,IF,ISINF,free,0,IF");
-            $def[$defcnt] .= rrd::cdef("ag","free,100,LE,free,$warn_free_pct,GT,INF,UNKN,IF,UNKN,IF,ISINF,free,0,IF");
-            $def[$defcnt] .= rrd::cdef("used","100,free,-");
-            $def[$defcnt] .= rrd::area("ag","#$green") ;
-            $def[$defcnt] .= rrd::area("ay","#$yellow") ;
-            $def[$defcnt] .= rrd::area("ar","#$red") ;
-            $def[$defcnt] .= rrd::line1("free","#000000");
-            $def[$defcnt] .= rrd::area("used","#00000030","","STACK") ;
-            $def[$defcnt] .= rrd::vdef("lvfree","free,LAST") ;
-            $def[$defcnt] .= rrd::vdef("lvfreemb","freemb,LAST") ;
-            $def[$defcnt] .= rrd::gprint("lvfree","Database $db has %.2lf%% free space left");
-            $def[$defcnt] .= rrd::comment("($db_free_mb_val of $max_free_mb$unit_free_mb)\\n");
-            $def[$defcnt] .= rrd::comment("($warn_free_pct $crit_free_pct)");
-            $def[$defcnt] .= rrd::line1("allocated","#FFFFFF");
-            $def[$defcnt] .= rrd::vdef("lvallocated","allocated,LAST") ;
-            $def[$defcnt] .= rrd::gprint("lvallocated","Database $db has %.2lf%% allocated\\n");
-            $defcnt++;
+        $ds_name[1] = "DB Freespace %";
+        $def[1] .= rrd::def     ("var".$KEY, $VAL['RRDFILE'], $VAL['DS'], "AVERAGE") ;
+        $def[1] .= rrd::line1   ("var".$KEY, rrd::color($KEY), rrd::cut($dsname, 12) ) ;
+        $def[1] .= rrd::gprint  ("var".$KEY, array("LAST","MAX","AVERAGE"), "%3.2lf%%" );
+    }
+    if(preg_match('/^db_(.*)_free$/', $VAL['NAME'], $match)) {
+	$dsname = $match[1];
+	if(empty($opt[2])){
+            $opt[2] = "--vertical-label \"MB\" --title \"DB Freespace MB\" ";
+	}
+	if(empty($def[2])){
+             $def[2] = "";
         }
+        $ds_name[2] = "DB Freespace MB";
+        $def[2] .= rrd::def     ("var".$KEY, $VAL['RRDFILE'], $VAL['DS'], "AVERAGE") ;
+        $def[2] .= rrd::line1   ("var".$KEY, rrd::color($KEY), rrd::cut($dsname, 12) ) ;
+        $def[2] .= rrd::gprint  ("var".$KEY, array("LAST","MAX","AVERAGE"), "%3.2lf %SM" );
     }
 }
-if(isset($dbs)) unset($dbs);
-if(isset($locks)) unset($locks);
-if(isset($warn)) unset($warn);
-if(isset($crit)) unset($crit);
 ?>
 
