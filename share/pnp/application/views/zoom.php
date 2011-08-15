@@ -31,6 +31,7 @@ jQuery.noConflict();
                     return;
 
             var graph_width = parseInt(jQuery(img).css('width'));
+            var source = <?php echo $this->source?>;
             var link   = jQuery(img).attr('id');
             var ostart = Math.abs(jQuery(img).attr('start'));
             var oend   = Math.abs(jQuery(img).attr('end'));
@@ -40,7 +41,7 @@ jQuery.noConflict();
             var sec_per_px = parseInt( delta / graph_width);
             var start = ostart + Math.ceil( selection.x1 * sec_per_px );  
             var end   = ostart + ( selection.x2 * sec_per_px );  
-            window.location = link + '&start=' + start + '&end=' + end ; 
+            window.location = link + '&source=' + source + '&start=' + start + '&end=' + end ; 
         }
     });
 </script>
