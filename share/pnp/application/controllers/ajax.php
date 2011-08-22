@@ -119,7 +119,7 @@ class Ajax_Controller extends System_Controller  {
                         pnp::shorten($item)
                       );
             }
-        }elseif($action == "remove-all"){
+        }elseif($action == "clear"){
             $this->session->delete("basket");
         }else{
             echo "Action $action not known";
@@ -128,7 +128,10 @@ class Ajax_Controller extends System_Controller  {
         if(is_array($basket) && sizeof($basket) == 0){
             echo Kohana::lang('common.basket-empty');
         }else{
-            echo "<div><a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">".Kohana::lang('common.basket-show')."</a></div>";
+            echo "<div align=\"center\" class=\"p2\">\n";
+            echo "<button id=\"show\">".Kohana::lang('common.basket-show')."</button>\n";
+            echo "<button id=\"clear\">".Kohana::lang('common.basket-clear')."</button>\n";
+            echo "</div>\n";
         }
     }
 

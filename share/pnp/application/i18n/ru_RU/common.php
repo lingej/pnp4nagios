@@ -49,6 +49,7 @@ $lang = array
     'mobile-submit' => 'Ввести',
     'basket-empty' => 'Корзина пуста',
     'basket-show' => 'Показать корзину',
+    'basket-clear' => 'Clear basket',
     'basket-remove' => 'Убрать %s',
     'basket-add-item' => 'Добавить этот элемент в мою корзину',
     'basket-add-service' => 'Добавить эту службу в мою корзину',

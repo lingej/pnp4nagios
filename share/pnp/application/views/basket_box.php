@@ -17,7 +17,11 @@ if(is_array($basket) && sizeof($basket) > 0 ){
 	}
 }
 if(is_array($basket) && sizeof($basket) > 0 ){
-	echo "<div><a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">".Kohana::lang('common.basket-show')."</a></div>\n";
+    echo "<div align=\"center\" class=\"p2\">\n";
+    echo "<button id=\"basket-show\">".Kohana::lang('common.basket-show')."</button>\n";
+    echo "<button id=\"basket-clear\">".Kohana::lang('common.basket-clear')."</button>\n";
+    echo "</div>\n";
+    #echo "<div><a class=\"multi0\" href=\"".url::base(TRUE)."page/basket\">".Kohana::lang('common.basket-show')."</a></div>\n";
 }else{
 	echo "<div>".Kohana::lang('common.basket-empty')."</div>\n";
 }

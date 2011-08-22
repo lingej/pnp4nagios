@@ -49,6 +49,7 @@ $lang = array
     'mobile-submit' => 'absenden',
     'basket-empty' => 'Basket ist leer',
     'basket-show' => 'Zeige Basket',
+    'basket-clear' => 'Leere Basket',
     'basket-remove' => 'Entferne %s',
     'basket-add-item' => 'Graphen zum Basket hinzuf&uuml;gen',
     'basket-add-service' => 'Alle Graphen zum Basket hinzuf&uuml;gen',

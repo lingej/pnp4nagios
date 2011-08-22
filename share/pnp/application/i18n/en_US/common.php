@@ -49,6 +49,7 @@ $lang = array
     'mobile-submit' => 'Submit',
     'basket-empty' => 'Basket is empty',
     'basket-show' => 'Show basket',
+    'basket-clear' => 'Clear basket',
     'basket-remove' => 'Remove %s',
     'basket-add-item' => 'Add this item to my basket',
     'basket-add-service' => 'Add this service to my basket',

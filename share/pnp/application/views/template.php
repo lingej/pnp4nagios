@@ -53,7 +53,7 @@ jQuery(window).load(
 jQuery(document).ready(function(){
     var path = "<?php echo url::base(TRUE)."/"?>";
     jQuery("img").fadeIn(1500);
-    jQuery("#basket_action_add a").click(function(){
+    jQuery("#basket_action_add a").live("click", function(){
         var item = (this.id)
         jQuery.ajax({
             type: "POST",
@@ -61,8 +61,21 @@ jQuery(document).ready(function(){
             data: { item: item },
             success: function(msg){
                 jQuery("#basket_items").html(msg);
+                window.location.reload() 
             }
         });
+    });
+    jQuery("#basket-clear").live("click", function(){
+        jQuery.ajax({
+            type: "POST",
+            url: path + "ajax/basket/clear",
+            success: function(msg){
+                window.location.reload() 
+            }
+        });
+    });
+    jQuery("#basket-show").live("click", function(){
+                window.location.href = path + 'page/basket' 
     });
     jQuery(".basket_action_remove a").live("click", function(){
         var item = (this.id)
