@@ -330,14 +330,19 @@ class rrd_Core {
 			throw new Kohana_exception("rrd::". __FUNCTION__ . "() Third Parameter 'critical' is missing");
 		}
 		$line = "";
-		$line .= "CDEF:green=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
-		$line .= "CDEF:btw=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
-		$line .= "CDEF:blue=btw,".$warning.",GE,btw,UNKN,IF ";
-		$line .= "CDEF:red=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
-		$line .= "CDEF:green2=green,0,EQ,0.000001,green,IF ";
-		$line .= rrd::tick("green2", $color_green.$opacity, $fraction);
-		$line .= rrd::tick("blue", $color_btw.$opacity, $fraction);
-		$line .= rrd::tick("red", $color_red.$opacity, $fraction);
+		$green_vname = "var".substr(sha1(rand()),1,4);
+        $btw_vname = "var".substr(sha1(rand()),1,4);
+        $blue_vname = "var".substr(sha1(rand()),1,4);
+        $red_vname = "var".substr(sha1(rand()),1,4);
+		$green2_vname = "var".substr(sha1(rand()),1,4);
+		$line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
+		$line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+		$line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GE,".$btw_vname.",UNKN,IF ";
+		$line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+		$line .= "CDEF:".$green2_vname."=".$green_vname.",0,EQ,0.000001,".$green_vname.",IF ";
+		$line .= rrd::tick($green2_vname, $color_green.$opacity, $fraction);
+		$line .= rrd::tick($blue_vname, $color_btw.$opacity, $fraction);
+		$line .= rrd::tick($red_vname, $color_red.$opacity, $fraction);
 	
 	    return $line;
     }
