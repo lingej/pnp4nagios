@@ -73,8 +73,8 @@ foreach($this->data->STRUCT as $key=>$value){
    	echo "<div class=\"p4 gh ui-widget-content ui-corner-bottom\">\n";
 	echo "<div style=\"position:relative;\">\n";
         $path = pnp::addToUri( array(
-                                'host'   => urlencode($value['MACRO']['HOSTNAME']),
-                                'srv'    => urlencode($value['MACRO']['SERVICEDESC']),
+                                'host'   => $value['MACRO']['HOSTNAME'],
+                                'srv'    => $value['MACRO']['SERVICEDESC'],
                                ), FALSE
                              );
    	echo "<a href=\"".url::base(TRUE)."graph".$path 
@@ -85,8 +85,8 @@ foreach($this->data->STRUCT as $key=>$value){
 		."\">\n";
 	echo "<div start=".$value['TIMERANGE']['start']." end=".$value['TIMERANGE']['end']." style=\"width:".$value['GRAPH_WIDTH']."px; height:".$value['GRAPH_HEIGHT']."px; position:absolute; top:33px\" class=\"graph\" id=\"".$this->url."\" ></div>";
         $path = pnp::addToUri( array(
-                                'host'   => urlencode($value['MACRO']['HOSTNAME']),
-                                'srv'    => urlencode($value['MACRO']['SERVICEDESC']),
+                                'host'   => $value['MACRO']['HOSTNAME'],
+                                'srv'    => $value['MACRO']['SERVICEDESC'],
                                 'view'   => $value['VIEW'],
                                 'source' => $value['SOURCE'],
                                 'start'  => $value['TIMERANGE']['start'],
