@@ -318,6 +318,37 @@ class rrd_Core {
 	    return $line;
     }
 
+    public static function alerter_gr($vname=FALSE,$label=FALSE,$warning=FALSE,$critical=FALSE,$opacity='ff',$unit,$color_green='#00ff00',$color_btw='#ffff00',$color_red='#ff0000',$line_col='#0000ff',$start_color="#ffffff") {
+
+        if($vname === FALSE){
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");
+        }
+        if($label === FALSE){
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Parameter 'label' is missing");
+        }
+        if($warning === FALSE){
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Third Parameter 'warning' is missing");
+        }
+        if($critical === FALSE){
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() Fourth Parameter 'critical' is missing");
+        }
+        $line = "";
+        $green_vname = "var".substr(sha1(rand()),1,4);
+        $btw_vname = "var".substr(sha1(rand()),1,4);
+        $blue_vname = "var".substr(sha1(rand()),1,4);
+        $red_vname = "var".substr(sha1(rand()),1,4);
+        $line = "";
+        $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
+        $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+        $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GT,".$btw_vname.",UNKN,IF ";
+        $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GT,".$vname.",UNKN,IF ";
+        $line .= rrd::gradient($green_vname, $start_color, $color_green.$opacity);
+        $line .= rrd::gradient($blue_vname, $start_color, $color_btw.$opacity);
+        $line .= rrd::gradient($red_vname, $start_color, $color_red.$opacity);
+        $line .= rrd::line1($vname,$line_col,$label);
+        return $line;
+    }
+
 	public static function ticker($vname=FALSE, $warning=FALSE, $critical=FALSE, $fraction = -0.05, $opacity = 'ff', $color_green = '#00ff00', $color_btw = '#ffff00', $color_red = '#ff0000') {
 
 		if($vname === FALSE){
