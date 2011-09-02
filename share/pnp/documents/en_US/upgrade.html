@@ -108,7 +108,7 @@ The definitions for the preview popup function are similar
 </p>
 <pre class="code">define host {
    name       host-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=_HOST_
    register   0
 }
 
@@ -168,7 +168,7 @@ Please keep in mind that all occurrences have to be changed <img src="/lib/image
 </p>
 
 </div>
-<!-- SECTION "Adjustments" [2923-4674] -->
+<!-- SECTION "Adjustments" [2923-4716] -->
 <h2><a name="upgrade_scenario_using_npcd" id="upgrade_scenario_using_npcd">Upgrade scenario using NPCD</a></h2>
 <div class="level2">
 <ol>
@@ -217,4 +217,4 @@ Please keep in mind that all occurrences have to be changed <img src="/lib/image
 </ol>
 
 </div>
-<!-- SECTION "Upgrade scenario using NPCD" [4675-] -->
+<!-- SECTION "Upgrade scenario using NPCD" [4717-] -->

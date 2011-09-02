@@ -523,7 +523,7 @@ define service {
 </p>
 <pre class="code">define host {
    name       host-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=_HOST_
    register   0
 }
 
