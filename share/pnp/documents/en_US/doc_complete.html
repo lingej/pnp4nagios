@@ -244,7 +244,7 @@ Using this storage format the size of the files will stay the same over time. Pe
 
 <h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
 <div class="level2">
-<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 103554 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 98.81%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 90.99%</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 103554 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li></ul>
 <p>
 
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
@@ -411,7 +411,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.13.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.14.tar.gz</a>
 </p>
 
 </div>
@@ -431,7 +431,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Thu Aug  4 14:55:01 CEST 2011
+Last Update: Thu Sep  1 20:55:01 CEST 2011
 </p>
 
 </div>
@@ -441,7 +441,22 @@ Last Update: Thu Aug  4 14:55:01 CEST 2011
 
 <p>
 
-<strong>pnp-0.6.14 ??/??/2011</strong>
+<strong>pnp-0.6.15 ??/??/2011</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix:  Fixed Overview link (reported by Stefan Triep)</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Fixed zoom popup (reported by Rudolf Labuschagne)</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Fixed double urlencode() (reported by Mathias Kettner)</div>
+</li>
+<li class="level1"><div class="li"> Feature: “Clear basket” button added (suggested by Stefan Triep) </div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.14 08/05/2011</strong>
 </p>
 <ul>
 <li class="level1"><div class="li"> Feature: Webinterface for mobile devices based on jQuery Mobile <br/>
@@ -833,7 +848,7 @@ The definitions for the preview popup function are similar
 </p>
 <pre class="code">define host {
    name       host-pnp
-   action_url /pnp4nagios/graph?host=$HOSTNAME$&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/popup?host=$HOSTNAME$
+   action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&amp;srv=_HOST_&#039; class=&#039;tips&#039; rel=&#039;/pnp4nagios/index.php/popup?host=$HOSTNAME$&amp;srv=_HOST_
    register   0
 }
 
