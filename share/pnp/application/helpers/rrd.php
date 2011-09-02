@@ -212,6 +212,33 @@ class rrd_Core {
         return $line; 
     }
 
+	/*
+	* Function to modify alignment of gprint
+	*/
+	public static function gprinta($vname=FALSE, $cf="AVERAGE", $text="%6.2lf %s", $align=""){
+        $line = "";
+        if($vname === FALSE){
+            throw new Kohana_exception("rrd::". __FUNCTION__ . "() First Parameter 'vname' is missing");
+        }
+        if($align != ""){
+            $align = '\\' . $align;
+        }
+        if(is_array($cf)){
+            foreach($cf as $key => $val){
+                $line .= sprintf("GPRINT:%s:%s:",$vname,$val);
+                if(($key == sizeof($cf)-1)and($align != "")){
+                    $line .= '"'.$text.' '.ucfirst(strtolower($val)).$align.'" ';
+                }else{
+                    $line .= '"'.$text.' '.ucfirst(strtolower($val)).'" ';
+                }
+            }
+        }else{
+            $line .= sprintf("GPRINT:%s:%s:",$vname,$cf);
+            $line .= '"'.$text.'" ';
+        }
+        return $line;
+    }
+
     public static function def($vname=FALSE, $rrdfile=FALSE, $ds=FALSE, $cf="AVERAGE"){
         $line = "";
         if($vname === FALSE){
