@@ -3,6 +3,7 @@
   * Bugfix:  Fixed zoom popup (reported by Rudolf Labuschagne)
   * Bugfix:  Fixed double urlencode() (reported by Mathias Kettner)
   * Feature: "Clear basket" button added (suggested by Stefan Triep) 
+  * Feature: New helper function "rrd::alerter_gr()" ( committed by Stefan Trip )
 
 **pnp-0.6.14 08/05/2011**
   * Feature: Webinterface for mobile devices based on jQuery Mobile \\ ( http://jquerymobile.com/ )
