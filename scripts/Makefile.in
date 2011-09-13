@@ -19,7 +19,7 @@ all html:
 clean:
 
 distclean: clean
-	-rm -f process_perfdata.pl check_pnp_rrds.pl net2pnp.pl verify_pnp_config.pl rc.npcd rc.pnp_gearman_worker rrd_convert.pl
+	-rm -f process_perfdata.pl check_pnp_rrds.pl net2pnp.pl rc.npcd rc.pnp_gearman_worker rrd_convert.pl
 	-rm -f Makefile
 
 devclean: distclean
@@ -35,9 +35,6 @@ install-processperfdata:
 install-plugins: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) check_pnp_rrds.pl $(DESTDIR)$(LIBEXECDIR)
 
-install-verifyconfig: 
-	$(INSTALL) -m 755 $(INSTALL_OPTS) verify_pnp_config.pl $(DESTDIR)$(LIBEXECDIR)
-
 install-rrdconvert: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) rrd_convert.pl $(DESTDIR)$(LIBEXECDIR)
 
@@ -47,6 +44,5 @@ install:
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LOGDIR)/stats
 	$(MAKE) install-processperfdata
 	$(MAKE) install-plugins
-	$(MAKE) install-verifyconfig
 	$(MAKE) install-rrdconvert
 	
