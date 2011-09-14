@@ -5,177 +5,96 @@
 <div class="level1">
 
 <p>
-In case of problems there is a script called <code>verify_pnp_config.pl</code> located in the <code>scripts</code> directory. It enables you to check the configuration settings as well as performance data of hosts or services. It can be used prior and during runtime of PNP.
-</p>
 
-<p>
-<strong>* Note </strong>*: The information applies to verify_pnp_config v0.1.24 which is available in the current stable version downloadable via <a href="http://www.pnp4nagios.org/pnp/dwnld" class="urlextern" title="http://www.pnp4nagios.org/pnp/dwnld"  rel="nofollow">http://www.pnp4nagios.org/pnp/dwnld</a>.
-Older versions may have fewer options so in the descriptions of the various options you will find hints to the PNP versions.<br/>
-
-</p>
-
-<p>
-<strong>* Note </strong>*: In PNP 0.6.4 one line is missing in the script which results in an error so please add this line before executing it:
-
-</p>
-<pre class="code">     $CPcfg{&#039;$conf[\&#039;max_age\&#039;]&#039;} = &#039;n;^\(?[\d\* ]+\)?$&#039;;
-     $CPcfg{&#039;$conf[\&#039;temp\&#039;]&#039;} = &#039;d;;&#039;;
-     $CPcfg{&#039;$conf[\&#039;base_url\&#039;]&#039;} = &quot;S;.+;&quot;;   # &lt;-- add this line
-     $CPcfg{&#039;$conf[\&#039;nagios_base\&#039;]&#039;} = &quot;S;.+;&quot;;
-     $CPcfg{&#039;$conf[\&#039;allowed_for_service_links\&#039;]&#039;} = &#039;S;[\S,]+;&#039;;</pre>
-
-<p>
-<strong>* Note </strong>*: The “long” options always start with two ”-” which isn&#039;t clearly visible in the text.<br/>
-
-</p>
-
-<p>
-Checking the configuration can be done executing
-</p>
-<pre class="code">./verify_pnp_config.pl -m &lt;mode&gt;</pre>
-
-<p>
-replacing &lt;mode&gt; by sync, bulk or NPCD.
-</p>
-
-<p>
-Specifying the option <code>-h</code> or <code>–-help</code> respectively shows the following lines:
-
-</p>
-<pre class="code">
--h, --help        print these lines
--b, --basedir=s   Nagios Base directory (default: /usr/local/nagios)
--B, --binary=s    Nagios binary (default: nagios)
--c, --config=s    Nagios main config file (default: /usr/local/nagios/etc/nagios.cfg)
--m, --mode=s      PNP mode (&quot;sync&quot;, &quot;bulk&quot;, &quot;NPCD&quot;)
--l, --logfile=s   check configure log file
--D, --pnpdir=s    PNP root dir (PNP version &gt;= 0.6)
--N, --npcdcfg=s   PNP config file for NPCD mode (default: /usr/local/pnp4nagios/etc/pnp/npcd.cfg)
--P, --ppcfg=s     process_perfdata config file (default: /usr/local/pnp4nagios/etc/pnp/process_perfdata.cfg)
--C, --cpcfg=s     PNP config file (config.php)
--p, --precheck    use config files instead of objects cache
--r, --rrdtool=s   specify the location of the RRDtool binary
--R, --RRDpath=s   specify the perfdata directory (default: /usr/local/pnp4nagios/var/perfdata) or &quot;no&quot; for no check
--U, --resource=s  location of the resource config file (default: /usr/local/nagios/etc/resource.cfg)
--M, --monitor=s   specify the monitoring product (default: nagios; may be &quot;icinga&quot;)
--L, --layout=s    specify a layout (Nagios2, Nagios3, SuSE, Fedora)
--T, --template=s  specify the path to the templates directory (default /usr/local/pnp4nagios/share/templates.dist)
--u, --user=s      user of the perfdata directory
--g, --group=s     group of the perfdata directory 	
--q, --quiet       quiet mode, non-zero return code will indicate errors
--o, --object=s    Nagios object (host name, service description)
--t, --time        show warnings if RRDfiles are too old
--s, --skip        skip check of installed packages
--n, --native      show messages in native language (so far &quot;es&quot; or &quot;de&quot;)
--e, --english     show english messages/links
--d, --debug       some debugging output
--I, --info        show information about compile time variable settings
-</pre>
-
-<p>
-
-The Nagios program and access to the main configuration file are always necessary. If you have non-standard paths because you installed a Nagios package you can try to use one of the predefined layouts via the -L option. “suse” and “fedora” should work on the appropriate distributions while “nagios2” and “nagios3” should work on others depending on the Nagios version you installed.
-If none of these methods work you can use three options (-b, -B and -c) to specify the nagios base directory, the name of the binary and the place of the main config file. If the program name starts with a ”/” then this value is taken as an absolute path which isn&#039;t modified anymore. If it doesn&#039;t start with a ”/” then the path is composed of the basedir, the string “bin” and the binary. Using -U you can specify the location on the resource config file.
-</p>
-
-<p>
-Without specifying any options the help page will be shown so you&#039;ll have to specify either the mode or an object.
-</p>
-
-<p>
-Using the option <code>-m</code> (<code>–mode</code>) you specify one of the PNP modes whose settings will be checked. The option <code>-l &lt;filename&gt;</code> (<code>–logfile=&lt;filename&gt;</code>) allows to check the config during installation of PNP. You have to execute <code>./configure</code> (with additional options if necessary) first which creates the file <code>config.log</code>. This name has to be passed as parameter value. The script checks if software requirements are met and if several settings have been specified correctly. That includes a call of the RRDtool binary so you may use the option  <code>-r &lt;location&gt;</code> (<code>–rrdtool &lt;location&gt;</code>) if the binary can not be found at <code>/usr/bin/rrdtool</code>.
-</p>
-
-<p>
-The script checks if owner and group of the directories and files below the perfdata folder correspond to the values given in nagios.cfg. Additionally the xml files are checked for non-zero return codes of RRDtool. Using the option <code>-R</code> (<code>–RRDpath</code>) you can specify the directory where the RRD files are located if its place is non-standard. If you don&#039;t wish these checks to be performed please specify “no” as directory name. Using the options -u (–user) and -g (–group) you can specify user and/or group of the perfdata directory if they don&#039;t match the values of the nagios user.
-</p>
-
-<p>
-After the installation the changes in <code>nagios.cfg</code> can be checked using the option <code>-p</code> (<code>–precheck</code>) before restarting nagios. This way you can correct any errors without restarting every time.
-</p>
-
-<p>
-Together with the option <code>-o &lt;object&gt;</code> (<code>–object=&lt;object&gt;</code>) you specify a string which is compared to hostnames and/or service descriptions in the objects cache file. The string should be enclosed in quotes to escape blanks and several special characters.
-If the string matches the name and any performance data will be shown. If no or invalid performance data is present appropriate messages will be given.
-</p>
-
-<p>
-Appending a semicolon to the string will result in comparing only hostnames, prepending a semicolon only inspects service descriptions. A semicolon within the string separates hostname and service description.
-</p>
-<ul>
-<li class="level1"><div class="li"> hostname/service description ⇒ string matches hostname or service description</div>
-</li>
-<li class="level1"><div class="li"> hostname; ⇒ string only matches against hostnames</div>
-</li>
-<li class="level1"><div class="li"> ;service description ⇒ string only matches against service descriptions</div>
-</li>
-<li class="level1"><div class="li"> hostname;service description ⇒ hostname and service description have to match</div>
-</li>
-</ul>
-
-<p>
-
-Starting with PNP version 0.6 the directory layout has changed so all files are below a separate directory which can be specified using ”-D” (–pnpdir) if it differs from /usr/local/pnp4nagios. This also affects the options ”-N”, ”-P” and ”-C”, respectively, so you may not have to specify separate values for these options.
-</p>
-
-<p>
-When using the NPCD mode you can use <code>-N &lt;config file&gt;</code> (<code>–npcdcfg=&lt;config file&gt;</code>) to specify the location of the config file if its name or location differs from the default (/usr/local/pnp4nagios/etc/npcd.cfg).
-</p>
-
-<p>
-Using the option <code>-P &lt;config file&gt;</code> (<code>–ppcfg=&lt;config file&gt;</code>) you can specify the name of the config file for process_perfdata.pl if name or location differs from the default (/usr/local/pnp4nagios/etc/process_perfdata.cfg).
-</p>
-
-<p>
-Using the option -M (–monitor) enables you to specify the product which delivers the data to PNP. The default is “nagios” but “icinga” is supported now as well. Additionally you may have to use the options -b, -B and -c as well.
-</p>
-
-<p>
-Sometimes changes in template files result in errors which are hard to find in the web <acronym title="Graphical User Interface">GUI</acronym>. Using the option -T the template files are checked for errors. Specify the path to the templates diretory as a parameter.
-</p>
-
-<p>
-Per default the script checks if certain packages are installed. If you experience difficulties with these checks (or when you&#039;re sure the required packages are installed) you can use the option -s (–skip) to skip these checks.
-</p>
-
-<p>
-Using -n (–native) you can specify “es” or “de” to see spanish or german messages, respectively.
-</p>
-
-<p>
-The option <code>-e</code> (<code>–english</code>) enables you to force the use of english messages if the script detects german language settings.
-</p>
-
-<p>
-The option <code>-d</code> (<code>–debug</code>) will output additional lines which may help during trouble shooting  whereas -q (–quiet) suppresses all output. Errors will result in a non-zero return code.
-</p>
-
-<p>
-The option <code>-I</code> (<code>–info</code>) shows the settings of variables like <code>prefix</code>, <code>datadir</code> and other things you might have changed during &#039;./configure&#039;. In some cases we need to know these values and using this option is easier than searching different files. The option is available starting with PNP 0.6.7.
-</p>
-
-<p>
-Each output line will start with a letter indicating the type of information:
-</p>
-
-<p>
-<code>[I] </code>informational message about settings, things to be done, …<br/>
-
-<code>[A] </code>actions to be taken<br/>
-
-<code>[W] </code>warning message<br/>
-
-<code>[E] </code>error message: PNP will not work without resolving the problem(s)<br/>
-
-<code>[H] </code>hint: it might be worth reading the appropriate documentation<br/>
-
-<code>[D] </code>debugging message, hopefully showing the source of your problem<br/>
-
-</p>
-
-<p>
-<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/webfe" class="wikilink1" title="pnp-0.6:webfe">web frontend</a>
-
+In case of problems there is a script called <code>verify_pnp_config.pl</code> located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a>. It enables you to check the configuration settings as well as performance data of hosts or services. It can be used prior and during runtime of PNP.
 </p>
 
 </div>
+<!-- SECTION "verify_pnp_config" [1-292] -->
+<h2><a name="download" id="download">Download</a></h2>
+<div class="level2">
+<pre class="code">
+wget http://verify.pnp4nagios.org/verify_pnp_config
+</pre>
+
+</div>
+<!-- SECTION "Download" [293-383] -->
+<h2><a name="test" id="test">Test</a></h2>
+<div class="level2">
+
+<p>
+
+The verify script is located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> an needs three start options
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>–mode</code> One of the modes described on <a href="/pnp-0.6/modeds" class="wikilink2" title="pnp-0.6:modeds" rel="nofollow">modeds</a></div>
+</li>
+<li class="level1"><div class="li"> <code>–config</code> Path nagios.cfg or icinga.cfg</div>
+</li>
+<li class="level1"><div class="li"> <code>–pnpcfg</code> Path to PNP´s etc directory</div>
+</li>
+</ul>
+<pre class="code">
+lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/nagios.cfg --pnpcfg=/usr/local/pnp4nagios/etc
+[INFO]  ========== Starting Environment Checks ============
+[INFO]  My version is: verify_pnp_config-0.6.14-R.31
+[INFO]  Reading /usr/local/nagios/etc/nagios.cfg
+[OK  ]  Running product is &#039;nagios&#039;
+[OK  ]  object_cache_file is defined
+[OK  ]  object_cache_file=/usr/local/nagios/var/objects.cache
+[INFO]  Reading /usr/local/nagios/var/objects.cache
+[OK  ]  resource_file is defined
+[OK  ]  resource_file=/usr/local/nagios/etc/resource.cfg
+[INFO]  Reading /usr/local/nagios/etc/resource.cfg
+[INFO]  Reading /usr/local/pnp4nagios/etc/process_perfdata.cfg
+[INFO]  Reading /usr/local/pnp4nagios/etc/pnp4nagios_release
+[OK  ]  Found PNP4Nagios version &quot;0.6.14&quot;
+[OK  ]  Effective User is &#039;nagios&#039;
+[OK  ]  User nagios exists with ID &#039;1000&#039;
+[OK  ]  Effective group is &#039;nagios&#039;
+[OK  ]  Group nagios exists with ID &#039;1000&#039;
+[INFO]  ========== Checking npcdmod Mode Config  ============
+[OK  ]  process_performance_data is 1 compared with &#039;/1/&#039;
+[OK  ]  event_broker_options is defined
+[OK  ]  event_broker_options=-1
+[OK  ]  event_broker_option bits 2 and 3 enabled (12)
+[OK  ]  broker_module is defined
+[OK  ]  broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nagios/etc/npcd.cfg
+[OK  ]  npcdmod.o config file is /usr/local/pnp4nagios/etc/npcd.cfg
+[OK  ]  /usr/local/pnp4nagios/etc/npcd.cfg used by npcdmod.o is readable
+[OK  ]  npcd daemon is running
+[OK  ]  /usr/local/pnp4nagios/etc/npcd.cfg is used by npcd and readable
+[OK  ]  npcd and npcdmod.o are using the same config file (/usr/local/pnp4nagios/etc/npcd.cfg)
+[INFO]  Nagios config looks good so far
+[INFO]  ========== Checking config values ============
+[INFO]  Reading /usr/local/pnp4nagios/etc/npcd.cfg
+[OK  ]  Script /usr/local/pnp4nagios/libexec/process_perfdata.pl is executable
+[INFO]  ========== Starting global checks ============
+[OK  ]  status_file is defined
+[OK  ]  status_file=/dev/shm/status.dat
+[INFO]  Reading /dev/shm/status.dat
+[INFO]  ==== Starting rrdtool checks ====
+[OK  ]  RRDTOOL is defined
+[OK  ]  RRDTOOL=/usr/bin/rrdtool
+[OK  ]  /usr/bin/rrdtool is executable
+[OK  ]  RRDtool 1.3.1  Copyright 1997-2008 by Tobias Oetiker &lt;tobi@oetiker.ch&gt;
+[OK  ]  USE_RRDs is defined
+[OK  ]  USE_RRDs=1
+[OK  ]  Perl RRDs modules are loadable
+[INFO]  ==== Starting directory checks ====
+[OK  ]  RRDPATH is defined
+[OK  ]  RRDPATH=/usr/local/pnp4nagios/var/perfdata
+[OK  ]  Perfdata directory &#039;/usr/local/pnp4nagios/var/perfdata&#039; exists
+[WARN]  62 hosts/services are not providing performance data
+[WARN]  &#039;process_perf_data 1&#039; is set for 43 hosts/services which are not providing performance data!
+[WARN]  &#039;process_perf_data 0&#039; is set for 27 of your hosts/services
+[OK  ]  &#039;process_perf_data 1&#039; is set for 243 of your hosts/services
+[INFO]  ==== System sizing ====
+[OK  ]  269 hosts/service objects defined
+[INFO]  ==== Check statistics ====
+[WARN]  Warning: 3, Critical: 0
+[WARN]  Checks finished...
+</pre>
+
+</div>
+<!-- SECTION "Test" [384-] -->
