@@ -1,4 +1,6 @@
-**pnp-0.6.15 ??/??/2011**
+**pnp-0.6.16 ??/??/2011**
+
+**pnp-0.6.15 09/15/2011**
   * Bugfix:  Fixed Overview link (reported by Stefan Triep)
   * Bugfix:  Fixed zoom popup (reported by Rudolf Labuschagne)
   * Bugfix:  Fixed double urlencode() (reported by Mathias Kettner)

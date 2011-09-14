@@ -329,7 +329,41 @@ Excerpt from nagios.log
 
 <p>
 
-TODO
+<a href="/_detail/gearman.png?id=pnp-0.6%3Aconfig" class="media" title="gearman.png"><img src="/_media/gearman.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>
+</p>
+
+<p>
+Since version 0.6.12 PNP4Nagios can be driven as a gearman worker. This way large Nagios environments are possible using mod_gearman. Nagios and PNP4Nagios can be run on different machines.
+</p>
+
+<p>
+You need a mod_gearman environment up and running like described by Sven Nierlein on <a href="http://labs.consol.de/lang/en/nagios/mod-gearman/" class="urlextern" title="http://labs.consol.de/lang/en/nagios/mod-gearman/"  rel="nofollow">http://labs.consol.de/lang/en/nagios/mod-gearman/</a>.
+</p>
+
+<p>
+You&#039;ll find a section on gearman in <code>etc/process_perfdata.cfg</code>:
+</p>
+<pre class="code">PREFORK = 0
+GEARMAN_HOST = localhost:4730
+REQUESTS_PER_CHILD = 10000
+ENCRYPTION = 1
+KEY = should_be_changed
+#KEY_FILE = /usr/local/pnp4nagios/etc/secret.key</pre>
+
+<p>
+Using <code>PREFORK = &lt;n&gt;</code> you specify the number of additional(!) child processes. Specify “0” only a parent process is started.<br/>
+
+<code>GEARMAN_HOST = &lt;host&gt;:&lt;port&gt;</code> specifies host and port of the server running the gearman daemon providing the data.<br/>
+
+<code>REQUEST_PER_CHILD = &lt;n&gt;</code> enables you to define the number of requests processed per process.<br/>
+
+<code>ENCRYPTION = &lt;n&gt;</code> specifies whether to use encryption (“1”) or not. Default is an activated encyrption which should be changed only in special cases. You can either use <code>KEY = &lt;key phrase&gt;</code> or &#039;KEYFILE =&lt;key file&gt;<code> to specify the location of a file containing the key phrase.
+
+</code>etc/init.d/pnp_gearman_worker start<code> contains links to the perl script </code>process_perfdata.pl<code> and the config file </code>process_perfdata.cfg<code>.
+
+After starting the daemon process using
+   /etc/init.d/pnp_gearmon_worker start</code>
+the performance data will be processed which is provided by the gearmand daemon on the Nagios server.
 </p>
 
 <p>
