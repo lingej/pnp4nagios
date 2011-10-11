@@ -1,5 +1,6 @@
 **pnp-0.6.16 ??/??/2011**
   * Bugfix:  Fixed single quoted check_multi labels (reported by Matthias Flacke)
+  * Bugfix:  Append missing slash to perfdata_spool_dir ( Reported by Juergen-Michael Radtke ) 
 
 **pnp-0.6.15 09/15/2011**
   * Bugfix:  Fixed Overview link (reported by Stefan Triep)
