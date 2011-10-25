@@ -8,8 +8,8 @@ jQuery(function() {
         jQuery("#toggle-timerange").toggle("blind",500); 
         return false;
     });
-	jQuery("#dpstart").datepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/view-calendar.png', buttonImageOnly: true, constrainInput: false });
-	jQuery("#dpend").datepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/view-calendar.png', buttonImageOnly: true, constrainInput: false });
+	jQuery("#dpstart").datetimepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/view-calendar.png', buttonImageOnly: true, constrainInput: false });
+	jQuery("#dpend").datetimepicker({ showOn: 'button', buttonImage: '<?php echo url::base()?>media/images/view-calendar.png', buttonImageOnly: true, constrainInput: false });
 });
 </script>
 

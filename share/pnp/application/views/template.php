@@ -13,6 +13,7 @@
 <?php echo html::script('media/js/jquery-min.js')?>
 <?php echo html::script('media/js/jquery.imgareaselect.min.js')?>
 <?php echo html::script('media/js/jquery-ui.min.js')?>
+<?php echo html::script('media/js/jquery-ui-timepicker-addon.js')?>
 <script type="text/javascript">
 jQuery.noConflict();
 jQuery(window).load(
