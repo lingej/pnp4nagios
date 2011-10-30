@@ -11,8 +11,11 @@ class Pdf_Controller extends System_Controller  {
     public function __construct(){
         parent::__construct();
 
-        $this->use_bg = 0;
-        $this->bg = $this->config->conf['background_pdf'];
+        $this->use_bg           = 0;
+        $this->bg               = $this->config->conf['background_pdf'];
+        $this->pdf_margin_left  = $this->config->conf['pdf_margin_left'];
+        $this->pdf_margin_top   = $this->config->conf['pdf_margin_top'];
+        $this->pdf_margin_right = $this->config->conf['pdf_margin_right'];
 
         // Define PDF background per url option 
         if(isset($this->bg) && $this->bg != ""){
@@ -77,7 +80,7 @@ class Pdf_Controller extends System_Controller  {
         $pdf = new PDF;
         $pdf->AliasNbPages();
         $pdf->SetAutoPageBreak('off');
-        $pdf->SetMargins(17.5,30,10);
+        $pdf->SetMargins($this->pdf_margin_left,$this->pdf_margin_top,$this->pdf_margin_right);
         $pdf->AddPage();
         if($this->use_bg){
                 $pdf->setSourceFile($this->bg);
@@ -128,7 +131,7 @@ class Pdf_Controller extends System_Controller  {
             $Y = $pdf->GetY();
             $cell_height = ($img['height'] * 0.23);
             $cell_width = ($img['width'] * 0.23);
-            $pdf->Image($img['file'], 17.5, $Y, $cell_width, $cell_height, 'PNG');
+            $pdf->Image($img['file'], $this->pdf_margin_left, $Y, $cell_width, $cell_height, 'PNG');
             $pdf->CELL(120, $cell_height, '', 0, 1);
             unlink($img['file']);
         }
@@ -159,7 +162,7 @@ class Pdf_Controller extends System_Controller  {
         $pdf = new PDF;
         $pdf->AliasNbPages();
         $pdf->SetAutoPageBreak('off');
-        $pdf->SetMargins(17.5,30,10);
+        $pdf->SetMargins($this->pdf_margin_left,$this->pdf_margin_top,$this->pdf_margin_right);
         $pdf->AddPage();
         if($this->use_bg){
                 $pdf->setSourceFile($this->bg);
@@ -191,7 +194,7 @@ class Pdf_Controller extends System_Controller  {
             $Y = $pdf->GetY();
             $cell_height = ($img['height'] * 0.23);
             $cell_width = ($img['width'] * 0.23);
-            $pdf->Image($img['file'], 17.5, $Y, $cell_width, $cell_height, 'PNG');
+            $pdf->Image($img['file'], $this->pdf_margin_left, $Y, $cell_width, $cell_height, 'PNG');
             $pdf->CELL(120, $cell_height, '', 0, 1);
             unlink($img['file']);
         }
@@ -217,7 +220,7 @@ class Pdf_Controller extends System_Controller  {
         $pdf = new PDF;
         $pdf->AliasNbPages();
         $pdf->SetAutoPageBreak('off');
-        $pdf->SetMargins(17.5,30,10);
+        $pdf->SetMargins($this->pdf_margin_left,$this->pdf_margin_top,$this->pdf_margin_right);
         $pdf->AddPage();
         if($this->use_bg){
                 $pdf->setSourceFile($this->config->conf['background_pdf']);
@@ -249,7 +252,7 @@ class Pdf_Controller extends System_Controller  {
             $Y = $pdf->GetY();
             $cell_height = ($img['height'] * 0.23);
             $cell_width = ($img['width'] * 0.23);
-            $pdf->Image($img['file'], 17.5, $Y, $cell_width, $cell_height, 'PNG');
+            $pdf->Image($img['file'], $this->pdf_margin_left, $Y, $cell_width, $cell_height, 'PNG');
             $pdf->CELL(120, $cell_height, '', 0, 1);
             unlink($img['file']);
         }
