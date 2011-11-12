@@ -51,6 +51,7 @@ $conf['right_zoom_offset'] = 30;
 #
 $conf['pdf_width']        = "675";
 $conf['pdf_height']       = "100";
+$conf['pdf_page_size']    = "A4";   # A4 or Letter
 $conf['pdf_margin_top']   = "30";
 $conf['pdf_margin_left']  = "17.5";
 $conf['pdf_margin_right'] = "10";

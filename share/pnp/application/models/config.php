@@ -27,9 +27,10 @@ class Config_Model extends System_Model
         $conf['pdf_height']         = Kohana::config('core.pdf_height');
         $conf['right_zoom_offset']  = Kohana::config('core.right_zoom_offset');
         $conf['mobile_devices']     = Kohana::config('core.mobile_devices');
-        $conf['pdf_margin_left']  = Kohana::config('core.pdf_margin_left');
-        $conf['pdf_margin_right'] = Kohana::config('core.pdf_margin_right');
-        $conf['pdf_margin_top']   = Kohana::config('core.pdf_margin_top');
+        $conf['pdf_page_size']      = Kohana::config('core.pdf_page_size');
+        $conf['pdf_margin_left']    = Kohana::config('core.pdf_margin_left');
+        $conf['pdf_margin_right']   = Kohana::config('core.pdf_margin_right');
+        $conf['pdf_margin_top']     = Kohana::config('core.pdf_margin_top');
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {

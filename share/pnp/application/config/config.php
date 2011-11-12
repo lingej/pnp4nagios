@@ -131,6 +131,7 @@ $config['pdf_width']         = "675";
 $config['pdf_height']        = "100";
 $config['right_zoom_offset'] = "30";
 $config['mobile_devices']    = "iPhone";
+$config['pdf_page_size']     = "A4";
 $config['pdf_margin_left']   = "17.5";
 $config['pdf_margin_right']  = "10";
 $config['pdf_margin_top']    = "30";

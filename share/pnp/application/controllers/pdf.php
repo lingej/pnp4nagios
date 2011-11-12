@@ -13,6 +13,7 @@ class Pdf_Controller extends System_Controller  {
 
         $this->use_bg           = 0;
         $this->bg               = $this->config->conf['background_pdf'];
+        $this->pdf_page_size    = $this->config->conf['pdf_page_size'];
         $this->pdf_margin_left  = $this->config->conf['pdf_margin_left'];
         $this->pdf_margin_top   = $this->config->conf['pdf_margin_top'];
         $this->pdf_margin_right = $this->config->conf['pdf_margin_right'];
@@ -77,7 +78,7 @@ class Pdf_Controller extends System_Controller  {
         /*
         * PDF Output
         */
-        $pdf = new PDF;
+        $pdf = new PDF("P", "mm", $this->pdf_page_size);
         $pdf->AliasNbPages();
         $pdf->SetAutoPageBreak('off');
         $pdf->SetMargins($this->pdf_margin_left,$this->pdf_margin_top,$this->pdf_margin_right);
@@ -159,7 +160,7 @@ class Pdf_Controller extends System_Controller  {
         /*
         * PDF Output
         */
-        $pdf = new PDF;
+        $pdf = new PDF("P", "mm", $this->pdf_page_size);
         $pdf->AliasNbPages();
         $pdf->SetAutoPageBreak('off');
         $pdf->SetMargins($this->pdf_margin_left,$this->pdf_margin_top,$this->pdf_margin_right);
@@ -217,7 +218,7 @@ class Pdf_Controller extends System_Controller  {
         /*
         * PDF Output
         */
-        $pdf = new PDF;
+        $pdf = new PDF("P", "mm", $this->pdf_page_size);
         $pdf->AliasNbPages();
         $pdf->SetAutoPageBreak('off');
         $pdf->SetMargins($this->pdf_margin_left,$this->pdf_margin_top,$this->pdf_margin_right);

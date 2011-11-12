@@ -3,6 +3,7 @@
   * Bugfix:  Append missing slash to perfdata_spool_dir ( Reported by Juergen-Michael Radtke ) 
   * Bugfix:  Fixed jQuery-ui multisite theme
   * Feature: PDF margins are now adjustable via config.php ( Thomas Witzenrath )
+  * Featire: Support for PDF size 'letter' added ( Robert Becht )
 
 **pnp-0.6.15 09/15/2011**
   * Bugfix:  Fixed Overview link (reported by Stefan Triep)
