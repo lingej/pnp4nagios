@@ -244,7 +244,7 @@ Using this storage format the size of the files will stay the same over time. Pe
 
 <h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
 <div class="level2">
-<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files: 108236 total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios" class="urlextern" title="http://sourceforge.net/project/stats/?group_id=191615&amp;ugn=pnp4nagios"  rel="nofollow">Activity percentile (last week): 98.35%</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files:  total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
 <p>
 
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
@@ -418,7 +418,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.14.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.15.tar.gz</a>
 </p>
 
 </div>
@@ -438,7 +438,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Tue Sep 13 23:05:01 CEST 2011
+Last Update: Sat Nov 12 22:05:01 CET 2011
 </p>
 
 </div>
@@ -450,9 +450,22 @@ Last Update: Tue Sep 13 23:05:01 CEST 2011
 
 <strong>pnp-0.6.16 ??/??/2011</strong>
 </p>
+<ul>
+<li class="level1"><div class="li"> Bugfix:  Fixed single quoted check_multi labels (Reported by Matthias Flacke)</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Append missing slash to perfdata_spool_dir ( Reported by Juergen-Michael Radtke ) </div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Fixed jQuery-ui multisite theme</div>
+</li>
+<li class="level1"><div class="li"> Feature: <acronym title="Portable Document Format">PDF</acronym> margins are now adjustable via config.php ( Thomas Witzenrath )</div>
+</li>
+<li class="level1"><div class="li"> Featire: Support for <acronym title="Portable Document Format">PDF</acronym> size &#039;letter&#039; added ( Robert Becht )</div>
+</li>
+</ul>
 
 <p>
-<strong>pnp-0.6.15 09/0?/2011</strong>
+
+<strong>pnp-0.6.15 09/15/2011</strong>
 </p>
 <ul>
 <li class="level1"><div class="li"> Bugfix:  Fixed Overview link (reported by Stefan Triep)</div>
@@ -1689,9 +1702,95 @@ Have a look at the <a href="/pnp-0.6/about#system_requirements" class="wikilink1
 
 <p>
 
-TODO
-
+In case of problems there is a script called <code>verify_pnp_config.pl</code> located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a>. It enables you to check the configuration settings as well as performance data of hosts or services. It can be used prior and during runtime of PNP.
 </p>
+
+</div>
+
+<h2><a name="download1" id="download1">Download</a></h2>
+<div class="level2">
+<pre class="code">
+wget http://verify.pnp4nagios.org/verify_pnp_config
+</pre>
+
+</div>
+
+<h2><a name="test" id="test">Test</a></h2>
+<div class="level2">
+
+<p>
+
+The verify script is located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> an needs three start options
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>–mode</code> One of the modes described on <a href="/pnp-0.6/modeds" class="wikilink2" title="pnp-0.6:modeds" rel="nofollow">modeds</a></div>
+</li>
+<li class="level1"><div class="li"> <code>–config</code> Path nagios.cfg or icinga.cfg</div>
+</li>
+<li class="level1"><div class="li"> <code>–pnpcfg</code> Path to PNP´s etc directory</div>
+</li>
+</ul>
+<pre class="code">
+lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/nagios.cfg --pnpcfg=/usr/local/pnp4nagios/etc
+[INFO]  ========== Starting Environment Checks ============
+[INFO]  My version is: verify_pnp_config-0.6.14-R.31
+[INFO]  Reading /usr/local/nagios/etc/nagios.cfg
+[OK  ]  Running product is &#039;nagios&#039;
+[OK  ]  object_cache_file is defined
+[OK  ]  object_cache_file=/usr/local/nagios/var/objects.cache
+[INFO]  Reading /usr/local/nagios/var/objects.cache
+[OK  ]  resource_file is defined
+[OK  ]  resource_file=/usr/local/nagios/etc/resource.cfg
+[INFO]  Reading /usr/local/nagios/etc/resource.cfg
+[INFO]  Reading /usr/local/pnp4nagios/etc/process_perfdata.cfg
+[INFO]  Reading /usr/local/pnp4nagios/etc/pnp4nagios_release
+[OK  ]  Found PNP4Nagios version &quot;0.6.14&quot;
+[OK  ]  Effective User is &#039;nagios&#039;
+[OK  ]  User nagios exists with ID &#039;1000&#039;
+[OK  ]  Effective group is &#039;nagios&#039;
+[OK  ]  Group nagios exists with ID &#039;1000&#039;
+[INFO]  ========== Checking npcdmod Mode Config  ============
+[OK  ]  process_performance_data is 1 compared with &#039;/1/&#039;
+[OK  ]  event_broker_options is defined
+[OK  ]  event_broker_options=-1
+[OK  ]  event_broker_option bits 2 and 3 enabled (12)
+[OK  ]  broker_module is defined
+[OK  ]  broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nagios/etc/npcd.cfg
+[OK  ]  npcdmod.o config file is /usr/local/pnp4nagios/etc/npcd.cfg
+[OK  ]  /usr/local/pnp4nagios/etc/npcd.cfg used by npcdmod.o is readable
+[OK  ]  npcd daemon is running
+[OK  ]  /usr/local/pnp4nagios/etc/npcd.cfg is used by npcd and readable
+[OK  ]  npcd and npcdmod.o are using the same config file (/usr/local/pnp4nagios/etc/npcd.cfg)
+[INFO]  Nagios config looks good so far
+[INFO]  ========== Checking config values ============
+[INFO]  Reading /usr/local/pnp4nagios/etc/npcd.cfg
+[OK  ]  Script /usr/local/pnp4nagios/libexec/process_perfdata.pl is executable
+[INFO]  ========== Starting global checks ============
+[OK  ]  status_file is defined
+[OK  ]  status_file=/dev/shm/status.dat
+[INFO]  Reading /dev/shm/status.dat
+[INFO]  ==== Starting rrdtool checks ====
+[OK  ]  RRDTOOL is defined
+[OK  ]  RRDTOOL=/usr/bin/rrdtool
+[OK  ]  /usr/bin/rrdtool is executable
+[OK  ]  RRDtool 1.3.1  Copyright 1997-2008 by Tobias Oetiker &lt;tobi@oetiker.ch&gt;
+[OK  ]  USE_RRDs is defined
+[OK  ]  USE_RRDs=1
+[OK  ]  Perl RRDs modules are loadable
+[INFO]  ==== Starting directory checks ====
+[OK  ]  RRDPATH is defined
+[OK  ]  RRDPATH=/usr/local/pnp4nagios/var/perfdata
+[OK  ]  Perfdata directory &#039;/usr/local/pnp4nagios/var/perfdata&#039; exists
+[WARN]  62 hosts/services are not providing performance data
+[WARN]  &#039;process_perf_data 1&#039; is set for 43 hosts/services which are not providing performance data!
+[WARN]  &#039;process_perf_data 0&#039; is set for 27 of your hosts/services
+[OK  ]  &#039;process_perf_data 1&#039; is set for 243 of your hosts/services
+[INFO]  ==== System sizing ====
+[OK  ]  269 hosts/service objects defined
+[INFO]  ==== Check statistics ====
+[WARN]  Warning: 3, Critical: 0
+[WARN]  Checks finished...
+</pre>
 
 </div>
 <div class="inclmeta level1">
