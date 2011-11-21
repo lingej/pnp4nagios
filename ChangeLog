@@ -1,4 +1,6 @@
-**pnp-0.6.16 ??/??/2011**
+**pnp-0.6.17 ??/??/2011**
+
+**pnp-0.6.16 11/21/2011**
   * Bugfix:  Fixed single quoted check_multi labels (Reported by Matthias Flacke)
   * Bugfix:  Append missing slash to perfdata_spool_dir ( Reported by Juergen-Michael Radtke ) 
   * Bugfix:  Fixed jQuery-ui multisite theme
