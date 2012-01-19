@@ -308,6 +308,7 @@ sub restore_files(){
 		my $restorefile = sprintf("%s/%s-%s-%s.restore",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
 		if( $conf{'DRY_RUN'} == 1 ){
 			$rrdfile = sprintf("%s/%s/%s_%s.rrd",$conf{TMP_DIR},$host,$service,$STRUCT[$ds]{NAME});
+			create_dir(sprintf("%s/%s", $conf{TMP_DIR},$host ));
 		}else{
 			$rrdfile = sprintf("%s/%s/%s_%s.rrd",$conf{RRDPATH},$host,$service,$STRUCT[$ds]{NAME});
 		}

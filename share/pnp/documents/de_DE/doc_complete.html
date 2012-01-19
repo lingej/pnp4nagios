@@ -1846,6 +1846,7 @@ Beispiel:
 
 </p>
 <pre class="code"> pnp4nagios/graph?host=&lt;hostname&gt;&amp;srv=&lt;servicedesc&gt;&amp;start=-1week</pre>
+<pre class="code"> pnp4nagios/graph?host=&lt;hostname&gt;&amp;srv=&lt;servicedesc&gt;&amp;start=2011102322:50:00&amp;end=2011102409:50:00</pre>
 
 <p>
 
@@ -1904,6 +1905,9 @@ Beispiele zur Datumsangabe:
 	</tr>
 	<tr class="row6">
 		<td class="col0"> yesterday </td><td class="col1"> Gestern </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0"> 2011102322:50:00 </td><td class="col1"> 23.10.2011 ab 22:50:00 Uhr</td>
 	</tr>
 </table>
 
@@ -3109,16 +3113,17 @@ PROCS OK: 2 processes with args &#039;ndo2db&#039;| procs=2</pre>
 </div>
 </div>
 <div class="plugin_include_content" id="plugin_include__de:pnp-0.6:perfdata_format">
+<table class="inline">
+	<tr class="row0">
+		<th class="col0">2.6. Performance-Daten</th>
+	</tr>
+	<tr class="row1">
+		
+	</tr>
+</table>
 
 <p>
-2.6. Performance-Daten
-</p>
 
-<p>
-Performance-Daten von Nagios sind definiert als “alles hinter dem | des Plugin-Outputs” - nähere Einzelheiten dazu, wie diese Daten in Logfiles umgeleitet werden, gibt es in der <a href="http://www.nagios-wiki.de/nagios/doku3/perfdata" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/perfdata"  rel="nofollow">Nagios-Dokumentation</a>. Trotz allem ist es die Aufgabe des Plugin-Schreibers, dass die Performance-Daten in einem “Nagios-Plugin”-Format vorliegen. Dies ist das erwartete Format:
-</p>
-
-<p>
 &#039;Bezeichnung&#039;=Wert[UOM];[warn];[crit];[min];[max]
 </p>
 
@@ -3131,11 +3136,11 @@ Anmerkungen:
 </li>
 <li class="level1"><div class="li"> Bezeichnungen können beliebige Zeichen enthalten</div>
 </li>
-<li class="level1"><div class="li"> die Bezeichnung muss in Apostrophs eingeschlossen sein, wenn diese = oder Leerzeichen enthält, ansonsten sind die Apostrophs optional</div>
+<li class="level1"><div class="li"> die Bezeichnung muss in Apostrophe eingeschlossen sein, wenn diese Gleichheitszeichen (<code>=</code>), Apostroph (<code></code>&#039;) oder Leerzeichen (<code> </code>) enthält, ansonsten sind die Apostrophe optional</div>
 </li>
 <li class="level1"><div class="li"> die Länge der Bezeichnung ist beliebig, aber idealerweise sind die ersten 19 Zeichen eindeutig (aufgrund einer Beschränkung in RRD). Bitte beachten Sie, dass es eine Längenbegrenzung bei der Menge von Daten gibt, die von NRPE an Nagios geliefert werden kann</div>
 </li>
-<li class="level1"><div class="li"> um ein Apostroph darzustellen, nutzen Sie zwei einzelne Apostrophs</div>
+<li class="level1"><div class="li"> um ein Apostroph darzustellen, nutzen Sie zwei einzelne Apostrophe</div>
 </li>
 <li class="level1"><div class="li"> <em>warn</em>, <em>crit</em>, <em>min</em> und/oder <em>max</em> können leer sein (z.B. wenn der Schwellwert nicht definiert ist oder wenn min oder max nicht zutreffen). Nachfolgende, nicht gefüllte Semikola können entfallen</div>
 </li>
@@ -3163,7 +3168,7 @@ Anmerkungen:
 
 <p>
 
-Es bleibt Drittanbietern überlassen, aus den Performance-Daten Graphen zu erzeugen.
+Es bleibt Drittanbietern überlassen, aus den Performance-Daten Graphen zu erzeugen.|
 </p>
 
 <p>

@@ -18,15 +18,19 @@ class Config_Model extends System_Model
         }
 
         # Default Values
-        $conf['doc_language']      = Kohana::config('core.doc_language');
-        $conf['graph_width']       = Kohana::config('core.graph_width');
-        $conf['graph_height']      = Kohana::config('core.graph_height');
-        $conf['zgraph_width']      = Kohana::config('core.zgraph_width');
-        $conf['zgraph_height']     = Kohana::config('core.zgraph_height');
-        $conf['pdf_width']         = Kohana::config('core.pdf_width');
-        $conf['pdf_height']        = Kohana::config('core.pdf_height');
-        $conf['right_zoom_offset'] = Kohana::config('core.right_zoom_offset');
-        $conf['mobile_devices']    = Kohana::config('core.mobile_devices');
+        $conf['doc_language']       = Kohana::config('core.doc_language');
+        $conf['graph_width']        = Kohana::config('core.graph_width');
+        $conf['graph_height']       = Kohana::config('core.graph_height');
+        $conf['zgraph_width']       = Kohana::config('core.zgraph_width');
+        $conf['zgraph_height']      = Kohana::config('core.zgraph_height');
+        $conf['pdf_width']          = Kohana::config('core.pdf_width');
+        $conf['pdf_height']         = Kohana::config('core.pdf_height');
+        $conf['right_zoom_offset']  = Kohana::config('core.right_zoom_offset');
+        $conf['mobile_devices']     = Kohana::config('core.mobile_devices');
+        $conf['pdf_page_size']      = Kohana::config('core.pdf_page_size');
+        $conf['pdf_margin_left']    = Kohana::config('core.pdf_margin_left');
+        $conf['pdf_margin_right']   = Kohana::config('core.pdf_margin_right');
+        $conf['pdf_margin_top']     = Kohana::config('core.pdf_margin_top');
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {

@@ -158,7 +158,7 @@ void npcdmod_file_roller() {
 
 	time(&current_time);
 
-	sprintf(spool_file, "%s%s.%d", spool_dir, perfdata_spool_filename, (int)current_time);
+	sprintf(spool_file, "%s/%s.%d", spool_dir, perfdata_spool_filename, (int)current_time);
 	spool_file[sizeof(spool_file) - 1] = '\x0';
 
 	/* close actual file */
