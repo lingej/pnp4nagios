@@ -367,8 +367,8 @@ class rrd_Core {
         $line = "";
         $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
         $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
-        $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GT,".$btw_vname.",UNKN,IF ";
-        $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GT,".$vname.",UNKN,IF ";
+        $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GE,".$btw_vname.",UNKN,IF ";
+        $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
         $line .= rrd::gradient($green_vname, $start_color, $color_green.$opacity);
         $line .= rrd::gradient($blue_vname, $start_color, $color_btw.$opacity);
         $line .= rrd::gradient($red_vname, $start_color, $color_red.$opacity);
