@@ -821,16 +821,16 @@ sub parse_rra_config {
     my $template     = shift;
     my $rra_template = "";
     my @rrd_create = @default_rrd_create;
-    if ( -e $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg" ) {
+    if ( -r $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg" ) {
         $rra_template = $conf{'CFG_DIR'} . "/" . $template . ".rra.cfg";
         print_log( "Reading $rra_template", 2 );
     }
-    elsif ( -e $conf{'RRA_CFG'} ) {
+    elsif ( -r $conf{'RRA_CFG'} ) {
         $rra_template = $conf{'RRA_CFG'};
         print_log( "Reading $conf{'RRA_CFG'}", 2 );
     }
     else {
-        print_log( "No rra.cfg found. Using default values.", 2 );
+        print_log( "No usable rra.cfg found. Using default values.", 2 );
     }
 
     if ( $rra_template ne "" ) {
