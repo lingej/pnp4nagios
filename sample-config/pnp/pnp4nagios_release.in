@@ -4,5 +4,5 @@ PKG_NAME="@PKG_NAME@"
 
 #
 # Configure Arguments
-# ./configure @ac_configure_args@
 #
+CONFIGURE_ARGS=@ac_configure_args@

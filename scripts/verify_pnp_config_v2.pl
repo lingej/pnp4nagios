@@ -150,6 +150,7 @@ process_perfdata_cfg($ppcfg);
 if( -r "$PNPCfg/pnp4nagios_release" ){ 
 	process_pnp4nagios_release("$PNPCfg/pnp4nagios_release");
 	info("Found PNP4Nagios version ".get_config_var('PKG_VERSION'), 0);
+	info("./configure Options ".get_config_var('CONFIGURE_ARGS'), 0) if get_config_var('CONFIGURE_ARGS');
 }else{
 	info("No pnp4nagios_release file found. This might be an older version of PNP4Nagios", 0);
 }
