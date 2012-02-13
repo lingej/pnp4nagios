@@ -522,6 +522,10 @@ sub compare_config_var {
 
 sub check_perfdata_file_template {
 	$_ = shift;
+	if ( not $_ ){
+		return;
+	}
+		 
 	if( /^DATATYPE::(HOST|SERVICE)PERFDATA/ ){
 		info("PERFDATA template looks good",0);
 	}else{
