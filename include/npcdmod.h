@@ -20,6 +20,9 @@
  *
  *****************************************************************************/
 
+#define PERFDATA_BUFFER 65536 
+
+
 /* MMAPFILE structure - used for reading files via mmap() */
 typedef struct pnp_mmapfile_struct {
 	char *path;

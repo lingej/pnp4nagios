@@ -186,8 +186,10 @@ int npcdmod_handle_data(int event_type, void *data) {
 	host *host=NULL;
 	service *service=NULL;
 
-//	char temp_buffer[1024];
-	char perfdatafile_template[9216];
+	char temp_buffer[1024];
+	char perfdatafile_template[PERFDATA_BUFFER];
+    int written;
+
 
 	/* what type of event/data do we have? */
 	switch (event_type) {
@@ -213,8 +215,8 @@ int npcdmod_handle_data(int event_type, void *data) {
 
 			if (hostchkdata->type == NEBTYPE_HOSTCHECK_PROCESSED
 				&& hostchkdata->perf_data != NULL) {
-				snprintf(perfdatafile_template, sizeof(perfdatafile_template)
-					- 1, "DATATYPE::HOSTPERFDATA\t"
+				written = snprintf(perfdatafile_template, PERFDATA_BUFFER,
+					"DATATYPE::HOSTPERFDATA\t"
 					"TIMET::%d\t"
 					"HOSTNAME::%s\t"
 					"HOSTPERFDATA::%s\t"
@@ -224,9 +226,15 @@ int npcdmod_handle_data(int event_type, void *data) {
 						hostchkdata->host_name, hostchkdata->perf_data,
 						hostchkdata->command_name, hostchkdata->command_args,
 						hostchkdata->state, hostchkdata->state_type);
-				perfdatafile_template[sizeof(perfdatafile_template) - 1]
-						= '\x0';
-				fputs(perfdatafile_template, fp);
+
+                if (written >= PERFDATA_BUFFER) {
+                    snprintf(temp_buffer, sizeof(temp_buffer) - 1,
+                        "npcdmod: Buffer size of %d in npcdmod.h is too small, ignoring data for %s\n", PERFDATA_BUFFER, hostchkdata->host_name);
+                    temp_buffer[sizeof(temp_buffer) - 1] = '\x0';
+                    write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
+                } else {
+                    fputs(perfdatafile_template, fp);
+                }
 			}
 		}
 		break;
@@ -254,8 +262,8 @@ int npcdmod_handle_data(int event_type, void *data) {
 				write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
 				*/
 
-				snprintf(perfdatafile_template, sizeof(perfdatafile_template)
-						- 1, "DATATYPE::SERVICEPERFDATA\t"
+				written = snprintf(perfdatafile_template, PERFDATA_BUFFER,
+					"DATATYPE::SERVICEPERFDATA\t"
 					"TIMET::%d\t"
 					"HOSTNAME::%s\t"
 					"SERVICEDESC::%s\t"
@@ -266,9 +274,15 @@ int npcdmod_handle_data(int event_type, void *data) {
 						srvchkdata->host_name, srvchkdata->service_description,
 						srvchkdata->perf_data, service->service_check_command,
 						srvchkdata->state, srvchkdata->state_type);
-				perfdatafile_template[sizeof(perfdatafile_template) - 1]
-						= '\x0';
-				fputs(perfdatafile_template, fp);
+
+                if (written >= PERFDATA_BUFFER) {
+                    snprintf(temp_buffer, sizeof(temp_buffer) - 1,
+                        "npcdmod: Buffer size of %d in npcdmod.h is too small, ignoring data for %s / %s\n", PERFDATA_BUFFER, srvchkdata->host_name, srvchkdata->service_description);
+                    temp_buffer[sizeof(temp_buffer) - 1] = '\x0';
+                    write_to_all_logs(temp_buffer, NSLOG_INFO_MESSAGE);
+                } else {
+                    fputs(perfdatafile_template, fp);
+                }
 			}
 		}
 		break;
@@ -276,6 +290,7 @@ int npcdmod_handle_data(int event_type, void *data) {
 	default:
 		break;
 	}
+
 
 	return 0;
 }
