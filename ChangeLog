@@ -2,6 +2,7 @@
   * Bugfix:  Fixed rrd_convert.pl while running with --dry-run
   * Bugfix:  logging.c include missing header files ( Lars Vogdt )       
   * Bugfix:  Check if pnp4nagios/etc/rra.cfg is readable
+  * Bugfix:  rrd_convert.pl use XML tag TEMPLATE instead of CHECKCOMMAND to selects RRDs ( Sven Velt )
   * Feature: npcdmod.o increase perfdata buffer and log discarded perfdata ( Birger Schmidt )
   * Feature: rrd_modify.pl to change number of data sources of an RRD file
   * Feature: new template check_apachestatus_auto.php

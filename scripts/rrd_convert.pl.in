@@ -196,7 +196,7 @@ sub wanted_xml_files{
 		}
         open(XML, $xmlfile);
        	while (<XML>) {
-            if(/CHECKCOMMAND>(.*)</){
+            if(/TEMPLATE>(.*)</){
                 my ($t) = split("!",$1);
                 push(@commands,$t);
                 if(( defined $opt_c) and ($t =~ /^$opt_c$/)){
