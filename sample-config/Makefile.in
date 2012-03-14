@@ -36,6 +36,7 @@ install:
 	-rm -f $(DESTDIR)$(HTMLDIR)/conf/config.php
 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/config.d
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/check_commands
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(SYSCONFDIR)/pages
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/pnp4nagios_release $(DESTDIR)$(SYSCONFDIR)

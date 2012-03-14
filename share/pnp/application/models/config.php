@@ -39,15 +39,32 @@ class Config_Model extends System_Model
             throw new Kohana_Exception('error.config-not-found', $config.'.php');
         }
 
-        if (is_readable($config . "_local.php")) {
-            $array_a = $views;
-            $views = array();
-            include ($config . "_local.php");
-            $array_b = $views;
-            if(sizeof($views) == 0 ){
-                $views = $array_a;
+        // Load optional config files
+        // a) the _local.php config
+        // b) all .php files which do not start with a "." in config.d/
+        $custom_configs = array($config . "_local.php");
+        if (file_exists($config . ".d") && is_dir($config . ".d")) {
+            $dh = opendir($config . ".d");
+            while (($file = readdir($dh)) !== false) {
+                if ($file[0] != '.' && substr($file, -4) == '.php') {
+                    $custom_configs[] = $config . ".d/" .$file;
+                }
+            }
+            closedir($dh);
+        }
+
+	foreach($custom_configs AS $config_file) {
+            if (is_readable($config_file)) {
+                $array_a = $views;
+                $views = array();
+                include ($config_file);
+                $array_b = $views;
+                if(sizeof($views) == 0 ){
+                    $views = $array_a;
+                }
             }
         }
+
         $this->conf = $conf;
         $this->views = $views;
     }
