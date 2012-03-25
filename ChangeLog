@@ -1,4 +1,4 @@
-**pnp-0.6.17 ??/??/2011**
+**pnp-0.6.17 03/25/2012**
   * Bugfix:  Fixed rrd_convert.pl while running with --dry-run
   * Bugfix:  logging.c include missing header files ( Lars Vogdt )       
   * Bugfix:  Check if pnp4nagios/etc/rra.cfg is readable
