@@ -244,7 +244,7 @@ Using this storage format the size of the files will stay the same over time. Pe
 
 <h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
 <div class="level2">
-<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files:  total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 6</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files:  total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 5</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
 <p>
 
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
@@ -418,7 +418,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.15.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.16.tar.gz</a>
 </p>
 
 </div>
@@ -438,7 +438,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Mon Nov 21 10:05:01 CET 2011
+Last Update: Sun Mar 25 07:05:01 CEST 2012
 </p>
 
 </div>
@@ -448,7 +448,26 @@ Last Update: Mon Nov 21 10:05:01 CET 2011
 
 <p>
 
-<strong>pnp-0.6.16 ??/??/2011</strong>
+<strong>pnp-0.6.17 ??/??/2011</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix:  Fixed rrd_convert.pl while running with –dry-run</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  logging.c include missing header files ( Lars Vogdt )       </div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Check if pnp4nagios/etc/rra.cfg is readable</div>
+</li>
+<li class="level1"><div class="li"> Feature: npcdmod.o increase perfdata buffer and log discarded perfdata ( Birger Schmidt )</div>
+</li>
+<li class="level1"><div class="li"> Feature: rrd_modify.pl to change number of data sources of an RRD file</div>
+</li>
+<li class="level1"><div class="li"> Feature: new template check_apachestatus_auto.php</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.16 11/21/2011</strong>
 </p>
 <ul>
 <li class="level1"><div class="li"> Bugfix:  Fixed single quoted check_multi labels (Reported by Matthias Flacke)</div>
@@ -459,7 +478,7 @@ Last Update: Mon Nov 21 10:05:01 CET 2011
 </li>
 <li class="level1"><div class="li"> Feature: <acronym title="Portable Document Format">PDF</acronym> margins are now adjustable via config.php ( Thomas Witzenrath )</div>
 </li>
-<li class="level1"><div class="li"> Featire: Support for <acronym title="Portable Document Format">PDF</acronym> size &#039;letter&#039; added ( Robert Becht )</div>
+<li class="level1"><div class="li"> Feature: Support for <acronym title="Portable Document Format">PDF</acronym> size &#039;letter&#039; added ( Robert Becht )</div>
 </li>
 </ul>
 
@@ -1670,17 +1689,19 @@ Have a look at the <a href="/pnp-0.6/about#system_requirements" class="wikilink1
 </p>
 
 <p>
-4. Using the npcdmod module the value of the nagios.cfg directive <code>event_broker_options</code> may have to be adapted if it was modified. You&#039;ll find some details  <a href="/pnp-0.6/config#bulk_mode_with_npcd_and_npcdmod" class="wikilink1" title="pnp-0.6:config">here</a>.
+4. Some graphs are shown, others report the error <code>“parser error: Input is not proper UTF-8”</code> or something similar. Please check if your data contains “special” characters not present in the <acronym title="American Standard Code for Information Interchange">ASCII</acronym> set. Try to set <acronym title="Extensible Markup Language">XML</acronym>_ENC in <code>process_perfdata.cfg</code> to <code><acronym title="International Organization for Standardization">ISO</acronym>-8859-1</code> or something appropriate. Wait until the xml file is newly created and retry.
 </p>
 
 <p>
-5. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> in the <code>scripts</code> directory of the installation folder or the <code>libexec</code> folder after installation to check your settings and if performance data is present and/or valid. The syntax is quite simple for that:
-
+5. Using the npcdmod module the value of the nagios.cfg directive <code>event_broker_options</code> may have to be adapted if it was modified. You&#039;ll find some details  <a href="/pnp-0.6/config#bulk_mode_with_npcd_and_npcdmod" class="wikilink1" title="pnp-0.6:config">here</a>.
 </p>
-<pre class="code">./verify_pnp_config.pl -m &lt;mode&gt;</pre>
 
 <p>
- whereas <code>&lt;mode&gt;</code> is one of “sync”, “bulk” or “npcd” (without quotes). Please note that using “default” will select “npcd” which is different from the behaviour in PNP 0.4.x.
+6. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> after installation to check your settings and if performance data is present.
+</p>
+
+<p>
+7. Things look OK, but some files are being left in the spool directory (/usr/local/pnp4nagios/var/spool/&lt;perfdata_filename&gt;-PID-&lt;process_perfdata_pid&gt;). If process_perdata.pl is not able to write to the destination directory (/usr/local/pnp4nagios/share/perfdata/&lt;host&gt;), it will stop and not remove the file. That will increase the size of the spool directory and slow down performance data processing. This problem is likely to occur if you have copied directories from a previous installation and/or manually created directories and left them with wrong permissions or wrong ownership.
 </p>
 
 <p>
@@ -3339,7 +3360,9 @@ This can be changed with the following wrapper script
 LINE=`/usr/local/nagios/libexec/check_procs $*`
 RC=$?
 COUNT=`echo $LINE | awk &#039;{print $3}&#039;`
-echo $LINE \| procs=$COUNT
+PROCS=`expr $COUNT - 1`
+LINE=`echo $LINE | sed &quot;s/: $COUNT /: $PROCS /&quot;`
+echo $LINE \| procs=$PROCS
 exit $RC</pre>
 
 <p>

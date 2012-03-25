@@ -108,21 +108,20 @@ siehe <a href="/de/pnp-0.6/about#anforderungen" class="wikilink1" title="de:pnp-
 </p>
 
 <p>
-4. Bei aktiviertem npcdmod-Modul muss der Wert von <code>event_broker_options</code> in der nagios.cfg ggf. angepasst werden. Hinweise gibt es <a href="/de/pnp-0.6/config#bulk_mode_with_npcd_und_npcdmod" class="wikilink1" title="de:pnp-0.6:config">hier</a>.
+4. Einige Graphen werden angezeigt, andere melden den Fehler <code>“parser error: Input is not proper UTF-8”</code> oder etwas ähnliches. Bitte prüfen Sie, ob die Daten “spezielle” Zeichen enthalten, die nicht im <acronym title="American Standard Code for Information Interchange">ASCII</acronym>-Zeichensatz vorhanden sind (Umlaute, etc). Versuchen Sie, in <code>process_perfdata.cfg</code> den Wert von <code><acronym title="Extensible Markup Language">XML</acronym>_ENC</code> auf <code><acronym title="International Organization for Standardization">ISO</acronym>-8859-1</code> oder einen anderen passenden Wert zu setzen. Warten Sie, bis die xml-Datei neu erzeugt wurde und probieren Sie es nochmal.
 </p>
 
 <p>
-5. verify_pnp_config
+5. Bei aktiviertem npcdmod-Modul muss der Wert von <code>event_broker_options</code> in der nagios.cfg ggf. angepasst werden. Hinweise gibt es <a href="/de/pnp-0.6/config#bulk_mode_with_npcd_und_npcdmod" class="wikilink1" title="de:pnp-0.6:config">hier</a>.
 </p>
 
 <p>
-Das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> im <code>scripts</code>-Verzeichnis des Installationsordners bzw. im <code>libexec</code>-Verzeichnis ermöglicht die Prüfung von Konfigurationseinstellungen und zeigt, ob Performance-Daten vorhanden bzw. gültig sind. Die Syntax dafür ist ziemlich einfach:
-
+6. verify_pnp_config
+Das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> ermöglicht die Prüfung von Konfigurationseinstellungen und zeigt, ob Performance-Daten vorhanden sind.
 </p>
-<pre class="code">./verify_pnp_config.pl -m &lt;Modus&gt;</pre>
 
 <p>
- wobei <code>&lt;Modus&gt;</code> durch “sync”, “bulk” oder “npcd” zu ersetzen ist (ohne Anführungszeichen). Bitte beachten Sie, dass “default” ab PNP v.0.6.0 den “npcd”-Modus prüft.
+7. Es scheint zu funktionieren, aber es bleiben einige Dateien Spool-Verzeichnis stehen (/usr/local/pnp4nagios/var/spool/&lt;perfdata_filename&gt;-PID-&lt;process_perfdata_pid&gt;). Wenn <code>process_perdata.pl</code> nicht in das Zielverzeichnis (/usr/local/pnp4nagios/share/perfdata/&lt;host&gt;) schreiben kann, wird es anhalten und die Quelldatei nicht löschen. Das erhöht die Größe des Spool-Verzeichnisses und die Verarbeitung der Performance-Daten verlangsamen. Dieses Problem kann auftreten, wenn Sie Verzeichnisse aus einer vorherigen Installation kopiert und/oder manuell Verzeichnisse angelegt haben und dabei die falschen Benutzer/Berechtigungen verwendet haben.
 </p>
 
 <p>
