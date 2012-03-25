@@ -21,12 +21,19 @@ class Auth_Model extends System_Model {
         $this->config->read_config();
         if($this->config->conf['auth_enabled'] == 1){
             $this->AUTH_ENABLED = TRUE;
-			$this->socketPath = $this->config->conf['livestatus_socket'];
+            $this->socketPath = $this->config->conf['livestatus_socket'];
         }
         if(isset($_SERVER['REMOTE_USER'])){
             $this->REMOTE_USER = $_SERVER['REMOTE_USER'];
         }
         if($this->AUTH_ENABLED === TRUE && $this->REMOTE_USER === NULL){
+            if($this->config->conf['auth_multisite_enabled'] == 1) {
+                $MSAUTH = new Auth_Multisite_Model($this->config->conf['auth_multisite_htpasswd'],
+                                                   $this->config->conf['auth_multisite_secret']);
+                $this->REMOTE_USER = $MSAUTH->check();
+                if($this->REMOTE_USER !== null)
+                    return;
+            }
             throw new Kohana_exception("error.remote_user_missing");
         }
     }
