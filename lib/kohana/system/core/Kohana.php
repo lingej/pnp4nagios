@@ -719,7 +719,8 @@ final class Kohana {
 			}
 
 			// Store the Kohana output buffer
-			ob_end_clean();
+			//ob_end_clean();
+			ob_end_flush(); // Fixed for PHP 5.4
 		}
 	}
 
