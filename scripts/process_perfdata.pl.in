@@ -1427,6 +1427,8 @@ sub new_child {
             or die "Can't unblock SIGINT for fork: $!\n";
     
         my $worker = Gearman::Worker->new();
+        my @job_servers = split(/,/, $conf{'GEARMAN_HOST'}); # allow multiple gearman job servers 
+        $worker->job_servers(@job_servers);
         $worker->job_servers($conf{'GEARMAN_HOST'});
         $worker->register_function("perfdata", 2, sub { return main(@_); });
         my %opt = ( 

@@ -100,7 +100,8 @@ PREFORK = 1
 
 #
 # Gearman server to connect to
-# 
+# Comma separated list of gearman job servers
+#
 GEARMAN_HOST = localhost:4730
 
 #
