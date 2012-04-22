@@ -135,4 +135,4 @@ $config['pdf_page_size']     = "A4";
 $config['pdf_margin_left']   = "17.5";
 $config['pdf_margin_right']  = "10";
 $config['pdf_margin_top']    = "30";
-
+$config['auth_multisite_enabled'] = "0";
