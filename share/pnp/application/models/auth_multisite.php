@@ -5,9 +5,10 @@ class Auth_Multisite_Model {
     private $htpasswdPath;
     private $secretPath;
 
-    public function __construct($htpasswdPath, $secretPath) {
+    public function __construct($htpasswdPath, $secretPath, $loginUrl) {
         $this->htpasswdPath = $htpasswdPath;
-        $this->secretPath = $secretPath;
+        $this->secretPath   = $secretPath;
+        $this->loginUrl     = $loginUrl;
 
         if(!file_exists($this->htpasswdPath)) {
             throw new Kohana_exception("error.auth_multisite_missing_htpasswd");
@@ -80,7 +81,7 @@ class Auth_Multisite_Model {
         $username = $this->checkAuth();
         if($username === '') {
             // FIXME: Get the real path to multisite
-            header('Location:../../check_mk/login.py?_origin=' . $_SERVER['REQUEST_URI']);
+            header('Location:' . $this->loginUrl . '?_origtarget=' . $_SERVER['REQUEST_URI']);
             exit(0);
         }
 

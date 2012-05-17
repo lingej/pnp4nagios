@@ -31,7 +31,10 @@ class Config_Model extends System_Model
         $conf['pdf_margin_left']        = Kohana::config('core.pdf_margin_left');
         $conf['pdf_margin_right']       = Kohana::config('core.pdf_margin_right');
         $conf['pdf_margin_top']         = Kohana::config('core.pdf_margin_top');
-        $conf['auth_multisite_enabled'] = Kohana::config('core.auth_multisite_enabled');
+        $conf['auth_multisite_enabled']   = Kohana::config('core.auth_multisite_enabled');
+        $conf['auth_multisite_htpasswd']  = Kohana::config('core.auth_multisite_htpasswd');
+        $conf['auth_multisite_secret']    = Kohana::config('core.auth_multisite_secret');
+        $conf['auth_multisite_login_url'] = Kohana::config('core.auth_multisite_login_url');
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {
