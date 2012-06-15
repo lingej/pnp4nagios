@@ -91,17 +91,19 @@ Have a look at the <a href="/pnp-0.6/about#system_requirements" class="wikilink1
 </p>
 
 <p>
-4. Using the npcdmod module the value of the nagios.cfg directive <code>event_broker_options</code> may have to be adapted if it was modified. You&#039;ll find some details  <a href="/pnp-0.6/config#bulk_mode_with_npcd_and_npcdmod" class="wikilink1" title="pnp-0.6:config">here</a>.
+4. Some graphs are shown, others report the error <code>“parser error: Input is not proper UTF-8”</code> or something similar. Please check if your data contains “special” characters not present in the <acronym title="American Standard Code for Information Interchange">ASCII</acronym> set. Try to set <acronym title="Extensible Markup Language">XML</acronym>_ENC in <code>process_perfdata.cfg</code> to <code><acronym title="International Organization for Standardization">ISO</acronym>-8859-1</code> or something appropriate. Wait until the xml file is newly created and retry.
 </p>
 
 <p>
-5. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> in the <code>scripts</code> directory of the installation folder or the <code>libexec</code> folder after installation to check your settings and if performance data is present and/or valid. The syntax is quite simple for that:
-
+5. Using the npcdmod module the value of the nagios.cfg directive <code>event_broker_options</code> may have to be adapted if it was modified. You&#039;ll find some details  <a href="/pnp-0.6/config#bulk_mode_with_npcd_and_npcdmod" class="wikilink1" title="pnp-0.6:config">here</a>.
 </p>
-<pre class="code">./verify_pnp_config.pl -m &lt;mode&gt;</pre>
 
 <p>
- whereas <code>&lt;mode&gt;</code> is one of “sync”, “bulk” or “npcd” (without quotes). Please note that using “default” will select “npcd” which is different from the behaviour in PNP 0.4.x.
+6. You can use the script <a href="/pnp-0.6/verify_pnp_config" class="wikilink1" title="pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> after installation to check your settings and if performance data is present.
+</p>
+
+<p>
+7. Things look OK, but some files are being left in the spool directory (/usr/local/pnp4nagios/var/spool/&lt;perfdata_filename&gt;-PID-&lt;process_perfdata_pid&gt;). If process_perdata.pl is not able to write to the destination directory (/usr/local/pnp4nagios/share/perfdata/&lt;host&gt;), it will stop and not remove the file. That will increase the size of the spool directory and slow down performance data processing. This problem is likely to occur if you have copied directories from a previous installation and/or manually created directories and left them with wrong permissions or wrong ownership.
 </p>
 
 <p>

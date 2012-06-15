@@ -29,7 +29,7 @@ use strict;
 use POSIX;
 use Getopt::Long;
 use Time::HiRes qw(gettimeofday tv_interval);
-use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line $name $ds_update $dstype);
+use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $count $line $name $ds_update $dstype %CTPL);
 
 my %conf = (
     TIMEOUT            => 15,
@@ -674,10 +674,22 @@ sub adjust_template {
     my @temp_template = split /\!/, $command;
     my $initial_template = cleanup( $temp_template[0] );
     my $template = cleanup( $temp_template[0] );
-    my %CTPL = read_custom_template ( $command, $uom, $count );
+    %CTPL = (
+        UOM		  => $uom,
+        COUNT             => $count,
+        COMMAND           => $command,
+        TEMPLATE          => $template,
+        DSTYPE            => $dstype,
+        RRD_STORAGE_TYPE  => $conf{'RRD_STORAGE_TYPE'}, 
+        RRD_HEARTBEAT     => $conf{'RRD_HEARTBEAT'},
+        USE_MIN_ON_CREATE => 0,
+        USE_MAX_ON_CREATE => 0,
+    );
+
+    read_custom_template ( );
     # 
     if ( $CTPL{'TEMPLATE'} ne $initial_template ){
-        %CTPL = read_custom_template ( $CTPL{'TEMPLATE'}, $uom, $count );
+        read_custom_template ( );
     }
     return %CTPL;
 }
@@ -687,14 +699,14 @@ sub adjust_template {
 # Analyse check_command to find PNP Template .
 #
 sub read_custom_template {
-    my $command           = shift;
-    my $uom               = shift;
-    my $count             = shift;
+    my $command           = $CTPL{'COMMAND'};
+    my $uom               = $CTPL{'UOM'};
+    my $count             = $CTPL{'COUNT'};
     my @dstype_list       = ();
     my $use_min_on_create = 0;
     my $use_max_on_create = 0;
-    my $rrd_storage_type  = $conf{'RRD_STORAGE_TYPE'};
-    my $rrd_heartbeat     = $conf{'RRD_HEARTBEAT'};
+    my $rrd_storage_type  = $CTPL{'RRD_STORAGE_TYPE'};
+    my $rrd_heartbeat     = $CTPL{'RRD_HEARTBEAT'};
 
     if ( defined($conf{'UOM2TYPE'}{$uom}) ) {
         $dstype = $conf{'UOM2TYPE'}{$uom};
@@ -708,6 +720,7 @@ sub read_custom_template {
     my $template = cleanup( $temp_template[0] );
     $template = trim($template);
     my $template_cfg = "$conf{CFG_DIR}/check_commands/$template.cfg";
+    print_log( "DEBUG: read_custom_template() => $command", 3 );
     if ( -e $template_cfg ) {
         print_log( "DEBUG: adjust_template() => $template_cfg", 3 );
         my $initial_dstype = $dstype;
@@ -768,18 +781,17 @@ sub read_custom_template {
         close FH;
     }
     else {
-        print_log( "No Custom Template found for $template ($template_cfg) ", 2 );
+        print_log( "No Custom Template found for $template ($template_cfg) ", 3 );
         print_log( "RRD Datatype is $dstype",                                 3 );
     }
-    print_log( "Template is $template.php", 2 );
-    my %CTPL = (
-        TEMPLATE          => $template,
-        DSTYPE            => $dstype,
-        RRD_STORAGE_TYPE  => $rrd_storage_type,
-        RRD_HEARTBEAT     => $rrd_heartbeat,
-        USE_MIN_ON_CREATE => $use_min_on_create,
-        USE_MAX_ON_CREATE => $use_max_on_create,
-    );
+    print_log( "Template is $template.php", 3 );
+    $CTPL{'COMMAND'}           = $template;
+    $CTPL{'TEMPLATE'}          = $template;
+    $CTPL{'DSTYPE'}            = $dstype;
+    $CTPL{'RRD_STORAGE_TYPE'}  = $rrd_storage_type;
+    $CTPL{'RRD_HEARTBEAT'}     = $rrd_heartbeat;
+    $CTPL{'USE_MIN_ON_CREATE'} = $use_min_on_create;
+    $CTPL{'USE_MAX_ON_CREATE'} = $use_max_on_create;
     return %CTPL;
 }
 
@@ -1415,6 +1427,8 @@ sub new_child {
             or die "Can't unblock SIGINT for fork: $!\n";
     
         my $worker = Gearman::Worker->new();
+        my @job_servers = split(/,/, $conf{'GEARMAN_HOST'}); # allow multiple gearman job servers 
+        $worker->job_servers(@job_servers);
         $worker->job_servers($conf{'GEARMAN_HOST'});
         $worker->register_function("perfdata", 2, sub { return main(@_); });
         my %opt = ( 

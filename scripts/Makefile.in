@@ -38,6 +38,9 @@ install-plugins:
 install-rrdconvert: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) rrd_convert.pl $(DESTDIR)$(LIBEXECDIR)
 
+install-rrdmodify: 
+	$(INSTALL) -m 755 $(INSTALL_OPTS) rrd_modify.pl $(DESTDIR)$(LIBEXECDIR)
+
 install: 
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATADIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBEXECDIR)
@@ -45,4 +48,5 @@ install:
 	$(MAKE) install-processperfdata
 	$(MAKE) install-plugins
 	$(MAKE) install-rrdconvert
+	$(MAKE) install-rrdmodify
 	

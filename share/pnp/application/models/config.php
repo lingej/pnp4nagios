@@ -18,19 +18,23 @@ class Config_Model extends System_Model
         }
 
         # Default Values
-        $conf['doc_language']       = Kohana::config('core.doc_language');
-        $conf['graph_width']        = Kohana::config('core.graph_width');
-        $conf['graph_height']       = Kohana::config('core.graph_height');
-        $conf['zgraph_width']       = Kohana::config('core.zgraph_width');
-        $conf['zgraph_height']      = Kohana::config('core.zgraph_height');
-        $conf['pdf_width']          = Kohana::config('core.pdf_width');
-        $conf['pdf_height']         = Kohana::config('core.pdf_height');
-        $conf['right_zoom_offset']  = Kohana::config('core.right_zoom_offset');
-        $conf['mobile_devices']     = Kohana::config('core.mobile_devices');
-        $conf['pdf_page_size']      = Kohana::config('core.pdf_page_size');
-        $conf['pdf_margin_left']    = Kohana::config('core.pdf_margin_left');
-        $conf['pdf_margin_right']   = Kohana::config('core.pdf_margin_right');
-        $conf['pdf_margin_top']     = Kohana::config('core.pdf_margin_top');
+        $conf['doc_language']           = Kohana::config('core.doc_language');
+        $conf['graph_width']            = Kohana::config('core.graph_width');
+        $conf['graph_height']           = Kohana::config('core.graph_height');
+        $conf['zgraph_width']           = Kohana::config('core.zgraph_width');
+        $conf['zgraph_height']          = Kohana::config('core.zgraph_height');
+        $conf['pdf_width']              = Kohana::config('core.pdf_width');
+        $conf['pdf_height']             = Kohana::config('core.pdf_height');
+        $conf['right_zoom_offset']      = Kohana::config('core.right_zoom_offset');
+        $conf['mobile_devices']         = Kohana::config('core.mobile_devices');
+        $conf['pdf_page_size']          = Kohana::config('core.pdf_page_size');
+        $conf['pdf_margin_left']        = Kohana::config('core.pdf_margin_left');
+        $conf['pdf_margin_right']       = Kohana::config('core.pdf_margin_right');
+        $conf['pdf_margin_top']         = Kohana::config('core.pdf_margin_top');
+        $conf['auth_multisite_enabled']   = Kohana::config('core.auth_multisite_enabled');
+        $conf['auth_multisite_htpasswd']  = Kohana::config('core.auth_multisite_htpasswd');
+        $conf['auth_multisite_secret']    = Kohana::config('core.auth_multisite_secret');
+        $conf['auth_multisite_login_url'] = Kohana::config('core.auth_multisite_login_url');
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {
@@ -39,15 +43,32 @@ class Config_Model extends System_Model
             throw new Kohana_Exception('error.config-not-found', $config.'.php');
         }
 
-        if (is_readable($config . "_local.php")) {
-            $array_a = $views;
-            $views = array();
-            include ($config . "_local.php");
-            $array_b = $views;
-            if(sizeof($views) == 0 ){
-                $views = $array_a;
+        // Load optional config files
+        // a) the _local.php config
+        // b) all .php files which do not start with a "." in config.d/
+        $custom_configs = array($config . "_local.php");
+        if (file_exists($config . ".d") && is_dir($config . ".d")) {
+            $dh = opendir($config . ".d");
+            while (($file = readdir($dh)) !== false) {
+                if ($file[0] != '.' && substr($file, -4) == '.php') {
+                    $custom_configs[] = $config . ".d/" .$file;
+                }
+            }
+            closedir($dh);
+        }
+
+	foreach($custom_configs AS $config_file) {
+            if (is_readable($config_file)) {
+                $array_a = $views;
+                $views = array();
+                include ($config_file);
+                $array_b = $views;
+                if(sizeof($views) == 0 ){
+                    $views = $array_a;
+                }
             }
         }
+
         $this->conf = $conf;
         $this->views = $views;
     }

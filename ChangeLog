@@ -1,10 +1,17 @@
-**pnp-0.6.17 ??/??/2011**
+**pnp-0.6.18 ??/??/2012**
+  * Bugfix:  Fixed STORAGE_TYPE and CUSTOM_TEMPLATE vars used in custom templates
+  * Bugfix:  Blank screen on PHP 5.4 fixed
+  * Feature: Allow multiple gearman job servers
+
+**pnp-0.6.17 03/25/2012**
   * Bugfix:  Fixed rrd_convert.pl while running with --dry-run
   * Bugfix:  logging.c include missing header files ( Lars Vogdt )       
   * Bugfix:  Check if pnp4nagios/etc/rra.cfg is readable
+  * Bugfix:  rrd_convert.pl use XML tag TEMPLATE instead of CHECKCOMMAND to selects RRDs ( Sven Velt )
   * Feature: npcdmod.o increase perfdata buffer and log discarded perfdata ( Birger Schmidt )
   * Feature: rrd_modify.pl to change number of data sources of an RRD file
-  * Feature: new template check_apachestatus_auto.php
+  * Feature: New template check_apachestatus_auto.php
+  * Feature: Implement etc/config.d to place config snippets ( Lars Michelsen )
 
 **pnp-0.6.16 11/21/2011**
   * Bugfix:  Fixed single quoted check_multi labels (Reported by Matthias Flacke)

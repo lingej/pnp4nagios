@@ -15,7 +15,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.15.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.16.tar.gz</a>
 </p>
 
 </div>
@@ -35,20 +35,39 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Mon Nov 21 18:11:11 CET 2011
+Last Update: Sun Mar 25 17:27:41 CEST 2012
 </p>
 
 </div>
-<!-- SECTION "Latest Devel Version" [327-549] -->
+<!-- SECTION "Latest Devel Version" [327-550] -->
 <h2><a name="changelog" id="changelog">ChangeLog</a></h2>
 <div class="level2">
 
 <p>
 
-<strong>pnp-0.6.17 ??/??/2011</strong>
+<strong>pnp-0.6.17 03/25/2012</strong>
 </p>
+<ul>
+<li class="level1"><div class="li"> Bugfix:  Fixed rrd_convert.pl while running with –dry-run</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  logging.c include missing header files ( Lars Vogdt )       </div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Check if pnp4nagios/etc/rra.cfg is readable</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  rrd_convert.pl use <acronym title="Extensible Markup Language">XML</acronym> tag TEMPLATE instead of CHECKCOMMAND to selects RRDs ( Sven Velt )</div>
+</li>
+<li class="level1"><div class="li"> Feature: npcdmod.o increase perfdata buffer and log discarded perfdata ( Birger Schmidt )</div>
+</li>
+<li class="level1"><div class="li"> Feature: rrd_modify.pl to change number of data sources of an RRD file</div>
+</li>
+<li class="level1"><div class="li"> Feature: New template check_apachestatus_auto.php</div>
+</li>
+<li class="level1"><div class="li"> Feature: Implement etc/config.d to place config snippets ( Lars Michelsen )</div>
+</li>
+</ul>
 
 <p>
+
 <strong>pnp-0.6.16 11/21/2011</strong>
 </p>
 <ul>
@@ -60,7 +79,7 @@ Last Update: Mon Nov 21 18:11:11 CET 2011
 </li>
 <li class="level1"><div class="li"> Feature: <acronym title="Portable Document Format">PDF</acronym> margins are now adjustable via config.php ( Thomas Witzenrath )</div>
 </li>
-<li class="level1"><div class="li"> Featire: Support for <acronym title="Portable Document Format">PDF</acronym> size &#039;letter&#039; added ( Robert Becht )</div>
+<li class="level1"><div class="li"> Feature: Support for <acronym title="Portable Document Format">PDF</acronym> size &#039;letter&#039; added ( Robert Becht )</div>
 </li>
 </ul>
 
@@ -360,4 +379,4 @@ Last Update: Mon Nov 21 18:11:11 CET 2011
 </ul>
 
 </div>
-<!-- SECTION "ChangeLog" [550-] -->
+<!-- SECTION "ChangeLog" [551-] -->

@@ -205,8 +205,27 @@ Creates colorized areas, which show different colors depending on states OK, WAR
 
 <p>
 <a href="/templates/alerter" class="wikilink1" title="templates:alerter">Example</a>
+</p>
+
+</div>
+<!-- SECTION "rrd::alerter" [2881-3275] -->
+<h2><a name="rrdalerter_gr" id="rrdalerter_gr">rrd::alerter_gr</a></h2>
+<div class="level2">
+
+<p>
+
+string <strong>rrd::alerter_gr</strong> ( $vname, $label, $warning, $critical, [$opacity], [$unit], [$color_OK], [$color_WARN], [$color_CRIT], [$line_col], [$start_color] )
+</p>
+
+<p>
+Creates colorized gradients, which show different colors depending on states OK, WARNING &amp; CRITICAL
+</p>
+<pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">alerter_gr</span><span class="br0">&#40;</span> <span class="st0">&quot;var1&quot;</span><span class="sy0">,</span> <span class="re0">$LABEL</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$WARN</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> <span class="re0">$CRIT</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="st0">&quot;FF&quot;</span><span class="sy0">,</span> <span class="re0">$UNIT</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+<a href="/templates/alerter_gr" class="wikilink1" title="templates:alerter_gr">Example</a>
 
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter" [2881-] -->
+<!-- SECTION "rrd::alerter_gr" [3276-] -->

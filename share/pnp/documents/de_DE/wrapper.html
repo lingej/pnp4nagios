@@ -17,7 +17,9 @@ Mit dem folgenden Wrapper-Script kann das geändert werden
 LINE=`/usr/local/nagios/libexec/check_procs $*`
 RC=$?
 COUNT=`echo $LINE | awk &#039;{print $3}&#039;`
-echo $LINE \| procs=$COUNT
+PROCS=`expr $COUNT - 1`
+LINE=`echo $LINE | sed &quot;s/: $COUNT /: $PROCS /&quot;`
+echo $LINE \| procs=$PROCS
 exit $RC</pre>
 
 <p>
