@@ -21,10 +21,18 @@ class rrd_Core {
      * Color Function
      * Concept by Stefan Triep
      */
-	public static function color($num=0 , $alpha='FF'){
+	public static function color($num=0 , $alpha='FF', $scheme=''){
 		$colors = array();
 		$value = array('cc','ff','99','66');
 		$num   = intval($num);
+
+		# check if colour scheme entry exists
+		# fall back to old method if not found
+		if ( isset( $scheme["$num"] ) ){
+			$color = $scheme["$num"] . $alpha;
+			return $color;
+		}
+
 		foreach($value as $ri){
 			for ($z=1;$z<8;$z++) {
 				$color = "#";
