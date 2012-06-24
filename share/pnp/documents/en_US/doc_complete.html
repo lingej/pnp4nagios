@@ -418,7 +418,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.16.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.17.tar.gz</a>
 </p>
 
 </div>
@@ -438,7 +438,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Sun Mar 25 07:05:01 CEST 2012
+Last Update: Sat Jun 23 13:05:01 CEST 2012
 </p>
 
 </div>
@@ -448,7 +448,20 @@ Last Update: Sun Mar 25 07:05:01 CEST 2012
 
 <p>
 
-<strong>pnp-0.6.17 ??/??/2011</strong>
+<strong>pnp-0.6.18 ??/??/2012</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix:  Fixed STORAGE_TYPE and CUSTOM_TEMPLATE vars used in custom templates</div>
+</li>
+<li class="level1"><div class="li"> Bugfix:  Blank screen on <acronym title="Hypertext Preprocessor">PHP</acronym> 5.4 fixed</div>
+</li>
+<li class="level1"><div class="li"> Feature: Allow multiple gearman job servers</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.17 03/25/2012</strong>
 </p>
 <ul>
 <li class="level1"><div class="li"> Bugfix:  Fixed rrd_convert.pl while running with –dry-run</div>
@@ -457,11 +470,15 @@ Last Update: Sun Mar 25 07:05:01 CEST 2012
 </li>
 <li class="level1"><div class="li"> Bugfix:  Check if pnp4nagios/etc/rra.cfg is readable</div>
 </li>
+<li class="level1"><div class="li"> Bugfix:  rrd_convert.pl use <acronym title="Extensible Markup Language">XML</acronym> tag TEMPLATE instead of CHECKCOMMAND to selects RRDs ( Sven Velt )</div>
+</li>
 <li class="level1"><div class="li"> Feature: npcdmod.o increase perfdata buffer and log discarded perfdata ( Birger Schmidt )</div>
 </li>
 <li class="level1"><div class="li"> Feature: rrd_modify.pl to change number of data sources of an RRD file</div>
 </li>
-<li class="level1"><div class="li"> Feature: new template check_apachestatus_auto.php</div>
+<li class="level1"><div class="li"> Feature: New template check_apachestatus_auto.php</div>
+</li>
+<li class="level1"><div class="li"> Feature: Implement etc/config.d to place config snippets ( Lars Michelsen )</div>
 </li>
 </ul>
 
@@ -1561,8 +1578,9 @@ You need a mod_gearman environment up and running like described by Sven Nierlei
 
 <p>
 You&#039;ll find a section on gearman in <code>etc/process_perfdata.cfg</code>:
+
 </p>
-<pre class="code">PREFORK = 0
+<pre class="code">PREFORK = 1
 GEARMAN_HOST = localhost:4730
 REQUESTS_PER_CHILD = 10000
 ENCRYPTION = 1
@@ -1570,18 +1588,32 @@ KEY = should_be_changed
 #KEY_FILE = /usr/local/pnp4nagios/etc/secret.key</pre>
 
 <p>
-Using <code>PREFORK = &lt;n&gt;</code> you specify the number of additional(!) child processes. Specify “0” only a parent process is started.<br/>
 
-<code>GEARMAN_HOST = &lt;host&gt;:&lt;port&gt;</code> specifies host and port of the server running the gearman daemon providing the data.<br/>
+Using <code>PREFORK = &lt;n&gt;</code> you specify the number of child processes. 
+</p>
 
-<code>REQUEST_PER_CHILD = &lt;n&gt;</code> enables you to define the number of requests processed per process.<br/>
+<p>
+<code>GEARMAN_HOST = &lt;host&gt;:&lt;port&gt;</code> specifies host and port of the server running the gearman daemon providing the data.
+</p>
 
+<p>
+<code>REQUEST_PER_CHILD = &lt;n&gt;</code> enables you to define the number of requests processed per process.
+</p>
+
+<p>
 <code>ENCRYPTION = &lt;n&gt;</code> specifies whether to use encryption (“1”) or not. Default is an activated encyrption which should be changed only in special cases. You can either use <code>KEY = &lt;key phrase&gt;</code> or &#039;KEYFILE =&lt;key file&gt;<code> to specify the location of a file containing the key phrase.
 
-</code>etc/init.d/pnp_gearman_worker start<code> contains links to the perl script </code>process_perfdata.pl<code> and the config file </code>process_perfdata.cfg<code>.
+</code>etc/init.d/pnp_gearman_worker start<code> contains links to the perl script </code>process_perfdata.pl<code> and the config file </code>process_perfdata.cfg&#039;&#039;.
+</p>
 
+<p>
 After starting the daemon process using
-   /etc/init.d/pnp_gearmon_worker start</code>
+
+</p>
+<pre class="code"> /etc/init.d/pnp_gearmon_worker start</pre>
+
+<p>
+
 the performance data will be processed which is provided by the gearmand daemon on the Nagios server.
 </p>
 

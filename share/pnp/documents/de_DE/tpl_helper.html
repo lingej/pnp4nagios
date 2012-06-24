@@ -131,8 +131,22 @@ string <strong>rrd::color</strong> ( $num [, $num ])
 Liefert eine Farbe aus der <acronym title="HyperText Markup Language">HTML</acronym>-Farbtabelle. Als zweites (optionales) Argument kann man einen Alpha-Wert angeben, der die Transparenz der Farbe festlegt. 
 </p>
 
+<p>
+Beginnend mit git-Version vom 21.06.2012 akzeptiert die Funktion ein drittes Argument, das auf Farbschemadefinitionen in <code>config.php</code> verweist (oder in <code>config_local.php</code>, die bei Updates nicht überschrieben wird). Dort finden Sie das Array $scheme[], z.B. 
+</p>
+<pre class="code">$scheme[&#039;Reds&#039;] = array (...)</pre>
+
+<p>
+Im Template definieren Sie 
+</p>
+<pre class="code"> ... rrd:color ($key, &#039;&#039;, &#039;Reds&#039;);</pre>
+
+<p>
+Aus diese Weise wählen Sie den Wert von $scheme[&#039;Reds&#039;][$key]. Falls $key nicht innerhalb des Arrays liegt oder der Name nicht korrekt ist (<strong>case-sensitiv</strong>), dann wird die Standardpalette verwendet.
+</p>
+
 </div>
-<!-- SECTION "rrd::color" [1744-1964] -->
+<!-- SECTION "rrd::color" [1744-2545] -->
 <h2><a name="rrdgradient" id="rrdgradient">rrd::gradient</a></h2>
 <div class="level2">
 
@@ -152,7 +166,7 @@ Erzeugt einen Farbverlauf von $start_color nach $end_color
 </p>
 
 </div>
-<!-- SECTION "rrd::gradient" [1965-2255] -->
+<!-- SECTION "rrd::gradient" [2546-2836] -->
 <h2><a name="rrdcut" id="rrdcut">rrd::cut</a></h2>
 <div class="level2">
 
@@ -168,7 +182,7 @@ Diese Funktion ist hilfreich, wenn die Legende ausgerichtet werden soll, aber di
 </p>
 
 </div>
-<!-- SECTION "rrd::cut" [2256-2590] -->
+<!-- SECTION "rrd::cut" [2837-3171] -->
 <h2><a name="rrdticker" id="rrdticker">rrd::ticker</a></h2>
 <div class="level2">
 
@@ -188,7 +202,7 @@ Erzeugt einen farbigen Balken am oberen Rand des Graphen, der je nach OK, WARNIN
 </p>
 
 </div>
-<!-- SECTION "rrd::ticker" [2591-2967] -->
+<!-- SECTION "rrd::ticker" [3172-3548] -->
 <h2><a name="rrdalerter" id="rrdalerter">rrd::alerter</a></h2>
 <div class="level2">
 
@@ -207,7 +221,7 @@ Erzeugt Areas, die entsprechend der Werte OK, WARNING &amp; CRITICAL unterschied
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter" [2968-3365] -->
+<!-- SECTION "rrd::alerter" [3549-3946] -->
 <h2><a name="rrdalerter_gr" id="rrdalerter_gr">rrd::alerter_gr</a></h2>
 <div class="level2">
 
@@ -227,4 +241,4 @@ Erzeugt Gradienten, die entsprechend der Werte OK, WARNING &amp; CRITICAL unters
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter_gr" [3366-] -->
+<!-- SECTION "rrd::alerter_gr" [3947-] -->
