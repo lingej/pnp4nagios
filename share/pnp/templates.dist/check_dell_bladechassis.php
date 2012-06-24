@@ -47,10 +47,10 @@ foreach ($DS as $i) {
 	$opt[$count] = "--slope-mode --vertical-label \"$vlabel\" --title \"$def_title: $title\" ";
  
 	if(isset($def[$count])){
-	    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] .= "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
 	else {
-	    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] = "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
         $def[$count] .= "AREA:var$i#$PWRcolor:\"$NAME[$i]\" " ;
         $def[$count] .= "LINE:var$i#000000: " ;
@@ -72,10 +72,10 @@ foreach ($DS as $i) {
 	$opt[$count] = "-X0 --slope-mode --vertical-label \"$vlabel\" --title \"$def_title: $title\" ";
  
 	if(isset($def[$count])){
-	    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] .= "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
 	else {
-	    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] = "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
         $def[$count] .= "AREA:var$i#$AMPcolor:\"$NAME[$i]\" " ;
         $def[$count] .= "LINE:var$i#000000: " ;
@@ -99,10 +99,10 @@ foreach ($DS as $i) {
 	$opt[$count] = "-X0 --slope-mode --vertical-label \"$vlabel\" --title \"$def_title: Power Supply Voltage\" ";
  
 	if(isset($def[$count])){
-	    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] .= "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
 	else {
-	    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] = "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
 	$def[$count] .= "LINE:var$i#".$colors[$v++].":\"$NAME[$i]\" " ;
 	$def[$count] .= "GPRINT:var$i:LAST:\"%3.2lf V last \" ";
@@ -125,10 +125,10 @@ foreach ($DS as $i) {
 	$opt[$count] = "-X0 --slope-mode --vertical-label \"$vlabel\" --title \"$def_title: Power Supply Amperage\" ";
  
 	if(isset($def[$count])){
-	    $def[$count] .= "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] .= "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
 	else {
-	    $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	    $def[$count] = "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	}
 	$def[$count] .= "LINE:var$i#".$colors[$a++].":\"$NAME[$i]\" " ;
 	$def[$count] .= "GPRINT:var$i:LAST:\"%2.3lf A last \" ";
