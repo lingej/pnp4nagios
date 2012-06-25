@@ -36,6 +36,7 @@ $lang = array
     'title-special-templates-link' => 'View Special Templates',
     'title-docs-link' => 'View Documentation',
     'title-home-link' => 'View Graphs',
+    'title-color-link' => 'View Color Schemes',
     'docs-home' => 'Home',
     'docs-box-header' => 'Menu',
     'docs-header' => 'Documentation Version %s',
@@ -53,4 +54,6 @@ $lang = array
     'basket-remove' => 'Remove %s',
     'basket-add-item' => 'Add this item to my basket',
     'basket-add-service' => 'Add this service to my basket',
+    'color-box-header' => 'Colors',
+    'color-header' => 'Colors Schemes',
 );

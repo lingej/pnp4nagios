@@ -36,6 +36,7 @@ $lang = array
     'title-special-templates-link' => 'Просмотр специальных шаблонов',
     'title-docs-link' => 'Просмотреть документацию',
     'title-home-link' => 'Просмотр графиков',
+    'title-color-link' => 'View Color Schemes',
     'docs-home' => 'На главную',
     'docs-box-header' => 'Меню',
     'docs-header' => 'Версия документации %s',
@@ -53,4 +54,6 @@ $lang = array
     'basket-remove' => 'Убрать %s',
     'basket-add-item' => 'Добавить этот элемент в мою корзину',
     'basket-add-service' => 'Добавить эту службу в мою корзину',
+    'color-box-header' => 'Colors',
+    'color-header' => 'Colors Schemes',
 );

@@ -426,4 +426,17 @@ class rrd_Core {
 
 		return $line;
 	}
+
+    public static function debug($data=FALSE){
+        if($data != FALSE){
+	    ob_start();
+
+	    var_dump($data);
+            $var_dump = ob_get_contents();
+            $var_dump = preg_replace('/(HRULE|VDEF|DEF|CDEF|GPRINT|LINE|AREA|COMMENT)/',"\n\${1}", $var_dump);
+            ob_end_clean(); 
+            throw new Kohana_exception("<pre>".$var_dump."</pre>");
+	}
+    }
+
 } 
