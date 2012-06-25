@@ -131,8 +131,22 @@ string <strong>rrd::color</strong> ( $num [, $num])
 Returns a color from the <acronym title="HyperText Markup Language">HTML</acronym> color table. The second (optional) argument allows to specify an alpha value used to set the transparency of the selected color.
 </p>
 
+<p>
+Starting with git version as of 2012.06.21 the function accepts a third argument which refers to colour scheme definitions in <code>config.php</code> (or <code>config_local.php</code> which is update safe). There you can find the array $scheme[], e.g. 
+</p>
+<pre class="code">$scheme[&#039;Reds&#039;] = array (...)</pre>
+
+<p>
+Within the template you define 
+</p>
+<pre class="code"> ... rrd::color ($key, &#039;&#039;, &#039;Reds&#039;);</pre>
+
+<p>
+This way you select the value taken from $scheme[&#039;Reds&#039;][$key]. If $key is not within the array or you misspelled the name (<strong>case sensitive</strong>) then the default colour palette is used.
+</p>
+
 </div>
-<!-- SECTION "rrd::color" [1713-1936] -->
+<!-- SECTION "rrd::color" [1713-2477] -->
 <h2><a name="rrdgradient" id="rrdgradient">rrd::gradient</a></h2>
 <div class="level2">
 
@@ -152,7 +166,7 @@ Creates a color gradient from $start_color to $end_color
 </p>
 
 </div>
-<!-- SECTION "rrd::gradient" [1937-2224] -->
+<!-- SECTION "rrd::gradient" [2478-2765] -->
 <h2><a name="rrdcut" id="rrdcut">rrd::cut</a></h2>
 <div class="level2">
 
@@ -169,7 +183,7 @@ This function is helpful if legend needs to be justified but length of label is 
 </p>
 
 </div>
-<!-- SECTION "rrd::cut" [2225-2509] -->
+<!-- SECTION "rrd::cut" [2766-3050] -->
 <h2><a name="rrdticker" id="rrdticker">rrd::ticker</a></h2>
 <div class="level2">
 
@@ -189,7 +203,7 @@ Creates a colorized bar at the top of the chart which shows different colors dep
 </p>
 
 </div>
-<!-- SECTION "rrd::ticker" [2510-2880] -->
+<!-- SECTION "rrd::ticker" [3051-3421] -->
 <h2><a name="rrdalerter" id="rrdalerter">rrd::alerter</a></h2>
 <div class="level2">
 
@@ -208,7 +222,7 @@ Creates colorized areas, which show different colors depending on states OK, WAR
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter" [2881-3275] -->
+<!-- SECTION "rrd::alerter" [3422-3816] -->
 <h2><a name="rrdalerter_gr" id="rrdalerter_gr">rrd::alerter_gr</a></h2>
 <div class="level2">
 
@@ -228,4 +242,4 @@ Creates colorized gradients, which show different colors depending on states OK,
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter_gr" [3276-] -->
+<!-- SECTION "rrd::alerter_gr" [3817-] -->

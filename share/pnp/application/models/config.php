@@ -7,6 +7,7 @@ class Config_Model extends System_Model
 {
     public $conf = array();
     public $views = array();
+    public $scheme = array();
 
     public function read_config(){
         if(getenv('PNP_CONFIG_FILE') != ""){
@@ -71,5 +72,6 @@ class Config_Model extends System_Model
 
         $this->conf = $conf;
         $this->views = $views;
+        $this->scheme = $scheme;
     }
 }

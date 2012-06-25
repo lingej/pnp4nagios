@@ -129,6 +129,9 @@ jQuery(document).ready(function(){
 <?php if (!empty($debug)) {
      echo $debug;
 } ?>
+<?php if (!empty($color)) {
+     echo $color;
+} ?>
 <?php if (!empty($zoom)) {
      echo $zoom;
 } ?>

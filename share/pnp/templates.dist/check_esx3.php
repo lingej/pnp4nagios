@@ -71,7 +71,7 @@ $opt[1] .= "--watermark=\"http://www.op5.com template: $TEMPLATE[1]\" ";
 $opt[1] .= "--units-exponent=0 ";
 
 for ($i = 1; $i <= count($DS); $i++) {
-	$def[1] .= "DEF:ds$i=$rrdfile:$DS[$i]:AVERAGE " ;
+	$def[1] .= "DEF:ds$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
 	$def[1] .= "CDEF:var$i=ds$i ";
 
 	if (isset($color)) {

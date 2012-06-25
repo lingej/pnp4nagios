@@ -30,7 +30,7 @@ foreach ($DS as $i) {
  
 	$opt[$count] = "--slope-mode --vertical-label \"$vlabel\" --title \"$def_title: $title\" ";
  
-        $def[$count] = "DEF:var$i=$rrdfile:$DS[$i]:AVERAGE " ;
+        $def[$count] = "DEF:var$i=$RRDFILE[$i]:$DS[$i]:AVERAGE " ;
         $def[$count] .= "AREA:var$i#$PWRcolor:\"$NAME[$i]\" " ;
         $def[$count] .= "LINE:var$i#000000: " ;
 	$def[$count] .= "GPRINT:var$i:LAST:\"%6.0lf W last \" ";

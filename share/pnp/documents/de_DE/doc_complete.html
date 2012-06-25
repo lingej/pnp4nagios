@@ -1212,34 +1212,42 @@ Benötigt wird eine fertig eingerichtete mod_gearman Installation wie von Sven N
 <p>
 In <code>etc/process_perfdata.cfg</code> gibt es einen gearman-Abschnitt:
 </p>
-<pre class="code"> PREFORK = 0
+<pre class="code"> PREFORK = 1
  GEARMAN_HOST = localhost:4730
  REQUESTS_PER_CHILD = 10000
  ENCRYPTION = 1
  KEY = should_be_changed
- #KEY_FILE = /usr/local/pnp4nagios/etc/secret.key</pre>
+ #KEY_FILE = /usr/local/pnp4nagios/etc/secret.key
+ </pre>
 
 <p>
-Dort ist mit <code>PREFORK = &lt;n&gt;</code> die Anzahl von zusätzlichen(!) Kindprozessen anzugeben. Bei “0” wird lediglich ein “Elternprozess” gestartet.<br/>
+Dort ist mit <code>PREFORK = &lt;n&gt;</code> die Anzahl der zu startenden Kindprozessen anzugeben.
+</p>
 
-<code>GEARMAN_HOST = &lt;host&gt;:&lt;port&gt;</code> definiert Rechner und Port, auf dem der gearman-Daemon die Daten bereitstellt.<br/>
+<p>
+<code>GEARMAN_HOST = &lt;host&gt;:&lt;port&gt;</code> definiert Rechner und Port, auf dem der gearman-Daemon die Daten bereitstellt.
+Über <code>REQUESTS_PER_CHILD = &lt;n&gt;</code> kann die maximal zu verarbeitende Anzahl von Anforderungen pro Prozess eingestellt werden.
+</p>
 
-Über <code>REQUESTS_PER_CHILD = &lt;n&gt;</code> kann die maximal zu verarbeitende Anzahl von Anforderungen pro Prozess eingestellt werden.<br/>
-
+<p>
 <code>ENCRYPTION = &lt;1|0&gt;</code> stellt ein, ob Verschlüsselung benutzt werden soll. Die Standardeinstellung ist eine aktivierte Verschlüsselung (“1”) und das sollte nur in Ausnahmefällen verändert werden.
 Dabei kann entweder über <code>KEY = &lt;Schlüssel&gt;</code> der zu benutzende Schlüssel definiert oder per <code>KEY_FILE = &lt;Schlüsseldatei&gt;</code> der Standort einer Schlüsseldatei angegeben werden.
 </p>
 
 <p>
+
 <code>/etc/init.d/pnp_gearman_worker</code> enthält Verweise auf die <acronym title="Practical Extraction and Report Language">Perl</acronym>-Prozedur <code>process_perfdata.pl</code> sowie die Konfigurationsdatei <code>process_perfdata.cfg</code>.
 </p>
 
 <p>
+
 Nach dem Start des PNP-Daemons per 
+
 </p>
 <pre class="code"> /etc/init.d/pnp_gearman_worker start</pre>
 
 <p>
+
 werden die Performance-Daten verarbeitet, die über den gearmand-Daemon auf dem Nagios-Rechner zur Verfügung gestellt werden.
 </p>
 
