@@ -36,6 +36,9 @@ class Config_Model extends System_Model
         $conf['auth_multisite_htpasswd']  = Kohana::config('core.auth_multisite_htpasswd');
         $conf['auth_multisite_secret']    = Kohana::config('core.auth_multisite_secret');
         $conf['auth_multisite_login_url'] = Kohana::config('core.auth_multisite_login_url');
+	
+	$scheme['Reds']     = array ('#FEE0D2','#FCBBA1','#FC9272','#FB6A4A','#EF3B2C','#CB181D','#A50F15','#67000D');
+
         $views = Kohana::config('core.views');
         
         if (is_readable($config . ".php")) {
