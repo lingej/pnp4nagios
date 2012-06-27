@@ -139,14 +139,16 @@ Starting with git version as of 2012.06.21 the function accepts a third argument
 <p>
 Within the template you define 
 </p>
-<pre class="code"> ... rrd::color ($key, &#039;&#039;, &#039;Reds&#039;);</pre>
+<pre class="code">$schema = $scheme[&#039;Reds&#039;];
+...
+rrd::color ($key, &#039;&#039;, $schema);</pre>
 
 <p>
 This way you select the value taken from $scheme[&#039;Reds&#039;][$key]. If $key is not within the array or you misspelled the name (<strong>case sensitive</strong>) then the default colour palette is used.
 </p>
 
 </div>
-<!-- SECTION "rrd::color" [1713-2477] -->
+<!-- SECTION "rrd::color" [1713-2504] -->
 <h2><a name="rrdgradient" id="rrdgradient">rrd::gradient</a></h2>
 <div class="level2">
 
@@ -166,7 +168,7 @@ Creates a color gradient from $start_color to $end_color
 </p>
 
 </div>
-<!-- SECTION "rrd::gradient" [2478-2765] -->
+<!-- SECTION "rrd::gradient" [2505-2792] -->
 <h2><a name="rrdcut" id="rrdcut">rrd::cut</a></h2>
 <div class="level2">
 
@@ -183,7 +185,7 @@ This function is helpful if legend needs to be justified but length of label is 
 </p>
 
 </div>
-<!-- SECTION "rrd::cut" [2766-3050] -->
+<!-- SECTION "rrd::cut" [2793-3077] -->
 <h2><a name="rrdticker" id="rrdticker">rrd::ticker</a></h2>
 <div class="level2">
 
@@ -203,7 +205,7 @@ Creates a colorized bar at the top of the chart which shows different colors dep
 </p>
 
 </div>
-<!-- SECTION "rrd::ticker" [3051-3421] -->
+<!-- SECTION "rrd::ticker" [3078-3448] -->
 <h2><a name="rrdalerter" id="rrdalerter">rrd::alerter</a></h2>
 <div class="level2">
 
@@ -222,7 +224,7 @@ Creates colorized areas, which show different colors depending on states OK, WAR
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter" [3422-3816] -->
+<!-- SECTION "rrd::alerter" [3449-3843] -->
 <h2><a name="rrdalerter_gr" id="rrdalerter_gr">rrd::alerter_gr</a></h2>
 <div class="level2">
 
@@ -242,4 +244,4 @@ Creates colorized gradients, which show different colors depending on states OK,
 </p>
 
 </div>
-<!-- SECTION "rrd::alerter_gr" [3817-] -->
+<!-- SECTION "rrd::alerter_gr" [3844-] -->
