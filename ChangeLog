@@ -1,7 +1,11 @@
-**pnp-0.6.18 ??/??/2012**
+**pnp-0.6.19 ??/??/2012**
+
+**pnp-0.6.18 06/28/2012**
   * Bugfix:  Fixed STORAGE_TYPE and CUSTOM_TEMPLATE vars used in custom templates
   * Bugfix:  Blank screen on PHP 5.4 fixed
   * Feature: Allow multiple gearman job servers
+  * Feature: New helper function rrd::debug()
+  * Feature: New templates check_jmx4perl_*.php
 
 **pnp-0.6.17 03/25/2012**
   * Bugfix:  Fixed rrd_convert.pl while running with --dry-run
