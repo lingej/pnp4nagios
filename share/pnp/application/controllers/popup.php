@@ -42,7 +42,7 @@ class Popup_Controller extends System_Controller  {
         if(isset($this->host) && isset($this->service)){
             $this->service = pnp::clean($this->service);
             $this->host    = pnp::clean($this->host);
-            $this->data->buildDataStruct($this->host,$this->service,$this->view);
+            $this->data->buildDataStruct($this->host,$this->service,$this->view,$this->source);
             $this->template->host      = $this->host;
             $this->template->srv       = $this->service;
             $this->template->view      = $this->view;
