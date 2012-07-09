@@ -26,10 +26,15 @@ class Popup_Controller extends System_Controller  {
             $this->view = $this->config->conf['overview-range'];
         }
 
-        if(isset($this->config->conf['popup-width']) &&$this->config->conf['popup-width'] != ""){ 
-            $this->imgwidth = $this->config->conf['popup-width'];
+
+        if(isset($_GET['width']) && $_GET['width'] !="" ){
+            $this->imgwidth = $this->input->get('width');
         }else{
-            $this->imgwidth = FALSE;
+            if(isset($this->config->conf['popup-width']) &&$this->config->conf['popup-width'] != ""){ 
+                $this->imgwidth = $this->config->conf['popup-width'];
+            }else{
+                $this->imgwidth = FALSE;
+            }
         }
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
