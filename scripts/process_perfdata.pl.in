@@ -899,8 +899,8 @@ sub _parse {
         "max"      => $7
     );
     
-    $p{label}  =~ s/[']//g;        # cleanup
-    $p{name}   =~ s/[']//g;        # cleanup
+    $p{label}  =~ s/["']//g;        # cleanup
+    $p{name}   =~ s/["']//g;        # cleanup
     $p{name}   =~ s/[\/\\]/_/g;    # cleanup
     $p{name}   = cleanup($p{name});
 

@@ -130,7 +130,7 @@ class pnp_Core {
                 $matches[3] = $matches[2];
                 $matches[2] = " ";
             }
-            $pos = strpos(' KMGTP',$matches[2]);
+            $pos = strpos(' KMGTP',strtoupper($matches[2]));
             $unit = substr(' KMGTP',$mag+$pos,1).$matches[3];
         }
         $val_unit = sprintf ("$format %s", $value, $unit);
