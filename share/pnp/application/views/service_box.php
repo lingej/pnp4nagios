@@ -3,9 +3,15 @@
  <div class="p2 ui-widget-header ui-corner-top">
  <?php echo Kohana::lang('common.service-box-header') ?> 
  </div>
-<div class="p4 ui-widget-content ui-corner-bottom">
+
+<div class="p4 ui-widget-content">
+   <input type="text" name="service-filter" id="service-filter" class="textbox" />
+</div>
+
+<div class="p4 ui-widget-content ui-corner-bottom" id="services">
 <?php
 foreach($services as $service){
+	echo "<span id=\"service-".$service['servicedesc']."\">\n";
 	$path = pnp::addToUri( array('host' => $host, 'srv' => $service['name']) );
 	echo pnp::add_to_basket_icon($host,
                 $service['name']);
@@ -15,6 +21,7 @@ foreach($services as $service){
 		 "\">";
 	echo pnp::shorten($service['servicedesc']).
 		 "</a><br>\n";
+	echo "</span>\n";
 }
 ?>
 </div>
