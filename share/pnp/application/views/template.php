@@ -135,6 +135,20 @@ jQuery(document).ready(function(){
             };
         });
     });
+
+	jQuery("#page-filter").keyup(function () {
+        var sfilter = jQuery("#page-filter").val();
+        jQuery("#pages span[id^='page']").each(function () {
+            if (jQuery(this).attr('id').search(new RegExp("page-.*" + sfilter,"i")) == 0) {
+                jQuery(this).show();
+            } else {
+                jQuery(this).hide();
+            };
+        });
+    });
+});
+
+
 });
 
 <?php if (!empty($zoom_header)) {
