@@ -118,7 +118,6 @@ jQuery(document).ready(function(){
         var filter = jQuery("#service-filter").val();
         jQuery("#services span[id^='service']").each(function () {
             if (jQuery(this).attr('id').search(new RegExp("service-.*" + filter,"i")) == 0) {
-                // console.log(jQuery(this));
                 jQuery(this).show();
             } else {
                 jQuery(this).hide();
@@ -128,9 +127,7 @@ jQuery(document).ready(function(){
 
 	jQuery("#special-filter").keyup(function () {
         var sfilter = jQuery("#special-filter").val();
-        console.log(sfilter);
         jQuery("#special-templates span[id^='special']").each(function () {
-            console.log(jQuery(this).attr('href'));
             if (jQuery(this).attr('id').search(new RegExp("special-.*" + sfilter,"i")) == 0) {
                 jQuery(this).show();
             } else {
