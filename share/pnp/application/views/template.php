@@ -114,6 +114,40 @@ jQuery(document).ready(function(){
         });
     });
 
+	jQuery("#service-filter").keyup(function () {
+        var filter = jQuery("#service-filter").val();
+        jQuery("#services span[id^='service']").each(function () {
+            if (jQuery(this).attr('id').search(new RegExp("service-.*" + filter,"i")) == 0) {
+                jQuery(this).show();
+            } else {
+                jQuery(this).hide();
+            }
+        });
+    });
+
+	jQuery("#special-filter").keyup(function () {
+        var sfilter = jQuery("#special-filter").val();
+        jQuery("#special-templates span[id^='special']").each(function () {
+            if (jQuery(this).attr('id').search(new RegExp("special-.*" + sfilter,"i")) == 0) {
+                jQuery(this).show();
+            } else {
+                jQuery(this).hide();
+            };
+        });
+    });
+
+	jQuery("#page-filter").keyup(function () {
+        var sfilter = jQuery("#page-filter").val();
+        jQuery("#pages span[id^='page']").each(function () {
+            if (jQuery(this).attr('id').search(new RegExp("page-.*" + sfilter,"i")) == 0) {
+                jQuery(this).show();
+            } else {
+                jQuery(this).hide();
+            };
+        });
+    });
+});
+
 
 });
 
