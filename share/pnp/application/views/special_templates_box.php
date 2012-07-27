@@ -4,8 +4,14 @@
 <?php echo Kohana::lang('common.special-templates-box-header') ?> 
 </div>
 
+<?php
+    $filter = $this->session->get('spfilter');
+?>
+
     <div class="p4 ui-widget-content">
-        <input type="text" name="special-filter" id="special-filter" class="textbox" />
+	<?php
+		echo "<input type=\"text\" name=\"special-filter\" id=\"special-filter\" value=\"".$filter."\"class=\"textbox\" />"
+	?>
     </div>
 
 <div class="p4 ui-widget-content ui-corner-bottom" id="special-templates">
