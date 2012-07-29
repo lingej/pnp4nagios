@@ -4,8 +4,14 @@
  <?php echo Kohana::lang('common.service-box-header') ?> 
  </div>
 
+<?php
+    $filter = $this->session->get('sfilter');
+?>
+
 <div class="p4 ui-widget-content">
-   <input type="text" name="service-filter" id="service-filter" class="textbox" />
+	<?php
+		echo "<input type=\"text\" name=\"service-filter\" id=\"service-filter\" value=\"".$filter."\" class=\"textbox\" />"	
+	?>
 </div>
 
 <div class="p4 ui-widget-content ui-corner-bottom" id="services">

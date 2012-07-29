@@ -49,7 +49,21 @@ jQuery(window).load(
         window.location = link + '&start=' + start + '&end=' + end ; 
 
     }
-
+	
+	var sfilter = "<?php echo $this->session->get('sfilter') ?>";
+	var spfilter = "<?php echo $this->session->get('spfilter') ?>";
+	var pfilter = "<?php echo $this->session->get('pfilter') ?>";
+	
+	if(jQuery("#service-filter").length) {
+		console.log("send keyup")
+		jQuery("#service-filter").keyup()
+	}
+	if(jQuery("#special-filter").length) {
+		jQuery("#special-filter").keyup()
+	}
+	if(jQuery("#page-filter").length) {
+		jQuery("#page-filter").keyup()
+	}
 });
 jQuery(document).ready(function(){
     var path = "<?php echo url::base(TRUE)."/"?>";
@@ -115,9 +129,19 @@ jQuery(document).ready(function(){
     });
 
 	jQuery("#service-filter").keyup(function () {
-        var filter = jQuery("#service-filter").val();
+        var sfilter = jQuery("#service-filter").val();
+		if(sfilter != "") {
+			jQuery("#service-filter").css('background-color','#ff9999');
+		}else{
+			jQuery("#service-filter").css('background-color','white');
+		}
+		jQuery.ajax({
+			type: "POST",
+			url: path + "ajax/filter/set-sfilter",
+			data: { sfilter: sfilter }
+		});
         jQuery("#services span[id^='service']").each(function () {
-            if (jQuery(this).attr('id').search(new RegExp("service-.*" + filter,"i")) == 0) {
+            if (jQuery(this).attr('id').search(new RegExp("service-.*" + sfilter,"i")) == 0) {
                 jQuery(this).show();
             } else {
                 jQuery(this).hide();
@@ -126,9 +150,19 @@ jQuery(document).ready(function(){
     });
 
 	jQuery("#special-filter").keyup(function () {
-        var sfilter = jQuery("#special-filter").val();
+        var spfilter = jQuery("#special-filter").val();
+		if(spfilter != "") {
+			jQuery("#special-filter").css('background-color','#ff9999');
+		}else{
+			jQuery("#special-filter").css('background-color','white');
+		}
+		jQuery.ajax({
+			type: "POST",
+			url: path + "ajax/filter/set-spfilter",
+			data: { spfilter: spfilter }
+		});
         jQuery("#special-templates span[id^='special']").each(function () {
-            if (jQuery(this).attr('id').search(new RegExp("special-.*" + sfilter,"i")) == 0) {
+            if (jQuery(this).attr('id').search(new RegExp("special-.*" + spfilter,"i")) == 0) {
                 jQuery(this).show();
             } else {
                 jQuery(this).hide();
@@ -137,9 +171,19 @@ jQuery(document).ready(function(){
     });
 
 	jQuery("#page-filter").keyup(function () {
-        var sfilter = jQuery("#page-filter").val();
+        var pfilter = jQuery("#page-filter").val();
+		if(pfilter != "") {
+			jQuery("#page-filter").css('background-color','#ff9999');
+		}else{
+			jQuery("#page-filter").css('background-color','white');
+		}
+		jQuery.ajax({
+			type: "POST",
+			url: path + "ajax/filter/set-pfilter",
+			data: { pfilter: pfilter }
+		});
         jQuery("#pages span[id^='page']").each(function () {
-            if (jQuery(this).attr('id').search(new RegExp("page-.*" + sfilter,"i")) == 0) {
+            if (jQuery(this).attr('id').search(new RegExp("page-.*" + pfilter,"i")) == 0) {
                 jQuery(this).show();
             } else {
                 jQuery(this).hide();
