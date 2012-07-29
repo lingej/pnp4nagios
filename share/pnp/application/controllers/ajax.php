@@ -39,6 +39,16 @@ class Ajax_Controller extends System_Controller  {
             $this->session->set('timerange-reset', 1);
         }
     }
+	
+	public function filter($what){
+        if($what == 'set-sfilter'){
+            $this->session->set('sfilter', $_POST['sfilter']);
+        }elseif($what == 'set-spfilter'){
+			$this->session->set('spfilter', $_POST['spfilter']);
+		}elseif($what == 'set-pfilter'){
+            $this->session->set('pfilter', $_POST['pfilter']);
+        }
+    }
 
     public function basket($action=FALSE){
         // Disable auto-rendering
