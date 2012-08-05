@@ -37,7 +37,7 @@ Mit Version 0.6.x steigen wir von Subversion auf GIT um. Der Sourcecode ist bere
 </li>
 <li class="level1"><div class="li"> process_perfdata.pl wird in der Lage sein, pro Datenreihe eine eigene RRD-Datenbank zu verwenden.</div>
 </li>
-<li class="level1"><div class="li"> Installer weiter verbessert. Angabe von Directory-Layouts über –with-layout</div>
+<li class="level1"><div class="li"> Installer weiter verbessert. Angabe von Directory-Layouts über --with-layout</div>
 </li>
 <li class="level1"><div class="li"> RRDtool-Fehler werden als Bild dargestellt. Keine fehlenden Bilder mehr.</div>
 </li>
@@ -679,7 +679,7 @@ Im Verzeichnis pnp4nagios wird nun ./configure aufgerufen.
 
 <p>
 
-<strong>Hinweis:</strong> Ohne weitere Optionen werden als Benutzer und Gruppe “nagios” verwendet. Bei abweichenden Werten sind die Parameter ”–with-nagios-user” und ”–with-nagios-group” zu benutzen. Im Falle von Icinga könnte der Aufruf so aussehen
+<strong>Hinweis:</strong> Ohne weitere Optionen werden als Benutzer und Gruppe “nagios” verwendet. Bei abweichenden Werten sind die Parameter ”--with-nagios-user” und ”--with-nagios-group” zu benutzen. Im Falle von Icinga könnte der Aufruf so aussehen
 
 </p>
 <pre class="code">
@@ -1075,7 +1075,7 @@ Die Parameter und deren Bedeutung im Einzelnen:
 <ul>
 <li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> Der Pfad zur temporären Datei, in der die Daten gesammelt werden sollen.</div>
 </li>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das <a href="/de/pnp-0.6/perfdata_file_template" class="wikilink2" title="de:pnp-0.6:perfdata_file_template" rel="nofollow">Format</a> der temporären Datei. Hier werden die Daten über Nagios-Macros definiert.</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das Format der temporären Datei. Hier werden die Daten über Nagios-Macros definiert.</div>
 </li>
 <li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> Die Option “a” definiert, dass an die Datei angehangen werden soll.</div>
 </li>
@@ -1449,17 +1449,17 @@ verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod]
 </pre>
 
 <p>
-Die wichtigste Infos ist der zu prüfende Modus, welcher mit der Option <code>–mode</code> angegeben wird.<br/>
+Die wichtigste Infos ist der zu prüfende Modus, welcher mit der Option <code>--mode</code> angegeben wird.<br/>
 
 Weitere Infos über die einzelnen Modi und deren Konfiguration unter <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">&quot;Welcher Modus ist für mich richtig ?&quot;</a> und <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">&quot;Konfiguration&quot;</a>
 </p>
 
 <p>
-Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) über die Option <code>–config</code> zu übergeben. Auf einem Icinga System ist es entsprechend der Pfad zur icinga.cfg.
+Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) über die Option <code>--config</code> zu übergeben. Auf einem Icinga System ist es entsprechend der Pfad zur icinga.cfg.
 </p>
 
 <p>
-Über <code>–pnpcfg</code> wird der Pfad zum <code>etc</code> Verzeichnis der PNP4Nagios Installation übergeben.<br/>
+Über <code>--pnpcfg</code> wird der Pfad zum <code>etc</code> Verzeichnis der PNP4Nagios Installation übergeben.<br/>
 
 </p>
 <pre class="code">
@@ -1736,7 +1736,7 @@ Höhe und Breite der RRD-Graphen bei PDFs
 
 <p>
 
-Zusätzliche Optionen, die bei jedem Aufruf von RRDTool mit übergeben werden. Beispielsweise <code>—-slope-mode</code>, um die Graphen etwas zu glätten.
+Zusätzliche Optionen, die bei jedem Aufruf von RRDTool mit übergeben werden. Beispielsweise <code>----slope-mode</code>, um die Graphen etwas zu glätten.
 
 </p>
 <pre class="code"> $conf[&#039;graph_opt&#039;] = &quot;&quot;;</pre>
@@ -2219,7 +2219,7 @@ Am Beispiel des recht einfachen Templates response.php lassen sich die wichtigst
 <span class="sy1">?&gt;</span></pre>
 
 <p>
-<strong><code>$opt[1] = ”–title …”</code></strong> setzt RRDtool-Optionen für den ersten Datensatz im Array. Hier ist das der Titel des Graphen. 
+<strong><code>$opt[1] = ”--title …”</code></strong> setzt RRDtool-Optionen für den ersten Datensatz im Array. Hier ist das der Titel des Graphen. 
 Wie man sieht, werden eingebettete Anführungszeichen durch einen Backslash (\) maskiert. 
 Die beiden Variablen <code>$hostname</code> und <code>$servicedesc</code> sind durch den Aufruf von PNP ermittelt worden und stehen nun auch im Template zur Verfügung.
 </p>
@@ -2703,7 +2703,7 @@ Daraus ergibt sich beispielsweise ein Aufruf von rrdached mit folgenden Paramete
 
 <p>
 
-RRDtool selbst wird die Existenz des Daemons über die Option –daemon=&lt;socket&gt; mitgeteilt.
+RRDtool selbst wird die Existenz des Daemons über die Option --daemon=&lt;socket&gt; mitgeteilt.
 
 </p>
 <pre class="code"> rrdtool --daemon=unix:/tmp/rrdcached.sock update ...</pre>
