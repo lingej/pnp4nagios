@@ -2914,7 +2914,6 @@ perfdata_file_run_cmd_args = -b
 npcd_max_threads=5
 
 # greedy options
-use_load_threshold = 0
 load_threshold = 10.0
 
 # Process Options
@@ -3037,23 +3036,9 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level1"><div class="li"> <strong>Greedy-Optionen</strong></div>
 <ul>
-<li class="level2"><div class="li"> use_load_threshold  &lt;0 oder 1&gt;</div>
-<ul>
-<li class="level3"><div class="li"> definiert, ob NPCD bei Erreichen des load_thresholds die Anzahl der Threads begrenzen soll</div>
-<ul>
-<li class="level4"><div class="li"> 0 = ausschalten (weitere Threads starten)</div>
-</li>
-<li class="level4"><div class="li"> 1 = einschalten</div>
-</li>
-</ul>
-</li>
-<li class="level3"><div class="li"> <strong>Default:</strong> 0</div>
-</li>
-</ul>
-</li>
 <li class="level2"><div class="li"> load_threshold &lt;float value&gt;</div>
 <ul>
-<li class="level3"><div class="li"> wenn <code>use_load_threshold</code> auf 1 gesetzt ist, werden bei Erreichen dieses load limits keine neuen Threads gestartet</div>
+<li class="level3"><div class="li"> bei Werten größer als 0.0, werden beim Erreichen eines solchen load limits keine neuen Threads gestartet</div>
 </li>
 <li class="level3"><div class="li"> <strong>Default:</strong> 10.0</div>
 </li>
