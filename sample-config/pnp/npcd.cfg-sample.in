@@ -102,7 +102,7 @@ perfdata_file_run_cmd = @libexecdir@/@pp_pl_name@
 # '<perfdata_file_run_cmd> <perfdata_file_run_cmd_args> <filename_from_spool_dir>'
 #
 
-perfdata_file_run_cmd_args = -b
+perfdata_file_run_cmd_args = --bulk
 
 
 # identify_npcd (optional)
