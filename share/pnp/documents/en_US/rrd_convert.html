@@ -51,8 +51,8 @@ Significant as always with PNP is the Nagios check command.
 [ --no_structure_check ]</pre>
 
 <p>
-You have to specify at least one of ”–check_command” or ”–list_commands”, respectively.
-Using the open <code>–check-command=</code> you tell the script which check command should be searched for.
+You have to specify at least one of ”--check_command” or ”--list_commands”, respectively.
+Using the open <code>--check-command=</code> you tell the script which check command should be searched for.
 </p>
 
 <p>
@@ -64,19 +64,19 @@ After confirmation from the user the conversion of the appropriate RRD databases
 </p>
 
 <p>
-If you are unsure then use <code>–list_commands</code> to get a list of the check commands used in the <acronym title="Extensible Markup Language">XML</acronym> files.
+If you are unsure then use <code>--list_commands</code> to get a list of the check commands used in the <acronym title="Extensible Markup Language">XML</acronym> files.
 </p>
 
 <p>
-The option <code>–dry-run</code> will convert the RRD databases but they will be stored in /tmp/rrd_convert in separate folders per host instead. This way you&#039;ll get a feeling about the runtime and the amount of data.
+The option <code>--dry-run</code> will convert the RRD databases but they will be stored in /tmp/rrd_convert in separate folders per host instead. This way you&#039;ll get a feeling about the runtime and the amount of data.
 </p>
 
 <p>
-If you want to change the temporary directory you can use <code>–tmp_dir=&lt;alternative temp dir&gt;</code>.
+If you want to change the temporary directory you can use <code>--tmp_dir=&lt;alternative temp dir&gt;</code>.
 </p>
 
 <p>
-Sometimes the number of datasources in the RRD files doesn&#039;t match the number in the <acronym title="Extensible Markup Language">XML</acronym> files. This might happen if a plugin suddenly returns more datasources than usual (like check_disk as mentioned above). Using the option <code>–no_structure_check</code> these RRD files will be converted as well.
+Sometimes the number of datasources in the RRD files doesn&#039;t match the number in the <acronym title="Extensible Markup Language">XML</acronym> files. This might happen if a plugin suddenly returns more datasources than usual (like check_disk as mentioned above). Using the option <code>--no_structure_check</code> these RRD files will be converted as well.
 </p>
 
 <p>

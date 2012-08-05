@@ -32,7 +32,7 @@ Starting with version 0.6.x we switch from subversion to GIT. The <a href="http:
 </li>
 <li class="level1"><div class="li"> process_perfdata.pl will be able to use one RRD database per datasource</div>
 </li>
-<li class="level1"><div class="li"> improved installer. Specification of directory layouts using –with-layout</div>
+<li class="level1"><div class="li"> improved installer. Specification of directory layouts using --with-layout</div>
 </li>
 <li class="level1"><div class="li"> RRDtool errors are now displayed as images. no more missing images</div>
 </li>
@@ -464,7 +464,7 @@ Last Update: Thu Jun 28 16:05:01 CEST 2012
 <strong>pnp-0.6.17 03/25/2012</strong>
 </p>
 <ul>
-<li class="level1"><div class="li"> Bugfix:  Fixed rrd_convert.pl while running with –dry-run</div>
+<li class="level1"><div class="li"> Bugfix:  Fixed rrd_convert.pl while running with --dry-run</div>
 </li>
 <li class="level1"><div class="li"> Bugfix:  logging.c include missing header files ( Lars Vogdt )       </div>
 </li>
@@ -544,7 +544,7 @@ Last Update: Thu Jun 28 16:05:01 CEST 2012
 <strong>pnp-0.6.13 05/19/2011</strong>
 </p>
 <ul>
-<li class="level1"><div class="li"> Feature: New option –ignore-hosts added to check_pnp_rrds.pl ( by Jochen Bern )</div>
+<li class="level1"><div class="li"> Feature: New option --ignore-hosts added to check_pnp_rrds.pl ( by Jochen Bern )</div>
 </li>
 <li class="level1"><div class="li"> Feature: New options zgraph_width and zgraph_height in config.php ( Mike Liebsch )</div>
 </li>
@@ -594,9 +594,9 @@ Last Update: Thu Jun 28 16:05:01 CEST 2012
 
 </p>
 <ul>
-<li class="level1"><div class="li"> Feature: Add RRDTool Option –only-graph if graph height is below 32px to create thumbnails </div>
+<li class="level1"><div class="li"> Feature: Add RRDTool Option --only-graph if graph height is below 32px to create thumbnails </div>
 </li>
-<li class="level1"><div class="li"> Feature: RRDTool Option –width and –height is now allowed in templates</div>
+<li class="level1"><div class="li"> Feature: RRDTool Option --width and --height is now allowed in templates</div>
 </li>
 <li class="level1"><div class="li"> Feature: RRDTool DS Type for UOM of “c” changed from COUNTER to DERIVE   </div>
 </li>
@@ -678,7 +678,7 @@ Last Update: Thu Jun 28 16:05:01 CEST 2012
 </li>
 <li class="level1"><div class="li"> Update: jQuery-ui Update to 1.8</div>
 </li>
-<li class="level1"><div class="li"> Feature: New configure Option –with-base-url</div>
+<li class="level1"><div class="li"> Feature: New configure Option --with-base-url</div>
 </li>
 <li class="level1"><div class="li"> Template: New template check_ntp_time.php (Mathias Kettner)</div>
 </li>
@@ -748,7 +748,7 @@ Last Update: Thu Jun 28 16:05:01 CEST 2012
 </li>
 <li class="level1"><div class="li"> Feature: Array $TIMERANGE now available for templates → <a href="/pnp-0.6/timeranges" class="wikilink1" title="pnp-0.6:timeranges">timeranges</a></div>
 </li>
-<li class="level1"><div class="li"> Bugfix:  ./configure –sysconfdir no longer ignored</div>
+<li class="level1"><div class="li"> Bugfix:  ./configure --sysconfdir no longer ignored</div>
 </li>
 <li class="level1"><div class="li"> Feature: Store internal runtime statistics on a per minute base </div>
 </li>
@@ -770,7 +770,7 @@ Last Update: Thu Jun 28 16:05:01 CEST 2012
 </li>
 <li class="level1"><div class="li"> process_perfdata.pl will be able to use one RRD database per datasource</div>
 </li>
-<li class="level1"><div class="li"> improved installer. Specification of directory layouts using –with-layout</div>
+<li class="level1"><div class="li"> improved installer. Specification of directory layouts using --with-layout</div>
 </li>
 <li class="level1"><div class="li"> RRDtool errors are now displayed as images. no more missing images</div>
 </li>
@@ -1065,7 +1065,7 @@ cd pnp4nagios
 
 <p>
 
-<strong>Note:</strong> Without specifying any options user and group will be “nagios”. If you have different values then please use the parameters ”–with-nagios-user” and ”–with-nagios-group”, respectively. Using  Icinga the call might be
+<strong>Note:</strong> Without specifying any options user and group will be “nagios”. If you have different values then please use the parameters ”--with-nagios-user” and ”--with-nagios-group”, respectively. Using  Icinga the call might be
 
 </p>
 <pre class="code">
@@ -1776,11 +1776,11 @@ wget http://verify.pnp4nagios.org/verify_pnp_config
 The verify script is located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> an needs three start options
 </p>
 <ul>
-<li class="level1"><div class="li"> <code>–mode</code> One of the modes described on <a href="/pnp-0.6/modeds" class="wikilink2" title="pnp-0.6:modeds" rel="nofollow">modeds</a></div>
+<li class="level1"><div class="li"> <code>--mode</code> One of the modes described on <a href="/pnp-0.6/modeds" class="wikilink2" title="pnp-0.6:modeds" rel="nofollow">modeds</a></div>
 </li>
-<li class="level1"><div class="li"> <code>–config</code> Path nagios.cfg or icinga.cfg</div>
+<li class="level1"><div class="li"> <code>--config</code> Path nagios.cfg or icinga.cfg</div>
 </li>
-<li class="level1"><div class="li"> <code>–pnpcfg</code> Path to PNP´s etc directory</div>
+<li class="level1"><div class="li"> <code>--pnpcfg</code> Path to PNP´s etc directory</div>
 </li>
 </ul>
 <pre class="code">
@@ -2524,7 +2524,7 @@ Note: as the number (1) and the letter “L” look alike in this listing: the f
 </p>
 
 <p>
-<strong><code>$opt[1] = ”–title …</code></strong> sets RRDtool options for the first set of data, here the title as you can see. Embedded quotes are masked using a backslash (\). The variables <code>$hostname</code> and <code>$servicedesc</code> were determined through the call of PNP and are available for the template as well.
+<strong><code>$opt[1] = ”--title …</code></strong> sets RRDtool options for the first set of data, here the title as you can see. Embedded quotes are masked using a backslash (\). The variables <code>$hostname</code> and <code>$servicedesc</code> were determined through the call of PNP and are available for the template as well.
 </p>
 
 <p>
@@ -2989,7 +2989,7 @@ These options may result in a call of rrdcached with the following parameters
 
 <p>
 
-RRDtool itself will be informed about the daemon using the option –daemon=&lt;socket&gt;.
+RRDtool itself will be informed about the daemon using the option --daemon=&lt;socket&gt;.
 
 </p>
 <pre class="code"> rrdtool --daemon=unix:/tmp/rrdcached.sock update ...</pre>

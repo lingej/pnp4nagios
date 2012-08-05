@@ -54,7 +54,7 @@ Maßgeblich ist dabei wie immer bei PNP das Nagios-Check-Command.
 [[ --no_structure_check ]]</pre>
 
 <p>
-Das Script erwartet über die Option <code>–check-command=</code> das Check-Command, nach dem gesucht werden soll.
+Das Script erwartet über die Option <code>--check-command=</code> das Check-Command, nach dem gesucht werden soll.
 </p>
 
 <p>
@@ -66,13 +66,13 @@ Nach Bestätigung durch den User beginnt das Konvertieren der einzelnen RRD-Date
 </p>
 
 <p>
-Die Option <code>–dry-run</code> sorgt dafür, dass die RRD-Datenbanken zwar konvertiert, jedoch in <code>/tmp/rrd_convert</code> in separaten Verzeichnissen je Host gespeichert werden. So kann man sich einen Überblick über die zu erwartende Laufzeit und das Datenvolumen verschaffen.
+Die Option <code>--dry-run</code> sorgt dafür, dass die RRD-Datenbanken zwar konvertiert, jedoch in <code>/tmp/rrd_convert</code> in separaten Verzeichnissen je Host gespeichert werden. So kann man sich einen Überblick über die zu erwartende Laufzeit und das Datenvolumen verschaffen.
 </p>
 
 <p>
-Wenn Sie das temporäre Verzeichnis ändern möchten, dann können Sie das mit Hilfe der Option <code>–tmp_dir=&lt;alternatives TMP-Directory&gt; tun.
+Wenn Sie das temporäre Verzeichnis ändern möchten, dann können Sie das mit Hilfe der Option <code>--tmp_dir=&lt;alternatives TMP-Directory&gt; tun.
 
-Ab und zu passt die Anzahl der Datasources in den RRD-Dateien nicht zu der Anzahl in den <acronym title="Extensible Markup Language">XML</acronym>-Dateien. Das passiert z.B. dann, wenn Plugins plötzlich eine andere Zahl von Datenreihen liefern (siehe oben check_disk). Mit der Option </code>–no_structure_check&#039;&#039; werden auch diese RRD-Dateien konvertiert. 
+Ab und zu passt die Anzahl der Datasources in den RRD-Dateien nicht zu der Anzahl in den <acronym title="Extensible Markup Language">XML</acronym>-Dateien. Das passiert z.B. dann, wenn Plugins plötzlich eine andere Zahl von Datenreihen liefern (siehe oben check_disk). Mit der Option </code>--no_structure_check&#039;&#039; werden auch diese RRD-Dateien konvertiert. 
 </p>
 
 <p>
