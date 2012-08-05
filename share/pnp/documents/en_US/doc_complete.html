@@ -2068,7 +2068,7 @@ Screen sizes may vary, pages sizes won&#039;t. The following two directives enab
 
 <p>
 
-Additional options passed with every call of RRDTool, for example <code>----slope-mode</code> to smooth the graphs
+Additional options passed with every call of RRDTool, for example <code>--slope-mode</code> to smooth the graphs
 
 </p>
 <pre class="code"> $conf[&#039;graph_opt&#039;] = &quot;&quot;;</pre>
@@ -3215,7 +3215,6 @@ perfdata_file_run_cmd_args = -b
 npcd_max_threads=5
 
 # greedy options
-use_load_threshold = 0
 load_threshold = 10.0
 
 # Process Options
@@ -3338,23 +3337,9 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level1"><div class="li"> <strong>Greedy Options</strong></div>
 <ul>
-<li class="level2"><div class="li"> use_load_threshold  &lt;0 or 1&gt;</div>
-<ul>
-<li class="level3"><div class="li"> defines if NPCD should _not_ start new threads if your system load is too high</div>
-<ul>
-<li class="level4"><div class="li"> 0 = disable</div>
-</li>
-<li class="level4"><div class="li"> 1 = enable</div>
-</li>
-</ul>
-</li>
-<li class="level3"><div class="li"> <strong>Default:</strong> 0</div>
-</li>
-</ul>
-</li>
 <li class="level2"><div class="li"> load_threshold &lt;float value&gt;</div>
 <ul>
-<li class="level3"><div class="li"> if <code>use_load_threshold</code> is set to 1 this load limit must not be exceeded</div>
+<li class="level3"><div class="li"> values greater than 0.0 prevent new threads from being created if that load limit was reached</div>
 </li>
 <li class="level3"><div class="li"> <strong>Default:</strong> 10.0</div>
 </li>
