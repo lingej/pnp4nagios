@@ -16,7 +16,7 @@ Alias @BASE_URL@ "@datarootdir@"
 	<IfModule mod_rewrite.c>
 		# Turn on URL rewriting
 		RewriteEngine On
-		Options FollowSymLinks
+		Options symLinksIfOwnerMatch
 		# Installation directory
 		RewriteBase @BASE_URL@/
 		# Protect application and system files from being viewed
