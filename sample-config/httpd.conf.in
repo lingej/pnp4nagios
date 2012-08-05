@@ -20,7 +20,7 @@ Alias @BASE_URL@ "@datarootdir@"
 		# Installation directory
 		RewriteBase @BASE_URL@/
 		# Protect application and system files from being viewed
-		RewriteRule "^(application|modules|system)" - [F]
+		RewriteRule "^(?:application|modules|system)" - [F]
 		# Allow any files or directories that exist to be displayed directly
 		RewriteCond %{REQUEST_FILENAME} !-f
 		RewriteCond %{REQUEST_FILENAME} !-d
