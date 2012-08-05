@@ -44,9 +44,10 @@ log_file = @localstatedir@/npcd.log
 
 
 # max_logfile_size - defines the maximum filesize (bytes)
-# before the logfile will rotated.
+# before the logfile will rotated to <log_file>.old
+# 0 disables rotation
 #
-# max_logfile_size = <value> (default 10Mbyte)
+# max_logfile_size = <value> (default 10 MiB)
 #
 
 max_logfile_size = 10485760

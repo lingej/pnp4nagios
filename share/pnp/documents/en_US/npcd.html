@@ -204,9 +204,11 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level2"><div class="li"> max_logfile_size &lt;bytes&gt; </div>
 <ul>
-<li class="level3"><div class="li"> NPCD will rotate the logfile if the filesize of the current log is above this limit</div>
+<li class="level3"><div class="li"> NPCD will rotate the logfile to &lt;log_file&gt;.old if the filesize of the current log is above this limit</div>
 </li>
-<li class="level3"><div class="li"> <strong>Default:</strong> 10485760 = 10 MByte</div>
+<li class="level3"><div class="li"> The value <code>0</code> disables the rotation</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 10485760 = 10 MiB</div>
 </li>
 </ul>
 </li>

@@ -67,7 +67,11 @@ int write_log(char *message) {
 	}
 
 	/* rotate logfile if size > max_logfile_size */
-	if ((filelen = lseek(fd, 0L, SEEK_END)) > max_logfile_size) {
+	filelen = lseek(fd, 0L, SEEK_END);
+	if (max_logfile_size == 0) {
+		close(fd);
+		return filelen;
+	} else if (filelen > max_logfile_size) {
 		/* LOG(0, "Begin Logrotation!\n"); */
 		char buffer[PATH_MAX];
 		close(fd);
