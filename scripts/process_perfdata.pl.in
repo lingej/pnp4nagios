@@ -1524,20 +1524,22 @@ sub print_help {
     Use this Option if process_perfdata.pl is executed by inetd/xinetd.
     -d, --datatype
     Defaults to \"SERVICEPERFDATA\". Use \"HOSTPERFDATA\" to process Perfdata from regular Host Checks
-    Only used in default or inetd Mode
+    Only used in default or inetd mode
     -b, --bulk
     Provide a file for bulk update
+    -n, --npcd
+    Hint the program, that it was invoked by NPCD
     -c, --config
     Optional process_perfdata config file
     Default: @sysconfdir@/process_perfdata.cfg
 
   Gearman Worker Options:
     --gearman 
-    Start in gearman worker mode
+    Start in Gearman worker mode
     --daemon
     Run as daemon
     --pidfile=/var/run/process_perfdata.pid
-    The pidfile used while running in as gearman worker daemon
+    The pidfile used while running in as Gearman worker daemon
 
 EOD
     exit 0;
