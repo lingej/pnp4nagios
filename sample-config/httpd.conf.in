@@ -25,6 +25,6 @@ Alias @BASE_URL@ "@datarootdir@"
 		RewriteCond %{REQUEST_FILENAME} !-f
 		RewriteCond %{REQUEST_FILENAME} !-d
 		# Rewrite all other URLs to index.php/URL
-		RewriteRule "^.*$" index.php/$0 [PT]
+		RewriteRule "^.*$" index.php/$0
 	</IfModule>
 </Directory>
