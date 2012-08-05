@@ -204,9 +204,11 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level2"><div class="li"> max_logfile_size &lt;bytes&gt; </div>
 <ul>
-<li class="level3"><div class="li"> NPCD wird nach Erreichen der hier angegebenen Dateigröße eigenständig eine Logrotation durchführen</div>
+<li class="level3"><div class="li"> NPCD wird nach Erreichen der hier angegebenen Dateigröße eigenständig eine Logrotation nach &lt;log_file&gt;.old durchführen</div>
 </li>
-<li class="level3"><div class="li"> <strong>Default:</strong> 10485760 = 10 MByte</div>
+<li class="level3"><div class="li"> Der Wert <code>0</code> deaktiviert die Logrotation</div>
+</li>
+<li class="level3"><div class="li"> <strong>Default:</strong> 10485760 = 10 MiB</div>
 </li>
 </ul>
 </li>
