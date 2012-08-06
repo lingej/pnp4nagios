@@ -76,7 +76,7 @@ log_level = 0
 # perfdata_spool_dir = </path/to/directory/>
 #
 
-perfdata_spool_dir = @PERFDATA_SPOOL_DIR@/
+perfdata_spool_dir = @PERFDATA_SPOOL_DIR@
 
 
 # Execute following command for each found file
