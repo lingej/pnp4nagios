@@ -20,25 +20,25 @@
 #
 # Bulk mode
 #
-#define command{
+#define command {
 #       command_name    process-service-perfdata-file
-#       command_line    @libexecdir@/process_perfdata.pl --bulk=@localstatedir@/service-perfdata
+#       command_line    @libexecdir@/process_perfdata.pl --bulk @localstatedir@/service-perfdata
 #}
 
-#define command{
+#define command {
 #       command_name    process-host-perfdata-file
-#       command_line    @libexecdir@/process_perfdata.pl --bulk=@localstatedir@/host-perfdata
+#       command_line    @libexecdir@/process_perfdata.pl --bulk @localstatedir@/host-perfdata
 #}
 
 #
 # Bulk with NPCD mode
 #
-#define command{
+#define command {
 #       command_name    process-service-perfdata-file
 #       command_line    /bin/mv @localstatedir@/service-perfdata @PERFDATA_SPOOL_DIR@/service-perfdata.$TIMET$
 #}
 
-#define command{
+#define command {
 #       command_name    process-host-perfdata-file
 #       command_line    /bin/mv @localstatedir@/host-perfdata @PERFDATA_SPOOL_DIR@/host-perfdata.$TIMET$
 #}
