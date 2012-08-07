@@ -5,12 +5,16 @@
 <div class="level1">
 
 <p>
-
 As already described under ”<a href="/pnp-0.6/tpl" class="wikilink1" title="pnp-0.6:tpl">What are templates ?</a>” the appearance of graphs depends on the check command used.
 </p>
 
 <p>
-There are situations where this behaviour must be overruled. This has to be done when universal commands have been defined.
+There are situations where this behaviour must be overruled, for example when universal commands have been defined.
+</p>
+
+<p>
+PNP, especially process_perfdata.pl, will search for a config file (&lt;check_command&gt;.cfg) in the etc/check_commands directory and read its contents (if available).<br/>
+The following options can be defined in it:
 </p>
 
 </div>
@@ -19,9 +23,7 @@ There are situations where this behaviour must be overruled. This has to be done
 <div class="level2">
 
 <p>
-
 Example:
-
 </p>
 <pre class="code">
 define command {
@@ -35,10 +37,6 @@ This would lead to a call of the check_nrpe.php template even when the monitored
 </p>
 
 <p>
-PNP, especially process_perfdata.pl, will search for a config file (&lt;check_command&gt;.cfg) in the etc/check_commands directory and read its contents (if available).
-</p>
-
-<p>
 As our example command is called check_nrpe it will be searched for etc/check_commands/check_nrpe.cfg.
 </p>
 
@@ -46,9 +44,6 @@ As our example command is called check_nrpe it will be searched for etc/check_co
 During installation a sample config file with the extension .cfg-sample is copied to etc/check_commands.
 </p>
 
-<p>
-Two options can be set in this config file:
-</p>
 <pre class="code">
 # check_command check_nrpe!load!-w 4,4,4 -c 5,5,5
 # ________0__________|       |       |
@@ -70,43 +65,43 @@ CUSTOM_TEMPLATE = 1
 <code>CUSTOM_TEMPLATE = 1,0</code> results in → “load_check_nrpe.php”
 </p>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
 <!-- SECTION "CUSTOM_TEMPLATE" [277-1539] -->
 <h2><a name="datatype" id="datatype">DATATYPE</a></h2>
 <div class="level2">
 
 <p>
-
 The option “DATATYPE” controls the datatype which is used during creation of the RRD database. Default is “GAUGE”. For consecutive values the type should be “COUNTER”. Plugin-developers should use the unit “c” for counters but this is not always the case.
 </p>
 
 <p>
 To set all datasources to COUNTER
-
 </p>
 <pre class="code">DATATYPE = COUNTER</pre>
 
 <p>
 Setting datasources to different types
-
 </p>
 <pre class="code">DATATYPE = GAUGE,GAUGE,COUNTER,COUNTER</pre>
-
-<p>
-This option has effect only during creation of the RRD database.
-</p>
 
 <p>
 More datatypes are explained in the RRDTool documentation found at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">rrdcreate</a>.
 </p>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
 <!-- SECTION "DATATYPE" [1540-2178] -->
-<h2><a name="min_and_max" id="min_and_max">MIN and MAX</a></h2>
+<h2><a name="min_and_max" id="min_and_max">USE_MIN_ON_CREATE and USE_MAX_ON_CREATE</a></h2>
 <div class="level2">
 
 <p>
-
 In a few situations it might be necessary to limit the values which are valid for RRDTool.
 </p>
 
@@ -116,15 +111,17 @@ RRD databases can be created with fixed minimum and maximum values. You will fin
 
 <p>
 Account for the maximum value taken from the performance data
-
 </p>
 <pre class="code">USE_MAX_ON_CREATE = 1</pre>
 
 <p>
 Account for the minimum value taken from the performance data
-
 </p>
 <pre class="code">USE_MIN_ON_CREATE = 1</pre>
+
+<p>
+This option has effect only during creation of the RRD database.
+</p>
 
 </div>
 <!-- SECTION "MIN and MAX" [2179-2646] -->
@@ -133,7 +130,6 @@ Account for the minimum value taken from the performance data
 <pre class="code">RRD_STORAGE_TYPE = SINGLE</pre>
 
 <p>
-
 The option RRD_STORAGE_TYPE defines the kind of data storage.
 </p>
 
@@ -154,13 +150,16 @@ MULTIPLE: One or more RRD databases per service. Each datasource will be stored 
 You will find a conversion script <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">here</a>.
 </p>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
 <!-- SECTION "RRD_STORAGE_TYPE" [2647-3096] -->
 <h2><a name="rrd_heartbeat" id="rrd_heartbeat">RRD_HEARTBEAT</a></h2>
 <div class="level2">
 
 <p>
-
 <strong>Starting with PNP 0.6.1</strong>
 </p>
 <pre class="code">RRD_HEARTBEAT = 305</pre>
@@ -174,8 +173,11 @@ More information at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
 </p>
 
 <p>
-<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/advanced" class="wikilink1" title="pnp-0.6:advanced">PNP in distributed environments</a>
+This option has effect only during creation of the RRD database.
+</p>
 
+<p>
+<a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/advanced" class="wikilink1" title="pnp-0.6:advanced">PNP in distributed environments</a>
 </p>
 
 </div>
