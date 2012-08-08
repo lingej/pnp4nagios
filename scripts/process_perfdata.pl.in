@@ -33,7 +33,7 @@ use vars qw ( $TEMPLATE %NAGIOS $t0 $t1 $rt $delayed_write $rrdfile @ds_create $
 
 my %conf = (
     TIMEOUT            => 15,
-    CFG_DIR            => "@sysconfdir@/",
+    CFG_DIR            => "@sysconfdir@",
     USE_RRDs           => 1,
     RRDPATH            => "@PERFDATA_DIR@",
     RRDTOOL            => "@RRDTOOL@",
@@ -73,7 +73,7 @@ my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "
 Getopt::Long::Configure('bundling');
 my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b, $opt_gm, $opt_pidfile,$opt_daemon );
 my $opt_t = $conf{TIMEOUT};                            # Default Timeout
-my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
+my $opt_c = $conf{CFG_DIR} . "/process_perfdata.cfg";
 GetOptions(
     "V"          => \$opt_V,
     "version"    => \$opt_V,
