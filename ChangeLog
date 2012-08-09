@@ -1,6 +1,7 @@
 **pnp-0.6.19 ??/??/2012**
   * Feature: Parameter "width" added to popup controller ( Andreas Doehler ) 
   * Fix:     simplify/improve apache rules ( Christoph Anton Mitterer )
+  * Bugfix:  socketDOMAIN changed to AF_INET while using livstatus tcp socket ( Rene Koch )
 
 **pnp-0.6.18 06/28/2012**
   * Bugfix:  Fixed STORAGE_TYPE and CUSTOM_TEMPLATE vars used in custom templates
