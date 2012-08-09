@@ -50,11 +50,6 @@ RRD_HEARTBEAT = 8460
 RRA_CFG = @sysconfdir@/rra.cfg
 
 #
-# Interval at which PDPs are generated
-#
-RRA_STEP = 60
-
-#
 # Name of the log file
 #
 LOG_FILE = @PERFDATA_LOG@
