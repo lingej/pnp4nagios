@@ -10,17 +10,22 @@ As already described under ”<a href="/pnp-0.6/tpl" class="wikilink1" title="pn
 </p>
 
 <p>
-There are situations where this behaviour must be overruled. This has to be done when universal commands have been defined.
+There are situations where this behaviour must be overruled, for example when universal commands have been defined.
+</p>
+
+<p>
+PNP, especially process_perfdata.pl, will search for a config file (&lt;check_command&gt;;.cfg) in the etc/check_commands directory and read its contents (if available).
+The following options can be defined in it:
 </p>
 
 </div>
-<!-- SECTION "Custom Templates" [1-276] -->
+<!-- SECTION "Custom Templates" [1-477] -->
 <h2><a name="custom_template" id="custom_template">CUSTOM_TEMPLATE</a></h2>
 <div class="level2">
 
 <p>
 
-Example:
+Outgoing from the following example of a Nagios command-definition:
 
 </p>
 <pre class="code">
@@ -35,19 +40,11 @@ This would lead to a call of the check_nrpe.php template even when the monitored
 </p>
 
 <p>
-PNP, especially process_perfdata.pl, will search for a config file (&lt;check_command&gt;.cfg) in the etc/check_commands directory and read its contents (if available).
-</p>
-
-<p>
 As our example command is called check_nrpe it will be searched for etc/check_commands/check_nrpe.cfg.
 </p>
 
 <p>
 During installation a sample config file with the extension .cfg-sample is copied to etc/check_commands.
-</p>
-
-<p>
-Two options can be set in this config file:
 </p>
 <pre class="code">
 # check_command check_nrpe!load!-w 4,4,4 -c 5,5,5
@@ -70,8 +67,12 @@ CUSTOM_TEMPLATE = 1
 <code>CUSTOM_TEMPLATE = 1,0</code> results in → “load_check_nrpe.php”
 </p>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
-<!-- SECTION "CUSTOM_TEMPLATE" [277-1539] -->
+<!-- SECTION "CUSTOM_TEMPLATE" [478-1657] -->
 <h2><a name="datatype" id="datatype">DATATYPE</a></h2>
 <div class="level2">
 
@@ -93,16 +94,16 @@ Setting datasources to different types
 <pre class="code">DATATYPE = GAUGE,GAUGE,COUNTER,COUNTER</pre>
 
 <p>
-This option has effect only during creation of the RRD database.
-</p>
-
-<p>
 More datatypes are explained in the RRDTool documentation found at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">rrdcreate</a>.
 </p>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
-<!-- SECTION "DATATYPE" [1540-2178] -->
-<h2><a name="min_and_max" id="min_and_max">MIN and MAX</a></h2>
+<!-- SECTION "DATATYPE" [1658-2296] -->
+<h2><a name="use_min_on_create_and_use_max_on_create" id="use_min_on_create_and_use_max_on_create">USE_MIN_ON_CREATE and USE_MAX_ON_CREATE</a></h2>
 <div class="level2">
 
 <p>
@@ -126,8 +127,12 @@ Account for the minimum value taken from the performance data
 </p>
 <pre class="code">USE_MIN_ON_CREATE = 1</pre>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
-<!-- SECTION "MIN and MAX" [2179-2646] -->
+<!-- SECTION "USE_MIN_ON_CREATE and USE_MAX_ON_CREATE" [2297-2858] -->
 <h2><a name="rrd_storage_type" id="rrd_storage_type">RRD_STORAGE_TYPE</a></h2>
 <div class="level2">
 <pre class="code">RRD_STORAGE_TYPE = SINGLE</pre>
@@ -154,8 +159,12 @@ MULTIPLE: One or more RRD databases per service. Each datasource will be stored 
 You will find a conversion script <a href="/pnp-0.6/rrd_convert" class="wikilink1" title="pnp-0.6:rrd_convert">here</a>.
 </p>
 
+<p>
+This option has effect only during creation of the RRD database.
+</p>
+
 </div>
-<!-- SECTION "RRD_STORAGE_TYPE" [2647-3096] -->
+<!-- SECTION "RRD_STORAGE_TYPE" [2859-3374] -->
 <h2><a name="rrd_heartbeat" id="rrd_heartbeat">RRD_HEARTBEAT</a></h2>
 <div class="level2">
 
@@ -174,9 +183,141 @@ More information at <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
 </p>
 
 <p>
+This option has effect only during creation of the RRD database.
+</p>
+
+</div>
+<!-- SECTION "RRD_HEARTBEAT" [3375-3660] -->
+<h2><a name="hints_on_template_names" id="hints_on_template_names">Hints on Template Names</a></h2>
+<div class="level2">
+
+<p>
+
+In most situations, one can easily get desired template names, by using suitable command object definitions.
+</p>
+
+<p>
+Consider the followng example:
+
+</p>
+<pre class="code">
+define command {
+  command_name check_by_ssh
+  command_line /usr/bin/ssh $HOSTADDRESS$ $ARG1$
+}
+</pre>
+
+<p>
+
+with commands like:
+
+</p>
+<pre class="code">
+  …
+  check_command check_by_ssh!/usr/lib/nagios/plugins/check_load -w 4,4,4 -c 5,5,5
+  …
+</pre>
+
+<p>
+Even when using “CUSTOM_TEMPLATE = 1” one would end up in template names like “_usr_lib_nagios_plugins_check_load_-w_4,4,4_-c_5,5,5”, which is highly undesired, especially because of the parameters in it.
+</p>
+
+<p>
+<strong>Solution 1: Split parameters into separate $ARGn$</strong>
+</p>
+
+<p>
+A simple solution is to use the following command object definition:
+
+</p>
+<pre class="code">
+define command {
+  command_name check_by_ssh
+  command_line /usr/bin/ssh $HOSTADDRESS$ $ARG1$ $ARG2$
+}
+</pre>
+
+<p>
+
+with commands like:
+
+</p>
+<pre class="code">
+  …
+  check_command check_by_ssh!/usr/lib/nagios/plugins/check_load!-w 4,4,4 -c 5,5,5
+  …
+</pre>
+
+<p>
+
+(notice the additional “!”)
+</p>
+
+<p>
+This even works, when $ARG2$ is let empty.
+</p>
+
+<p>
+Of course one would still need to set “CUSTOM_TEMPLATE = 1”.
+</p>
+
+<p>
+
+<strong>Solution 2: Hide the remote executor inside the command object definition</strong>
+</p>
+
+<p>
+Another way is to “hide” the remote excutor in the respective command object definitions.
+</p>
+
+<p>
+Instead of defining:
+
+</p>
+<pre class="code">
+define command {
+  command_name check_by_ssh
+  command_line /usr/bin/ssh $HOSTADDRESS$ $ARG1$ $ARG2$
+}
+</pre>
+
+<p>
+
+one would define the following for <strong>every</strong> command to be remotely executed:
+
+</p>
+<pre class="code">
+define command {
+  command_name check_load_by_ssh
+  command_line /usr/bin/ssh $HOSTADDRESS$ /usr/lib/nagios/plugins/check_load $ARG1$
+}
+</pre>
+
+<p>
+
+with commands like:
+
+</p>
+<pre class="code">
+  …
+  check_load_by_ssh!-w 4,4,4 -c 5,5,5
+  …
+</pre>
+
+<p>
+
+Of course one must not set “CUSTOM_TEMPLATE = 1” in this way.
+</p>
+
+<p>
+
+Which of above two solutions one follows is largely a matter of taste.
+</p>
+
+<p>
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/advanced" class="wikilink1" title="pnp-0.6:advanced">PNP in distributed environments</a>
 
 </p>
 
 </div>
-<!-- SECTION "RRD_HEARTBEAT" [3097-] -->
+<!-- SECTION "Hints on Template Names" [3661-] -->
