@@ -28,29 +28,29 @@ foreach ($this->DS as $KEY=>$VAL) {
 	$lower    = "";
 	$upper    = "";
 	
-	if ($VAL['WARN'] != "") {
+	if ($VAL['WARN'] != "" && is_numeric($VAL['WARN']) ){
 		$warning = $VAL['WARN'];
 	}
-	if ($VAL['WARN_MAX'] != "") {
+	if ($VAL['WARN_MAX'] != "" && is_numeric($VAL['WARN_MAX']) ) {
 		$warn_max = $VAL['WARN_MAX'];
 	}
-	if ($VAL['WARN_MIN'] != "") {
+	if ( $VAL['WARN_MIN'] != "" && is_numeric($VAL['WARN_MIN']) ) {
 		$warn_min = $VAL['WARN_MIN'];
 	}
-	if ($VAL['CRIT'] != "") {
+	if ( $VAL['CRIT'] != "" && is_numeric($VAL['CRIT']) ) {
 		$critical = $VAL['CRIT'];
 	}
-	if ($VAL['CRIT_MAX'] != "") {
+	if ( $VAL['CRIT_MAX'] != "" && is_numeric($VAL['CRIT_MAX']) ) {
 		$crit_max = $VAL['CRIT_MAX'];
 	}
-	if ($VAL['CRIT_MIN'] != "") {
+	if ( $VAL['CRIT_MIN'] != "" && is_numeric($VAL['CRIT_MIN']) ) {
 		$crit_min = $VAL['CRIT_MIN'];
 	}
-	if ($VAL['MIN'] != "") {
+	if ( $VAL['MIN'] != "" && is_numeric($VAL['MIN']) ) {
 		$lower = " --lower=" . $VAL['MIN'];
 		$minimum = $VAL['MIN'];
 	}
-	if ($VAL['MAX'] != "") {
+	if ( $VAL['MAX'] != "" && is_numeric($VAL['MAX']) ) {
 		$maximum = $VAL['MAX'];
 	}
 	if ($VAL['UNIT'] == "%%") {
