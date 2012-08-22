@@ -463,7 +463,7 @@ sub check_command_definition {
 		my $dump_file = get_config_var( $option =~m/(.*)_processing_command/ );
 		my $perfdata_spool_dir = get_config_var( 'perfdata_spool_dir');
 		#print "$dump_file\n";
-		my $regex = qr/\/bin\/mv\s$dump_file\s$perfdata_spool_dir/;
+		my $regex = qr/\/bin\/mv\s+$dump_file\s+$perfdata_spool_dir/;
 		if( $val =~ m/$regex/){
 			info ( "Command looks good",0 );
 		}else{
