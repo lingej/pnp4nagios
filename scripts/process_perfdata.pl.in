@@ -98,7 +98,6 @@ GetOptions(
 
 parse_config($opt_c);
 $conf{'GLOBAL_RRD_STORAGE_TYPE'} = uc($conf{'RRD_STORAGE_TYPE'}); # store the initial value for later use
-$opt_t = $conf{TIMEOUT};    # Reset Timeout from config file
 
 my %stats = init_stats();
 my $cypher;
