@@ -27,7 +27,6 @@ sample-config/httpd.conf
 share/pnp/application/logs/*
 contrib/ssi/status-header.ssi
 helpers/w2h.pl
-helpers/wiki2html.sh
 scripts/verify_pnp_config.pl
 sample-config/lighttpd.pnp4nagios.conf
 sample-config/nginx.pnp4nagios.conf
