@@ -28,6 +28,7 @@ my $version = 'pnp4nagios-head';
 
 # process command line parameters
 use vars qw ( $help $debug $mode $vInfo $PNPCfg $MainCfg $last_check);
+my $start_options = $0 . " " . join(" ", @ARGV);
 Getopt::Long::Configure('bundling');
 GetOptions(
 	"h|help"     => \$help,
@@ -94,6 +95,7 @@ my $process_perfdata_cfg = 0;
 
 info("========== Starting Environment Checks ============",4);
 info("My version is: ".$version,4);
+info("Start Options: ".$start_options, 4);
 
 #
 # Read Main config file
