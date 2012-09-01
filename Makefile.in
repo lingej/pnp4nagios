@@ -46,7 +46,6 @@ all:
 	cd $(SRC_SHARE) && $(MAKE)
 	cd $(SRC_SCRIPTS) && $(MAKE)
 	chmod a+r $(SRC_CONTRIB)/ssi/status-header.ssi
-	chmod a+xr $(SRC_HELPERS)/w2h.pl
 
 	@echo ""
 	@echo "*** Compile finished ***"
@@ -90,7 +89,6 @@ distclean:
 	rm -f Makefile include/stamp-h1 include/config.h config.status config.log
 	rm -f subst summary
 	rm -f $(SRC_CONTRIB)/ssi/status-header.ssi
-	rm -f $(SRC_HELPERS)/w2h.pl
 
 devclean: distclean
 
