@@ -226,9 +226,11 @@ class Rrdtool_Model extends System_Model
         fwrite($fh, $data);
         fclose($fh);
         if (function_exists('imagecreatefrompng')) {
-                $image = imagecreatefrompng($img['file']);
-                imagepng($image, $img['file']);
-                list ($img['width'], $img['height'], $img['type'], $img['attr']) = getimagesize($img['file']);
+            $image = imagecreatefrompng($img['file']);
+            imagepng($image, $img['file']);
+            list ($img['width'], $img['height'], $img['type'], $img['attr']) = getimagesize($img['file']);
+        }else{
+            throw new Kohana_Exception('error.gd-missing');
         }
         return $img;
     }

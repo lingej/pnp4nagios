@@ -28,4 +28,5 @@ $lang = array
     'livestatus_socket_error' => 'Ошибка Livestatus сокета: %s (%s) <a href="http://docs.pnp4nagios.org/faq/24">Read FAQ online</a>',
     'not_authorized_for_host_overview' => 'Вы не авторизованы для доступа к странице обзора хоста.',
     'xml-generic_error' => 'Не удаётся распарсить XML файл "%s".<p><strong>Ошибки XML:</strong>%s</p>',
+    'gd-missing' => 'PHP GD functions are missing. More on <a href="http://www.php.net/manual/en/book.image.php">www.php.net</a>',
 );
