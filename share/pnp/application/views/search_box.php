@@ -4,7 +4,7 @@
 jQuery(function() {
     jQuery("#query").autocomplete({
         source: "<?php echo url::base('true')?>/index.php/ajax/search",
-        select: function(event, ui) { window.location = <?php echo url::base('true')?> + "graph?host=" + ui.item.value  }
+        select: function(event, ui) { window.location = "<?php echo url::base('true')?>" + "graph?host=" + ui.item.value  }
     });
 });
 </script>
