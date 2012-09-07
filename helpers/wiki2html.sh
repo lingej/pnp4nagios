@@ -27,8 +27,16 @@ for L in $LANG; do
         F=${FILES[$index]}
         echo "$L $F"
         wget -nv -O "${T}/${F}.html" "${URL}/${PART}/${F}?do=export_xhtmlbody"
+	sed -i -e's/ü/\&uuml;/g' "${T}/${F}.html"
+	sed -i -e's/Ü/\&Uuml;/g' "${T}/${F}.html"
+	sed -i -e's/ä/\&auml;/g' "${T}/${F}.html"
+	sed -i -e's/Ä/\&Auml;/g' "${T}/${F}.html"
+	sed -i -e's/ö/\&ouml;/g' "${T}/${F}.html"
+	sed -i -e's/Ö/\&Ouml;/g' "${T}/${F}.html"
         ((index++))
 
     done
     ((lindex++))
 done
+rm de_DE/dwnld.html
+ln -s en_US/dwnld.html de_DE/dwnld.html
