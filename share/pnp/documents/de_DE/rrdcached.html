@@ -6,11 +6,11 @@
 
 <p>
 
-In großen Installationen wird man über kurz oder lang feststellen, dass die Verarbeitung der Performance-Daten eine recht hohe I/O-Last zur Folge hat. RRDtool muss extrem viele Updates auf Disk schreiben, kann dabei jedoch den Disk-Cache nicht optimal ausnutzen.
+In großen Installationen wird man &uuml;ber kurz oder lang feststellen, dass die Verarbeitung der Performance-Daten eine recht hohe I/O-Last zur Folge hat. RRDtool muss extrem viele Updates auf Disk schreiben, kann dabei jedoch den Disk-Cache nicht optimal ausnutzen.
 </p>
 
 <p>
-Eine Optimierung stellt das Sammeln und Sortieren der Daten dar. Es ist für das System effektiver, viele Updates im Block in eine RRD-Datenbank zu schreiben. Der Disk-Cache kann dabei effektiver genutzt werden.
+Eine Optimierung stellt das Sammeln und Sortieren der Daten dar. Es ist f&uuml;r das System effektiver, viele Updates im Block in eine RRD-Datenbank zu schreiben. Der Disk-Cache kann dabei effektiver genutzt werden.
 </p>
 
 <p>
@@ -18,7 +18,7 @@ In der aktuellen RRDtool-Version ( <a href="http://oss.oetiker.ch/rrdtool-trac/b
 </p>
 
 <p>
-An dieser Stelle möchte ich mich bei Florian octo Forster, Kevin Brintnall und Tobi Oetiker bedanken. Die Entwicklung dieses Daemons wurde vorbildlich auf der <a href="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html" class="urlextern" title="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html"  rel="nofollow">rrd-developers</a> Mailingliste koordiniert.
+An dieser Stelle m&ouml;chte ich mich bei Florian octo Forster, Kevin Brintnall und Tobi Oetiker bedanken. Die Entwicklung dieses Daemons wurde vorbildlich auf der <a href="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html" class="urlextern" title="http://www.mail-archive.com/rrd-developers@lists.oetiker.ch/index.html"  rel="nofollow">rrd-developers</a> Mailingliste koordiniert.
 </p>
 
 </div>
@@ -28,7 +28,7 @@ An dieser Stelle möchte ich mich bei Florian octo Forster, Kevin Brintnall und 
 
 <p>
 
-Der rrdcached arbeitet als Daemon im Hintergrund und öffnet einen UNIX- oder TCP-Socket, auf dem er auf Anfragen von rrdtool wartet. Aufgrund von Sicherheitsbedenken ist es in neueren Versionen von rrdcached aber nicht mehr möglich absolute Pfadangaben (wie bei pnp4nagios üblich) bei Netzwerkzugriffen zu verwenden, daher ist derzeit nur Nutzung von UNIX-Sockets möglich.
+Der rrdcached arbeitet als Daemon im Hintergrund und &ouml;ffnet einen UNIX- oder TCP-Socket, auf dem er auf Anfragen von rrdtool wartet. Aufgrund von Sicherheitsbedenken ist es in neueren Versionen von rrdcached aber nicht mehr m&ouml;glich absolute Pfadangaben (wie bei pnp4nagios &uuml;blich) bei Netzwerkzugriffen zu verwenden, daher ist derzeit nur Nutzung von UNIX-Sockets m&ouml;glich.
 </p>
 
 </div>
@@ -38,7 +38,7 @@ Der rrdcached arbeitet als Daemon im Hintergrund und öffnet einen UNIX- oder TC
 
 <p>
 
-Der rrdcached kennt einige wichtige Optionen, die beim Start übergeben werden.
+Der rrdcached kennt einige wichtige Optionen, die beim Start &uuml;bergeben werden.
 </p>
 
 <p>
@@ -52,17 +52,17 @@ Option -l definiert den Socket, auf dem der rrdcached Requests annimmt. Der Defa
 </pre>
 
 <p>
-Option -P gibt die für die nachfolgenden Sockets (mit -l spezifiziert) erlaubten Befehle an, welche auf die RRD-Datenbanken angewendet werden können.
+Option -P gibt die f&uuml;r die nachfolgenden Sockets (mit -l spezifiziert) erlaubten Befehle an, welche auf die RRD-Datenbanken angewendet werden k&ouml;nnen.
 </p>
 <pre class="code">-P FLUSH,PENDING</pre>
 
 <p>
-Option -s erlaubt es die Gruppenzugehörigkeit der nachfolgenden UNIX-Sockets zu ändern.
+Option -s erlaubt es die Gruppenzugeh&ouml;rigkeit der nachfolgenden UNIX-Sockets zu &auml;ndern.
 </p>
 <pre class="code">-s nagios</pre>
 
 <p>
-Option -m setzt die Zugriffsrechte für die nachfolgenden UNIX-Sockets auf die (in oktal) angegebenen Werte.
+Option -m setzt die Zugriffsrechte f&uuml;r die nachfolgenden UNIX-Sockets auf die (in oktal) angegebenen Werte.
 </p>
 <pre class="code">-m 0660</pre>
 
@@ -72,7 +72,7 @@ Option -w bestimmt den Intervall in Sekunden, in dem die Daten auf Disk geschrie
 <pre class="code">-w 1800</pre>
 
 <p>
-Option -z definiert einen Delay, der die über die Option -w definierten Schreibzyklen in einen zufälligen Bereich [0-delay] verteilt, um gleichzeitige Schreibzugriffe zu verhindern. Der Wert der Option -z darf nicht größer gewählt werden als -w.
+Option -z definiert einen Delay, der die &uuml;ber die Option -w definierten Schreibzyklen in einen zuf&auml;lligen Bereich [0-delay] verteilt, um gleichzeitige Schreibzugriffe zu verhindern. Der Wert der Option -z darf nicht gr&ouml;ßer gew&auml;hlt werden als -w.
 </p>
 <pre class="code">-z 1800</pre>
 
@@ -82,7 +82,7 @@ Option -p definiert ein PID File
 <pre class="code">-p /var/run/rrdcached.pid</pre>
 
 <p>
-Option -j definiert den Pfad zu einem Journal-Verzeichnis. Dort werden alle Aufträge protokolliert und ggf. beim nächsten Start nachgefahren, falls der rrdcached-Daemon abstürzt.
+Option -j definiert den Pfad zu einem Journal-Verzeichnis. Dort werden alle Auftr&auml;ge protokolliert und ggf. beim n&auml;chsten Start nachgefahren, falls der rrdcached-Daemon abst&uuml;rzt.
 </p>
 <pre class="code">-j /var/cache/rrdcached</pre>
 
@@ -98,14 +98,14 @@ Daraus ergibt sich beispielsweise ein Aufruf von rrdached mit folgenden Paramete
 
 <p>
 
-RRDtool selbst wird die Existenz des Daemons über die Option --daemon=&lt;socket&gt; mitgeteilt.
+RRDtool selbst wird die Existenz des Daemons &uuml;ber die Option --daemon=&lt;socket&gt; mitgeteilt.
 
 </p>
 <pre class="code"> rrdtool --daemon=unix:/tmp/rrdcached.sock update ...</pre>
 
 <p>
 
-Dies muss natürlich mit den Startoptionen des rrdcached übereinstimmen!
+Dies muss nat&uuml;rlich mit den Startoptionen des rrdcached &uuml;bereinstimmen!
 </p>
 
 </div>
@@ -115,11 +115,11 @@ Dies muss natürlich mit den Startoptionen des rrdcached übereinstimmen!
 
 <p>
 
-Da zwei Bestandteile von PNP auf den rrdcached vorbereitet werden müssen, ergeben sich Änderungen in zwei Config-Files. Außerdem muß der User unter welchem der Webserver läuft zur Gruppe unter der Nagios läuft hinzugefügt werden.
+Da zwei Bestandteile von PNP auf den rrdcached vorbereitet werden m&uuml;ssen, ergeben sich &Auml;nderungen in zwei Config-Files. Außerdem muß der User unter welchem der Webserver l&auml;uft zur Gruppe unter der Nagios l&auml;uft hinzugef&uuml;gt werden.
 </p>
 
 <p>
-1. Anpassen der <code>process_perfdata.cfg</code> für den Datensammler <code>process_perfdata.pl</code>
+1. Anpassen der <code>process_perfdata.cfg</code> f&uuml;r den Datensammler <code>process_perfdata.pl</code>
 </p>
 <pre class="code">
 # EXPERIMENTAL rrdcached Support
@@ -129,7 +129,7 @@ RRD_DAEMON_OPTS = unix:/var/run/rrdcached.sock
 </pre>
 
 <p>
-2. Anpassen der <code>config_local.php</code> (bzw. config.php) für das Webinterface
+2. Anpassen der <code>config_local.php</code> (bzw. config.php) f&uuml;r das Webinterface
 </p>
 <pre class="code">
 #
@@ -145,7 +145,7 @@ Die passenden Optionen sind bereits in den Beispieldateien enthalten.
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/rrd_convert" class="wikilink1" title="de:pnp-0.6:rrd_convert">migrieren von RRD-Dateien</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/rrd_convert" class="wikilink1" title="de:pnp-0.6:rrd_convert">migrieren von RRD-Dateien</a>
 
 </p>
 

@@ -20,19 +20,19 @@ PNP-Helper-Funktionen sind dazu gedacht, die Erstellung von Templates zu vereinf
 </p>
 
 <p>
-Der Zweck dieser Funktion ist die “Normalisierung” von großen Zahlen. Moderne Festplatten haben Größen von mehreren <acronym title="Gigabyte">GB</acronym> oder TB erreicht und wenn Sie auf Zahlen wie 1521073648234 schauen, dann fangen Sie an, die Ziffern zu zählen, also wäre es schön, diese Zahlen in ein “handliches” Format zu verwandeln. Das Gleiche gilt für Netzwerkverkehr.
+Der Zweck dieser Funktion ist die “Normalisierung” von großen Zahlen. Moderne Festplatten haben Gr&ouml;ßen von mehreren <acronym title="Gigabyte">GB</acronym> oder TB erreicht und wenn Sie auf Zahlen wie 1521073648234 schauen, dann fangen Sie an, die Ziffern zu z&auml;hlen, also w&auml;re es sch&ouml;n, diese Zahlen in ein “handliches” Format zu verwandeln. Das Gleiche gilt f&uuml;r Netzwerkverkehr.
 </p>
 
 <p>
-An die Funktion werden bis zu drei Parameter übergeben und in jedem Fall ein Array mit vier Elementen zurückgeliefert.
+An die Funktion werden bis zu drei Parameter &uuml;bergeben und in jedem Fall ein Array mit vier Elementen zur&uuml;ckgeliefert.
 
 </p>
 <ul>
-<li class="level1"><div class="li"> Der erste übergebene Parameter ist der Wert (ggf. inklusive die “UOM”)</div>
+<li class="level1"><div class="li"> Der erste &uuml;bergebene Parameter ist der Wert (ggf. inklusive die “UOM”)</div>
 </li>
-<li class="level1"><div class="li"> Der zweite Parameter ist optional (Default “1000”, z.B. für “Traffic”), bzw.  “1024” (z.B. Festplattengrößen)</div>
+<li class="level1"><div class="li"> Der zweite Parameter ist optional (Default “1000”, z.B. f&uuml;r “Traffic”), bzw.  “1024” (z.B. Festplattengr&ouml;ßen)</div>
 </li>
-<li class="level1"><div class="li"> Der dritte Parameter ist optional (Default &#039;%.3lf&#039;) und gibt das Format des zurückzugebenden Wertes an</div>
+<li class="level1"><div class="li"> Der dritte Parameter ist optional (Default &#039;%.3lf&#039;) und gibt das Format des zur&uuml;ckzugebenden Wertes an</div>
 </li>
 </ul>
 <pre class="code php"><span class="re0">$size</span> <span class="sy0">=</span> pnp<span class="sy0">::</span><span class="me2">adjust_unit</span><span class="br0">&#40;</span><span class="nu0">1521073648234</span><span class="sy0">,</span><span class="nu0">1024</span><span class="sy0">,</span><span class="st_h">'%7.3lf'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
@@ -43,26 +43,26 @@ Bitte beachten Sie, dass “$size” ein Array ist, das aus vier Feldern besteht
 <pre class="code"> $size[0] := &quot;  1.383 T&quot;</pre>
 
 <p>
-enthält den formatierten Wert inkl. der Einheit
+enth&auml;lt den formatierten Wert inkl. der Einheit
 </p>
 <pre class="code"> $size[1] := &quot;1.383&quot;</pre>
 
 <p>
-enthält den formatierten Wert (ohne führende Leerzeichen)
+enth&auml;lt den formatierten Wert (ohne f&uuml;hrende Leerzeichen)
 </p>
 <pre class="code"> $size[2] := &quot;T&quot;</pre>
 
 <p>
-enthält die Einheit
+enth&auml;lt die Einheit
 </p>
 <pre class="code"> $size[3] := &quot;1099511627776&quot;</pre>
 
 <p>
-enthält den Divisor
+enth&auml;lt den Divisor
 </p>
 
 <p>
-Angenommen das Plugin “check_disk” liefert “<acronym title="Megabyte">MB</acronym>” als UOM, dann können Sie diese Einheit ebenfalls übergeben
+Angenommen das Plugin “check_disk” liefert “<acronym title="Megabyte">MB</acronym>” als UOM, dann k&ouml;nnen Sie diese Einheit ebenfalls &uuml;bergeben
 
 </p>
 <pre class="code php"><span class="re0">$disk</span> <span class="sy0">=</span> pnp<span class="sy0">::</span><span class="me2">adjust_unit</span><span class="br0">&#40;</span><span class="st0">&quot;1524MB&quot;</span><span class="sy0">,</span><span class="nu0">1024</span><span class="sy0">,</span><span class="st_h">'%7.3lf'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>

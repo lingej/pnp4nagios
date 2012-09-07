@@ -6,7 +6,7 @@
 
 <p>
 
-Im Folgenden wird die Konfiguration der bereits erwähnten <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">Arten der Performance-Daten Verarbeitung</a> genauer erklärt.
+Im Folgenden wird die Konfiguration der bereits erw&auml;hnten <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">Arten der Performance-Daten Verarbeitung</a> genauer erkl&auml;rt.
 </p>
 
 <p>
@@ -20,18 +20,18 @@ Die bevorzugte Methode der PNP-Entwickler ist der “Bulk Mode mit NPCD und npcd
 
 <p>
 
-<a href="/_detail/synchronous.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Der Synchronous-Mode ist die einfachste Art, den Datensammler <code>process_perfdata.pl</code> in Nagios zu integrieren. Hierbei wird bei jedem Ereignis ein gesondertes Command <code>process-service-perfdata</code> (bzw. <code>process-host-perfdata</code>) ausgeführt.
+<a href="/_detail/synchronous.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Der Synchronous-Mode ist die einfachste Art, den Datensammler <code>process_perfdata.pl</code> in Nagios zu integrieren. Hierbei wird bei jedem Ereignis ein gesondertes Command <code>process-service-perfdata</code> (bzw. <code>process-host-perfdata</code>) ausgef&uuml;hrt.
 </p>
 
 <p>
-Grundsätzlich ist in der <code>nagios.cfg</code> die Verarbeitung der Performance-Daten zu aktivieren. Bitte beachten Sie, dass diese Direktive wahrscheinlich bereits in der Konfigurationsdatei enthalten ist (Default ist “0”).
+Grunds&auml;tzlich ist in der <code>nagios.cfg</code> die Verarbeitung der Performance-Daten zu aktivieren. Bitte beachten Sie, dass diese Direktive wahrscheinlich bereits in der Konfigurationsdatei enthalten ist (Default ist “0”).
 
 </p>
 <pre class="code"> process_performance_data=1</pre>
 
 <p>
 
-Für jeden Host und jeden Service, für den KEINE Performance-Daten verarbeitet werden sollen, ist die Verarbeitung der Performance-Daten explizit auszuschalten.
+F&uuml;r jeden Host und jeden Service, f&uuml;r den KEINE Performance-Daten verarbeitet werden sollen, ist die Verarbeitung der Performance-Daten explizit auszuschalten.
 </p>
 <pre class="code">
 define service {
@@ -42,7 +42,7 @@ define service {
 </pre>
 
 <p>
-Weiterhin ist es ab Nagios 3.x möglich, in der <code>nagios.cfg</code> das Exportieren der Environment-Variablen zu deaktivieren. Diese sind jedoch für den Synchronous-Mode zwingend erforderlich. Daher muss
+Weiterhin ist es ab Nagios 3.x m&ouml;glich, in der <code>nagios.cfg</code> das Exportieren der Environment-Variablen zu deaktivieren. Diese sind jedoch f&uuml;r den Synchronous-Mode zwingend erforderlich. Daher muss
 
 </p>
 <pre class="code">enable_environment_macros=1</pre>
@@ -53,21 +53,21 @@ ebenfalls in der <code>nagios.cfg</code> gesetzt sein.
 </p>
 
 <p>
-Zusätzlich wird das Kommando zum Verarbeiten der Performance-Daten in der <code>nagios.cfg</code> angegeben.
+Zus&auml;tzlich wird das Kommando zum Verarbeiten der Performance-Daten in der <code>nagios.cfg</code> angegeben.
 
 </p>
 <pre class="code"> service_perfdata_command=process-service-perfdata</pre>
 
 <p>
 
-Ab Nagios 3.x ist es durchaus sinnvoll, auch die Verarbeitung der Performance-Daten für Hosts einzuschalten. Nagios 3 führt durch die geänderte Hostcheck-Logik nun auch die Prüfung der Hosts regelmäßig aus.
+Ab Nagios 3.x ist es durchaus sinnvoll, auch die Verarbeitung der Performance-Daten f&uuml;r Hosts einzuschalten. Nagios 3 f&uuml;hrt durch die ge&auml;nderte Hostcheck-Logik nun auch die Pr&uuml;fung der Hosts regelm&auml;ßig aus.
 
 </p>
 <pre class="code"> host_perfdata_command=process-host-perfdata</pre>
 
 <p>
 
-Die referenzierten Commands müssen natürlich auch Nagios bekannt gegeben werden. Wie man sieht, sind für den Aufruf von process_perfdata.pl so gut wie keine Optionen nötig. Einzig bei Performance-Daten der Host-Checks ist die Option -d ( DATATYPE ) nötig. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
+Die referenzierten Commands m&uuml;ssen nat&uuml;rlich auch Nagios bekannt gegeben werden. Wie man sieht, sind f&uuml;r den Aufruf von process_perfdata.pl so gut wie keine Optionen n&ouml;tig. Einzig bei Performance-Daten der Host-Checks ist die Option -d ( DATATYPE ) n&ouml;tig. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> f&uuml;r Nagios benutzt haben, k&ouml;nnen Sie die Definitionen in der Datei commands.cfg anpassen.
 </p>
 <pre class="code">
 define command {
@@ -86,7 +86,7 @@ define command {
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion prüfen</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion pr&uuml;fen</a>
 </p>
 
 </div>
@@ -96,11 +96,11 @@ define command {
 
 <p>
 
-<a href="/_detail/bulk.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Der Bulk-Mode ist etwas komplizierter als der Synchronous-Mode, reduziert die Last auf dem Nagios Server jedoch merklich, da nun nicht mehr für jeden Service bzw. Host zusätzlich der Datensammler <code>process_perfdata.pl</code> gestartet werden muss.
+<a href="/_detail/bulk.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="mediaright" align="right" alt="" width="150" /></a>Der Bulk-Mode ist etwas komplizierter als der Synchronous-Mode, reduziert die Last auf dem Nagios Server jedoch merklich, da nun nicht mehr f&uuml;r jeden Service bzw. Host zus&auml;tzlich der Datensammler <code>process_perfdata.pl</code> gestartet werden muss.
 </p>
 
 <p>
-Im Bulk-Mode schreibt Nagios die Daten in einem definierten Format in eine temporäre Datei. Diese Datei wiederum wird periodisch von <code>process_perfdata.pl</code> verarbeitet. Um den Start und den Intervall kümmert sich dabei Nagios selbst.
+Im Bulk-Mode schreibt Nagios die Daten in einem definierten Format in eine tempor&auml;re Datei. Diese Datei wiederum wird periodisch von <code>process_perfdata.pl</code> verarbeitet. Um den Start und den Intervall k&uuml;mmert sich dabei Nagios selbst.
 </p>
 
 <p>
@@ -111,7 +111,7 @@ Auch hier muss die Verarbeitung der Performance-Daten in der <code>nagios.cfg</c
 
 <p>
 
-Zusätzlich werden einige neue Parameter benötigt.
+Zus&auml;tzlich werden einige neue Parameter ben&ouml;tigt.
 </p>
 <pre class="code">
 #
@@ -142,13 +142,13 @@ Die Parameter und deren Bedeutung im Einzelnen:
 
 </p>
 <ul>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> Der Pfad zur temporären Datei, in der die Daten gesammelt werden sollen.</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> Der Pfad zur tempor&auml;ren Datei, in der die Daten gesammelt werden sollen.</div>
 </li>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das Format der temporären Datei. Hier werden die Daten über Nagios-Macros definiert.</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das Format der tempor&auml;ren Datei. Hier werden die Daten &uuml;ber Nagios-Macros definiert.</div>
 </li>
 <li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> Die Option “a” definiert, dass an die Datei angehangen werden soll.</div>
 </li>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> Das Intervall beträgt 15 Sekunden</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> Das Intervall betr&auml;gt 15 Sekunden</div>
 </li>
 <li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_command</strong></code> das Command, das im definierten Intervall aufgerufen werden soll.</div>
 </li>
@@ -156,7 +156,7 @@ Die Parameter und deren Bedeutung im Einzelnen:
 
 <p>
 
-Die verwendeten Commands müssen Nagios wiederum bekannt gegeben werden. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
+Die verwendeten Commands m&uuml;ssen Nagios wiederum bekannt gegeben werden. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> f&uuml;r Nagios benutzt haben, k&ouml;nnen Sie die Definitionen in der Datei commands.cfg anpassen.
 </p>
 <pre class="code">
 define command{
@@ -173,13 +173,13 @@ define command{
   <b class='xtop'><b class='xb1'></b><b class='xb2'></b><b class='xb3'></b><b class='xb4'></b></b>
   <div class='xbox'>
 <p class='box_title'><strong>HINWEIS:</strong></p>
-<div class='box_content'> Da <code>process_perfdata.pl</code> nun mehr Daten zu verarbeiten hat als im Default Mode, kommt es natürlich auch zu längeren Laufzeiten. Daher ist der TIMEOUT Wert in der <code>etc/process_perfdata.cfg</code> zu überprüfen und ggf. anzupassen.</div>
+<div class='box_content'> Da <code>process_perfdata.pl</code> nun mehr Daten zu verarbeiten hat als im Default Mode, kommt es nat&uuml;rlich auch zu l&auml;ngeren Laufzeiten. Daher ist der TIMEOUT Wert in der <code>etc/process_perfdata.cfg</code> zu &uuml;berpr&uuml;fen und ggf. anzupassen.</div>
   </div>
   <b class='xbottom'><b class='xb4'></b><b class='xb3'></b><b class='xb2'></b><b class='xb1'></b></b>
 </div>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion prüfen</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion pr&uuml;fen</a>
 </p>
 
 </div>
@@ -200,7 +200,7 @@ Auch hier muss die Verarbeitung der Performance-Daten in der <code>nagios.cfg</c
 
 <p>
 
-Zusätzlich werden einige neue Parameter benötigt.
+Zus&auml;tzlich werden einige neue Parameter ben&ouml;tigt.
 </p>
 <pre class="code">
 #
@@ -231,13 +231,13 @@ Die Parameter und deren Bedeutung im Einzelnen:
 
 </p>
 <ul>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> Der Pfad zur temporären Datei, in der die Daten gesammelt werden sollen.</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file</strong></code> Der Pfad zur tempor&auml;ren Datei, in der die Daten gesammelt werden sollen.</div>
 </li>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das Format der temporären Datei. Hier werden die Daten über Nagios-Macros definiert.</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_template</strong></code> Das Format der tempor&auml;ren Datei. Hier werden die Daten &uuml;ber Nagios-Macros definiert.</div>
 </li>
 <li class="level1"><div class="li"> <code><strong>service_perfdata_file_mode</strong></code> Die Option “a” definiert, dass an die Datei angehangen werden soll.</div>
 </li>
-<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> Das Intervall beträgt 15 Sekunden</div>
+<li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_interval</strong></code> Das Intervall betr&auml;gt 15 Sekunden</div>
 </li>
 <li class="level1"><div class="li"> <code><strong>service_perfdata_file_processing_command</strong></code> das Command, das im definierten Intervall aufgerufen werden soll.</div>
 </li>
@@ -245,7 +245,7 @@ Die Parameter und deren Bedeutung im Einzelnen:
 
 <p>
 
-Die verwendeten Commands müssen Nagios wiederum bekannt gegeben werden. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die Definitionen in der Datei commands.cfg anpassen.
+Die verwendeten Commands m&uuml;ssen Nagios wiederum bekannt gegeben werden. Wenn Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> f&uuml;r Nagios benutzt haben, k&ouml;nnen Sie die Definitionen in der Datei commands.cfg anpassen.
 </p>
 <pre class="code">
 define command{
@@ -260,7 +260,7 @@ define command{
 </pre>
 
 <p>
-Durch die Kommandos wird immer nach Ablauf des über <code><strong>service_perfdata_file_processing_interval</strong></code> eingestellten Intervalls die Datei service-perfdata nach var/spool/ verschoben. Dabei wird das Nagios-Macro $TIMET$ verwendet, an den Dateinamen angehängt, um zu verhindern, dass alte Dateien ungewollt überschrieben werden. Das Macro $TIMET$ enthält den aktuellen Zeitstempel in Unix-Time-Format ( Sekunden seit 1.1.1970 ).
+Durch die Kommandos wird immer nach Ablauf des &uuml;ber <code><strong>service_perfdata_file_processing_interval</strong></code> eingestellten Intervalls die Datei service-perfdata nach var/spool/ verschoben. Dabei wird das Nagios-Macro $TIMET$ verwendet, an den Dateinamen angeh&auml;ngt, um zu verhindern, dass alte Dateien ungewollt &uuml;berschrieben werden. Das Macro $TIMET$ enth&auml;lt den aktuellen Zeitstempel in Unix-Time-Format ( Sekunden seit 1.1.1970 ).
 </p>
 
 <p>
@@ -268,7 +268,7 @@ Somit sammeln sich Dateien im Verzeichnis /usr/local/pnp4nagios/var/spool/, die 
 </p>
 
 <p>
-NPCD überwacht das Spool-Verzeichnis und übergibt wiederum alle gefundenen Dateien an <code>process_perfdata.pl</code>. Damit ist die Verarbeitung der Performancedaten komplett von Nagios entkoppelt. Wir müssen nur noch den NPCD starten.
+NPCD &uuml;berwacht das Spool-Verzeichnis und &uuml;bergibt wiederum alle gefundenen Dateien an <code>process_perfdata.pl</code>. Damit ist die Verarbeitung der Performancedaten komplett von Nagios entkoppelt. Wir m&uuml;ssen nur noch den NPCD starten.
 
 </p>
 <pre class="code"> /usr/local/pnp4nagios/bin/npcd -d -f /usr/local/pnp4nagios/etc/npcd.cfg</pre>
@@ -279,14 +279,14 @@ Die Option <code>-d</code> veranlasst NPCD im Hintergund als Daemon seinen Diens
 </p>
 
 <p>
-Das Init Script für den NPCD wir während der Installation über “make install-init” installiert und kann somit auch für den Start verwendet werden.
+Das Init Script f&uuml;r den NPCD wir w&auml;hrend der Installation &uuml;ber “make install-init” installiert und kann somit auch f&uuml;r den Start verwendet werden.
 
 </p>
 <pre class="code"> /etc/init.d/npcd start</pre>
 
 <p>
 
-In der Config-Datei des NPCD, der <code>npcd.cfg</code>, ist vor dem ersten Start zu prüfen, ob die Pfade zum Spool-Verzeichnis und zu <code>process_perfdata.pl</code> richtig gesetzt sind.
+In der Config-Datei des NPCD, der <code>npcd.cfg</code>, ist vor dem ersten Start zu pr&uuml;fen, ob die Pfade zum Spool-Verzeichnis und zu <code>process_perfdata.pl</code> richtig gesetzt sind.
 </p>
 
 <p>
@@ -300,14 +300,14 @@ Weitere Informationen zu NPCD findet ihr <a href="/de/pnp-0.6/npcd" class="wikil
 
 <p>
 
-<a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker-Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata-Routinen von Nagios, die über die “*_perf_data_*” Optionen in der <code>nagios.cfg</code> konfiguriert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o kümmert sich um die für PNP nötige Aufbereitung der Daten.
+<a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker-Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata-Routinen von Nagios, die &uuml;ber die “*_perf_data_*” Optionen in der <code>nagios.cfg</code> konfiguriert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o k&uuml;mmert sich um die f&uuml;r PNP n&ouml;tige Aufbereitung der Daten.
 </p>
 
 <p>
 Vorteil:
 </p>
 <ul>
-<li class="level1"><div class="li"> Die Perfdata-Routinen innerhalb von Nagios stehen wieder für andere Addons zur Verfügung.</div>
+<li class="level1"><div class="li"> Die Perfdata-Routinen innerhalb von Nagios stehen wieder f&uuml;r andere Addons zur Verf&uuml;gung.</div>
 </li>
 <li class="level1"><div class="li"> Die Konfiguration reduziert sich.</div>
 </li>
@@ -325,11 +325,11 @@ broker_module=/usr/local/pnp4nagios/lib/npcdmod.o config_file=/usr/local/pnp4nag
 </pre>
 
 <p>
-Alle anderen auf dieser Seite gezeigten Optionen dürfen für diesen Modus <strong>NICHT</strong> mehr verwendet werden.
+Alle anderen auf dieser Seite gezeigten Optionen d&uuml;rfen f&uuml;r diesen Modus <strong>NICHT</strong> mehr verwendet werden.
 </p>
 
 <p>
-<strong>Achtung:</strong> Wichtig sind in diesem Zusammenhang auch die <code>event_broker_options</code> bei einem von -1 abweichenden Wert. Für PNP müssen die Bits 2 und 3 gesetzt sein (0b01100; siehe auch <a href="http://www.nagios-wiki.de/nagios/ndo/eventbroker_optionen" class="urlextern" title="http://www.nagios-wiki.de/nagios/ndo/eventbroker_optionen"  rel="nofollow">http://www.nagios-wiki.de/nagios/ndo/eventbroker_optionen</a>).
+<strong>Achtung:</strong> Wichtig sind in diesem Zusammenhang auch die <code>event_broker_options</code> bei einem von -1 abweichenden Wert. F&uuml;r PNP m&uuml;ssen die Bits 2 und 3 gesetzt sein (0b01100; siehe auch <a href="http://www.nagios-wiki.de/nagios/ndo/eventbroker_optionen" class="urlextern" title="http://www.nagios-wiki.de/nagios/ndo/eventbroker_optionen"  rel="nofollow">http://www.nagios-wiki.de/nagios/ndo/eventbroker_optionen</a>).
 </p>
 
 <p>
@@ -364,7 +364,7 @@ PNP4Nagios kann seit Version 0.6.12 als Gearman-Worker betrieben werden. So sind
 </p>
 
 <p>
-Benötigt wird eine fertig eingerichtete mod_gearman Installation wie von Sven Nierlein unter <a href="http://labs.consol.de/lang/en/nagios/mod-gearman/" class="urlextern" title="http://labs.consol.de/lang/en/nagios/mod-gearman/"  rel="nofollow">http://labs.consol.de/lang/en/nagios/mod-gearman/</a> beschrieben.
+Ben&ouml;tigt wird eine fertig eingerichtete mod_gearman Installation wie von Sven Nierlein unter <a href="http://labs.consol.de/lang/en/nagios/mod-gearman/" class="urlextern" title="http://labs.consol.de/lang/en/nagios/mod-gearman/"  rel="nofollow">http://labs.consol.de/lang/en/nagios/mod-gearman/</a> beschrieben.
 </p>
 
 <p>
@@ -384,17 +384,17 @@ Dort ist mit <code>PREFORK = &lt;n&gt;</code> die Anzahl der zu startenden Kindp
 
 <p>
 <code>GEARMAN_HOST = &lt;host&gt;:&lt;port&gt;</code> definiert Rechner und Port, auf dem der gearman-Daemon die Daten bereitstellt.
-Über <code>REQUESTS_PER_CHILD = &lt;n&gt;</code> kann die maximal zu verarbeitende Anzahl von Anforderungen pro Prozess eingestellt werden.
+&Uuml;ber <code>REQUESTS_PER_CHILD = &lt;n&gt;</code> kann die maximal zu verarbeitende Anzahl von Anforderungen pro Prozess eingestellt werden.
 </p>
 
 <p>
-<code>ENCRYPTION = &lt;1|0&gt;</code> stellt ein, ob Verschlüsselung benutzt werden soll. Die Standardeinstellung ist eine aktivierte Verschlüsselung (“1”) und das sollte nur in Ausnahmefällen verändert werden.
-Dabei kann entweder über <code>KEY = &lt;Schlüssel&gt;</code> der zu benutzende Schlüssel definiert oder per <code>KEY_FILE = &lt;Schlüsseldatei&gt;</code> der Standort einer Schlüsseldatei angegeben werden.
+<code>ENCRYPTION = &lt;1|0&gt;</code> stellt ein, ob Verschl&uuml;sselung benutzt werden soll. Die Standardeinstellung ist eine aktivierte Verschl&uuml;sselung (“1”) und das sollte nur in Ausnahmef&auml;llen ver&auml;ndert werden.
+Dabei kann entweder &uuml;ber <code>KEY = &lt;Schl&uuml;ssel&gt;</code> der zu benutzende Schl&uuml;ssel definiert oder per <code>KEY_FILE = &lt;Schl&uuml;sseldatei&gt;</code> der Standort einer Schl&uuml;sseldatei angegeben werden.
 </p>
 
 <p>
 
-<code>/etc/init.d/pnp_gearman_worker</code> enthält Verweise auf die <acronym title="Practical Extraction and Report Language">Perl</acronym>-Prozedur <code>process_perfdata.pl</code> sowie die Konfigurationsdatei <code>process_perfdata.cfg</code>.
+<code>/etc/init.d/pnp_gearman_worker</code> enth&auml;lt Verweise auf die <acronym title="Practical Extraction and Report Language">Perl</acronym>-Prozedur <code>process_perfdata.pl</code> sowie die Konfigurationsdatei <code>process_perfdata.cfg</code>.
 </p>
 
 <p>
@@ -406,11 +406,11 @@ Nach dem Start des PNP-Daemons per
 
 <p>
 
-werden die Performance-Daten verarbeitet, die über den gearmand-Daemon auf dem Nagios-Rechner zur Verfügung gestellt werden.
+werden die Performance-Daten verarbeitet, die &uuml;ber den gearmand-Daemon auf dem Nagios-Rechner zur Verf&uuml;gung gestellt werden.
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion prüfen</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/verify" class="wikilink1" title="de:pnp-0.6:verify">Funktion pr&uuml;fen</a>
 
 </p>
 

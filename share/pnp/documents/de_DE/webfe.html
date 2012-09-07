@@ -6,12 +6,12 @@
 
 <p>
 
-PNP soll natürlich schnell erreichbar sein. Man möchte nicht lange nach den richtigen Graphen suchen.
+PNP soll nat&uuml;rlich schnell erreichbar sein. Man m&ouml;chte nicht lange nach den richtigen Graphen suchen.
 </p>
 
 <p>
-Nagios selbst bietet die Möglichkeit, externe URLs über die sogenannte Extended Info Config einzubinden.
-Da es in diesem Bereich eine Änderung zwischen Nagios 2.x und der Version 3.0 gibt, wird anschließend auf beide Versionen getrennt eingegangen.
+Nagios selbst bietet die M&ouml;glichkeit, externe URLs &uuml;ber die sogenannte Extended Info Config einzubinden.
+Da es in diesem Bereich eine &Auml;nderung zwischen Nagios 2.x und der Version 3.0 gibt, wird anschließend auf beide Versionen getrennt eingegangen.
 </p>
 
 </div>
@@ -21,7 +21,7 @@ Da es in diesem Bereich eine Änderung zwischen Nagios 2.x und der Version 3.0 g
 
 <p>
 
-Bis Nagios 2.x erfolgt die Einbindung externer URLs in das Nagios-Web-Interface über die <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo"  rel="nofollow">Extended-Info-Objekte</a>. Für PNP verwenden wir die Option action_url, um das PNP-Web-Frontend mit den passenden Optionen aufzurufen.
+Bis Nagios 2.x erfolgt die Einbindung externer URLs in das Nagios-Web-Interface &uuml;ber die <a href="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/objectdefinitions#serviceextinfo"  rel="nofollow">Extended-Info-Objekte</a>. F&uuml;r PNP verwenden wir die Option action_url, um das PNP-Web-Frontend mit den passenden Optionen aufzurufen.
 </p>
 <pre class="code">
 define serviceextinfo {
@@ -32,7 +32,7 @@ define serviceextinfo {
 </pre>
 
 <p>
-Dieses Template kann nun über “use srv-pnp” in der serviceextinfo-Definition verwendet werden. Wenn Sie die Schnellstart-Installationsanleitungen benutzt haben, können Sie beispielsweise in der Datei localhost.cfg die Definitionen wie folgt erweitern:
+Dieses Template kann nun &uuml;ber “use srv-pnp” in der serviceextinfo-Definition verwendet werden. Wenn Sie die Schnellstart-Installationsanleitungen benutzt haben, k&ouml;nnen Sie beispielsweise in der Datei localhost.cfg die Definitionen wie folgt erweitern:
 </p>
 <pre class="code">
 define serviceextinfo {
@@ -53,7 +53,7 @@ Seit Nagios 3.0 ist die Direktive action_url in die <a href="http://www.nagios-w
 </p>
 
 <p>
-Zuerst definieren wir zwei Nagios-Templates. Falls Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> für Nagios benutzt haben, können Sie die folgenden Zeilen der Datei templates.cfg hinzufügen:
+Zuerst definieren wir zwei Nagios-Templates. Falls Sie die <a href="http://www.nagios-wiki.de/nagios/doku3/quickstart" class="urlextern" title="http://www.nagios-wiki.de/nagios/doku3/quickstart"  rel="nofollow">Schnellstart-Installationsanleitungen</a> f&uuml;r Nagios benutzt haben, k&ouml;nnen Sie die folgenden Zeilen der Datei templates.cfg hinzuf&uuml;gen:
 </p>
 <pre class="code">
 define host {
@@ -70,7 +70,7 @@ define service {
 </pre>
 
 <p>
-Diese beiden Templates können nun über “use srv-pnp” in der Service-Definition oder “use host-pnp” in der Host-Definition verwendet werden. Wenn Sie die Schnellstart-Installationsanleitungen benutzt haben, können Sie beispielsweise in der Datei localhost.cfg die Definitionen wie folgt erweitern:
+Diese beiden Templates k&ouml;nnen nun &uuml;ber “use srv-pnp” in der Service-Definition oder “use host-pnp” in der Host-Definition verwendet werden. Wenn Sie die Schnellstart-Installationsanleitungen benutzt haben, k&ouml;nnen Sie beispielsweise in der Datei localhost.cfg die Definitionen wie folgt erweitern:
 
 </p>
 <pre class="code">define host{
@@ -102,19 +102,19 @@ Die Links auf die richtigen URLs werden automagisch erstellt.
 
 <p>
 
-Außerdem gibt es die Möglichkeit, die Graphen bereits in der Statusübersicht beim Überfahren des “Action Url Icons” mit der Maus einzublenden.
+Außerdem gibt es die M&ouml;glichkeit, die Graphen bereits in der Status&uuml;bersicht beim &Uuml;berfahren des “Action Url Icons” mit der Maus einzublenden.
 </p>
 
 <p>
-Ermöglicht wird dies durch die <a href="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html"  rel="nofollow">CGI Includes</a>, die es uns erlauben, Javascript-Code an geeigneter Stelle im Seitenkopf der Statusübersicht einzubinden ( status.cgi ). 
+Erm&ouml;glicht wird dies durch die <a href="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html" class="urlextern" title="http://nagios.sourceforge.net/docs/3_0/cgiincludes.html"  rel="nofollow">CGI Includes</a>, die es uns erlauben, Javascript-Code an geeigneter Stelle im Seitenkopf der Status&uuml;bersicht einzubinden ( status.cgi ). 
 </p>
 
 <p>
-In den PNP-Quellen ist die Datei <code>contrib/ssi/status-header.ssi</code> bereits enthalten, die verwendeten URLs müssen aber unter Umständen angepasst werden. Wir gehen hier davon aus, dass PNP über <code>/pnpnagios/index.php</code> erreichbar ist.
+In den PNP-Quellen ist die Datei <code>contrib/ssi/status-header.ssi</code> bereits enthalten, die verwendeten URLs m&uuml;ssen aber unter Umst&auml;nden angepasst werden. Wir gehen hier davon aus, dass PNP &uuml;ber <code>/pnpnagios/index.php</code> erreichbar ist.
 </p>
 
 <p>
-Die besagte Datei muss in das Verzeichnis <code>/usr/local/nagios/share/ssi/</code> kopiert werden und darf <strong>NICHT</strong> ausführbar sein. Nagios würde die Datei sonst wirklich wie ein <acronym title="Common Gateway Interface">CGI</acronym> behandeln und ausführen, was aber in diesem Fall zu Fehlern führen würde. Die Apache-Admins mögen bitte “Nagios <acronym title="Server Side Includes">SSI</acronym>” nicht mit “Apache <acronym title="Server Side Includes">SSI</acronym>” in Verbindung bringen. Beides hat nichts miteinander zu tun. 
+Die besagte Datei muss in das Verzeichnis <code>/usr/local/nagios/share/ssi/</code> kopiert werden und darf <strong>NICHT</strong> ausf&uuml;hrbar sein. Nagios w&uuml;rde die Datei sonst wirklich wie ein <acronym title="Common Gateway Interface">CGI</acronym> behandeln und ausf&uuml;hren, was aber in diesem Fall zu Fehlern f&uuml;hren w&uuml;rde. Die Apache-Admins m&ouml;gen bitte “Nagios <acronym title="Server Side Includes">SSI</acronym>” nicht mit “Apache <acronym title="Server Side Includes">SSI</acronym>” in Verbindung bringen. Beides hat nichts miteinander zu tun. 
 </p>
 
 <p>
@@ -135,13 +135,13 @@ define service {
 </pre>
 
 <p>
-Nach einem Restart von Nagios (nach Anpassung der Definitionen) sieht das Ergebnis ungefähr so aus:<br/>
+Nach einem Restart von Nagios (nach Anpassung der Definitionen) sieht das Ergebnis ungef&auml;hr so aus:<br/>
 
 <a href="/_detail/popup.png?id=de%3Apnp-0.6%3Awebfe" class="media" title="popup.png"><img src="/_media/popup.png?w=200" class="media" alt="" width="200" /></a>
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/webfe_cfg" class="wikilink1" title="de:pnp-0.6:webfe_cfg">Konfiguration Web-Frontend</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/webfe_cfg" class="wikilink1" title="de:pnp-0.6:webfe_cfg">Konfiguration Web-Frontend</a>
 
 </p>
 

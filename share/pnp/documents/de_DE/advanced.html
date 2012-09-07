@@ -18,11 +18,11 @@ Rein technisch ist diese Frage nicht wichtig. PNP kann auf den Slaves sowie auf 
 </p>
 
 <p>
-Wird PNP auf dem Master betrieben, ist jedoch bei der Übergabe der Daten via send_nsca von den Slave-Servern zum Master darauf zu achten, dass auch die Performance-Daten übergeben werden. Weiterhin kommt auf dem Master oft nicht das Original-Check-Command zum Einsatz. 
+Wird PNP auf dem Master betrieben, ist jedoch bei der &Uuml;bergabe der Daten via send_nsca von den Slave-Servern zum Master darauf zu achten, dass auch die Performance-Daten &uuml;bergeben werden. Weiterhin kommt auf dem Master oft nicht das Original-Check-Command zum Einsatz. 
 </p>
 
 <p>
-Damit nun aber PNP auf dem Master noch erkennen kann, welches Check-Command auf den Slaves die Daten ermittelt hat, reagiert process_perfdata.pl auf ein zusätzliches Feld am Ende der Performance-Daten.
+Damit nun aber PNP auf dem Master noch erkennen kann, welches Check-Command auf den Slaves die Daten ermittelt hat, reagiert process_perfdata.pl auf ein zus&auml;tzliches Feld am Ende der Performance-Daten.
 </p>
 <pre class="code">OK - 127.0.0.1: rta 2.687ms, lost 0% | rta=2.687ms;3000.000;5000.000;0; pl=0%;80;100;; [check_icmp]</pre>
 
@@ -61,11 +61,11 @@ define command{
 
 <p>
 
-Das Plugin <a href="http://my-plugin.de/wiki/projects/check_multi/start" class="urlextern" title="http://my-plugin.de/wiki/projects/check_multi/start"  rel="nofollow">check_multi</a> ist eines der ersten Plugins, das die Funktionen von Nagios 3.0 richtig ausschöpft. Check_Multi ist in der Lage, mehrere Nagios-Plugins auszuführen, aber für Nagios als einen Service darzustellen. Die Ausgabe von check_multi erfolgt über mehrere Zeilen, um die Masse an Informationen wieder darstellen zu können.
+Das Plugin <a href="http://my-plugin.de/wiki/projects/check_multi/start" class="urlextern" title="http://my-plugin.de/wiki/projects/check_multi/start"  rel="nofollow">check_multi</a> ist eines der ersten Plugins, das die Funktionen von Nagios 3.0 richtig aussch&ouml;pft. Check_Multi ist in der Lage, mehrere Nagios-Plugins auszuf&uuml;hren, aber f&uuml;r Nagios als einen Service darzustellen. Die Ausgabe von check_multi erfolgt &uuml;ber mehrere Zeilen, um die Masse an Informationen wieder darstellen zu k&ouml;nnen.
 </p>
 
 <p>
-Daraus ergaben sich jedoch einige Schwierigkeiten für PNP. PNP muss aus den Performance-Daten wieder die Daten der einzelnen Plugins ermitteln können. Zusammen mit Matthias Flacke, dem Entwickler von check_multi, haben wir jedoch recht schnell eine Möglichkeit gefunden, die Daten wieder sauber den einzelnen Plugins zuzuordnen.
+Daraus ergaben sich jedoch einige Schwierigkeiten f&uuml;r PNP. PNP muss aus den Performance-Daten wieder die Daten der einzelnen Plugins ermitteln k&ouml;nnen. Zusammen mit Matthias Flacke, dem Entwickler von check_multi, haben wir jedoch recht schnell eine M&ouml;glichkeit gefunden, die Daten wieder sauber den einzelnen Plugins zuzuordnen.
 </p>
 
 <p>
@@ -73,7 +73,7 @@ Daraus ergaben sich jedoch einige Schwierigkeiten für PNP. PNP muss aus den Per
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/rrdcached" class="wikilink1" title="de:pnp-0.6:rrdcached">rrdcached-Unterstützung</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/rrdcached" class="wikilink1" title="de:pnp-0.6:rrdcached">rrdcached-Unterst&uuml;tzung</a>
 
 </p>
 

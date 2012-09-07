@@ -90,7 +90,7 @@ string <strong>rrd::area</strong> ( $vname, $color, [ $text ], [ $stack ] )
 <pre class="code php"><span class="re0">$def</span> <span class="sy0">.=</span> rrd<span class="sy0">::</span><span class="me2">area</span><span class="br0">&#40;</span><span class="st_h">'var1'</span><span class="sy0">,</span> <span class="st_h">'#ff00ff'</span><span class="sy0">,</span> <span class="st_h">'Load'</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre>
 
 <p>
-Eine Fläche mit dem Label “Load”
+Eine Fl&auml;che mit dem Label “Load”
 </p>
 
 <p>
@@ -132,7 +132,7 @@ Liefert eine Farbe aus der <acronym title="HyperText Markup Language">HTML</acro
 </p>
 
 <p>
-Beginnend mit PNP 0.6.18 akzeptiert die Funktion ein drittes Argument, das auf Farbschemadefinitionen in <code>config.php</code> verweist (oder in <code>config_local.php</code>, die bei Updates nicht überschrieben wird). Dort finden Sie das Array $scheme[], z.B. 
+Beginnend mit PNP 0.6.18 akzeptiert die Funktion ein drittes Argument, das auf Farbschemadefinitionen in <code>config.php</code> verweist (oder in <code>config_local.php</code>, die bei Updates nicht &uuml;berschrieben wird). Dort finden Sie das Array $scheme[], z.B. 
 </p>
 <pre class="code">$scheme[&#039;Reds&#039;] = array (...)</pre>
 
@@ -144,7 +144,7 @@ Im Template definieren Sie
 rrd:color ($key, &#039;&#039;, $schema);</pre>
 
 <p>
-Aus diese Weise wählen Sie den Wert von $scheme[&#039;Reds&#039;][$key]. Falls $key nicht innerhalb des Arrays liegt oder der Name nicht korrekt ist (<strong>case-sensitiv</strong>), dann wird die Standardpalette verwendet.
+Aus diese Weise w&auml;hlen Sie den Wert von $scheme[&#039;Reds&#039;][$key]. Falls $key nicht innerhalb des Arrays liegt oder der Name nicht korrekt ist (<strong>case-sensitiv</strong>), dann wird die Standardpalette verwendet.
 </p>
 
 </div>
@@ -179,8 +179,8 @@ string <strong>rrd::cut</strong> ( $text, $length )
 <pre class="code php"><span class="re0">$label</span> <span class="sy0">=</span> rrd<span class="sy0">::</span><span class="me2">cut</span><span class="br0">&#40;</span><span class="re0">$LABEL</span><span class="br0">&#91;</span>0<span class="br0">&#93;</span><span class="sy0">,</span> 18<span class="br0">&#41;</span><span class="sy0">;</span></pre>
 
 <p>
-Schneidet einen Text auf eine gegebene Länge $length ab oder füllt wenn nötig auf $length auf.
-Diese Funktion ist hilfreich, wenn die Legende ausgerichtet werden soll, aber die Länge des Labels nicht bekannt ist.
+Schneidet einen Text auf eine gegebene L&auml;nge $length ab oder f&uuml;llt wenn n&ouml;tig auf $length auf.
+Diese Funktion ist hilfreich, wenn die Legende ausgerichtet werden soll, aber die L&auml;nge des Labels nicht bekannt ist.
 </p>
 
 </div>

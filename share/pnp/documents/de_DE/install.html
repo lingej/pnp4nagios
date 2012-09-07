@@ -6,7 +6,7 @@
 
 <p>
 
-Im Folgenden wird die Installation von PNP beschrieben. Dabei wird davon ausgegangen, dass Nagios aus den Sourcen übersetzt und im Verzeichnis /usr/local/nagios installiert wurde.<br/>
+Im Folgenden wird die Installation von PNP beschrieben. Dabei wird davon ausgegangen, dass Nagios aus den Sourcen &uuml;bersetzt und im Verzeichnis /usr/local/nagios installiert wurde.<br/>
 
 <strong>Achtung:</strong> Die Beschreibung bezieht sich auf die Developer-Version PNP 0.6.0.<br/>
 
@@ -20,7 +20,7 @@ Bitte vergessen Sie nicht, dass PNP nach der Installation noch konfiguriert werd
 
 <p>
 
-Die Installation von PNP wird wie bei Nagios auch über <a href="http://de.wikipedia.org/wiki/Makefile" class="interwiki iw_wpde" title="http://de.wikipedia.org/wiki/Makefile">Makefile</a>s gesteuert. Dabei wird durch den Aufruf von ./configure das System analysiert und die ermittelten Werte in Makefiles übernommen.
+Die Installation von PNP wird wie bei Nagios auch &uuml;ber <a href="http://de.wikipedia.org/wiki/Makefile" class="interwiki iw_wpde" title="http://de.wikipedia.org/wiki/Makefile">Makefile</a>s gesteuert. Dabei wird durch den Aufruf von ./configure das System analysiert und die ermittelten Werte in Makefiles &uuml;bernommen.
 </p>
 
 <p>
@@ -41,7 +41,7 @@ Im Verzeichnis pnp4nagios wird nun ./configure aufgerufen.
 
 <p>
 
-<strong>Hinweis:</strong> Ohne weitere Optionen werden als Benutzer und Gruppe “nagios” verwendet. Bei abweichenden Werten sind die Parameter ”--with-nagios-user” und ”--with-nagios-group” zu benutzen. Im Falle von Icinga könnte der Aufruf so aussehen
+<strong>Hinweis:</strong> Ohne weitere Optionen werden als Benutzer und Gruppe “nagios” verwendet. Bei abweichenden Werten sind die Parameter ”--with-nagios-user” und ”--with-nagios-group” zu benutzen. Im Falle von Icinga k&ouml;nnte der Aufruf so aussehen
 
 </p>
 <pre class="code">
@@ -49,7 +49,7 @@ Im Verzeichnis pnp4nagios wird nun ./configure aufgerufen.
 </pre>
 
 <p>
-Es laufen einige Zeilen über den Bildschirm. Wichtig ist die Ausgabe zum Schluss.
+Es laufen einige Zeilen &uuml;ber den Bildschirm. Wichtig ist die Ausgabe zum Schluss.
 </p>
 <pre class="code">
 *** Configuration summary for pnp4nagios-0.6.2 23-12-2009 ***
@@ -75,7 +75,7 @@ Es laufen einige Zeilen über den Bildschirm. Wichtig ist die Ausgabe zum Schlus
   type &#039;make all&#039; to compile.</pre>
 
 <p>
-Die angezeigten Pfade sollten nun geprüft werden. Falls die gezeigten Werte nicht passen, kann durch einen erneuten Aufruf von ./configure mit den passenden Optionen Abhilfe geschaffen werden.<br/>
+Die angezeigten Pfade sollten nun gepr&uuml;ft werden. Falls die gezeigten Werte nicht passen, kann durch einen erneuten Aufruf von ./configure mit den passenden Optionen Abhilfe geschaffen werden.<br/>
 
 <strong>ACHTUNG:</strong> Nachdem es immer wieder Schwierigkeiten gibt: “Location of rrdtool binary” bedeutet inkl. Namen des Binary! Bei Bedarf kann man das beim ./configure als Parameter angeben:
 
@@ -85,7 +85,7 @@ Die angezeigten Pfade sollten nun geprüft werden. Falls die gezeigten Werte nic
 
 <p>
 
-zeigt, welche Optionen möglich sind.<br/>
+zeigt, welche Optionen m&ouml;glich sind.<br/>
 <br/>
 
 Ein
@@ -116,16 +116,16 @@ Optional kann noch
 <pre class="code">make install-config</pre>
 
 <p>
-aufgerufen werden. Damit werden Config-Files für process_perfdata.pl und npcd nach etc/pnp kopiert. 
+aufgerufen werden. Damit werden Config-Files f&uuml;r process_perfdata.pl und npcd nach etc/pnp kopiert. 
 </p>
 
 <p>
-Wird das INIT Script für den NPCD benötigt, so sorgt
+Wird das INIT Script f&uuml;r den NPCD ben&ouml;tigt, so sorgt
 </p>
 <pre class="code">make install-init</pre>
 
 <p>
-für die Installation nach /etc/init.d 
+f&uuml;r die Installation nach /etc/init.d 
 </p>
 
 <p>
@@ -134,28 +134,36 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 <pre class="code">make fullinstall</pre>
 
 <p>
-<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei für den Web-Server ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
+<strong>Hinweis:</strong> Wie oben schon beschrieben wird standarm&auml;ssig mit den Nagios Einstellungen installiert. Wird Icinga genutzt muss in der Datei ”/etc/apache2/conf.d/pnp4nagios.conf” der Pfad zum AuthUserFile angepasst werden (Pfad evtl. je nach Distri anpassen):
+</p>
+<pre class="code">
+#       AuthUserFile /usr/local/nagios/etc/htpasswd.users
+        AuthUserFile /usr/local/icinga/etc/htpasswd.users
+</pre>
+
+<p>
+<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server bzw. &auml;ndern des AuthUserFile ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
 </p>
 
 </div>
-<!-- SECTION "Make und Co" [386-3752] -->
+<!-- SECTION "Make und Co" [386-4174] -->
 <h2><a name="update" id="update">Update</a></h2>
 <div class="level2">
 
 <p>
 
 Das Update einer 0.6.x-Version funktioniert (fast) genauso wie die Installation. Bitte beachten Sie, dass Sie beim ”./configure” die gleichen Optionen wie bei der Erstinstallation benutzen!
-Bitte prüfen Sie außerdem, ob Sie Änderungen im Verzeichnis <code>share/templates.dist</code> vorgenommen haben. Eigene Templates sollten im Ordner <code>share/templates</code> abgelegt werden.<br/>
+Bitte pr&uuml;fen Sie außerdem, ob Sie &Auml;nderungen im Verzeichnis <code>share/templates.dist</code> vorgenommen haben. Eigene Templates sollten im Ordner <code>share/templates</code> abgelegt werden.<br/>
 
-<strong>Achtung</strong>:  Wenn Sie in der Datei config.php Änderungen vorgenommen haben, sollten Sie diese Datei sichern, bevor sie bei einem “make install-config” überschrieben wird.
+<strong>Achtung</strong>:  Wenn Sie in der Datei config.php &Auml;nderungen vorgenommen haben, sollten Sie diese Datei sichern, bevor sie bei einem “make install-config” &uuml;berschrieben wird.
 </p>
 
 <p>
-Sie können die Schritte <code>make install-webconf</code> und <code>make install-init</code> überspringen, denn zwischen den 0.6.x-Versionen gab es an dieser Stelle keine Änderungen.
+Sie k&ouml;nnen die Schritte <code>make install-webconf</code> und <code>make install-init</code> &uuml;berspringen, denn zwischen den 0.6.x-Versionen gab es an dieser Stelle keine &Auml;nderungen.
 </p>
 
 </div>
-<!-- SECTION "Update" [3753-4488] -->
+<!-- SECTION "Update" [4175-4910] -->
 <h2><a name="die_komponenten" id="die_komponenten">Die Komponenten</a></h2>
 <div class="level2">
 
@@ -165,7 +173,7 @@ Nach der Installation sind einige Komponenten von PNP an die passenden Stellen i
 </p>
 
 <p>
-Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files für das Web-Frontend in 
+Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files f&uuml;r das Web-Frontend in 
 
 </p>
 <pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
@@ -186,15 +194,15 @@ Beispiel-Config-Files mit der Dateierweiterung <code>-sample</code> in
 
 <p>
 
-Die Config-Datei config.php für das Web-Frontend in 
+Die Config-Datei config.php f&uuml;r das Web-Frontend in 
 
 </p>
 <pre class="code"> /usr/local/pnp4nagios/etc</pre>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">Konfiguration</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">Konfiguration</a>
 
 </p>
 
 </div>
-<!-- SECTION "Die Komponenten" [4489-] -->
+<!-- SECTION "Die Komponenten" [4911-] -->

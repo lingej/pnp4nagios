@@ -1,22 +1,22 @@
 
 
 
-<h1><a name="pruefen_der_installation" id="pruefen_der_installation">Prüfen der Installation</a></h1>
+<h1><a name="pruefen_der_installation" id="pruefen_der_installation">Pr&uuml;fen der Installation</a></h1>
 <div class="level1">
 
 <p>
 
 Wenn bis jetzt alles sauber funktioniert hat, kann PNP zum ersten Mal im Browser aufgerufen werden.
-Bei der Installation mit den Standardeinstellungen erfolgt der Aufruf über <a href="http://%3CServername%3E/pnp4nagios/" class="urlextern" title="http://&lt;Servername&gt;/pnp4nagios/"  rel="nofollow">http://&lt;Servername&gt;/pnp4nagios/</a>.
+Bei der Installation mit den Standardeinstellungen erfolgt der Aufruf &uuml;ber <a href="http://%3CServername%3E/pnp4nagios/" class="urlextern" title="http://&lt;Servername&gt;/pnp4nagios/"  rel="nofollow">http://&lt;Servername&gt;/pnp4nagios/</a>.
 </p>
 
 <p>
-Beim ersten Aufruf sieht man die Seite “PNP4Nagios Environment Tests”, die verschiedene Tests von notwendigen Komponenten enthält. Offenkundig sollten alle Tests erfolgreich verlaufen, bevor es weitergehen kann. Bitte beachten Sie die Hinweise auf der Seite.<br/>
+Beim ersten Aufruf sieht man die Seite “PNP4Nagios Environment Tests”, die verschiedene Tests von notwendigen Komponenten enth&auml;lt. Offenkundig sollten alle Tests erfolgreich verlaufen, bevor es weitergehen kann. Bitte beachten Sie die Hinweise auf der Seite.<br/>
 
 </p>
 
 <p>
-Sind alle Tests erfolgreich verlaufen, so kann die Datei <code>pnp4nagios/share/install.php</code> gelöscht oder umbenannt werden. Erst dann ist das Webinterface erreichbar.
+Sind alle Tests erfolgreich verlaufen, so kann die Datei <code>pnp4nagios/share/install.php</code> gel&ouml;scht oder umbenannt werden. Erst dann ist das Webinterface erreichbar.
 </p>
 
 <p>
@@ -24,41 +24,41 @@ Alternativ kann eine Datei <code>pnp4nagios/share/install.ignore</code> angelegt
 </p>
 
 <p>
-Ohne weitere Optionen sucht PNP nach RRD- und <acronym title="Extensible Markup Language">XML</acronym>-Dateien in <code>pnp4nagios/var/perfdata/</code> und zeigt alle Graphen des ersten Hosts in der Übersicht an.
+Ohne weitere Optionen sucht PNP nach RRD- und <acronym title="Extensible Markup Language">XML</acronym>-Dateien in <code>pnp4nagios/var/perfdata/</code> und zeigt alle Graphen des ersten Hosts in der &Uuml;bersicht an.
 </p>
 
 <p>
-ACHTUNG: Direkt nach dem (Neu-)Start von Nagios nach dem Aktivieren der Verarbeitung von Performance-Daten wird der Aufruf im Browser zu Fehlermeldungen führen, weil zunächst Performance-Daten gesammelt und in den RRD-Dateien abgelegt werden müssen. Abhängig vom Check-Intervall kann es einige Zeit dauern, bis die ersten Graphen angezeigt werden können.
+ACHTUNG: Direkt nach dem (Neu-)Start von Nagios nach dem Aktivieren der Verarbeitung von Performance-Daten wird der Aufruf im Browser zu Fehlermeldungen f&uuml;hren, weil zun&auml;chst Performance-Daten gesammelt und in den RRD-Dateien abgelegt werden m&uuml;ssen. Abh&auml;ngig vom Check-Intervall kann es einige Zeit dauern, bis die ersten Graphen angezeigt werden k&ouml;nnen.
 </p>
 
 </div>
-<!-- SECTION "Prüfen der Installation" [1-1347] -->
+<!-- SECTION "Pr&uuml;fen der Installation" [1-1347] -->
 <h2><a name="logfile" id="logfile">Logfile</a></h2>
 <div class="level2">
 
 <p>
 
-Während der Installation wurde durch den Aufruf von <code>make install-config</code> ein Beispiel-Config-File <code>etc/process_perfdata.cfg-sample</code> erzeugt. Die Werte in der sample-Datei entsprechen den Default-Werten, die auch in <code>process_perfdata.pl</code> fest hinterlegt sind, daher ist die <code>process_perfdata.cfg</code> für den Betrieb nicht zwingend notwendig.
+W&auml;hrend der Installation wurde durch den Aufruf von <code>make install-config</code> ein Beispiel-Config-File <code>etc/process_perfdata.cfg-sample</code> erzeugt. Die Werte in der sample-Datei entsprechen den Default-Werten, die auch in <code>process_perfdata.pl</code> fest hinterlegt sind, daher ist die <code>process_perfdata.cfg</code> f&uuml;r den Betrieb nicht zwingend notwendig.
 </p>
 
 <p>
-Die Datei <code>process_perfdata.cfg-sample</code> kann somit als Vorlage für die <code>process_perfdata.cfg</code> dienen, die immer dann notwendig ist, wenn vom Standard abweichende Werte eingestellt werden sollen.
+Die Datei <code>process_perfdata.cfg-sample</code> kann somit als Vorlage f&uuml;r die <code>process_perfdata.cfg</code> dienen, die immer dann notwendig ist, wenn vom Standard abweichende Werte eingestellt werden sollen.
 </p>
 
 <p>
-In der <code>process_perfdata.<strong>cfg</strong></code> lässt sich das Verhalten von <code>process_perfdata.pl</code> vielfach beeinflussen.
+In der <code>process_perfdata.<strong>cfg</strong></code> l&auml;sst sich das Verhalten von <code>process_perfdata.pl</code> vielfach beeinflussen.
 </p>
 
 <p>
-Die wichtigsten Optionen für die Inbetriebnahme sind LOG_LEVEL und LOG_FILE. Im laufenden Betrieb sollte der Log-Level immer auf 0 gesetzt sein, um die Performance von process_perfdata.pl nicht durch unnötiges Schreiben von Logfiles zu beeinträchtigen.
+Die wichtigsten Optionen f&uuml;r die Inbetriebnahme sind LOG_LEVEL und LOG_FILE. Im laufenden Betrieb sollte der Log-Level immer auf 0 gesetzt sein, um die Performance von process_perfdata.pl nicht durch unn&ouml;tiges Schreiben von Logfiles zu beeintr&auml;chtigen.
 </p>
 
 <p>
-Während der Inbetriebnahme sollte man jedoch den <code>LOG_LEVEL</code> auf “2” setzen, um zu sehen, was process_perfdata.pl bei der Verarbeitung der Performance-Daten so alles anstellt.
+W&auml;hrend der Inbetriebnahme sollte man jedoch den <code>LOG_LEVEL</code> auf “2” setzen, um zu sehen, was process_perfdata.pl bei der Verarbeitung der Performance-Daten so alles anstellt.
 </p>
 
 <p>
-Spätestens bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:pnp-0.6:about">Support Anfragen</a> im Forum oder auf den Mailinglisten werden wir sowohl nach Auszügen aus dem perfdata.log als auch nach der Ausgabe des <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config-Scripts</a> fragen. Es empfiehlt sich also, diese Angaben gleich mitzuliefern <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
+Sp&auml;testens bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:pnp-0.6:about">Support Anfragen</a> im Forum oder auf den Mailinglisten werden wir sowohl nach Ausz&uuml;gen aus dem perfdata.log als auch nach der Ausgabe des <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config-Scripts</a> fragen. Es empfiehlt sich also, diese Angaben gleich mitzuliefern <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
 </p>
 
 </div>
@@ -68,7 +68,7 @@ Spätestens bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:
 
 <p>
 
-Einige grundlegende Einstellungen sind zu prüfen.
+Einige grundlegende Einstellungen sind zu pr&uuml;fen.
 </p>
 
 <p>
@@ -76,17 +76,17 @@ Einige grundlegende Einstellungen sind zu prüfen.
 </p>
 
 <p>
-<code>process_perfdata.pl</code> legt für jeden Host unter var/perfdata ein neues Verzeichnis an. In diesem Verzeichnis wird wiederum für jeden Service eine RRD-Datenbank und ein <acronym title="Extensible Markup Language">XML</acronym>-File erstellt. Für den Host-Check lautet der Dateinamen <code>_HOST_.xml</code> bzw. <code>_HOST_.rrd</code>.<br/>
+<code>process_perfdata.pl</code> legt f&uuml;r jeden Host unter var/perfdata ein neues Verzeichnis an. In diesem Verzeichnis wird wiederum f&uuml;r jeden Service eine RRD-Datenbank und ein <acronym title="Extensible Markup Language">XML</acronym>-File erstellt. F&uuml;r den Host-Check lautet der Dateinamen <code>_HOST_.xml</code> bzw. <code>_HOST_.rrd</code>.<br/>
 
-Falls Graphen urplötzlich nicht mehr weitergeführt werden, dann hilft vielleicht ein Blick in die betroffene <acronym title="Extensible Markup Language">XML</acronym>-Datei. Dort gibt es u.a. die Tags &lt;RC&gt; und &lt;TXT&gt;. &lt;RC&gt; zeigt den Return-Code des RRDtool-Updates der RRD-Datei, &lt;TXT&gt; eine textuelle Beschreibung.<br/>
+Falls Graphen urpl&ouml;tzlich nicht mehr weitergef&uuml;hrt werden, dann hilft vielleicht ein Blick in die betroffene <acronym title="Extensible Markup Language">XML</acronym>-Datei. Dort gibt es u.a. die Tags &lt;RC&gt; und &lt;TXT&gt;. &lt;RC&gt; zeigt den Return-Code des RRDtool-Updates der RRD-Datei, &lt;TXT&gt; eine textuelle Beschreibung.<br/>
 
-Allerdings liefern nicht alle Checks Performance-Daten, das gilt u.a. für “check_ping”, die Alternative “check_icmp” dagegen erzeugt Daten (ab Nagios-Plugin-Version 1.4.12 liefert auch check_ping Performance-Daten).<br/>
+Allerdings liefern nicht alle Checks Performance-Daten, das gilt u.a. f&uuml;r “check_ping”, die Alternative “check_icmp” dagegen erzeugt Daten (ab Nagios-Plugin-Version 1.4.12 liefert auch check_ping Performance-Daten).<br/>
 
-Teilweise muss man zusätzliche Optionen aktivieren, damit Performance-Daten ausgegeben werden. Evtl. kann das auch durch ein <a href="/de/pnp-0.6/wrapper" class="wikilink1" title="de:pnp-0.6:wrapper">Wrapper-Script</a> geändert werden.<br/>
+Teilweise muss man zus&auml;tzliche Optionen aktivieren, damit Performance-Daten ausgegeben werden. Evtl. kann das auch durch ein <a href="/de/pnp-0.6/wrapper" class="wikilink1" title="de:pnp-0.6:wrapper">Wrapper-Script</a> ge&auml;ndert werden.<br/>
 
 In den Detailinformationen zu jedem Host/Service gibt es das Feld “Performance-Data”. Wenn dort keine Daten stehen, dann werden im jeweiligen Verzeichnis keine Dateien erzeugt und PNP kann deshalb auch keine grafischen Auswertungen liefern!<br/>
 
-Das folgende Bild zeigt die Informationen zu einem “PING”-Service. Das blaue Feld enthält den vom Plugin gelieferten Text, das rote die Performance-Daten, die Nagios erkannt hat.<br/>
+Das folgende Bild zeigt die Informationen zu einem “PING”-Service. Das blaue Feld enth&auml;lt den vom Plugin gelieferten Text, das rote die Performance-Daten, die Nagios erkannt hat.<br/>
 
 <a href="/_detail/srv_info.png?id=de%3Apnp-0.6%3Averify" class="media" title="srv_info.png"><img src="/_media/srv_info.png?w=250" class="media" title="Informationen zu &quot;PING&quot;" alt="Informationen zu &quot;PING&quot;" width="250" /></a>
 </p>
@@ -96,7 +96,7 @@ Das folgende Bild zeigt die Informationen zu einem “PING”-Service. Das blaue
 </p>
 
 <p>
-In der Config-Datei für process_perfdata.pl, der <code>etc/process_perfdata.<strong>cfg</strong></code> lässt sich der Debug-Level erhöhen. Die Verarbeitung der Daten wird nun in <code>var/perfdata.log</code> bzw. im Syslog protokolliert.
+In der Config-Datei f&uuml;r process_perfdata.pl, der <code>etc/process_perfdata.<strong>cfg</strong></code> l&auml;sst sich der Debug-Level erh&ouml;hen. Die Verarbeitung der Daten wird nun in <code>var/perfdata.log</code> bzw. im Syslog protokolliert.
 </p>
 
 <p>
@@ -108,7 +108,7 @@ siehe <a href="/de/pnp-0.6/about#anforderungen" class="wikilink1" title="de:pnp-
 </p>
 
 <p>
-4. Einige Graphen werden angezeigt, andere melden den Fehler <code>“parser error: Input is not proper UTF-8”</code> oder etwas ähnliches. Bitte prüfen Sie, ob die Daten “spezielle” Zeichen enthalten, die nicht im <acronym title="American Standard Code for Information Interchange">ASCII</acronym>-Zeichensatz vorhanden sind (Umlaute, etc). Versuchen Sie, in <code>process_perfdata.cfg</code> den Wert von <code><acronym title="Extensible Markup Language">XML</acronym>_ENC</code> auf <code><acronym title="International Organization for Standardization">ISO</acronym>-8859-1</code> oder einen anderen passenden Wert zu setzen. Warten Sie, bis die xml-Datei neu erzeugt wurde und probieren Sie es nochmal.
+4. Einige Graphen werden angezeigt, andere melden den Fehler <code>“parser error: Input is not proper UTF-8”</code> oder etwas &auml;hnliches. Bitte pr&uuml;fen Sie, ob die Daten “spezielle” Zeichen enthalten, die nicht im <acronym title="American Standard Code for Information Interchange">ASCII</acronym>-Zeichensatz vorhanden sind (Umlaute, etc). Versuchen Sie, in <code>process_perfdata.cfg</code> den Wert von <code><acronym title="Extensible Markup Language">XML</acronym>_ENC</code> auf <code><acronym title="International Organization for Standardization">ISO</acronym>-8859-1</code> oder einen anderen passenden Wert zu setzen. Warten Sie, bis die xml-Datei neu erzeugt wurde und probieren Sie es nochmal.
 </p>
 
 <p>
@@ -117,15 +117,15 @@ siehe <a href="/de/pnp-0.6/about#anforderungen" class="wikilink1" title="de:pnp-
 
 <p>
 6. verify_pnp_config
-Das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> ermöglicht die Prüfung von Konfigurationseinstellungen und zeigt, ob Performance-Daten vorhanden sind.
+Das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a> erm&ouml;glicht die Pr&uuml;fung von Konfigurationseinstellungen und zeigt, ob Performance-Daten vorhanden sind.
 </p>
 
 <p>
-7. Es scheint zu funktionieren, aber es bleiben einige Dateien Spool-Verzeichnis stehen (/usr/local/pnp4nagios/var/spool/&lt;perfdata_filename&gt;-PID-&lt;process_perfdata_pid&gt;). Wenn <code>process_perdata.pl</code> nicht in das Zielverzeichnis (/usr/local/pnp4nagios/share/perfdata/&lt;host&gt;) schreiben kann, wird es anhalten und die Quelldatei nicht löschen. Das erhöht die Größe des Spool-Verzeichnisses und die Verarbeitung der Performance-Daten verlangsamen. Dieses Problem kann auftreten, wenn Sie Verzeichnisse aus einer vorherigen Installation kopiert und/oder manuell Verzeichnisse angelegt haben und dabei die falschen Benutzer/Berechtigungen verwendet haben.
+7. Es scheint zu funktionieren, aber es bleiben einige Dateien Spool-Verzeichnis stehen (/usr/local/pnp4nagios/var/spool/&lt;perfdata_filename&gt;-PID-&lt;process_perfdata_pid&gt;). Wenn <code>process_perdata.pl</code> nicht in das Zielverzeichnis (/usr/local/pnp4nagios/share/perfdata/&lt;host&gt;) schreiben kann, wird es anhalten und die Quelldatei nicht l&ouml;schen. Das erh&ouml;ht die Gr&ouml;ße des Spool-Verzeichnisses und die Verarbeitung der Performance-Daten verlangsamen. Dieses Problem kann auftreten, wenn Sie Verzeichnisse aus einer vorherigen Installation kopiert und/oder manuell Verzeichnisse angelegt haben und dabei die falschen Benutzer/Berechtigungen verwendet haben.
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/verify_pnp_config" class="wikilink1" title="de:pnp-0.6:verify_pnp_config">verify_pnp_config.pl</a>
 
 </p>
 

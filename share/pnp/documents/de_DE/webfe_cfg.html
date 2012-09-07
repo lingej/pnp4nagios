@@ -6,8 +6,8 @@
 
 <p>
 
-Das Verhalten des PNP-Web-Frontend lässt sich über die Config-Datei <code>etc/config.php</code> beeinflussen.
-Diese Datei wird bei Updates von PNP immer wieder überschrieben, da die meisten Pfade und Optionen bereits durch <code>./configure</code> ermittelt werden.
+Das Verhalten des PNP-Web-Frontend l&auml;sst sich &uuml;ber die Config-Datei <code>etc/config.php</code> beeinflussen.
+Diese Datei wird bei Updates von PNP immer wieder &uuml;berschrieben, da die meisten Pfade und Optionen bereits durch <code>./configure</code> ermittelt werden.
 </p>
 
 <p>
@@ -32,7 +32,7 @@ Der Pfad zum RRDtool-Binary. Wird von <code>./configure</code> ermittelt.
 <hr />
 
 <p>
-Höhe und Breite der RRD-Graphen
+H&ouml;he und Breite der RRD-Graphen
 
 </p>
 <pre class="code"> $conf[&#039;graph_width&#039;] = &quot;500&quot;;
@@ -41,8 +41,8 @@ Höhe und Breite der RRD-Graphen
 
 <p>
 
-Bildschirmdimensionen ändern sich, Blattgrößen nicht. Um unterschiedliche Einstellungen zu ermöglichen, können für die Generierung von <acronym title="Portable Document Format">PDF</acronym>-Dateien eigene Werte definiert werden. Wenn diese Variablen nicht definiert sind, werden die Werte der Graphen benutzt.
-Höhe und Breite der RRD-Graphen bei PDFs
+Bildschirmdimensionen &auml;ndern sich, Blattgr&ouml;ßen nicht. Um unterschiedliche Einstellungen zu erm&ouml;glichen, k&ouml;nnen f&uuml;r die Generierung von <acronym title="Portable Document Format">PDF</acronym>-Dateien eigene Werte definiert werden. Wenn diese Variablen nicht definiert sind, werden die Werte der Graphen benutzt.
+H&ouml;he und Breite der RRD-Graphen bei PDFs
 
 </p>
 <pre class="code"> $conf[&#039;pdf_width&#039;] = &quot;675&quot;;
@@ -51,7 +51,7 @@ Höhe und Breite der RRD-Graphen bei PDFs
 
 <p>
 
-Zusätzliche Optionen, die bei jedem Aufruf von RRDTool mit übergeben werden. Beispielsweise <code>--slope-mode</code>, um die Graphen etwas zu glätten.
+Zus&auml;tzliche Optionen, die bei jedem Aufruf von RRDTool mit &uuml;bergeben werden. Beispielsweise <code>--slope-mode</code>, um die Graphen etwas zu gl&auml;tten.
 
 </p>
 <pre class="code"> $conf[&#039;graph_opt&#039;] = &quot;&quot;;</pre>
@@ -67,7 +67,7 @@ Der Pfad zu den von <code>process_perfdata.pl</code> erstellten RRD- und <acrony
 
 <p>
 
-Pfad zu den Config-Files für die <a href="/de/pnp-0.6/pages" class="wikilink1" title="de:pnp-0.6:pages">Pages</a>.
+Pfad zu den Config-Files f&uuml;r die <a href="/de/pnp-0.6/pages" class="wikilink1" title="de:pnp-0.6:pages">Pages</a>.
 
 </p>
 <pre class="code"> $conf[&#039;page_dir&#039;] = &quot;/usr/local/pnp4nagios/etc/pages/&quot;;</pre>
@@ -97,21 +97,21 @@ Basis-<acronym title="Uniform Resource Locator">URL</acronym> zu den Nagios CGIs
 <hr />
 
 <p>
-Liste von Usern, für die Links zu den Services des aktuellen Hosts angezeigt werden sollen.
+Liste von Usern, f&uuml;r die Links zu den Services des aktuellen Hosts angezeigt werden sollen.
 
 </p>
 <pre class="code"> $conf[&#039;allowed_for_service_links&#039;] = &quot;EVERYONE&quot;;</pre>
 <hr />
 
 <p>
-Liste von Usern, für die das Host-Suchfeld angezeigt werden soll.
+Liste von Usern, f&uuml;r die das Host-Suchfeld angezeigt werden soll.
 
 </p>
 <pre class="code"> $conf[&#039;allowed_for_host_search&#039;] = &quot;EVERYONE&quot;;</pre>
 <hr />
 
 <p>
-Wird PNP nur mit der Angabe eines Hosts ( index.php?host=&lt;myserver&gt; ) aufgerufen, so wird eine Übersicht aller Services angezeigt, wenn der User in dieser Liste enthalten ist.
+Wird PNP nur mit der Angabe eines Hosts ( index.php?host=&lt;myserver&gt; ) aufgerufen, so wird eine &Uuml;bersicht aller Services angezeigt, wenn der User in dieser Liste enthalten ist.
 
 </p>
 <pre class="code"> $conf[&#039;allowed_for_host_overview&#039;] = &quot;EVERYONE&quot;;</pre>
@@ -130,11 +130,11 @@ $views[] = array(&#039;title&#039; =&gt; &#039;One Year&#039;,  &#039;start&#039
 </pre>
 
 <p>
-Sie können hier auch weitere Views definieren, sollten aber dabei berücksichtigen, dass im Normalfall ALLE definierten Views angezeigt werden.
+Sie k&ouml;nnen hier auch weitere Views definieren, sollten aber dabei ber&uuml;cksichtigen, dass im Normalfall ALLE definierten Views angezeigt werden.
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/timeranges" class="wikilink1" title="de:pnp-0.6:timeranges">Timeranges</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/timeranges" class="wikilink1" title="de:pnp-0.6:timeranges">Timeranges</a>
 
 </p>
 

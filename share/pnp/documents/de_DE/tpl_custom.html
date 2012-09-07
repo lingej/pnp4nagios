@@ -6,16 +6,16 @@
 
 <p>
 
-Wie bereits unter ”<a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">Was sind Templates ?</a>” beschrieben, ist die Darstellung der Graphen abhängig vom verwendeten Check-Command.
+Wie bereits unter ”<a href="/de/pnp-0.6/tpl" class="wikilink1" title="de:pnp-0.6:tpl">Was sind Templates ?</a>” beschrieben, ist die Darstellung der Graphen abh&auml;ngig vom verwendeten Check-Command.
 </p>
 
 <p>
-Es gibt jedoch Situationen, in denen dieses Verhalten übersteuert werden muss, zum Beispiel dann wenn allgemeingültige Commands definiert wurden.
+Es gibt jedoch Situationen, in denen dieses Verhalten &uuml;bersteuert werden muss, zum Beispiel dann wenn allgemeing&uuml;ltige Commands definiert wurden.
 </p>
 
 <p>
-PNP, speziell process_perfdata.pl, sucht zur Laufzeit für jedes check_command im Verzeichnis etc/check_commands nach einer Config-Datei (&lt;check_command&gt;.cfg) und liest diese, wenn vorhanden, ein.
-Folgende Optionen können darin definiert werden:
+PNP, speziell process_perfdata.pl, sucht zur Laufzeit f&uuml;r jedes check_command im Verzeichnis etc/check_commands nach einer Config-Datei (&lt;check_command&gt;.cfg) und liest diese, wenn vorhanden, ein.
+Folgende Optionen k&ouml;nnen darin definiert werden:
 </p>
 
 </div>
@@ -35,7 +35,7 @@ define command {
 </pre>
 
 <p>
-Die Folge wäre, dass immer das Template check_nrpe.php verwendet werden würde, auch wenn auf dem zu überwachenden Server via NRPE ein ganz anderes Plugin aufgerufen wurde.
+Die Folge w&auml;re, dass immer das Template check_nrpe.php verwendet werden w&uuml;rde, auch wenn auf dem zu &uuml;berwachenden Server via NRPE ein ganz anderes Plugin aufgerufen wurde.
 </p>
 
 <p>
@@ -43,7 +43,7 @@ Da unser Beispiel-Command check_nrpe lautet, wird nach etc/check_commands/check_
 </p>
 
 <p>
-Eine Beispiel-Config wird bereits während der Installation mit der Dateierweiterung .cfg-sample in etc/check_commands gespeichert.
+Eine Beispiel-Config wird bereits w&auml;hrend der Installation mit der Dateierweiterung .cfg-sample in etc/check_commands gespeichert.
 </p>
 <pre class="code">
 # check_command check_nrpe!load!-w 4,4,4 -c 5,5,5
@@ -55,7 +55,7 @@ CUSTOM_TEMPLATE = 1
 </pre>
 
 <p>
-<code>CUSTOM_TEMPLATE = 1</code> sorgt dafür, dass nur der Inhalt von $ARG1$ als Template-Name verwendet wird. Da in diesem Beispiel $ARG1$ mit dem Wert “load” gefüllt ist, ergibt sich als Template-Name “load.php”
+<code>CUSTOM_TEMPLATE = 1</code> sorgt daf&uuml;r, dass nur der Inhalt von $ARG1$ als Template-Name verwendet wird. Da in diesem Beispiel $ARG1$ mit dem Wert “load” gef&uuml;llt ist, ergibt sich als Template-Name “load.php”
 </p>
 
 <p>
@@ -77,9 +77,9 @@ Diese Option hat nur Einfluss, wenn die RRD Datenbank neu erstellt wird.
 
 <p>
 
-Über die Option “DATATYPE” kann beeinflusst werden, mit welchem Datentyp die RRD-Datenbank angelegt werden soll.
-Default ist in diesem Fall “GAUGE”. Für fortlaufende Werte wird aber hier der Datentyp COUNTER benötigt.
-Normalerweise sollten Plugin-Entwickler für Daten von Typ Counter die Einheit “c” verwenden. Dies ist jedoch nicht immer der Fall.
+&Uuml;ber die Option “DATATYPE” kann beeinflusst werden, mit welchem Datentyp die RRD-Datenbank angelegt werden soll.
+Default ist in diesem Fall “GAUGE”. F&uuml;r fortlaufende Werte wird aber hier der Datentyp COUNTER ben&ouml;tigt.
+Normalerweise sollten Plugin-Entwickler f&uuml;r Daten von Typ Counter die Einheit “c” verwenden. Dies ist jedoch nicht immer der Fall.
 </p>
 
 <p>
@@ -95,7 +95,7 @@ Einzelnen Datenreihen spezielle Datentypen zuweisen
 <pre class="code">DATATYPE = GAUGE,GAUGE,COUNTER,COUNTER</pre>
 
 <p>
-Weitere Datentypen sind in der RRDTool-Dokumentation unter <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">rrdcreate</a> erklärt.
+Weitere Datentypen sind in der RRDTool-Dokumentation unter <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html"  rel="nofollow">rrdcreate</a> erkl&auml;rt.
 </p>
 
 <p>
@@ -109,7 +109,7 @@ Diese Option hat nur Einfluss, wenn die RRD Datenbank neu erstellt wird.
 
 <p>
 
-In einigen wenigen Situationen ist es notwendig, die für RRDTool gültigen Daten zu begrenzen.
+In einigen wenigen Situationen ist es notwendig, die f&uuml;r RRDTool g&uuml;ltigen Daten zu begrenzen.
 </p>
 
 <p>
@@ -118,13 +118,13 @@ Weitere Infos unter <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
 </p>
 
 <p>
-Berücksichtigen des Maximum-Wertes aus den Performance-Daten
+Ber&uuml;cksichtigen des Maximum-Wertes aus den Performance-Daten
 
 </p>
 <pre class="code">USE_MAX_ON_CREATE = 1</pre>
 
 <p>
-Berücksichtigen des Minimum-Wertes aus den Performance-Daten
+Ber&uuml;cksichtigen des Minimum-Wertes aus den Performance-Daten
 
 </p>
 <pre class="code">USE_MIN_ON_CREATE = 1</pre>
@@ -145,7 +145,7 @@ Die Option RRD_STORAGE_TYPE definiert die Art der Datenhaltung.
 </p>
 
 <p>
-Mögliche Werte sind MULTIPLE und SINGLE
+M&ouml;gliche Werte sind MULTIPLE und SINGLE
 </p>
 
 <p>
@@ -153,7 +153,7 @@ SINGLE: Eine RRD-Datenbank pro Service
 </p>
 
 <p>
-MULTIPLE: Ein oder mehrere RRD-Datenbanken pro Service. Für jede Datenreihe wird eine eigene RRD-Datenbank erstellt.
+MULTIPLE: Ein oder mehrere RRD-Datenbanken pro Service. F&uuml;r jede Datenreihe wird eine eigene RRD-Datenbank erstellt.
 </p>
 
 <p>
@@ -173,7 +173,7 @@ Diese Option hat nur Einfluss, wenn die RRD Datenbank neu erstellt wird.
 
 <p>
 
-<strong>Gültig ab PNP 0.6.1</strong>
+<strong>G&uuml;ltig ab PNP 0.6.1</strong>
 </p>
 <pre class="code">RRD_HEARTBEAT = 305</pre>
 
@@ -196,7 +196,7 @@ Diese Option hat nur Einfluss, wenn die RRD Datenbank neu erstellt wird.
 
 <p>
 
-In den meisten Situationen, kann man erwünsche Template Namen relativ einfach, durch die Verwendung geeignter command Objekt Definitionen, erhalten.
+In den meisten Situationen, kann man erw&uuml;nsche Template Namen relativ einfach, durch die Verwendung geeignter command Objekt Definitionen, erhalten.
 </p>
 
 <p>
@@ -222,15 +222,15 @@ mit commands wie diesem:
 </pre>
 
 <p>
-Selbst wenn man “CUSTOM_TEMPLATE = 1” benutz, würde man template Namen wie diesen “_usr_lib_nagios_plugins_check_load_-w_4,4,4_-c_5,5,5” erhalten, was höchst unerwünscht ist, insbesondere wegen den darin enthaltenen Parametern.
+Selbst wenn man “CUSTOM_TEMPLATE = 1” benutz, w&uuml;rde man template Namen wie diesen “_usr_lib_nagios_plugins_check_load_-w_4,4,4_-c_5,5,5” erhalten, was h&ouml;chst unerw&uuml;nscht ist, insbesondere wegen den darin enthaltenen Parametern.
 </p>
 
 <p>
-<strong>Lösung 1: Die Parameter in eigenständige $ARGn$ auslagern</strong>
+<strong>L&ouml;sung 1: Die Parameter in eigenst&auml;ndige $ARGn$ auslagern</strong>
 </p>
 
 <p>
-Eine einfache Lösung ist die Verwendung der folgenden command Objekt Definition:
+Eine einfache L&ouml;sung ist die Verwendung der folgenden command Objekt Definition:
 
 </p>
 <pre class="code">
@@ -261,16 +261,16 @@ Dies funktioniert selbst dann, wann $ARG2$ leer bleibt.
 </p>
 
 <p>
-Selbstverständlich müsste man immer noch “CUSTOM_TEMPLATE = 1” setzen.
+Selbstverst&auml;ndlich m&uuml;sste man immer noch “CUSTOM_TEMPLATE = 1” setzen.
 </p>
 
 <p>
 
-<strong>Lösung 2: Den remote executor in der command Objekt Definition verstecken</strong>
+<strong>L&ouml;sung 2: Den remote executor in der command Objekt Definition verstecken</strong>
 </p>
 
 <p>
-Eine andere Lösung ist es, den remote excutor in den jeweiligen command Objekt Definitionen zu verstekcne.
+Eine andere L&ouml;sung ist es, den remote excutor in den jeweiligen command Objekt Definitionen zu verstekcne.
 </p>
 
 <p>
@@ -286,7 +286,7 @@ define command {
 
 <p>
 
-würde man dies für <strong>jeden</strong> fern auszuführenden command definieren:
+w&uuml;rde man dies f&uuml;r <strong>jeden</strong> fern auszuf&uuml;hrenden command definieren:
 
 </p>
 <pre class="code">
@@ -309,16 +309,16 @@ mit commands wie diesem:
 
 <p>
 
-Natürlich darf “CUSTOM_TEMPLATE = 1” bei dieser Lösung nicht mehr gesetzt werden.
+Nat&uuml;rlich darf “CUSTOM_TEMPLATE = 1” bei dieser L&ouml;sung nicht mehr gesetzt werden.
 </p>
 
 <p>
 
-Welche der obigen Lösungen verwendet wird, ist weitgehend Geschmacksache.
+Welche der obigen L&ouml;sungen verwendet wird, ist weitgehend Geschmacksache.
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/advanced" class="wikilink1" title="de:pnp-0.6:advanced">PNP in verteilten Umgebungen</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/advanced" class="wikilink1" title="de:pnp-0.6:advanced">PNP in verteilten Umgebungen</a>
 
 </p>
 

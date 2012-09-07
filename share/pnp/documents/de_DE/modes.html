@@ -6,7 +6,7 @@
 
 <p>
 
-PNP unterstützt mehrere Arten, die Performance-Daten zu verarbeiten. Die einzelnen Modi unterscheiden sich durch ihre Komplexität und die zu erwartende Performance.
+PNP unterst&uuml;tzt mehrere Arten, die Performance-Daten zu verarbeiten. Die einzelnen Modi unterscheiden sich durch ihre Komplexit&auml;t und die zu erwartende Performance.
 </p>
 
 <p>
@@ -14,12 +14,12 @@ Das folgende Bild zeigt die Verbindungen zwischen Nagios, PNP und RRDtool
 </p>
 
 <p>
-Nagios führt für jeden Host- und jeden Service, dessen Performance-Daten gesammelt werden sollen, einen Befehl aus. Abhängig vom gewählten Modus werden die Daten entweder direkt an ein <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script übergeben oder in temporäre Dateien geschrieben und später verarbeitet. process_perfdata.pl legt die Datei in <acronym title="Extensible Markup Language">XML</acronym>-Dateien ab und speichert sie mit Hilfe von RRDtool in RRD-Dateien.<br/>
+Nagios f&uuml;hrt f&uuml;r jeden Host- und jeden Service, dessen Performance-Daten gesammelt werden sollen, einen Befehl aus. Abh&auml;ngig vom gew&auml;hlten Modus werden die Daten entweder direkt an ein <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script &uuml;bergeben oder in tempor&auml;re Dateien geschrieben und sp&auml;ter verarbeitet. process_perfdata.pl legt die Datei in <acronym title="Extensible Markup Language">XML</acronym>-Dateien ab und speichert sie mit Hilfe von RRDtool in RRD-Dateien.<br/>
 
 </p>
 
 <p>
-Bevor Ihr euch auf einen Modus festlegt, lest euch alles durch und entscheidet selbst, welcher Weg für eure Installation der Beste ist.
+Bevor Ihr euch auf einen Modus festlegt, lest euch alles durch und entscheidet selbst, welcher Weg f&uuml;r eure Installation der Beste ist.
 </p>
 
 </div>
@@ -34,7 +34,7 @@ Bevor Ihr euch auf einen Modus festlegt, lest euch alles durch und entscheidet s
 
 <p>
 
-<a href="/_detail/synchronous.png?id=de%3Apnp-0.6%3Amodes" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>Der “Sync Mode” ist der einfachste und am leichtesten einzurichten. Nagios ruft für jeden Service (bzw. Host) zusätzlich das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script process_perfdata.pl auf, um die Daten zu verarbeiten.
+<a href="/_detail/synchronous.png?id=de%3Apnp-0.6%3Amodes" class="media" title="synchronous.png"><img src="/_media/synchronous.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>Der “Sync Mode” ist der einfachste und am leichtesten einzurichten. Nagios ruft f&uuml;r jeden Service (bzw. Host) zus&auml;tzlich das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script process_perfdata.pl auf, um die Daten zu verarbeiten.
 </p>
 
 <p>
@@ -48,16 +48,16 @@ Dieser Modus belastet aber auch Nagios am meisten, daher ist es auch in kleinen 
 <div class="level2">
 
 <p>
-<a href="/_detail/bulk.png?id=de%3Apnp-0.6%3Amodes" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>Im Bulk-Mode schreibt Nagios die benötigten Daten in eine temporäre Datei. Nach Ablauf einer definierten Zeit wird die Datei an einem Stück abgearbeitet und gelöscht.
+<a href="/_detail/bulk.png?id=de%3Apnp-0.6%3Amodes" class="media" title="bulk.png"><img src="/_media/bulk.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>Im Bulk-Mode schreibt Nagios die ben&ouml;tigten Daten in eine tempor&auml;re Datei. Nach Ablauf einer definierten Zeit wird die Datei an einem St&uuml;ck abgearbeitet und gel&ouml;scht.
 </p>
 
 <p>
-Die Anzahl der Aufrufe von process_perfdata.pl reduziert sich um ein Vielfaches. Abhängig von der Zeit und den gesammelten Daten werden wesentlich weniger Systemaufrufe ausgeführt. Dafür läuft process_perfdata.pl länger.
+Die Anzahl der Aufrufe von process_perfdata.pl reduziert sich um ein Vielfaches. Abh&auml;ngig von der Zeit und den gesammelten Daten werden wesentlich weniger Systemaufrufe ausgef&uuml;hrt. Daf&uuml;r l&auml;uft process_perfdata.pl l&auml;nger.
 </p>
 
 <p>
 <strong>Hinweis</strong>
-Bei diesem Modus sollte man die Laufzeit von process_perfdata.pl im Auge behalten. So lange, wie process_perfdata.pl zum Verarbeiten der Daten benötigt, so lange kann Nagios keine Checks ausführen. 
+Bei diesem Modus sollte man die Laufzeit von process_perfdata.pl im Auge behalten. So lange, wie process_perfdata.pl zum Verarbeiten der Daten ben&ouml;tigt, so lange kann Nagios keine Checks ausf&uuml;hren. 
 </p>
 
 <p>
@@ -71,7 +71,7 @@ Auszug aus var/perfdata.log:
 </pre>
 
 <p>
-71 Zeilen wurden in 0,06 Sekunden verarbeitet.  Das ist das Datenvolumen bei ca. 2000 Services und der Verarbeitung im 10-Sekunden-Intervall. Wir haben Nagios also genau für 0.06 Sekunden blockiert.
+71 Zeilen wurden in 0,06 Sekunden verarbeitet.  Das ist das Datenvolumen bei ca. 2000 Services und der Verarbeitung im 10-Sekunden-Intervall. Wir haben Nagios also genau f&uuml;r 0.06 Sekunden blockiert.
 </p>
 
 </div>
@@ -85,11 +85,11 @@ Auszug aus var/perfdata.log:
 </p>
 
 <p>
-Nagios benutzt wieder eine temporäre Datei, um die Daten zu speichern, und führt nach Ablauf der Zeit wieder ein Command aus. Jedoch wird die Datei nicht sofort von Process_perfdata.pl verarbeitet, sondern in ein spool-Verzeichnis verschoben. Da das Verschieben einer Datei im gleichen Filesystem so gut wie keine Zeit beansprucht, ist Nagios sofort wieder in der Lage, wichtige Arbeiten auszuführen.
+Nagios benutzt wieder eine tempor&auml;re Datei, um die Daten zu speichern, und f&uuml;hrt nach Ablauf der Zeit wieder ein Command aus. Jedoch wird die Datei nicht sofort von Process_perfdata.pl verarbeitet, sondern in ein spool-Verzeichnis verschoben. Da das Verschieben einer Datei im gleichen Filesystem so gut wie keine Zeit beansprucht, ist Nagios sofort wieder in der Lage, wichtige Arbeiten auszuf&uuml;hren.
 </p>
 
 <p>
-Der NPCD ( Nagios Performance C Daemon ) überwacht nun das Verzeichnis auf neue Dateien und übergibt diese an process_perfdata.pl. Die Verarbeitung der Performancedaten ist also komplett von Nagios entkoppelt. NPCD wiederum ist in der Lage, zum Verarbeiten der Daten mehrere Threads zu starten.
+Der NPCD ( Nagios Performance C Daemon ) &uuml;berwacht nun das Verzeichnis auf neue Dateien und &uuml;bergibt diese an process_perfdata.pl. Die Verarbeitung der Performancedaten ist also komplett von Nagios entkoppelt. NPCD wiederum ist in der Lage, zum Verarbeiten der Daten mehrere Threads zu starten.
 </p>
 
 </div>
@@ -121,7 +121,7 @@ PNP4Nagios kann seit Version 0.6.12 als Gearman Worker betrieben werden. So sind
 </p>
 
 <p>
-Benötigt wird eine fertig eingerichtete mod_gearman Installation wie von Sven Nierlein unter <a href="http://labs.consol.de/lang/en/nagios/mod-gearman/" class="urlextern" title="http://labs.consol.de/lang/en/nagios/mod-gearman/"  rel="nofollow">http://labs.consol.de/lang/en/nagios/mod-gearman/</a> beschrieben. 
+Ben&ouml;tigt wird eine fertig eingerichtete mod_gearman Installation wie von Sven Nierlein unter <a href="http://labs.consol.de/lang/en/nagios/mod-gearman/" class="urlextern" title="http://labs.consol.de/lang/en/nagios/mod-gearman/"  rel="nofollow">http://labs.consol.de/lang/en/nagios/mod-gearman/</a> beschrieben. 
 </p>
 
 </div>
@@ -131,15 +131,15 @@ Benötigt wird eine fertig eingerichtete mod_gearman Installation wie von Sven N
 
 <p>
 
-Welchen der beschriebenen Wege ihr verwendet, hängt also stark von der Größe der Nagios-Installation ab.
+Welchen der beschriebenen Wege ihr verwendet, h&auml;ngt also stark von der Gr&ouml;ße der Nagios-Installation ab.
 </p>
 
 <p>
-Die verwendeten Begriffe werden euch aber in der Dokumentation immer wieder über den Weg laufen.
+Die verwendeten Begriffe werden euch aber in der Dokumentation immer wieder &uuml;ber den Weg laufen.
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zurück zur Übersicht</a> | <a href="/de/pnp-0.6/install" class="wikilink1" title="de:pnp-0.6:install">Installation</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">Zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/install" class="wikilink1" title="de:pnp-0.6:install">Installation</a>
 
 </p>
 

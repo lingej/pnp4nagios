@@ -6,19 +6,19 @@
 
 <p>
 
-„pages“ bieten die Möglichkeit, Grafiken von verschiedenen Hosts/Services auf einer Seite zusammenzufassen. Auf diese Weise können z.B. die Übertragungsraten der Netzwerk-Interfaces aller Tape-Libraries dargestellt werden. Innerhalb der Definitionen sind reguläre Ausdrücke möglich, so dass – entsprechende Namen vorausgesetzt - mit wenig Aufwand viel erreicht werden kann.
-Das Verzeichnis, das in <code>config.php</code> durch den Konfigurationseintrag „$conf[&#039;page_dir&#039;]“ angegeben wurde, enthält ein oder mehrere Dateien mit der Endung „.cfg“.
+„pages“ bieten die M&ouml;glichkeit, Grafiken von verschiedenen Hosts/Services auf einer Seite zusammenzufassen. Auf diese Weise k&ouml;nnen z.B. die &Uuml;bertragungsraten der Netzwerk-Interfaces aller Tape-Libraries dargestellt werden. Innerhalb der Definitionen sind regul&auml;re Ausdr&uuml;cke m&ouml;glich, so dass – entsprechende Namen vorausgesetzt - mit wenig Aufwand viel erreicht werden kann.
+Das Verzeichnis, das in <code>config.php</code> durch den Konfigurationseintrag „$conf[&#039;page_dir&#039;]“ angegeben wurde, enth&auml;lt ein oder mehrere Dateien mit der Endung „.cfg“.
 </p>
 
 <p>
-Kommentare beginnen mit einem &#039;#&#039; und sind auch innerhalb einer Zeile möglich.
-Jede Datei enthält eine „page“-Definition, die neben dem Namen der Seite festlegt, ob die nachfolgenden Grafikdefinitionen reguläre Ausdrücke enthalten.<br/>
+Kommentare beginnen mit einem &#039;#&#039; und sind auch innerhalb einer Zeile m&ouml;glich.
+Jede Datei enth&auml;lt eine „page“-Definition, die neben dem Namen der Seite festlegt, ob die nachfolgenden Grafikdefinitionen regul&auml;re Ausdr&uuml;cke enthalten.<br/>
 
-Die Bezeichnung hinter <code>page_name</code> erscheint in der Liste der verfügbaren Seiten und wird als Titel im Browser angezeigt.
+Die Bezeichnung hinter <code>page_name</code> erscheint in der Liste der verf&uuml;gbaren Seiten und wird als Titel im Browser angezeigt.
 <strong>Achtung:</strong> “host_name” und “service_desc” beziehen sich auf die Namen der Dateien im perfdata-Ordner, nicht auf die Nagios-Bezeichnungen. Leerzeichen werden durch Unterstriche (“_”) ersetzt.
 </p>
 <pre class="code">define  page  {
-        use_regex 1		# 0 = keine regulären Ausdrücke, 1 = reguläre Ausdrücke
+        use_regex 1		# 0 = keine regul&auml;ren Ausdr&uuml;cke, 1 = regul&auml;re Ausdr&uuml;cke
         page_name Test-Seite	# Beschreibung der Seite
 }</pre>
 
@@ -40,7 +40,7 @@ Danach folgen ein oder mehrere „graph“-Definitionen:
 }</pre>
 
 <p>
-Und jetzt mit regulären Ausdrücken. Zuerst alle Hosts, deren Name mit „Tape“ beginnen:
+Und jetzt mit regul&auml;ren Ausdr&uuml;cken. Zuerst alle Hosts, deren Name mit „Tape“ beginnen:
 
 </p>
 <pre class="code">define graph {
@@ -76,7 +76,7 @@ alle Services, die im Namen nach einem „_“  (mindestens) drei Ziffern haben 
 }</pre>
 
 <p>
-In einigen Fällen möchten Sie vielleicht die Anzeige auf einen Graphen beschränken. Um dies zu erreichen, können Sie die optionale Direktive “source” benutzen, gefolgt von einer Zahl, die die Position in der RRD-Datei angibt. Die Zählung beginnt ab 0
+In einigen F&auml;llen m&ouml;chten Sie vielleicht die Anzeige auf einen Graphen beschr&auml;nken. Um dies zu erreichen, k&ouml;nnen Sie die optionale Direktive “source” benutzen, gefolgt von einer Zahl, die die Position in der RRD-Datei angibt. Die Z&auml;hlung beginnt ab 0
 
 </p>
 <pre class="code">define graph {
@@ -86,7 +86,7 @@ In einigen Fällen möchten Sie vielleicht die Anzeige auf einen Graphen beschr�
 }</pre>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/xport" class="wikilink1" title="de:pnp-0.6:xport">Datenexport</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/xport" class="wikilink1" title="de:pnp-0.6:xport">Datenexport</a>
 
 </p>
 

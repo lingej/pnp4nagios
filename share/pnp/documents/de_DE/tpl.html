@@ -10,7 +10,7 @@ PNP benutzt Templates, um das Aussehen der RRD-Graphen zu beeinflussen.
 </p>
 
 <p>
-Dabei bestimmt das verwendete check_command, welches Template zur Darstellung herangezogen wird. Im Folgenden wird beschrieben, wo Templates gespeichert werden und wie die Entscheidung für das “richtige” Template getroffen wird.
+Dabei bestimmt das verwendete check_command, welches Template zur Darstellung herangezogen wird. Im Folgenden wird beschrieben, wo Templates gespeichert werden und wie die Entscheidung f&uuml;r das “richtige” Template getroffen wird.
 </p>
 
 </div>
@@ -24,19 +24,19 @@ Templates werden an zwei Stellen im Dateisystem gespeichert.
 
 </p>
 <ul>
-<li class="level1"><div class="li"> share/templates.dist - für Templates, die im PNP-Paket bereits enthalten sind.</div>
+<li class="level1"><div class="li"> share/templates.dist - f&uuml;r Templates, die im PNP-Paket bereits enthalten sind.</div>
 </li>
-<li class="level1"><div class="li"> share/templates - für selbst erstellte Templates. Diese werden bei Updates nicht verändert.</div>
+<li class="level1"><div class="li"> share/templates - f&uuml;r selbst erstellte Templates. Diese werden bei Updates nicht ver&auml;ndert.</div>
 </li>
 </ul>
 
 <p>
 
-Weiterhin können seit Version 0.6.5 weitere Template Verzeichnisse in der Config Datei <code>pnp4nagios/etc/config.php</code> hinzugefügt werden.
+Weiterhin k&ouml;nnen seit Version 0.6.5 weitere Template Verzeichnisse in der Config Datei <code>pnp4nagios/etc/config.php</code> hinzugef&uuml;gt werden.
 </p>
 
 <p>
-Soll der Graph für den Service “http” auf Host “localhost” angezeigt werden, so sucht PNP zuerst nach der <acronym title="Extensible Markup Language">XML</acronym>-Datei <code>perfdata/localhost/http.xml</code> und liest diese ein. Diese <acronym title="Extensible Markup Language">XML</acronym>-Dateien werden automatisch erstellt und enthalten Informationen zum jeweiligen Host und Service. Weiterhin enthält der Kopf Informationen über das Plugin und die Performance-Daten. Im folgenden Beispiel erkennt man anhand des <acronym title="Extensible Markup Language">XML</acronym>-Tags <code>&lt;TEMPLATE&gt;</code>, welches PNP-Template für diesen Graphen verwendet werden soll.
+Soll der Graph f&uuml;r den Service “http” auf Host “localhost” angezeigt werden, so sucht PNP zuerst nach der <acronym title="Extensible Markup Language">XML</acronym>-Datei <code>perfdata/localhost/http.xml</code> und liest diese ein. Diese <acronym title="Extensible Markup Language">XML</acronym>-Dateien werden automatisch erstellt und enthalten Informationen zum jeweiligen Host und Service. Weiterhin enth&auml;lt der Kopf Informationen &uuml;ber das Plugin und die Performance-Daten. Im folgenden Beispiel erkennt man anhand des <acronym title="Extensible Markup Language">XML</acronym>-Tags <code>&lt;TEMPLATE&gt;</code>, welches PNP-Template f&uuml;r diesen Graphen verwendet werden soll.
 </p>
 
 <p>
@@ -96,33 +96,33 @@ Das Template default.php nimmt somit eine Sonderstellung ein und wird immer verw
 
 <p>
 
-PNP-Templates sind <acronym title="Hypertext Preprocessor">PHP</acronym>-Dateien, die zur Laufzeit von PNP über die <acronym title="Hypertext Preprocessor">PHP</acronym>-Funktion include() eingebunden werden.
-Dies bedeutet, dass jeder <acronym title="Hypertext Preprocessor">PHP</acronym>-Code in Templates interpretiert wird. Daher ist die Manipulation aller Werte über <acronym title="Hypertext Preprocessor">PHP</acronym> möglich.
+PNP-Templates sind <acronym title="Hypertext Preprocessor">PHP</acronym>-Dateien, die zur Laufzeit von PNP &uuml;ber die <acronym title="Hypertext Preprocessor">PHP</acronym>-Funktion include() eingebunden werden.
+Dies bedeutet, dass jeder <acronym title="Hypertext Preprocessor">PHP</acronym>-Code in Templates interpretiert wird. Daher ist die Manipulation aller Werte &uuml;ber <acronym title="Hypertext Preprocessor">PHP</acronym> m&ouml;glich.
 </p>
 
 <p>
-PNP-Templates müssen folgende Eigenschaften besitzen:
+PNP-Templates m&uuml;ssen folgende Eigenschaften besitzen:
 </p>
 <ol>
-<li class="level1"><div class="li"> Templates müssen gültigen <acronym title="Hypertext Preprocessor">PHP</acronym>-Code enthalten.</div>
+<li class="level1"><div class="li"> Templates m&uuml;ssen g&uuml;ltigen <acronym title="Hypertext Preprocessor">PHP</acronym>-Code enthalten.</div>
 </li>
-<li class="level1"><div class="li"> Templates dürfen keine Ausgabe erzeugen.</div>
+<li class="level1"><div class="li"> Templates d&uuml;rfen keine Ausgabe erzeugen.</div>
 </li>
-<li class="level1"><div class="li"> innerhalb der Templates werden die zwei Arrays $opt[] und $def[] gefüllt.</div>
+<li class="level1"><div class="li"> innerhalb der Templates werden die zwei Arrays $opt[] und $def[] gef&uuml;llt.</div>
 </li>
 </ol>
 
 <p>
 
-Die beiden <acronym title="Hypertext Preprocessor">PHP</acronym>-Arrays $opt[] und $def[] zusammen bilden den Aufruf von <code>&#039;rrdtool graph</code>&#039;. Somit sind alle Optionen möglich, die RRDtool bietet. Die Optionen von RRDtool sind auf der <a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html"  rel="nofollow">RRDtool Homepage</a> genauestens beschrieben.
+Die beiden <acronym title="Hypertext Preprocessor">PHP</acronym>-Arrays $opt[] und $def[] zusammen bilden den Aufruf von <code>&#039;rrdtool graph</code>&#039;. Somit sind alle Optionen m&ouml;glich, die RRDtool bietet. Die Optionen von RRDtool sind auf der <a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html" class="urlextern" title="http://oss.oetiker.ch/rrdtool/doc/rrdgraph.en.html"  rel="nofollow">RRDtool Homepage</a> genauestens beschrieben.
 </p>
 
 <p>
-Wenn beide Arrays mehrere Datensätze enthalten, so wird für jeden Datensatz ein Graph erstellt.
+Wenn beide Arrays mehrere Datens&auml;tze enthalten, so wird f&uuml;r jeden Datensatz ein Graph erstellt.
 </p>
 
 <p>
-Weiterhin stehen innerhalb der Templates die Daten aus dem zugehörigen <acronym title="Extensible Markup Language">XML</acronym>-File zur Verfügung, die zum Erstellen der Graphen wieder verwendet werden können. 
+Weiterhin stehen innerhalb der Templates die Daten aus dem zugeh&ouml;rigen <acronym title="Extensible Markup Language">XML</acronym>-File zur Verf&uuml;gung, die zum Erstellen der Graphen wieder verwendet werden k&ouml;nnen. 
 </p>
 
 <p>
@@ -141,21 +141,21 @@ Am Beispiel des recht einfachen Templates response.php lassen sich die wichtigst
 <span class="sy1">?&gt;</span></pre>
 
 <p>
-<strong><code>$opt[1] = ”--title …”</code></strong> setzt RRDtool-Optionen für den ersten Datensatz im Array. Hier ist das der Titel des Graphen. 
-Wie man sieht, werden eingebettete Anführungszeichen durch einen Backslash (\) maskiert. 
-Die beiden Variablen <code>$hostname</code> und <code>$servicedesc</code> sind durch den Aufruf von PNP ermittelt worden und stehen nun auch im Template zur Verfügung.
+<strong><code>$opt[1] = ”--title …”</code></strong> setzt RRDtool-Optionen f&uuml;r den ersten Datensatz im Array. Hier ist das der Titel des Graphen. 
+Wie man sieht, werden eingebettete Anf&uuml;hrungszeichen durch einen Backslash (\) maskiert. 
+Die beiden Variablen <code>$hostname</code> und <code>$servicedesc</code> sind durch den Aufruf von PNP ermittelt worden und stehen nun auch im Template zur Verf&uuml;gung.
 </p>
 
 <p>
-<strong><code>$def[1] =  “DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE ”;</code></strong> definiert, welche Daten aus welchem RRD-File gelesen werden sollen. $RRDFILE[1] enthält den Pfad zur RRD-Datei dieses Services. $DS[1] verweist auf die Datenreihe eins aus der RRD-Datei.   
+<strong><code>$def[1] =  “DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE ”;</code></strong> definiert, welche Daten aus welchem RRD-File gelesen werden sollen. $RRDFILE[1] enth&auml;lt den Pfad zur RRD-Datei dieses Services. $DS[1] verweist auf die Datenreihe eins aus der RRD-Datei.   
 </p>
 
 <p>
-<strong><code>$def[1] .= “AREA:var1#00FF00:\”Response Times \” ”;</code></strong> durch den Operator ”.=” werden weitere Daten an das Array $def[1] angehängt. Gezeichnet wird eine Fläche (AREA) mit den Daten der Variable var1. Die Farbe wird im HEX-Code #00FF00 definiert. Als Beschriftung wird “Response Times” verwendet.
+<strong><code>$def[1] .= “AREA:var1#00FF00:\”Response Times \” ”;</code></strong> durch den Operator ”.=” werden weitere Daten an das Array $def[1] angeh&auml;ngt. Gezeichnet wird eine Fl&auml;che (AREA) mit den Daten der Variable var1. Die Farbe wird im HEX-Code #00FF00 definiert. Als Beschriftung wird “Response Times” verwendet.
 </p>
 
 <p>
-<strong><code>$def[1] .= “LINE1:var1#000000 ”;</code></strong> Als Abschluss der eben gezeichneten Fläche wird eine Linie (LINE1) in Schwarz (#000000) gezeichnet.
+<strong><code>$def[1] .= “LINE1:var1#000000 ”;</code></strong> Als Abschluss der eben gezeichneten Fl&auml;che wird eine Linie (LINE1) in Schwarz (#000000) gezeichnet.
 </p>
 
 <p>
@@ -168,17 +168,17 @@ $def[1] .= “GPRINT:var1:AVERAGE:\”%3.4lg %s$UNIT[1] AVERAGE \” ”;</code>
 </p>
 
 <p>
-Die drei GPRINT Zeilen bilden die Legende des Graphen. Die aktuellen Werte werden dabei über die <a href="http://en.wikipedia.org/wiki/printf" class="interwiki iw_wp" title="http://en.wikipedia.org/wiki/printf">printf</a> Syntax formatiert.
+Die drei GPRINT Zeilen bilden die Legende des Graphen. Die aktuellen Werte werden dabei &uuml;ber die <a href="http://en.wikipedia.org/wiki/printf" class="interwiki iw_wp" title="http://en.wikipedia.org/wiki/printf">printf</a> Syntax formatiert.
 </p>
 
 </div>
 <!-- SECTION "Eigene Templates erstellen" [2157-5154] -->
-<h2><a name="verfuegbare_variablen" id="verfuegbare_variablen">Verfügbare Variablen</a></h2>
+<h2><a name="verfuegbare_variablen" id="verfuegbare_variablen">Verf&uuml;gbare Variablen</a></h2>
 <div class="level2">
 
 <p>
 
-PNP speichert über den Datensammler <code>process_perfdata.pl</code> zur Laufzeit nicht nur Performancedaten, sondern auch weitere von Nagios exportierte Werte. Diese Werte werden in der jeweils für den Service gültigen <acronym title="Extensible Markup Language">XML</acronym>-Datei gespeichert.
+PNP speichert &uuml;ber den Datensammler <code>process_perfdata.pl</code> zur Laufzeit nicht nur Performancedaten, sondern auch weitere von Nagios exportierte Werte. Diese Werte werden in der jeweils f&uuml;r den Service g&uuml;ltigen <acronym title="Extensible Markup Language">XML</acronym>-Datei gespeichert.
 </p>
 
 <p>
@@ -200,7 +200,7 @@ Im ersten Teil der <acronym title="Extensible Markup Language">XML</acronym>-Dat
 <span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
 
 <p>
-Das Feld &lt;DS&gt; bezeichnet die DataSource und dient der Identifizierung der Datenreihen innerhalb der RRD-Dateien, ist aber auch der Schlüssel der folgenden Arrays.
+Das Feld &lt;DS&gt; bezeichnet die DataSource und dient der Identifizierung der Datenreihen innerhalb der RRD-Dateien, ist aber auch der Schl&uuml;ssel der folgenden Arrays.
 </p>
 
 <p>
@@ -208,7 +208,7 @@ Im Array <code>$UNIT[1]</code> ist somit die Einheit der ersten Datenreihe gespe
 </p>
 
 <p>
-Die <acronym title="Extensible Markup Language">XML</acronym>-Datei enthält jedoch noch weitere Informationen. Wird <code>process_perdata.pl</code> im sync-Mode verwendet, so sind alle verfügbaren Makros mit den aktuellen Werten verfügbar. Der folgende Ausschnitt ist jedoch zu Gunsten der Lesbarkeit gekürzt.
+Die <acronym title="Extensible Markup Language">XML</acronym>-Datei enth&auml;lt jedoch noch weitere Informationen. Wird <code>process_perdata.pl</code> im sync-Mode verwendet, so sind alle verf&uuml;gbaren Makros mit den aktuellen Werten verf&uuml;gbar. Der folgende Ausschnitt ist jedoch zu Gunsten der Lesbarkeit gek&uuml;rzt.
 </p>
 <pre class="code xml"><span class="sc3"><span class="re1">&lt;NAGIOS<span class="re2">&gt;</span></span></span>
 ...
@@ -227,7 +227,7 @@ Die <acronym title="Extensible Markup Language">XML</acronym>-Datei enthält jed
 <span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
 
 <p>
-Die einzelnen <acronym title="Extensible Markup Language">XML</acronym>-Felder sind als Variablen in den PNP-Templates verwendbar, wobei jedes Feld als Variable gleichen Namens verfügbar ist.
+Die einzelnen <acronym title="Extensible Markup Language">XML</acronym>-Felder sind als Variablen in den PNP-Templates verwendbar, wobei jedes Feld als Variable gleichen Namens verf&uuml;gbar ist.
 </p>
 
 <p>
@@ -235,9 +235,9 @@ Aus <code>&lt;NAGIOS_SERVICEOUTPUT&gt;</code> wird die Variable <code>$NAGIOS_SE
 </p>
 
 <p>
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/tpl_custom" class="wikilink1" title="de:pnp-0.6:tpl_custom">Custom Templates</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/tpl_custom" class="wikilink1" title="de:pnp-0.6:tpl_custom">Custom Templates</a>
 
 </p>
 
 </div>
-<!-- SECTION "Verfügbare Variablen" [5155-] -->
+<!-- SECTION "Verf&uuml;gbare Variablen" [5155-] -->

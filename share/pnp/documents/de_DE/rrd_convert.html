@@ -6,19 +6,19 @@
 
 <p>
 
-<strong>Verfügbar ab PNP 0.6.3</strong>
+<strong>Verf&uuml;gbar ab PNP 0.6.3</strong>
 </p>
 
 <p>
-Mit PNP-Version 0.6 ist es möglich, die Performance-Daten nicht in einer einzelnen RRD-Datenbank (SINGLE), sondern in mehreren RRD Datenbanken (MULTIPLE) zu speichern.
+Mit PNP-Version 0.6 ist es m&ouml;glich, die Performance-Daten nicht in einer einzelnen RRD-Datenbank (SINGLE), sondern in mehreren RRD Datenbanken (MULTIPLE) zu speichern.
 </p>
 
 <p>
-Nach dem Anlegen eines RRD-Files ist es nicht mehr möglich, dieses um eine Datasource (DS) zu erweitern. Daraus ergeben sich Probleme für Nagios-Plugins, die im Laufe der Zeit die Anzahl der Datenreihen dynamisch ändern.
+Nach dem Anlegen eines RRD-Files ist es nicht mehr m&ouml;glich, dieses um eine Datasource (DS) zu erweitern. Daraus ergeben sich Probleme f&uuml;r Nagios-Plugins, die im Laufe der Zeit die Anzahl der Datenreihen dynamisch &auml;ndern.
 </p>
 
 <p>
-Ein Beispiel wäre check_disk, wenn man pauschal alle verfügbaren Filesysteme in einem Service überwacht. Kommt ein Filesystem hinzu, so kann die RRD-Datenbank nicht mehr aktualisiert werden. Die Struktur der neuen Daten passt einfach nicht mehr zur RRD-Struktur.
+Ein Beispiel w&auml;re check_disk, wenn man pauschal alle verf&uuml;gbaren Filesysteme in einem Service &uuml;berwacht. Kommt ein Filesystem hinzu, so kann die RRD-Datenbank nicht mehr aktualisiert werden. Die Struktur der neuen Daten passt einfach nicht mehr zur RRD-Struktur.
 </p>
 
 <p>
@@ -26,15 +26,15 @@ PNP arbeitet per Default mit der Option <code>RRD_STORAGE_TYPE = SINGLE</code>, 
 </p>
 
 <p>
-Diese Einstellung sollte <strong>nicht</strong> global verändert werden, da PNP nach der Umstellung auf MULTIPLE sofort beginnt, neue RRD-Files anzulegen. Alte Daten gehen damit sofort verloren!
+Diese Einstellung sollte <strong>nicht</strong> global ver&auml;ndert werden, da PNP nach der Umstellung auf MULTIPLE sofort beginnt, neue RRD-Files anzulegen. Alte Daten gehen damit sofort verloren!
 </p>
 
 <p>
-Weiterhin ist es im Hinblick auf die Performance nicht sinnvoll, global mit <code>RRD_STORAGE_TYPE = MULTIPLE</code> zu arbeiten. Die Anzahl der RRD-Datenbanken und somit auch der Disk-I/O während der Updates vervielfacht sich. Entsprechend sollte man mit Bedacht wählen, welche Nagios-Check-Commands mit welcher Einstellung behandelt werden sollen.
+Weiterhin ist es im Hinblick auf die Performance nicht sinnvoll, global mit <code>RRD_STORAGE_TYPE = MULTIPLE</code> zu arbeiten. Die Anzahl der RRD-Datenbanken und somit auch der Disk-I/O w&auml;hrend der Updates vervielfacht sich. Entsprechend sollte man mit Bedacht w&auml;hlen, welche Nagios-Check-Commands mit welcher Einstellung behandelt werden sollen.
 </p>
 
 <p>
-Im Abschnitt <a href="/de/pnp-0.6/tpl_custom" class="wikilink1" title="de:pnp-0.6:tpl_custom">Custom Templates</a> ist beschrieben, wie die Einstellungen vorgenommen werden können.    
+Im Abschnitt <a href="/de/pnp-0.6/tpl_custom" class="wikilink1" title="de:pnp-0.6:tpl_custom">Custom Templates</a> ist beschrieben, wie die Einstellungen vorgenommen werden k&ouml;nnen.    
 </p>
 
 </div>
@@ -54,7 +54,7 @@ Maßgeblich ist dabei wie immer bei PNP das Nagios-Check-Command.
 [[ --no_structure_check ]]</pre>
 
 <p>
-Das Script erwartet über die Option <code>--check-command=</code> das Check-Command, nach dem gesucht werden soll.
+Das Script erwartet &uuml;ber die Option <code>--check-command=</code> das Check-Command, nach dem gesucht werden soll.
 </p>
 
 <p>
@@ -62,17 +62,17 @@ Das Script erwartet über die Option <code>--check-command=</code> das Check-Com
 </p>
 
 <p>
-Nach Bestätigung durch den User beginnt das Konvertieren der einzelnen RRD-Datenbanken, wobei der aktuelle Ablauf angezeigt wird. Das Script endet, wenn Sie &lt;ENTER&gt; drücken, also geben Sie bitte einen Buchstaben ein.
+Nach Best&auml;tigung durch den User beginnt das Konvertieren der einzelnen RRD-Datenbanken, wobei der aktuelle Ablauf angezeigt wird. Das Script endet, wenn Sie &lt;ENTER&gt; dr&uuml;cken, also geben Sie bitte einen Buchstaben ein.
 </p>
 
 <p>
-Die Option <code>--dry-run</code> sorgt dafür, dass die RRD-Datenbanken zwar konvertiert, jedoch in <code>/tmp/rrd_convert</code> in separaten Verzeichnissen je Host gespeichert werden. So kann man sich einen Überblick über die zu erwartende Laufzeit und das Datenvolumen verschaffen.
+Die Option <code>--dry-run</code> sorgt daf&uuml;r, dass die RRD-Datenbanken zwar konvertiert, jedoch in <code>/tmp/rrd_convert</code> in separaten Verzeichnissen je Host gespeichert werden. So kann man sich einen &Uuml;berblick &uuml;ber die zu erwartende Laufzeit und das Datenvolumen verschaffen.
 </p>
 
 <p>
-Wenn Sie das temporäre Verzeichnis ändern möchten, dann können Sie das mit Hilfe der Option <code>--tmp_dir=&lt;alternatives TMP-Directory&gt; tun.
+Wenn Sie das tempor&auml;re Verzeichnis &auml;ndern m&ouml;chten, dann k&ouml;nnen Sie das mit Hilfe der Option <code>--tmp_dir=&lt;alternatives TMP-Directory&gt; tun.
 
-Ab und zu passt die Anzahl der Datasources in den RRD-Dateien nicht zu der Anzahl in den <acronym title="Extensible Markup Language">XML</acronym>-Dateien. Das passiert z.B. dann, wenn Plugins plötzlich eine andere Zahl von Datenreihen liefern (siehe oben check_disk). Mit der Option </code>--no_structure_check&#039;&#039; werden auch diese RRD-Dateien konvertiert. 
+Ab und zu passt die Anzahl der Datasources in den RRD-Dateien nicht zu der Anzahl in den <acronym title="Extensible Markup Language">XML</acronym>-Dateien. Das passiert z.B. dann, wenn Plugins pl&ouml;tzlich eine andere Zahl von Datenreihen liefern (siehe oben check_disk). Mit der Option </code>--no_structure_check&#039;&#039; werden auch diese RRD-Dateien konvertiert. 
 </p>
 
 <p>

@@ -6,7 +6,7 @@
 
 <p>
 
-NPCD (Nagios-Perfdata-C-Daemon) wurde geschrieben, um die asynchrone Bearbeitung von Nagios Performance-Daten zu ermöglichen.
+NPCD (Nagios-Perfdata-C-Daemon) wurde geschrieben, um die asynchrone Bearbeitung von Nagios Performance-Daten zu erm&ouml;glichen.
 </p>
 
 </div>
@@ -16,19 +16,19 @@ NPCD (Nagios-Perfdata-C-Daemon) wurde geschrieben, um die asynchrone Bearbeitung
 
 <p>
 
-In großen Nagios-Installationen kann es zu nicht akzeptierbaren Verspätungen seitens der Checks kommen. Das bedeutet, dass Nagios einen Check zum Zeitpunkt <code>x</code> ausführen soll, diesen aber erst <code>y</code> Sekunden später tatsächlich ausführt.
+In großen Nagios-Installationen kann es zu nicht akzeptierbaren Versp&auml;tungen seitens der Checks kommen. Das bedeutet, dass Nagios einen Check zum Zeitpunkt <code>x</code> ausf&uuml;hren soll, diesen aber erst <code>y</code> Sekunden sp&auml;ter tats&auml;chlich ausf&uuml;hrt.
 </p>
 
 <p>
-Wenn man dem Nagios-Daemon mitteilt, dass man nach jedem einzelnen Check auch die Performance-Daten verarbeiten möchte, so geht dies bis zu einem bestimmten Grad gut, ab einer gewissen Anzahl von Checks pro Sekunde allerdings kommt man relativ schnell zu den sog. Latency-Problemen.
+Wenn man dem Nagios-Daemon mitteilt, dass man nach jedem einzelnen Check auch die Performance-Daten verarbeiten m&ouml;chte, so geht dies bis zu einem bestimmten Grad gut, ab einer gewissen Anzahl von Checks pro Sekunde allerdings kommt man relativ schnell zu den sog. Latency-Problemen.
 </p>
 
 <p>
-Um die Anzahl der Aktionen pro Check zu verringern, kann man nun PNP im <a href="/de/pnp-0.6/modes#bulk_mode" class="wikilink1" title="de:pnp-0.6:modes">Bulk-Mode</a> verwenden, wobei die Performance-Daten zunächst vom Nagios-Prozess gesammelt und anschließend ebenfalls vom Nagios-Prozess selbst verarbeitet werden. 
+Um die Anzahl der Aktionen pro Check zu verringern, kann man nun PNP im <a href="/de/pnp-0.6/modes#bulk_mode" class="wikilink1" title="de:pnp-0.6:modes">Bulk-Mode</a> verwenden, wobei die Performance-Daten zun&auml;chst vom Nagios-Prozess gesammelt und anschließend ebenfalls vom Nagios-Prozess selbst verarbeitet werden. 
 </p>
 
 <p>
-Man kann aber auch dem Nagios-Prozess mitteilen, dass die Verarbeitung der Performance-Daten lediglich durch das Verschieben der Dateien in ein Spool-Verzeichnis geschehen soll, welches für den Nagios-Prozess selbst eine sehr schnelle Aktion ist und die Performance nicht nennenswert beeinflusst und somit dem Core mehr Zeit für seine eigentliche Arbeit lässt: weitere Checks ausführen, Alamierungen bereitstellen, etc.
+Man kann aber auch dem Nagios-Prozess mitteilen, dass die Verarbeitung der Performance-Daten lediglich durch das Verschieben der Dateien in ein Spool-Verzeichnis geschehen soll, welches f&uuml;r den Nagios-Prozess selbst eine sehr schnelle Aktion ist und die Performance nicht nennenswert beeinflusst und somit dem Core mehr Zeit f&uuml;r seine eigentliche Arbeit l&auml;sst: weitere Checks ausf&uuml;hren, Alamierungen bereitstellen, etc.
 </p>
 
 </div>
@@ -38,19 +38,19 @@ Man kann aber auch dem Nagios-Prozess mitteilen, dass die Verarbeitung der Perfo
 
 <p>
 
-Wie bereits erwähnt, ist die Arbeit der Performance-Daten-Verarbeitung durch das schnelle Verschieben der Datei bereits erledigt, aber das bringt die Performance-Daten noch nicht in die RRD-Datenbank.
+Wie bereits erw&auml;hnt, ist die Arbeit der Performance-Daten-Verarbeitung durch das schnelle Verschieben der Datei bereits erledigt, aber das bringt die Performance-Daten noch nicht in die RRD-Datenbank.
 </p>
 
 <p>
-Um den Transport der Performance-Daten-Dateien kümmert sich nun der NPCD-Daemon, unabhängig vom Nagios-Prozess, indem er regelmäßig in das Spool-Verzeichnis guckt und für jede dort gefundene Datei eine Aktion ausführt.
+Um den Transport der Performance-Daten-Dateien k&uuml;mmert sich nun der NPCD-Daemon, unabh&auml;ngig vom Nagios-Prozess, indem er regelm&auml;ßig in das Spool-Verzeichnis guckt und f&uuml;r jede dort gefundene Datei eine Aktion ausf&uuml;hrt.
 </p>
 
 <p>
-Nachdem NPCD gestartet wurde, erstellt er sich eine Liste von Dateinamen des Spool-Verzeichnisses und startet für jede gefundene Datei einen Thread zur weiteren Verarbeitung mit Hilfe des <code>perfdata_file_run_cmd</code> und dem optionalen <code>perfdata_file_run_cmd_arg</code> als zusätzlichem Argument.
+Nachdem NPCD gestartet wurde, erstellt er sich eine Liste von Dateinamen des Spool-Verzeichnisses und startet f&uuml;r jede gefundene Datei einen Thread zur weiteren Verarbeitung mit Hilfe des <code>perfdata_file_run_cmd</code> und dem optionalen <code>perfdata_file_run_cmd_arg</code> als zus&auml;tzlichem Argument.
 </p>
 
 <p>
-Da das Format der Performance-Daten-Dateien dem Format der &#039;normalen&#039; PNP-Bulk-Modus-Dateien gleicht, kann NPCD nun für jede gefundene Datei also <code>process_perfdata.pl</code> im <a href="/de/pnp-0.6/modes#bulk_mode" class="wikilink1" title="de:pnp-0.6:modes">Bulk Modus</a> aufrufen.
+Da das Format der Performance-Daten-Dateien dem Format der &#039;normalen&#039; PNP-Bulk-Modus-Dateien gleicht, kann NPCD nun f&uuml;r jede gefundene Datei also <code>process_perfdata.pl</code> im <a href="/de/pnp-0.6/modes#bulk_mode" class="wikilink1" title="de:pnp-0.6:modes">Bulk Modus</a> aufrufen.
 </p>
 
 </div>
@@ -63,9 +63,9 @@ Da das Format der Performance-Daten-Dateien dem Format der &#039;normalen&#039; 
 <strong>Pro:</strong>
 </p>
 <ul>
-<li class="level1"><div class="li"> bessere Performance für Nagios</div>
+<li class="level1"><div class="li"> bessere Performance f&uuml;r Nagios</div>
 <ul>
-<li class="level2"><div class="li"> aufgrund der vom Nagios-Prozess getrennten Verarbeitung der Performance-Daten hat Nagios mehr Zeit für die wichtigen Dinge</div>
+<li class="level2"><div class="li"> aufgrund der vom Nagios-Prozess getrennten Verarbeitung der Performance-Daten hat Nagios mehr Zeit f&uuml;r die wichtigen Dinge</div>
 </li>
 </ul>
 </li>
@@ -99,7 +99,7 @@ Da das Format der Performance-Daten-Dateien dem Format der &#039;normalen&#039; 
 
 <p>
 
-NPCD muss zwangsläufig über eine Konfigurationsdatei gesteuert werden. Eine Beispielkonfiguration liegt der PNP-Installation als <code>npcd.cfg-sample</code> bei.
+NPCD muss zwangsl&auml;ufig &uuml;ber eine Konfigurationsdatei gesteuert werden. Eine Beispielkonfiguration liegt der PNP-Installation als <code>npcd.cfg-sample</code> bei.
 </p>
 
 <p>
@@ -121,7 +121,7 @@ um NPCD im Hintergrund als Daemon laufen zu lassen.
 
 <p>
 <strong>Hinweis:</strong>
-Die <code>-sample</code> Datei sollte in jedem Fall in <code>npcd.cfg</code> umbenannt werden, da sie sonst bei einem Update von PNP überschrieben werden könnte.
+Die <code>-sample</code> Datei sollte in jedem Fall in <code>npcd.cfg</code> umbenannt werden, da sie sonst bei einem Update von PNP &uuml;berschrieben werden k&ouml;nnte.
 </p>
 
 </div>
@@ -131,7 +131,7 @@ Die <code>-sample</code> Datei sollte in jedem Fall in <code>npcd.cfg</code> umb
 
 <p>
 
-Dies sind die essentiellen Konfigurationsdirektiven für NPCD:
+Dies sind die essentiellen Konfigurationsdirektiven f&uuml;r NPCD:
 </p>
 <pre class="code"># Privilege Options
 user = nagios
@@ -204,7 +204,7 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level2"><div class="li"> max_logfile_size &lt;bytes&gt; </div>
 <ul>
-<li class="level3"><div class="li"> NPCD wird nach Erreichen der hier angegebenen Dateigröße eigenständig eine Logrotation durchführen</div>
+<li class="level3"><div class="li"> NPCD wird nach Erreichen der hier angegebenen Dateigr&ouml;ße eigenst&auml;ndig eine Logrotation durchf&uuml;hren</div>
 </li>
 <li class="level3"><div class="li"> <strong>Default:</strong> 10485760 = 10 MByte</div>
 </li>
@@ -212,7 +212,7 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level2"><div class="li"> log_level &lt;integer&gt;</div>
 <ul>
-<li class="level3"><div class="li"> Wie viel soll aufgezeichnet werden, möglich ist:</div>
+<li class="level3"><div class="li"> Wie viel soll aufgezeichnet werden, m&ouml;glich ist:</div>
 <ul>
 <li class="level4"><div class="li"> 0  = Kein Log - außer Fehlern</div>
 </li>
@@ -242,7 +242,7 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level2"><div class="li"> perfdata_file_run_cmd &lt;/path/to/bin/filename&gt;</div>
 <ul>
-<li class="level3"><div class="li"> Das Programm, welches Nagios für jede Datei aufrufen soll</div>
+<li class="level3"><div class="li"> Das Programm, welches Nagios f&uuml;r jede Datei aufrufen soll</div>
 </li>
 <li class="level3"><div class="li"> <strong>Default:</strong>  /usr/local/pnp4nagios/libexec/process_perfdata.pl</div>
 </li>
@@ -250,7 +250,7 @@ pid_file=/var/run/npcd.pid
 </li>
 <li class="level2"><div class="li"> perfdata_file_run_cmd_args &lt;option&gt; </div>
 <ul>
-<li class="level3"><div class="li"> Das Argument, welches optional an <code>perfdata_file_run_cmd</code> angehängt wird</div>
+<li class="level3"><div class="li"> Das Argument, welches optional an <code>perfdata_file_run_cmd</code> angeh&auml;ngt wird</div>
 </li>
 <li class="level3"><div class="li"> <strong>Default:</strong> ”-b”</div>
 </li>
@@ -315,7 +315,7 @@ pid_file=/var/run/npcd.pid
 
 <p>
 
-<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zurück zur Übersicht</a> | <a href="/de/pnp-0.6/wrapper" class="wikilink1" title="de:pnp-0.6:wrapper">Wrapper-Script</a>
+<a href="/de/pnp-0.6/start" class="wikilink1" title="de:pnp-0.6:start">zur&uuml;ck zur &Uuml;bersicht</a> | <a href="/de/pnp-0.6/wrapper" class="wikilink1" title="de:pnp-0.6:wrapper">Wrapper-Script</a>
 
 </p>
 

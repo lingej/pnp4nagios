@@ -6,15 +6,15 @@
 
 <p>
 
-Bei Problemen kann das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <code>verify_pnp_config</code> von <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> helfen die aktuelle Nagios/Icinga Konfiguration zu prüfen und entsprechend Hinweise zur Lösung liefern.
+Bei Problemen kann das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <code>verify_pnp_config</code> von <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> helfen die aktuelle Nagios/Icinga Konfiguration zu pr&uuml;fen und entsprechend Hinweise zur L&ouml;sung liefern.
 </p>
 
 <p>
-Bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:pnp-0.6:about">Support Anfragen</a> sollte immer die Ausgabe dieses Scripts mit angegeben werden, da die Entwickler sich so einen besseren Überblick über das verwendete System machen können.
+Bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:pnp-0.6:about">Support Anfragen</a> sollte immer die Ausgabe dieses Scripts mit angegeben werden, da die Entwickler sich so einen besseren &Uuml;berblick &uuml;ber das verwendete System machen k&ouml;nnen.
 </p>
 
 <p>
-Feedback, Verbesserungsvorschläge oder Patches bitte per Mail an support@pnp4nagios.org
+Feedback, Verbesserungsvorschl&auml;ge oder Patches bitte per Mail an support@pnp4nagios.org
 </p>
 
 </div>
@@ -24,7 +24,7 @@ Feedback, Verbesserungsvorschläge oder Patches bitte per Mail an support@pnp4na
 
 <p>
 
-Das Verify Script ist unter <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> verfügbar.
+Das Verify Script ist unter <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> verf&uuml;gbar.
 </p>
 <pre class="code">
 wget http://verify.pnp4nagios.org/verify_pnp_config
@@ -37,7 +37,7 @@ wget http://verify.pnp4nagios.org/verify_pnp_config
 
 <p>
 
-Das Verify Script benötigt drei Optionen um die Funktion von PNP4Nagios zu prüfen
+Das Verify Script ben&ouml;tigt drei Optionen um die Funktion von PNP4Nagios zu pr&uuml;fen
 </p>
 <pre class="code">
 lenny:~# perl verify_pnp_config
@@ -48,17 +48,17 @@ verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod]
 </pre>
 
 <p>
-Die wichtigste Infos ist der zu prüfende Modus, welcher mit der Option <code>--mode</code> angegeben wird.<br/>
+Die wichtigste Infos ist der zu pr&uuml;fende Modus, welcher mit der Option <code>--mode</code> angegeben wird.<br/>
 
-Weitere Infos über die einzelnen Modi und deren Konfiguration unter <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">&quot;Welcher Modus ist für mich richtig ?&quot;</a> und <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">&quot;Konfiguration&quot;</a>
+Weitere Infos &uuml;ber die einzelnen Modi und deren Konfiguration unter <a href="/de/pnp-0.6/modes" class="wikilink1" title="de:pnp-0.6:modes">&quot;Welcher Modus ist f&uuml;r mich richtig ?&quot;</a> und <a href="/de/pnp-0.6/config" class="wikilink1" title="de:pnp-0.6:config">&quot;Konfiguration&quot;</a>
 </p>
 
 <p>
-Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) über die Option <code>--config</code> zu übergeben. Auf einem Icinga System ist es entsprechend der Pfad zur icinga.cfg.
+Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) &uuml;ber die Option <code>--config</code> zu &uuml;bergeben. Auf einem Icinga System ist es entsprechend der Pfad zur icinga.cfg.
 </p>
 
 <p>
-Über <code>--pnpcfg</code> wird der Pfad zum <code>etc</code> Verzeichnis der PNP4Nagios Installation übergeben.<br/>
+&Uuml;ber <code>--pnpcfg</code> wird der Pfad zum <code>etc</code> Verzeichnis der PNP4Nagios Installation &uuml;bergeben.<br/>
 
 </p>
 <pre class="code">

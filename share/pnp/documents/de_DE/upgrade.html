@@ -6,11 +6,11 @@
 
 <p>
 
-Das Web-Frontend ist komplett neu geschrieben worden und basiert nun auf dem <acronym title="Hypertext Preprocessor">PHP</acronym> MVC Framework <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a>. Somit ergeben sich grundlegend andere Abhängigkeiten, die dringend vor der Installation geprüft werden müssen.
+Das Web-Frontend ist komplett neu geschrieben worden und basiert nun auf dem <acronym title="Hypertext Preprocessor">PHP</acronym> MVC Framework <a href="http://www.kohanaphp.com" class="urlextern" title="http://www.kohanaphp.com"  rel="nofollow">Kohana</a>. Somit ergeben sich grundlegend andere Abh&auml;ngigkeiten, die dringend vor der Installation gepr&uuml;ft werden m&uuml;ssen.
 </p>
 
 <p>
-Anmerkung: Ein Upgrade läuft zuerst wie eine Neuinstallation. Anschließend sind einige Anpassungen durchzuführen, die weiter unten beschrieben sind.
+Anmerkung: Ein Upgrade l&auml;uft zuerst wie eine Neuinstallation. Anschließend sind einige Anpassungen durchzuf&uuml;hren, die weiter unten beschrieben sind.
 </p>
 
 <p>
@@ -18,11 +18,11 @@ PNP 0.4.x wurde ohne weitere Angabe von Optionen beim Aufruf von <code>./configu
 </p>
 
 <p>
-PNP 0.6.x wird bei Angabe keiner weiteren Optionen unter <code>/usr/local/pnp4nagios</code> installiert, ist also wie Nagios als eigenständige Applikation zu sehen.
+PNP 0.6.x wird bei Angabe keiner weiteren Optionen unter <code>/usr/local/pnp4nagios</code> installiert, ist also wie Nagios als eigenst&auml;ndige Applikation zu sehen.
 </p>
 
 <p>
-Anmerkung: Es reicht aus, die *.rrd-Dateien vom alten ins neue Verzeichnis zu kopieren. Sie enthalten die eigentlichen Daten. Die *.xml-Dateien werden jedes Mal neu angelegt, wenn Performance-Daten verarbeitet werden, denn sie enthalten lediglich Meta-Informationen. Außerdem hat sich die interne Struktur geändert, so dass sie sowieso nicht nutzbar sind.
+Anmerkung: Es reicht aus, die *.rrd-Dateien vom alten ins neue Verzeichnis zu kopieren. Sie enthalten die eigentlichen Daten. Die *.xml-Dateien werden jedes Mal neu angelegt, wenn Performance-Daten verarbeitet werden, denn sie enthalten lediglich Meta-Informationen. Außerdem hat sich die interne Struktur ge&auml;ndert, so dass sie sowieso nicht nutzbar sind.
 </p>
 
 </div>
@@ -78,7 +78,7 @@ Summary einer Installation von 0.6.0
 </pre>
 
 <p>
-Aus diesen Infos ergeben sich die zu ändernden Parameter und somit die Upgrade-Strategie.
+Aus diesen Infos ergeben sich die zu &auml;ndernden Parameter und somit die Upgrade-Strategie.
 </p>
 
 </div>
@@ -88,7 +88,7 @@ Aus diesen Infos ergeben sich die zu ändernden Parameter und somit die Upgrade-
 
 <p>
 
-Die Vorlagen der action_url-Definitionen haben sich verändert. Statt ”/nagios/pnp” ist ”/pnp4nagios” einzutragen und statt “index.php” wird nun “graph” benutzt
+Die Vorlagen der action_url-Definitionen haben sich ver&auml;ndert. Statt ”/nagios/pnp” ist ”/pnp4nagios” einzutragen und statt “index.php” wird nun “graph” benutzt
 </p>
 <pre class="code">define host {
    name       host-pnp
@@ -103,7 +103,7 @@ define service {
 }</pre>
 
 <p>
-Ähnliches gilt für die Preview-Popup-Funktion
+&Auml;hnliches gilt f&uuml;r die Preview-Popup-Funktion
 </p>
 <pre class="code">define host {
    name       host-pnp
@@ -123,17 +123,17 @@ define service {
 </p>
 
 <p>
-Anders als in der 0.4.x Dokumentation vermerkt gelten die Templates für Nagios 2.x und 3.x. Der einzige Unterschied besteht darin, dass die action_url-Direktive in Nagios 2.x nicht in der Service-Definition, sondern in eigenen serviceextinfo-Definitionen verfügbar ist.
+Anders als in der 0.4.x Dokumentation vermerkt gelten die Templates f&uuml;r Nagios 2.x und 3.x. Der einzige Unterschied besteht darin, dass die action_url-Direktive in Nagios 2.x nicht in der Service-Definition, sondern in eigenen serviceextinfo-Definitionen verf&uuml;gbar ist.
 </p>
 
 <p>
-Innerhalb der <acronym title="Hypertext Preprocessor">PHP</acronym>-Dateien im templates-Verzeichnis müssen alle Variablen vor der ersten Benutzung initialisiert werden, z.B. 
+Innerhalb der <acronym title="Hypertext Preprocessor">PHP</acronym>-Dateien im templates-Verzeichnis m&uuml;ssen alle Variablen vor der ersten Benutzung initialisiert werden, z.B. 
 </p>
 <pre class="code">$lower = &quot;&quot;</pre>
 
 <p>
 
-Das gilt auch für Variablen, an die früher “angehängt” werden konnte, ohne sie vorher zu initialisieren. Daher wird aus 
+Das gilt auch f&uuml;r Variablen, an die fr&uuml;her “angeh&auml;ngt” werden konnte, ohne sie vorher zu initialisieren. Daher wird aus 
 
 </p>
 <pre class="code">foreach ($DS as $i) {
@@ -162,7 +162,7 @@ wird dann z.B.
 <pre class="code"> $WARNRULE = &#039;#FFFF00&#039;;</pre>
 
 <p>
-Man sollte daran denken, alle Vorkommen in der Datei zu ändern <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
+Man sollte daran denken, alle Vorkommen in der Datei zu &auml;ndern <img src="/lib/images/smileys/icon_wink.gif" class="middle" alt=";-)" />.
 </p>
 
 </div>
@@ -172,7 +172,7 @@ Man sollte daran denken, alle Vorkommen in der Datei zu ändern <img src="/lib/i
 <ol>
 <li class="level1"><div class="li"> Planen des neuen Aufbaus.</div>
 </li>
-<li class="level1"><div class="li"> Testinstallation durchführen und sich mit dem neuen System vertraut machen.</div>
+<li class="level1"><div class="li"> Testinstallation durchf&uuml;hren und sich mit dem neuen System vertraut machen.</div>
 </li>
 <li class="level1"><div class="li"> Backup erstellen.</div>
 </li>
@@ -192,7 +192,7 @@ Man sollte daran denken, alle Vorkommen in der Datei zu ändern <img src="/lib/i
 </li>
 <li class="level1"><div class="li"> <code>/usr/local/pnp4nagios/etc/npcd.cfg</code> aus der <code>npcd.cfg-sample</code> erstellen.</div>
 <ol>
-<li class="level2"><div class="li"> Pfade überprüfen und ggf. Änderungen der 0.4.x nachziehen.</div>
+<li class="level2"><div class="li"> Pfade &uuml;berpr&uuml;fen und ggf. &Auml;nderungen der 0.4.x nachziehen.</div>
 </li>
 </ol>
 </li>
@@ -200,9 +200,9 @@ Man sollte daran denken, alle Vorkommen in der Datei zu ändern <img src="/lib/i
 </li>
 <li class="level1"><div class="li"> Alle Pfade in den Command-Definitionen anpassen.</div>
 </li>
-<li class="level1"><div class="li"> npcd über <code>/etc/init.d/npcd stop</code> anhalten.</div>
+<li class="level1"><div class="li"> npcd &uuml;ber <code>/etc/init.d/npcd stop</code> anhalten.</div>
 </li>
-<li class="level1"><div class="li"> <code>make install-init</code> installiert das neue Init Script für den npcd.</div>
+<li class="level1"><div class="li"> <code>make install-init</code> installiert das neue Init Script f&uuml;r den npcd.</div>
 </li>
 <li class="level1"><div class="li"> Nagios anhalten.</div>
 </li>
