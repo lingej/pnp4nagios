@@ -1,4 +1,6 @@
 **pnp-0.6.20 ??/??/2012**
+  * Feature: Allow RRD unknown values ( Simon Meggle )
+  * feature: Interactive delete mode added to check_rrds.pl ( Simon Meggle ) 
 
 **pnp-0.6.19 09/01/2012**
   * Feature: Parameter "width" added to popup controller ( Andreas Doehler ) 
