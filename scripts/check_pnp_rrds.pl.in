@@ -24,8 +24,10 @@ use strict;
 use Getopt::Long;
 
 Getopt::Long::Configure('bundling');
-my ( $opt_d, $opt_V, $opt_h, $opt_b );
+my ( $opt_V, $opt_h, $opt_b );
 my $opt_a    = 7;
+my $opt_dxml = 0;
+my $opt_drrd = 0;
 my $opt_w    = 1;
 my $opt_c    = 10;
 my $opt_t    = 10;
@@ -55,6 +57,8 @@ GetOptions(
     "critical=i" => \$opt_c,
     "fileage=i"  => \$opt_a,
     "a=i"        => \$opt_a,
+    "deletexml"  => \$opt_dxml,
+    "deleterrd"  => \$opt_drrd,
     "p=s"        => \$opt_p,
     "rrdpath=s"  => \$opt_p,
     "passiv-hostname=s"    => \$opt_phost,
@@ -141,10 +145,32 @@ sub inspect_files {
         my $mtime   = ( stat($file) )[9];
         my $fileage = ( ( time() - $mtime ) / 86400 );
         if ( $fileage >= ( $opt_a ) ) {
-
-            #print "Age -> ".$fileage."\n";
-            $XML_COUNT_AGE++;
-            $RRD_AGE .= sprintf(".../%s/%s is %d days old.\n",$host,$service,$fileage);
+            if ($opt_dxml) {
+                print $host . " / " . $service . " is ".$fileage." days old. Delete? (y/n)";
+                my $ret1 = <>;
+                if ($ret1 =~ /y/i) {
+                    if (! unlink($file)) {
+                        print "Deletion of $file failed!\n";
+                    } else {
+                        print "Deleted $file.\n";
+                    }
+                }
+                if ($opt_drrd) {
+                    my $rrd = $file;
+                    $rrd =~ s/\.[^.]+$//;
+                    $rrd .= ".rrd";
+                    if (-e $rrd) {
+                        print "    also delete " . basename($rrd) . "? (y/n)";
+                        my $ret2 = <>;
+                        if ($ret2 =~ /y/i)  {
+                           unlink($rrd) ? print "    $rrd deleted.\n" : print "    Deletion of $rrd failed.\n";
+                        }
+                    }
+                }
+            } else {
+                $XML_COUNT_AGE++;
+                $RRD_AGE .= sprintf(".../%s/%s is %d days old.\n",$host,$service,$fileage);
+            }
         }
         $RRD_ERRORS++ if $found != "0";
         $RRD_ERR .= ".../$host/$service $TXT\n" if $found != 0;
@@ -220,6 +246,11 @@ sub print_usage () {
     print "       Default: $opt_t Seconds\n";
     print "  --ignore-hosts \n";
     print "       Regular expression to ignore a set of hosts";
+    print "\n\n";
+    print "  --deletexml\n";
+    print "       delete old XML files (interactive). \n";
+    print "  --deleterrd\n";
+    print "       delete old RRD files (interactive, only if --deletexml). \n";
     print "\n\n";
     print "  --passiv-hostname=\n";
     print "       Nagios Hostname\n";
