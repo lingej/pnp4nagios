@@ -303,6 +303,7 @@ if($mode eq "bulk+npcd"){
 	process_npcd_cfg($npcd_cfg);
 	
 	check_config_var('perfdata_spool_dir', 'exists');
+	count_spool_files(get_config_var('perfdata_spool_dir'));
 	
 	$command_line = check_command_definition('service_perfdata_file_processing_command');
 	$command_line = check_command_definition('host_perfdata_file_processing_command');
@@ -368,6 +369,11 @@ if($mode eq "npcdmod"){
 	}else{
 		info_and_exit("npcd and npcdmod.o are not using the same config file($npcd_cfg<=>$npcdmod_npcd_cfg)",2);
 	}
+
+	# read npcd.cfg into %cfg
+	process_npcd_cfg($npcd_cfg);
+	check_config_var('perfdata_spool_dir', 'exists');
+	count_spool_files(get_config_var('perfdata_spool_dir'));
 
 	info(ucfirst($product)." config looks good so far",4);
 	info("========== Checking config values ============",4);
@@ -437,6 +443,19 @@ sub get_config_var {
 	}
 }
 
+sub count_spool_files {
+	my $spool_dir = shift;
+        my @all_files = glob "$spool_dir/*";
+	if($#all_files >= 10){
+		info("$#all_files files found in $spool_dir",2);
+		info("Something went wrong here!",5);
+	}elsif($#all_files >= 3){
+		info("$#all_files files found in $spool_dir",1);
+		info("Something went wrong here!",5);
+	}else{
+		info("$#all_files files found in $spool_dir",0);
+	}
+}
 sub check_command_definition {
 	my $option = shift;
 	my $key = get_config_var($option);
