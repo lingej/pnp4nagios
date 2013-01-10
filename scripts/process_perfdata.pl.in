@@ -72,7 +72,7 @@ my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "
 
 Getopt::Long::Configure('bundling');
 my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b, $opt_gm, $opt_pidfile,$opt_daemon );
-my $opt_t = $conf{TIMEOUT};                            # Default Timeout
+my $opt_t = my $opt_t_default = $conf{TIMEOUT}; # Default Timeout
 my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
 GetOptions(
     "V"          => \$opt_V,
@@ -131,6 +131,13 @@ if ( defined($opt_gm) ) {
 
 print_help()    if ($opt_h);
 print_version() if ($opt_V);
+
+# Use the timeout specified on the command line and if none use what is in the configuration
+# If timeout is not in command line or the config file use the default
+$opt_t = $conf{TIMEOUT} if ( $opt_t == $opt_t_default && $opt_t != $conf{TIMEOUT} );
+print_log( "Default Timeout: $opt_t_default secs.", 2 );
+print_log( "Config Timeout: $conf{TIMEOUT} secs.", 2 );
+print_log( "Actual Timeout: $opt_t secs.", 2 );
 
 init_signals();
 my %children = ();       # keys are current child process IDs
@@ -1517,7 +1524,7 @@ sub print_help {
     -V, --version
     Print version information
     -t, --timeout=INTEGER
-    Seconds before process_perfdata.pl times out (default: $opt_t)
+    Seconds before process_perfdata.pl times out (default: $opt_t_default)
     -i, --inetd
     Use this Option if process_perfdata.pl is executed by inetd/xinetd.
     -d, --datatype
