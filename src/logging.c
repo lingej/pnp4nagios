@@ -27,7 +27,7 @@ extern int max_logfile_size;
 
 int do_log(char *message) {
 	if (use_syslog) {
-		syslog(LOG_NOTICE, message);
+		syslog(LOG_NOTICE, "%s", message);
 		return OK;
 	} else if (use_syslog == FALSE) {
 		if (write_log(message)==0)
