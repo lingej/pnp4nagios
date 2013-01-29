@@ -905,7 +905,7 @@ sub _parse {
         "max"      => $7
     );
     
-    $p{label}  =~ s/["']//g;        # cleanup
+    $p{label}  =~ s/[&"']//g;        # cleanup
     $p{name}   =~ s/["']//g;        # cleanup
     $p{name}   =~ s/[\/\\]/_/g;    # cleanup
     $p{name}   = cleanup($p{name});
@@ -957,7 +957,7 @@ sub _parse {
 sub cleanup {
     my $string = shift;
     if ($string) {
-        $string =~ s/[ :\/\\]/_/g;
+        $string =~ s/[& :\/\\]/_/g;
     }
     return $string;
 }
