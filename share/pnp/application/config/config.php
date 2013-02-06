@@ -137,5 +137,6 @@ $config['pdf_margin_right']  = "10";
 $config['pdf_margin_top']    = "30";
 $config['auth_multisite_enabled']   = "0";
 $config['auth_multisite_htpasswd']  = "";
+$config['auth_multisite_serials']   = "";
 $config['auth_multisite_secret']    = "";
 $config['auth_multisite_login_url'] = "/check_mk/login.py";

@@ -1,4 +1,5 @@
 **pnp-0.6.20 ??/??/2012**
+  * Feature: Support check_mk Multisite Cookie Auth ( Lars Michelsen )
   * Feature: Allow RRD unknown values ( Simon Meggle )
   * feature: Interactive delete mode added to check_rrds.pl ( Simon Meggle ) 
   * Bugfix:  Allow multiple gearman servers ( Craig Barraclough )

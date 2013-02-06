@@ -30,6 +30,7 @@ class Auth_Model extends System_Model {
         }
         if($this->REMOTE_USER === NULL && $this->config->conf['auth_multisite_enabled'] == 1) {
             $MSAUTH = new Auth_Multisite_Model($this->config->conf['auth_multisite_htpasswd'],
+                                               $this->config->conf['auth_multisite_serials'],
                                                $this->config->conf['auth_multisite_secret'],
                                                $this->config->conf['auth_multisite_login_url']);
             $this->REMOTE_USER = $MSAUTH->check();

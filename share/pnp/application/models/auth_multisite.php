@@ -3,27 +3,41 @@
 
 class Auth_Multisite_Model {
     private $htpasswdPath;
+    private $serialsPath;
     private $secretPath;
+    private $authFile;
 
-    public function __construct($htpasswdPath, $secretPath, $loginUrl) {
+    public function __construct($htpasswdPath, $serialsPath, $secretPath, $loginUrl) {
         $this->htpasswdPath = $htpasswdPath;
+        $this->serialsPath  = $serialsPath;
         $this->secretPath   = $secretPath;
         $this->loginUrl     = $loginUrl;
 
-        if(!file_exists($this->htpasswdPath)) {
+        // When the auth.serial file exists, use this instead of the htpasswd
+        // for validating the cookie. The structure of the file is equal, so
+        // the same code can be used.
+        if(file_exists($this->serialsPath)) {
+            $this->authFile = 'serial';
+
+        } elseif(file_exists($this->htpasswdPath)) {
+            $this->authFile = 'htpasswd';
+
+        } else {
             throw new Kohana_exception("error.auth_multisite_missing_htpasswd");
         }
 
         if(!file_exists($this->secretPath)) {
-            throw new Kohana_exception("error.auth_multisite_missing_secret");
+            $this->redirectToLogin();
         }
     }
 
-    private function loadHtpasswd() {
+    private function loadAuthFile($path) {
         $creds = array();
-        foreach(file($this->htpasswdPath) AS $line) {
-            list($username, $pwhash) = explode(':', $line, 2);
-            $creds[$username] = rtrim($pwhash);
+        foreach(file($path) AS $line) {
+            if(strpos($line, ':') !== false) {
+                list($username, $secret) = explode(':', $line, 2);
+                $creds[$username] = rtrim($secret);
+            }
         }
         return $creds;
     }
@@ -32,9 +46,9 @@ class Auth_Multisite_Model {
         return trim(file_get_contents($this->secretPath));
     }
 
-    private function generateHash($username, $now, $pwhash) {
+    private function generateHash($username, $now, $user_secret) {
         $secret = $this->loadSecret();
-        return md5($username . $now . $pwhash . $secret);
+        return md5($username . $now . $user_secret . $secret);
     }
 
     private function checkAuthCookie($cookieName) {
@@ -44,16 +58,18 @@ class Auth_Multisite_Model {
 
         list($username, $issueTime, $cookieHash) = explode(':', $_COOKIE[$cookieName], 3);
 
-        // FIXME: Check expire time?
-        
-        $users = $this->loadHtpasswd();
+        if($this->authFile == 'htpasswd')
+            $users = $this->loadAuthFile($this->htpasswdPath);
+        else
+            $users = $this->loadAuthFile($this->serialsPath);
+
         if(!isset($users[$username])) {
             throw new Exception();
         }
-        $pwhash = $users[$username];
+        $user_secret = $users[$username];
 
         // Validate the hash
-        if($cookieHash != $this->generateHash($username, $issueTime, $pwhash)) {
+        if($cookieHash != $this->generateHash($username, $issueTime, $user_secret)) {
             throw new Exception();
         }
 
@@ -77,11 +93,14 @@ class Auth_Multisite_Model {
         return '';
     }
 
+    private function redirectToLogin() {
+        header('Location:' . $this->loginUrl . '?_origtarget=' . $_SERVER['REQUEST_URI']);
+    }
+
     public function check() {
         $username = $this->checkAuth();
         if($username === '') {
-            // FIXME: Get the real path to multisite
-            header('Location:' . $this->loginUrl . '?_origtarget=' . $_SERVER['REQUEST_URI']);
+            $this->redirectToLogin();
             exit(0);
         }
 
