@@ -27,7 +27,7 @@ use Term::ANSIColor;
 my $version = 'pnp4nagios-head';
 
 # process command line parameters
-use vars qw ( $help $debug $mode $vInfo $PNPCfg $MainCfg $last_check);
+use vars qw ( $help $debug $mode $vInfo $PNPCfg $MainCfg $last_check $object);
 my $start_options = $0 . " " . join(" ", @ARGV);
 Getopt::Long::Configure('bundling');
 GetOptions(
@@ -36,6 +36,7 @@ GetOptions(
 	"m|mode=s"   => \$mode,
 	"c|config=s" => \$MainCfg,
 	"p|pnpcfg=s" => \$PNPCfg,
+	"o|object=s" => \$object,
 );
 
 my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
@@ -788,25 +789,46 @@ sub process_status_file {
 	my ($file) = get_config_var('status_file');
 	my $line = "";
 	my $perfdata_found = 0;
+	my ($host,$service) = split(/;/,$object) if ($object);
+	$host    = "" unless (defined $host);
+	$service = "" unless (defined $service);
+	my $hst  = "";
+	my $srv  = "";
+	my $perf = "";
 	info ("Reading $file", 4);
 	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
 	while (<CFILE>) {
 		s/#.*//;
 		next if (/^$/);
 		chomp;
+		if(/\shost_name=(.+)/){
+			$hst = $1;
+			$srv = "";
+		}
+		if(/\sservice_description=(.+)/){
+			$srv = $1;
+		}
 		# count process_perf_data definitions
 		if (/process_performance_data=(\d)$/){
 			$process_perf_data_stats{$1}++;
+			$perf .= ", ppd=$1";
 			if ( $perfdata_found == 0 && $1 == 1){
 				$process_perf_data_stats{'noperf_but_enabled'}++;
+			}
+			if ($object) {
+				$perf = "" if (($host ne "") and ($hst !~ /$host/i));
+				$perf = "" if (($service ne "") and ($srv !~ /$service/i));
+				info ("$perf", 4) if ($perf ne "");
 			}
 		}
 		if(/\sperformance_data=$/){
 			$process_perf_data_stats{'noperf'}++;
 			$perfdata_found = 0;
+			$perf = " $hst/$srv: [empty perf data]";
 		}
 		if(/\sperformance_data=(.+)$/){
 			$perfdata_found = 1;
+			$perf =  " $hst/$srv: [$1]";
 		}
 		if(/^hoststatus /){
 			$process_perf_data_stats{'hosts'}++;
@@ -932,8 +954,9 @@ sub usage{
 print <<EOF;
 
 verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod]
-                  -c|--config=[path to nagios.cfg]
+                  -c|--config=[location of nagios.cfg]
                   -p|--pnpcfg=[path to PNP config dir]
+                  -o|--object=[host][;service] (optional)
 
 This script will check certain settings/entries of your PNP environ-
 ment to assist you in finding problems when you are using PNP.
