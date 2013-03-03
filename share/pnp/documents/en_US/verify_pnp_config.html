@@ -24,16 +24,26 @@ wget http://verify.pnp4nagios.org/verify_pnp_config
 
 <p>
 
-The verify script is located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> an needs three start options
+The verify script is located on <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> and needs three start options
 </p>
 <ul>
 <li class="level1"><div class="li"> <code>--mode</code> One of the modes described on <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">modes</a></div>
 </li>
-<li class="level1"><div class="li"> <code>--config</code> Path nagios.cfg or icinga.cfg</div>
+<li class="level1"><div class="li"> <code>--config</code> Location of nagios.cfg or icinga.cfg</div>
 </li>
 <li class="level1"><div class="li"> <code>--pnpcfg</code> Path to PNP´s etc directory</div>
 </li>
 </ul>
+
+<p>
+
+Calling <code>perl verify_pnp_config</code> will show the available options.
+</p>
+
+<p>
+The following is a sample run
+
+</p>
 <pre class="code">
 lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/nagios.cfg --pnpcfg=/usr/local/pnp4nagios/etc
 [INFO]  ========== Starting Environment Checks ============
@@ -97,4 +107,26 @@ lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/na
 </pre>
 
 </div>
-<!-- SECTION "Test" [384-] -->
+<!-- SECTION "Test" [384-3776] -->
+<h2><a name="performance_data" id="performance_data">Performance data</a></h2>
+<div class="level2">
+
+<p>
+Starting with <code>0.6.19-R.37</code> (2013-02-17) the script will accept the option <code>--object</code> (or <code>-o</code>)  followed by a string to specify a host name and/or service description to additionally show performance data (if any) of the object(s) found. The data is enclosed in brackets, followed by the value of the directive <code>process_performance_data</code> (<code>ppd</code>=n).
+</p>
+
+<p>
+<code>host</code> = show performance information for host <code>host</code> <br/>
+
+<code>;service</code> = show performance information for service <code>service</code> <br/>
+
+<code>host;service</code> = show performance information for service <code>service</code> on host <code>host</code>
+</p>
+
+<p>
+The strings are taken as regular expressions (perl syntax).
+
+</p>
+
+</div>
+<!-- SECTION "Performance data" [3777-] -->

@@ -772,7 +772,15 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 <pre class="code">make fullinstall</pre>
 
 <p>
-<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
+<strong>Hinweis:</strong> Wie oben schon beschrieben wird standarm&auml;ssig mit den Nagios Einstellungen installiert. Wird Icinga genutzt muss in der Datei ”/etc/apache2/conf.d/pnp4nagios.conf” der Pfad zum AuthUserFile angepasst werden (Pfad evtl. je nach Distri anpassen):
+</p>
+<pre class="code">
+#       AuthUserFile /usr/local/nagios/etc/htpasswd.users
+        AuthUserFile /usr/local/icinga/etc/htpasswd.users
+</pre>
+
+<p>
+<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server bzw. &auml;ndern des AuthUserFile ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
 </p>
 
 </div>
@@ -1462,6 +1470,10 @@ Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) &uuml;ber die Option
 &Uuml;ber <code>--pnpcfg</code> wird der Pfad zum <code>etc</code> Verzeichnis der PNP4Nagios Installation &uuml;bergeben.<br/>
 
 </p>
+
+<p>
+Beim Aufruf von <code>perl verify_pnp_config</code> werden die verf&uuml;gbaren Optionen ausgegeben.
+</p>
 <pre class="code">
 lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/nagios.cfg --pnpcfg=/usr/local/pnp4nagios/etc
 [INFO]  ========== Starting Environment Checks ============
@@ -1523,6 +1535,28 @@ lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/na
 [WARN]  Warning: 3, Critical: 0
 [WARN]  Checks finished...
 </pre>
+
+</div>
+
+<h2><a name="performance_data" id="performance_data">Performance data</a></h2>
+<div class="level2">
+
+<p>
+Beginnend mit <code>0.6.19-R.37</code> (2013-02-17) akzeptiert das Skript die Option<code>--object</code> (oder <code>-o</code>) gefolgt von einer Zeichenkette, die einen Host und/oder einen Service angibt. F&uuml;r diese/s Objekt(e) werden die Performance-Daten angegeben (falls vorhanden). Die Daten werden von eckigen Klammern begrenzt, gefolgt vom Wert der Direktive <code>process_performance_data</code> (<code>ppd</code>=n).
+</p>
+
+<p>
+<code>host</code> = Performance-Informationen f&uuml;r den Host <code>host</code> zeigen<br/>
+
+<code>;service</code> = Performance-Informationen f&uuml;r Service <code>service</code> zeigen<br/>
+
+<code>host;service</code> = Performance-Informationen f&uuml;r Service <code>service</code> auf Host <code>host</code> zeigen
+</p>
+
+<p>
+Die Zeichenketten werden als regul&auml;re Ausdr&uuml;cke angesehen (<acronym title="Practical Extraction and Report Language">Perl</acronym>-Syntax).
+
+</p>
 
 </div>
 <div class="inclmeta level1">
@@ -2148,7 +2182,7 @@ Soll der Graph f&uuml;r den Service “http” auf Host “localhost” angezeig
 <span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
 
 <p>
-PNP sucht nun nach einem Template mit dem Namen <code>check_http.php</code> in folgender Reihenfolge:
+PNP h&auml;ngt <code>.php</code> an und sucht nun nach einem Template mit dem Namen <code>check_http.php</code> in folgender Reihenfolge:
 
 </p>
 <ol>

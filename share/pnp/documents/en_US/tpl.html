@@ -66,7 +66,7 @@ If the graph for the service “http” on host “localhost” should be shown,
 <span class="sc3"><span class="re1">&lt;/NAGIOS<span class="re2">&gt;</span></span></span></pre>
 
 <p>
-PNP will look for a template with the name <code>check_http.php</code> in the following sequence:
+PNP will append <code>.php</code> to the string and therefore look for a template with the name <code>check_http.php</code> in the following sequence:
 
 </p>
 <ol>
@@ -86,7 +86,7 @@ The template default.php takes an exceptional position as it is used every time 
 </p>
 
 </div>
-<!-- SECTION "What template will be used when?" [298-1835] -->
+<!-- SECTION "What template will be used when?" [298-1879] -->
 <h2><a name="creating_own_templates" id="creating_own_templates">Creating own templates</a></h2>
 <div class="level2">
 
@@ -169,7 +169,7 @@ The three GPRINT lines build up the caption for the graph. The current values ar
 </p>
 
 </div>
-<!-- SECTION "Creating own templates" [1836-4573] -->
+<!-- SECTION "Creating own templates" [1880-4617] -->
 <h2><a name="available_variables" id="available_variables">Available variables</a></h2>
 <div class="level2">
 
@@ -237,4 +237,4 @@ The value of the field <code>&lt;NAGIOS_SERVICEOUTPUT&gt;</code> is available as
 </p>
 
 </div>
-<!-- SECTION "Available variables" [4574-] -->
+<!-- SECTION "Available variables" [4618-] -->
