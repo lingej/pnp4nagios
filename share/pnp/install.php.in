@@ -32,7 +32,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 <?php $failed = 0 ?>
 <h1>PNP4Nagios Environment Tests</h1>
 
-<p>The following options are determined by "configure". If any of the tests have failed, consult the <a href="http://docs.pnp4nagios.org/pnp-0.6/installer">documentation</a> for more information on how to correct the problem.</p>
+<p>The following options are determined by "configure". If any of the tests have failed, consult the <a href="http://docs.pnp4nagios.org/pnp-0.6/install">documentation</a> for more information on how to correct the problem.</p>
 
 <div id="tests">
 <table cellspacing="0">
@@ -133,7 +133,7 @@ body { width: 42em; margin: 0 auto; font-family: sans-serif; font-size: 90%; }
 
 <h1>Kohana Environment Tests</h1>
 
-<p>The following tests have been run to determine if Kohana will work in your environment. If any of the tests have failed, consult the <a href="http://docs.pnp4nagios.org/pnp-0.6/installer">documentation</a> for more information on how to correct the problem.</p>
+<p>The following tests have been run to determine if Kohana will work in your environment. If any of the tests have failed, consult the <a href="http://docs.pnp4nagios.org/pnp-0.6/install">documentation</a> for more information on how to correct the problem.</p>
 
 <div id="tests">
 <table cellspacing="0">
