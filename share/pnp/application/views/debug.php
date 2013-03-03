@@ -67,8 +67,8 @@ if($this->is_authorized === FALSE){
     </td></tr></table>
     <div class="left w99 cb ui-corner-all">
     <?php if (!empty($footer)) {
-            echo $footer .  Kohana::lang('core.stats_footer');
+            echo $footer .  pnp::print_version();
     } ?>
-    <?php echo Kohana::lang('core.stats_footer') ?>
+    <?php echo pnp::print_version(); ?>
     </div>
 

@@ -66,7 +66,7 @@ echo "<a title=\"".Kohana::lang('common.title-docs-link')."\" href=\"".url::base
 <tr valign="top"><td colspan="2">
 <div class="left">
 <div class="cb p4 ui-widget-content ui-corner-all">
-<?php echo Kohana::lang('core.stats_footer') ?>
+<?php echo pnp::print_version(); ?>
 </div>
 </div>
 </div>

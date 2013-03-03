@@ -138,4 +138,9 @@ class pnp_Core {
         $val_fmt = str_replace(' ','',$val_fmt);
         return array ($val_unit,$val_fmt,$unit,pow($base,$mag));
     }
+
+    public static function print_version(){
+	return PNP_NAME . "-" . PNP_VERSION . " [ " .  PNP_REL_DATE  . " ]";
+    }
+
 }

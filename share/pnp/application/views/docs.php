@@ -25,7 +25,7 @@ echo $logo_box;
 </td></tr>
 <tr valign="top"><td colspan="2">
 <div class="cb p4 ui-widget-content ui-corner-all">
-<?php echo Kohana::lang('core.stats_footer') ?>
+<?php echo pnp::print_version(); ?>
 </div>
 </td></tr></table>
 </div>

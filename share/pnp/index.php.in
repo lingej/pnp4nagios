@@ -8,6 +8,7 @@
  * @see http://kohanaphp.com
  */
 
+define('PNP_NAME'     , '@PKG_NAME@');
 define('PNP_VERSION'  , '@PKG_VERSION@');
 define('PNP_REL_DATE' , '@PKG_REL_DATE@');
 define('PNP_ETC_PATH' , '@sysconfdir@');
