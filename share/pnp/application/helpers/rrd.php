@@ -341,10 +341,17 @@ class rrd_Core {
         $btw_vname = "var".substr(sha1(rand()),1,4);
         $blue_vname = "var".substr(sha1(rand()),1,4);
         $red_vname = "var".substr(sha1(rand()),1,4);
-		$line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
-		$line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
-		$line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GE,".$btw_vname.",UNKN,IF ";
-		$line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+        if($warning < $critical){
+            $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GE,".$btw_vname.",UNKN,IF ";
+            $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+        } else {
+            $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",GT,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",LE,".$btw_vname.",UNKN,IF ";
+            $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+        }
 		$line .= rrd::area($green_vname, $color_green.$opacity);
 		$line .= rrd::area($blue_vname, $color_btw.$opacity);
 		$line .= rrd::area($red_vname, $color_red.$opacity);
@@ -373,10 +380,17 @@ class rrd_Core {
         $blue_vname = "var".substr(sha1(rand()),1,4);
         $red_vname = "var".substr(sha1(rand()),1,4);
         $line = "";
-        $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
-        $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
-        $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GE,".$btw_vname.",UNKN,IF ";
-        $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+        if($warning < $critical){
+            $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",LT,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",GE,".$btw_vname.",UNKN,IF ";
+            $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+        } else {
+            $line .= "CDEF:".$green_vname."=".$vname.",".$warning.",GT,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$btw_vname."=".$vname.",".$critical.",GE,".$vname.",UNKN,IF ";
+            $line .= "CDEF:".$blue_vname."=".$btw_vname.",".$warning.",LE,".$btw_vname.",UNKN,IF ";
+            $line .= "CDEF:".$red_vname."=".$vname.",".$critical.",LT,".$vname.",UNKN,IF ";
+        }
         $line .= rrd::gradient($green_vname, $start_color, $color_green.$opacity);
         $line .= rrd::gradient($blue_vname, $start_color, $color_btw.$opacity);
         $line .= rrd::gradient($red_vname, $start_color, $color_red.$opacity);
