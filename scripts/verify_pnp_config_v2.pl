@@ -798,9 +798,11 @@ sub process_status_file {
 	my ($file) = get_config_var('status_file');
 	my $line = "";
 	my $perfdata_found = 0;
-	my ($host,$service) = split(/;/,$object) if ($object);
-	$host    = "" unless (defined $host);
-	$service = "" unless (defined $service);
+	my ($host_query,$service_query) = split(/;/,$object) if ($object);
+	$host_query    = "" unless (defined $host_query);
+	$service_query = "" unless (defined $service_query);
+        info("host_query = $host_query",4);
+        info("service_query = $service_query",4);
 	my $hst  = "";
 	my $srv  = "";
 	my $perf = "";
@@ -817,6 +819,15 @@ sub process_status_file {
 		if(/\sservice_description=(.+)/){
 			$srv = $1;
 		}
+		if(/\sperformance_data=$/){
+			$process_perf_data_stats{'noperf'}++;
+			$perfdata_found = 0;
+			$perf = "   $hst/$srv: [empty perf data]";
+		}
+		if(/\sperformance_data=(.+)$/){
+			$perfdata_found = 1;
+			$perf =  "   $hst/$srv: [$1]";
+		}
 		# count process_perf_data definitions
 		if (/process_performance_data=(\d)$/){
 			$process_perf_data_stats{$1}++;
@@ -824,20 +835,13 @@ sub process_status_file {
 			if ( $perfdata_found == 0 && $1 == 1){
 				$process_perf_data_stats{'noperf_but_enabled'}++;
 			}
-			if ($object) {
-				$perf = "" if (($host ne "") and ($hst !~ /$host/i));
-				$perf = "" if (($service ne "") and ($srv !~ /$service/i));
-				info ("$perf", 4) if ($perf ne "");
+			if ($host_query ne "") {
+				$perf = "" if ($hst !~ /$host_query/i);
 			}
-		}
-		if(/\sperformance_data=$/){
-			$process_perf_data_stats{'noperf'}++;
-			$perfdata_found = 0;
-			$perf = " $hst/$srv: [empty perf data]";
-		}
-		if(/\sperformance_data=(.+)$/){
-			$perfdata_found = 1;
-			$perf =  " $hst/$srv: [$1]";
+			if ($service_query ne "") {
+				$perf = "" if ($srv !~ /$service_query/i);
+			}
+			info ("$perf", 4) if ($perf ne "");
 		}
 		if(/^hoststatus /){
 			$process_perf_data_stats{'hosts'}++;
@@ -965,7 +969,7 @@ print <<EOF;
 verify_pnp_config -m|--mode=[sync|bulk|bulk+npcd|npcdmod]
                   -c|--config=[location of nagios.cfg]
                   -p|--pnpcfg=[path to PNP config dir]
-                  -o|--object=[host][;service] (optional)
+                  -o|--object="[host][;service]" (optional)
 
 This script will check certain settings/entries of your PNP environ-
 ment to assist you in finding problems when you are using PNP.
