@@ -459,6 +459,7 @@ sub count_spool_files {
 }
 sub check_command_definition {
 	my $option = shift;
+        warn $option;
 	my $key = get_config_var($option);
 	my $val = $commands{$key};
 	if(exists $commands{$key}){
@@ -468,10 +469,18 @@ sub check_command_definition {
 		info_and_exit("Command $key is not defined",2);
 	}
 	if($mode eq "sync"){
-		if( $val =~ m/process_perfdata.pl$/ or $val =~ m/process_perfdata.pl\s+-d\s+HOSTPERFDATA/ ){
-			info ( "Command looks good",0 );
+                if ( $option eq "host_perfdata_command"){
+			if( $val =~ m/process_perfdata.pl\s+-d\s+HOSTPERFDATA/ ){
+				info ( "Command looks good",0 );
+			}else{
+				info_and_exit ( "Command looks suspect ($val)",2 );
+			}
 		}else{
-			info_and_exit ( "Command looks suspect ($val)",2 );
+			if( $val =~ m/process_perfdata.pl$/ or $val =~ m/process_perfdata.pl\s+-d\s+SERVICEPERFDATA/ ){
+				info ( "Command looks good",0 );
+			}else{
+				info_and_exit ( "Command looks suspect ($val)",2 );
+			}
 		}
 	}
 	if($mode eq "bulk"){
