@@ -224,7 +224,7 @@ case $host_os in
 	solaris2*|sysv4*)
 		MOD_LDFLAGS="-G"
 	;;
-	aix4*|aix5*)
+	aix4*|aix5*|aix6*|aix7*)
 		#MOD_LDFLAGS="-G -bnoentry -bexpall"
 		MOD_LDFLAGS="-shared -Wl,-G -Wl,-bM:SRE -Wl,-bnoentry -Wl,-bexpall"
 	;;
