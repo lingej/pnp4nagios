@@ -806,6 +806,7 @@ sub process_status_file {
 	my $hst  = "";
 	my $srv  = "";
 	my $perf = "";
+	my $ppd  = "";
 	info ("Reading $file", 4);
 	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
 	while (<CFILE>) {
@@ -829,21 +830,27 @@ sub process_status_file {
 			$perf =  "   $hst/$srv: [$1]";
 		}
 		# count process_perf_data definitions
-		if (/process_performance_data=(\d)$/){
-			$process_perf_data_stats{$1}++;
-			$perf .= ", ppd=$1";
-			if ( $perfdata_found == 0 && $1 == 1){
-				$process_perf_data_stats{'noperf_but_enabled'}++;
-			}
-			if ($host_query ne "") {
-				$perf = "" if ($hst !~ /$host_query/i);
-			}
-			if ($service_query ne "") {
-				$perf = "" if ($srv !~ /$service_query/i);
-			}
-			info ("$perf", 4) if ($perf ne "");
-		}
-		if(/^hoststatus /){
+                if (/process_performance_data=(\d)$/){
+                        $ppd=$1;
+                        $process_perf_data_stats{$1}++ ;
+                        if ( $perfdata_found == 0 && $1 == 1){
+                                $process_perf_data_stats{'noperf_but_enabled'}++;
+                        }
+                        if ($host_query ne '') {
+                            $perf = "" if ($hst !~ /$host_query/i);
+                            if ($service_query ne '') {
+                                $perf = "" if ($srv !~ /$service_query/i);
+                            }else{
+                                $perf = '';
+                            }
+                        }else{
+                            $perf='';
+                        }
+                        if ($perf ne ""){
+                             info ("$perf, ppd=$ppd", 4);
+                        }
+                }		
+                if(/^hoststatus /){
 			$process_perf_data_stats{'hosts'}++;
 		}
 		if(/^servicestatus /){
