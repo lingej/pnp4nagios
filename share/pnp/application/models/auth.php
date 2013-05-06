@@ -133,7 +133,7 @@ class Auth_Model extends System_Model {
 			$this->socketPROTO  = 0;
 			return;
 		}
-		if(preg_match('/^tcp:([a-zA-Z0-9-]+):([0-9]+)$/',$string,$match) ){
+		if(preg_match('/^tcp:([a-zA-Z0-9-\.]+):([0-9]+)$/',$string,$match) ){
 			$this->socketDOMAIN = AF_INET;
 			$this->socketTYPE   = SOCK_STREAM;
 			$this->socketHOST   = $match[1];
