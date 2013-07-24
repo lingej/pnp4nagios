@@ -313,8 +313,7 @@ sub restore_files(){
 			$rrdfile = sprintf("%s/%s/%s_%s.rrd",$conf{RRDPATH},$host,$service,$STRUCT[$ds]{NAME});
 		}
 		print "$rrdfile\n";
-		$err = system("$conf{'RRDTOOL'} restore -f $restorefile $rrdfile");
-		#my $err = RRDs::error();
+		$err = system("$conf{'RRDTOOL'} restore -f '$restorefile' '$rrdfile'");
 		if($err){
 			printf("RRDtool Error: %s\n",$err);
 			exit;
