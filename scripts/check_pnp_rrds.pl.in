@@ -23,6 +23,14 @@ use warnings;
 use strict;
 use Getopt::Long;
 
+my $read_input;
+if (eval {require "Term/ReadKey.pm"}) {
+	import Term::ReadKey;
+	$read_input = \&read_key;
+} else {
+	$read_input = \&read_stdin;
+}
+
 Getopt::Long::Configure('bundling');
 my ( $opt_V, $opt_h, $opt_b );
 my $opt_a    = 7;
@@ -146,27 +154,35 @@ sub inspect_files {
         my $fileage = ( ( time() - $mtime ) / 86400 );
         if ( $fileage >= ( $opt_a ) ) {
             if ($opt_dxml) {
-                print $host . " / " . $service . " is ".$fileage." days old. Delete? (y/n)";
-                my $ret1 = <>;
+                print $host . " / " . $service . " is ".$fileage." days old. Delete? (y/n/q) ";
+                my $ret1 = &$read_input;
+#                my $ret1 = <>;
                 if ($ret1 =~ /y/i) {
                     if (! unlink($file)) {
-                        print "Deletion of $file failed!\n";
+                        print " ...Deletion of $file failed!";
                     } else {
-                        print "Deleted $file.\n";
+                        print " ...Deleted file $file.";
                     }
-                }
+                } elsif ($ret1 =~ /q/i) {
+		    exit;
+		}
+		print "\n";
+		
                 if ($opt_drrd) {
                     my $rrd = $file;
                     $rrd =~ s/\.[^.]+$//;
                     $rrd .= ".rrd";
                     if (-e $rrd) {
-                        print "    also delete " . basename($rrd) . "? (y/n)";
-                        my $ret2 = <>;
+                        print "    Delete " . basename($rrd) . "? (y/n/q) ";
+                        my $ret2 = &$read_input;
                         if ($ret2 =~ /y/i)  {
-                           unlink($rrd) ? print "    $rrd deleted.\n" : print "    Deletion of $rrd failed.\n";
-                        }
+                           unlink($rrd) ? print "    $rrd deleted." : print "    Deletion of $rrd failed.";
+                        } elsif ($ret2 =~/q/i) {
+				exit;
+			}
                     }
                 }
+		print "\n\n";
             } else {
                 $XML_COUNT_AGE++;
                 $RRD_AGE .= sprintf(".../%s/%s is %d days old.\n",$host,$service,$fileage);
@@ -266,4 +282,17 @@ sub print_support {
     print "\n\n";
 }
 
+sub read_stdin {
+	my $rk;
+	$rk = <>;
+	return $rk;
+}
+
+sub read_key {
+	my $rk;
+	ReadMode('cbreak');
+	$rk = ReadKey(0);
+	ReadMode('normal');
+	return $rk;
+}
 # vim: set ai tabstop=4 shiftwidth=4
