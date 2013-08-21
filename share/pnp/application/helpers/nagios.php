@@ -5,7 +5,7 @@
 */
 class nagios_Core {
 
-    public function SummaryLink($hostname,$start,$end){
+    public static function SummaryLink($hostname,$start,$end){
         $smon = date('m' , $start);
         $sday = date('d' , $start);
         $syear = date('Y' , $start);
@@ -23,7 +23,7 @@ class nagios_Core {
         print " title=\"".Kohana::lang('common.nagios-summary-link-title')."\"><img src=\"".url::base()."media/images/notify.gif\"></a>\n";
     }
 
-    public function AvailLink($hostname,$servicedesc,$start,$end){
+    public static function AvailLink($hostname,$servicedesc,$start,$end){
         $hostname = urlencode($hostname);    
         $servicedesc = urlencode($servicedesc);    
         $smon = date('m' , $start);
