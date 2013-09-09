@@ -15,6 +15,7 @@ DAEMON="@libexecdir@/process_perfdata.pl"
 CFG="@sysconfdir@/process_perfdata.cfg"
 NAME=pnp_gearman_worker
 PIDFILE=@localstatedir@/${NAME}.pid
+LOCKFILE=/var/lock/subsys/${NAME}
 USER=@nagios_user@
 USERID=`id -u`
 CMD="$DAEMON --pidfile=$PIDFILE --config=$CFG --gearman --daemon"
@@ -45,6 +46,10 @@ function kill_procs() {
         done
         ps -p $pid > /dev/null 2>&1;
         if [ $? -ne 0 ]; then
+            rm -f $PIDFILE
+            if [ "$USERID" -eq 0 ]; then
+                rm -f $LOCKFILE
+            fi
             echo "done"
             exit 0;
         else
@@ -70,6 +75,9 @@ case "$1" in
             $CMD
         fi
         if [ $? -eq 0 ]; then
+            if [ "$USERID" -eq 0 ]; then
+                touch $LOCKFILE
+            fi
             echo "done"
             exit 0;
         else
