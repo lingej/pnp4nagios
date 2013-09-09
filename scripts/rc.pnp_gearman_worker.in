@@ -48,7 +48,7 @@ function kill_procs() {
         if [ $? -ne 0 ]; then
             rm -f $PIDFILE
             if [ "$USERID" -eq 0 ]; then
-                rm -f $LOCKFILE $PIDFILE
+                rm -f $LOCKFILE
             fi
             echo "done"
             exit 0;
