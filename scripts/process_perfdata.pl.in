@@ -71,7 +71,7 @@ my %const = (
 my @default_rrd_create = ( "RRA:AVERAGE:0.5:1:2880", "RRA:AVERAGE:0.5:5:2880", "RRA:AVERAGE:0.5:30:4320", "RRA:AVERAGE:0.5:360:5840", "RRA:MAX:0.5:1:2880", "RRA:MAX:0.5:5:2880", "RRA:MAX:0.5:30:4320", "RRA:MAX:0.5:360:5840", "RRA:MIN:0.5:1:2880", "RRA:MIN:0.5:5:2880", "RRA:MIN:0.5:30:4320", "RRA:MIN:0.5:360:5840", );
 
 Getopt::Long::Configure('bundling');
-my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b, $opt_gm, $opt_pidfile,$opt_daemon );
+my ( $opt_d, $opt_V, $opt_h, $opt_i, $opt_n, $opt_b, $opt_s, $opt_gm, $opt_pidfile,$opt_daemon );
 my $opt_t = my $opt_t_default = $conf{TIMEOUT}; # Default Timeout
 my $opt_c = $conf{CFG_DIR} . "process_perfdata.cfg";
 GetOptions(
@@ -91,6 +91,8 @@ GetOptions(
     "config=s"   => \$opt_c,
     "n"          => \$opt_n,
     "npcd"       => \$opt_n,
+    "s"          => \$opt_s,
+    "stdin"      => \$opt_s,
     "gearman:s"  => \$opt_gm,
     "daemon"     => \$opt_daemon,
     "pidfile=s"  => \$opt_pidfile,
@@ -190,20 +192,25 @@ sub main {
         }
         print_log( "Gearman job end (runtime ${rt}s) ...", 1 );
         return 1;
-    } elsif ( $opt_b && !$opt_n ) {
+    } elsif ( $opt_b && !$opt_n && !$opt_s ) {
         # Bulk mode
-    	alarm($opt_t);
+        alarm($opt_t);
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by Nagios", 1 );
         $lines = process_perfdata_file();
-    } elsif ( $opt_b && $opt_n ) {
+    } elsif ( $opt_b && $opt_n && !$opt_s ) {
         # Bulk mode with npcd
-    	alarm($opt_t);
+        alarm($opt_t);
         print_log( "process_perfdata.pl-$const{VERSION} starting in BULK Mode called by NPCD", 1 );
         $lines = process_perfdata_file();
+    } elsif ( $opt_s ) {
+        # STDIN mode
+        alarm($opt_t);
+        print_log( "starting in STDIN Mode", 1 );
+        $lines = process_perfdata_stdin();
     } else {
         # Synchronous mode
-	$opt_t = 5 if $opt_t > 5; # maximum timeout
-    	alarm($opt_t);
+    $opt_t = 5 if $opt_t > 5; # maximum timeout
+        alarm($opt_t);
         print_log( "process_perfdata.pl-$const{VERSION} starting in SYNC Mode", 1 );
         %NAGIOS = parse_env();
         $lines = process_perfdata();
@@ -228,7 +235,7 @@ sub parse_env {
         # Gearman Worker
         $job_data = decode_base64($job_data);
         if($conf{ENCRYPTION} == 1){
-            $job_data = $cypher->decrypt( $job_data )        
+            $job_data = $cypher->decrypt( $job_data );
         }
         my @LINE = split(/\t/, $job_data);
         foreach my $k (@LINE) {
@@ -239,8 +246,8 @@ sub parse_env {
             print_log( "Gearman job data missmatch. Please check your encryption key.", 0 );
             return %NAGIOS;
         }
-	} elsif ( defined($opt_b) ){
-		# Bulk Mode
+    } elsif ( defined($opt_b) || defined($opt_s) ){
+        # Bulk Mode/Stdin Mode
         my @LINE = split(/\t/, $job_data);
         foreach my $k (@LINE) {
             $k =~ /([A-Z 0-9_]+)::(.*)$/;
@@ -248,7 +255,7 @@ sub parse_env {
         }
     }else{
 
- 	    if ( ( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} ) ) {
+        if ( ( !$ENV{NAGIOS_HOSTNAME} ) and ( !$ENV{ICINGA_HOSTNAME} ) ) {
             print_log( "Cant find Nagios Environment. Exiting ....", 1 );
             exit 2;
         }
@@ -258,7 +265,7 @@ sub parse_env {
             }
         }
 
-	}
+    }
 
     if ($opt_d) {
         $NAGIOS{DATATYPE} = $opt_d;
@@ -291,7 +298,7 @@ sub process_perfdata {
     }
     if ( ! defined($NAGIOS{PERFDATA}) && ! defined($opt_gm) ) {
         print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
-        if ( !$opt_b ) {
+        if ( !$opt_b && !$opt_s ) {
             print_log( "PNP exiting ...", 1 );
             exit 3;
         }
@@ -365,6 +372,31 @@ sub process_perfdata_file {
     else {
         print_log( "ERROR: File $opt_b not found", 1 );
     }
+}
+
+#
+# Process Perfdata in STDIN Mode
+#
+sub process_perfdata_stdin {
+    print_log( "reading from STDIN for bulk update", 2 );
+    my $count = 0;
+    while (<STDIN>) {
+        my $job_data = $_;
+        $count++;
+        print_log( "Processing Line $count", 2 );
+        my @LINE = split(/\t/);
+        %NAGIOS = ();    # cleaning %NAGIOS Hash
+        parse_env($job_data);
+        if ( $NAGIOS{SERVICEPERFDATA} || $NAGIOS{HOSTPERFDATA} ) {
+            process_perfdata();
+        } else {
+            print_log( "No Perfdata. Skipping line $count", 2 );
+            $stats{skipped}++;
+        }
+    }
+
+    print_log( "$count lines processed", 1 );
+    return $count;
 }
 
 #
@@ -1237,15 +1269,15 @@ sub handle_signal {
     }else{
         if ( $signal eq "ALRM" ) {
             print_log( "*** TIMEOUT: Timeout after $opt_t secs. ***", 0 );
-            if ( $opt_b && !$opt_n ) {
+            if ( $opt_b && !$opt_n && !$opt_s ) {
                 print_log( "*** TIMEOUT: Deleting current file to avoid loops",   0 );
                 print_log( "*** TIMEOUT: Please check your process_perfdata.cfg", 0 );
             }
-            elsif ( $opt_b && $opt_n ) {
+            elsif ( $opt_b && $opt_n && !$opt_s ) {
                 print_log( "*** TIMEOUT: Deleting current file to avoid NPCD loops", 0 );
                 print_log( "*** TIMEOUT: Please check your process_perfdata.cfg",    0 );
             }
-            if ($opt_b) {
+            if ($opt_b && !$opt_s ) {
                 my $pdfile = "$opt_b" . "-PID-" . $$;
                 if ( unlink("$pdfile") == 1 ) {
                     print_log( "*** TIMEOUT: $pdfile deleted", 0 );
@@ -1532,6 +1564,8 @@ sub print_help {
     Only used in default or inetd mode
     -b, --bulk
     Provide a file for bulk update
+    -s, --stdin
+    Read input from stdin
     -n, --npcd
     Hint the program, that it was invoked by NPCD
     -c, --config
