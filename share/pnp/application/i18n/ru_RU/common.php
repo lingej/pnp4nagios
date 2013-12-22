@@ -56,4 +56,5 @@ $lang = array
     'basket-add-service' => 'Добавить эту службу в мою корзину',
     'color-box-header' => 'Colors',
     'color-header' => 'Colors Schemes',
+    'export-to-csv-link-title' => 'Export to CSV',
 );
