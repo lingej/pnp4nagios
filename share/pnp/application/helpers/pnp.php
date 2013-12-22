@@ -64,6 +64,15 @@ class pnp_Core {
     /*
     *
     */
+    public static function ExportLink($hostname,$service,$start,$end){
+        print "<a href=\"".url::base()."xport/csv?host=$hostname&srv=$service&start=$start&end=$end\"";
+        print " title=\"".Kohana::lang('common.export-to-csv-link-title')."\"><img src=\"".url::base()."media/images/int.gif\"></a>\n";
+    }
+
+
+    /*
+    *
+    */
     public static function multisite_link($base_url=FALSE,$site=FALSE,$host=FALSE,$service=FALSE){
         if($host && $service){
             $link = sprintf("'%s/view.py?view_name=service&site=%s&host=%s&service=%s'", $base_url,$site,urlencode($host),urlencode($service));
