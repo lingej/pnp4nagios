@@ -12,7 +12,10 @@ class Graph_Controller extends System_Controller  {
     {
         parent::__construct();
         $this->template                = $this->add_view('template');
-        $this->template->graph         = $this->add_view('graph');
+        if (isset($this->version) && $this->version == "tiny" )
+                $this->template->graph   = $this->add_view('graph_tiny');
+        else
+                $this->template->graph   = $this->add_view('graph');
         $this->template->zoom_header   = $this->add_view('zoom_header');
         $this->template->zoom_header->graph_width  = ($this->config->conf['zgraph_width'] + 140);
         $this->template->zoom_header->graph_height = ($this->config->conf['zgraph_height'] + 230);
