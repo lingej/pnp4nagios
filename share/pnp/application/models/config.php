@@ -74,6 +74,11 @@ class Config_Model extends System_Model
             }
         }
 
+        // Use graph_height & graph_width from URL if present
+        if(isset($_GET['h']) && $_GET['h'] != "" ) $conf['graph_height'] = $_GET['h'];
+        if(isset($_GET['w']) && $_GET['w'] != "" ) $conf['graph_width']  = $_GET['w'];
+        if(isset($_GET['graph_height']) && $_GET['graph_height'] != "" ) $conf['graph_height'] = $_GET['graph_height'];
+        if(isset($_GET['graph_width'])  && $_GET['graph_width']  != "" ) $conf['graph_width']  = $_GET['graph_width'];
         $this->conf = $conf;
         $this->views = $views;
         $this->scheme = $scheme;
