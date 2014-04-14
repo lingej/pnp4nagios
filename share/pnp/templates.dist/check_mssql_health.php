@@ -338,6 +338,27 @@ foreach ($this->DS as $KEY=>$VAL) {
         $def[2] .= rrd::line1   ("var".$KEY, rrd::color($KEY), rrd::cut($dsname, 12) ) ;
         $def[2] .= rrd::gprint  ("var".$KEY, array("LAST","MAX","AVERAGE"), "%3.2lf %SM" );
     }
+    
+    if(preg_match('/^select$/', $VAL['NAME'])) {
+        $ds_name[$defcnt] = "Output from sql-query for $servicedesc";
+        $opt[$defcnt] = "--vertical-label \"Counts\" --title \"Output from sql-query for $servicedesc on $hostname\" ";
+        $def[$defcnt] = "";
+        $def[$defcnt] .= rrd::def("var".$KEY,$VAL['RRDFILE'],$VAL['DS'],"AVERAGE:reduce=LAST") ;
+        $def[$defcnt] .= rrd::area("var".$KEY,"#111111");
+        $def[$defcnt] .= rrd::gprint("var".$KEY,array("LAST", "MAX", "AVERAGE"),"%3.2lf Counts") ;
+        $defcnt++;
+    }
+
+   if(preg_match('/^(.*)bck_age$/', $VAL['NAME'])) {
+        $ds_name[$defcnt] = "Last DB Backup";
+        $opt[$defcnt] = "--vertical-label \"Hours\" --title \"Last DB Backup\" ";
+        $def[$defcnt] = "";
+        $def[$defcnt] .= rrd::def("var".$KEY,$VAL['RRDFILE'],$VAL['DS'],"AVERAGE:reduce=LAST") ;
+        $def[$defcnt] .= rrd::area("var".$KEY,"#111111");
+        $def[$defcnt] .= rrd::gprint("var".$KEY,array("LAST", "MAX", "AVERAGE"),"%3.2lf Counts") ;
+        $defcnt++;
+    }
+
 }
 ?>
 
