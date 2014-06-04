@@ -134,7 +134,7 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 <pre class="code">make fullinstall</pre>
 
 <p>
-<strong>Hinweis:</strong> Wie oben schon beschrieben wird standarm&auml;ssig mit den Nagios Einstellungen installiert. Wird Icinga genutzt muss in der Datei ”/etc/apache2/conf.d/pnp4nagios.conf” der Pfad zum AuthUserFile angepasst werden (Pfad evtl. je nach Distri anpassen):
+<strong>Hinweis:</strong> Wie oben schon beschrieben wird standardm&auml;ssig mit den Nagios-Einstellungen installiert. Wird Icinga genutzt, muss in der Datei ”/etc/apache2/conf.d/pnp4nagios.conf” der Pfad zum AuthUserFile angepasst werden (Pfad evtl. je nach Distri anpassen):
 </p>
 <pre class="code">
 #       AuthUserFile /usr/local/nagios/etc/htpasswd.users
@@ -142,11 +142,11 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 </pre>
 
 <p>
-<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server bzw. &auml;ndern des AuthUserFile ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
+<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server bzw. &Auml;ndern des AuthUserFile ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
 </p>
 
 </div>
-<!-- SECTION "Make und Co" [386-4174] -->
+<!-- SECTION "Make und Co" [386-4176] -->
 <h2><a name="update" id="update">Update</a></h2>
 <div class="level2">
 
@@ -163,7 +163,7 @@ Sie k&ouml;nnen die Schritte <code>make install-webconf</code> und <code>make in
 </p>
 
 </div>
-<!-- SECTION "Update" [4175-4910] -->
+<!-- SECTION "Update" [4177-4912] -->
 <h2><a name="die_komponenten" id="die_komponenten">Die Komponenten</a></h2>
 <div class="level2">
 
@@ -173,10 +173,10 @@ Nach der Installation sind einige Komponenten von PNP an die passenden Stellen i
 </p>
 
 <p>
-Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files f&uuml;r das Web-Frontend in 
+Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files f&uuml;r das Web-Frontend unter 
 
 </p>
-<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+<pre class="code"> /usr/local/pnp4nagios/share</pre>
 
 <p>
 
@@ -205,4 +205,4 @@ Die Config-Datei config.php f&uuml;r das Web-Frontend in
 </p>
 
 </div>
-<!-- SECTION "Die Komponenten" [4911-] -->
+<!-- SECTION "Die Komponenten" [4913-] -->

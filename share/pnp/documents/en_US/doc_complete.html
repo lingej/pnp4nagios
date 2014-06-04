@@ -244,7 +244,7 @@ Using this storage format the size of the files will stay the same over time. Pe
 
 <h2><a name="statistics_and_links_to_sourceforge" id="statistics_and_links_to_sourceforge">Statistics and links to Sourceforge</a></h2>
 <div class="level2">
-<ul class="rss"><li><div class="li"><a href="http://sourceforge.net/project/showfiles.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/showfiles.php?group_id=191615"  rel="nofollow">Downloadable files:  total downloads to date</a></div></li><li><div class="li"><a href="http://sourceforge.net/projects/pnp4nagios/" class="urlextern" title="http://sourceforge.net/projects/pnp4nagios/"  rel="nofollow">Project name: PNP4Nagios</a></div></li><li><div class="li"><a href="http://sourceforge.net/project/memberlist.php?group_id=191615" class="urlextern" title="http://sourceforge.net/project/memberlist.php?group_id=191615"  rel="nofollow">Developers on project: 5</a></div></li><li><div class="li"><a href="http://sourceforge.net/mail/?group_id=191615" class="urlextern" title="http://sourceforge.net/mail/?group_id=191615"  rel="nofollow">Mailing lists (public): 3</a></div></li></ul>
+<ul class="rss"><li><div class="li"><em>An error occurred while fetching this feed: </em><a href="http://sourceforge.net/export/rss2_projsummary.php?group_id=191615" class="urlextern" title="http://sourceforge.net/export/rss2_projsummary.php?group_id=191615"  rel="nofollow">http://sourceforge.net/export/rss2_projsummary.php?group_id=191615</a></div></li></ul>
 <p>
 
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/modes" class="wikilink1" title="pnp-0.6:modes">PNP modes</a>
@@ -355,6 +355,11 @@ The NPCD daemon (Nagios Performance C Daemon) will monitor the directory for new
 
 <p>
 
+<strong>Attention</strong>
+<em>Starting with Nagios 4 the internal structures have changed so the start of the module will fail. So far there are no plans to support Nagios 4. Please select any other of the modes.</em>
+</p>
+
+<p>
 <a href="/_detail/bulk-npcdmod.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="medialeft" align="left" alt="" width="150" /></a> This scenario includes npcdmod.o, an NEB-module.
 This module reduces the configuration of the “Bulk Mode with NPCD” to a mere two lines in nagios.cfg
 </p>
@@ -418,7 +423,7 @@ Changes can be tracked on <a href="http://pnp4nagios.git.sourceforge.net/git/git
 </p>
 
 <p>
-The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.20.tar.gz</a>
+The current Version is <a href="https://sourceforge.net/projects/pnp4nagios/files/latest" class="urlextern" title="https://sourceforge.net/projects/pnp4nagios/files/latest"  rel="nofollow"> pnp4nagios-0.6.21.tar.gz</a>
 </p>
 
 </div>
@@ -438,7 +443,7 @@ This is allways the latest GIT HEAD Version
 
 <p>
 
-Last Update: Sat Mar 23 19:05:01 CET 2013
+Last Update: Tue Jun  3 22:05:01 CEST 2014
 </p>
 
 </div>
@@ -448,10 +453,21 @@ Last Update: Sat Mar 23 19:05:01 CET 2013
 
 <p>
 
-<strong>pnp-0.6.21 ??/??/2013</strong>
+<strong>pnp-0.6.?? ??/??/2013</strong>
+</p>
+<ul>
+<li class="level1"><div class="li"> Bugfix:  Fixed livestatus socket parsing ( Pekka Panula )</div>
+</li>
+</ul>
+
+<p>
+
+<strong>pnp-0.6.21 03/24/2013</strong>
 </p>
 <ul>
 <li class="level1"><div class="li"> Feature: Helper functions rrd::alerter and rrd:alerter_gr both supports treshold detection (Martin Schirrmacher)</div>
+</li>
+<li class="level1"><div class="li"> Update:  jQuery Mobile update to 1.3.0 ( was broken in 0.6.20 ) </div>
 </li>
 </ul>
 
@@ -1214,6 +1230,13 @@ All these steps are combined in
 
 <p>
 
+<strong>Note:</strong> As already stated the Nagios settings will be used per default. If you are using Icinga the file &#039;/etc/apache2/conf.d/pnp4nagios.conf&#039; has to be edited to change the path to AuthUserFile (the path may differ between distributions): 
+
+</p>
+<pre class="code">#       AuthUserFile /usr/local/nagios/etc/htpasswd.users
+        AuthUserFile /usr/local/icinga/etc/htpasswd.users</pre>
+
+<p>
 <strong>Attention:</strong> After copying the configuration file for the web server you have to restart the web server (<code>service httpd restart</code> or <code>/etc/init.d/apache2 restart</code>, respectively).
 </p>
 
@@ -1245,10 +1268,10 @@ After installation the components of PNP were copied to the appropriate places i
 </p>
 
 <p>
-the <acronym title="Hypertext Preprocessor">PHP</acronym>-Files for the web-frontend in
+the <acronym title="Hypertext Preprocessor">PHP</acronym>-Files for the web-frontend below
 
 </p>
-<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+<pre class="code"> /usr/local/pnp4nagios/share</pre>
 
 <p>
 
@@ -1558,6 +1581,11 @@ The option <code>-d</code> starts NPCD as a daemon in the background.
 
 <p>
 
+<strong>Attention</strong>
+<em>Starting with Nagios 4 the internal structures have changed so the start of the module will fail. So far there are no plans to support Nagios 4. Please select any other of the modes.</em>
+</p>
+
+<p>
 <a href="/_detail/bulk-npcdmod.png?id=pnp-0.6%3Adoc_complete" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> This mode uses the event broker module npcdmod.o. The flow of data is identical to “bulk mode with NPCD”. The internal perfdata routines of Nagios activated by the “*_perf_data_*” directives in nagios.cfg are *NOT* used anymore. The module npcdmod.o takes over the task of processing the data required by PNP.
 </p>
 

@@ -364,6 +364,11 @@ Der NPCD ( Nagios Performance C Daemon ) &uuml;berwacht nun das Verzeichnis auf 
 
 <p>
 
+<strong>Achtung</strong>
+<em>Beginnend mit Nagios 4 haben sich die internen Strukturen ge&auml;ndert, so dass der Start des Moduls fehlschl&auml;gt. Bisher gibt es keine Pl&auml;ne Nagios 4 zu unterst&uuml;tzen. Bitte w&auml;hlen Sie einen der anderen Modi.</em>
+</p>
+
+<p>
 <a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Adoc_complete" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="medialeft" align="left" alt="" width="150" /></a>In diesem Szenario kommt npcdmod.o, ein NEB-Modul, zum Einsatz.
 Diese Modul reduziert die Konfiguration des “Bulk Mode mit NPCD” auf zwei Zeilen in der nagios.cfg.
 </p>
@@ -772,7 +777,7 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 <pre class="code">make fullinstall</pre>
 
 <p>
-<strong>Hinweis:</strong> Wie oben schon beschrieben wird standarm&auml;ssig mit den Nagios Einstellungen installiert. Wird Icinga genutzt muss in der Datei ”/etc/apache2/conf.d/pnp4nagios.conf” der Pfad zum AuthUserFile angepasst werden (Pfad evtl. je nach Distri anpassen):
+<strong>Hinweis:</strong> Wie oben schon beschrieben wird standardm&auml;ssig mit den Nagios-Einstellungen installiert. Wird Icinga genutzt, muss in der Datei ”/etc/apache2/conf.d/pnp4nagios.conf” der Pfad zum AuthUserFile angepasst werden (Pfad evtl. je nach Distri anpassen):
 </p>
 <pre class="code">
 #       AuthUserFile /usr/local/nagios/etc/htpasswd.users
@@ -780,7 +785,7 @@ Zusammenfassen lassen sich diese einzelnen Commands durch
 </pre>
 
 <p>
-<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server bzw. &auml;ndern des AuthUserFile ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
+<strong>Achtung:</strong> Nach dem Kopieren der Konfigurationsdatei f&uuml;r den Web-Server bzw. &Auml;ndern des AuthUserFile ist ein Restart des Web-Servers notwendig (<code>service httpd restart</code> bzw. <code>/etc/init.d/apache2 restart</code>).
 </p>
 
 </div>
@@ -811,10 +816,10 @@ Nach der Installation sind einige Komponenten von PNP an die passenden Stellen i
 </p>
 
 <p>
-Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files f&uuml;r das Web-Frontend in 
+Im Folgenden sind dies die <acronym title="Hypertext Preprocessor">PHP</acronym>-Files f&uuml;r das Web-Frontend unter 
 
 </p>
-<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+<pre class="code"> /usr/local/pnp4nagios/share</pre>
 
 <p>
 
@@ -1150,6 +1155,11 @@ Weitere Informationen zu NPCD findet ihr <a href="/de/pnp-0.6/npcd" class="wikil
 
 <p>
 
+<strong>Achtung</strong>
+<em>Beginnend mit Nagios 4 haben sich die internen Strukturen ge&auml;ndert, so dass der Start des Moduls fehlschl&auml;gt. Bisher gibt es keine Pl&auml;ne, Nagios 4 zu unterst&uuml;tzen. Bitte w&auml;hlen Sie einen der anderen Modi.</em>
+</p>
+
+<p>
 <a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Adoc_complete" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker-Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata-Routinen von Nagios, die &uuml;ber die “*_perf_data_*” Optionen in der <code>nagios.cfg</code> konfiguriert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o k&uuml;mmert sich um die f&uuml;r PNP n&ouml;tige Aufbereitung der Daten.
 </p>
 

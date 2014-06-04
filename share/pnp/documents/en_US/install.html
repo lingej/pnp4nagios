@@ -139,11 +139,18 @@ All these steps are combined in
 
 <p>
 
+<strong>Note:</strong> As already stated the Nagios settings will be used per default. If you are using Icinga the file &#039;/etc/apache2/conf.d/pnp4nagios.conf&#039; has to be edited to change the path to AuthUserFile (the path may differ between distributions): 
+
+</p>
+<pre class="code">#       AuthUserFile /usr/local/nagios/etc/htpasswd.users
+        AuthUserFile /usr/local/icinga/etc/htpasswd.users</pre>
+
+<p>
 <strong>Attention:</strong> After copying the configuration file for the web server you have to restart the web server (<code>service httpd restart</code> or <code>/etc/init.d/apache2 restart</code>, respectively).
 </p>
 
 </div>
-<!-- SECTION "Make and more" [323-3329] -->
+<!-- SECTION "Make and more" [323-3702] -->
 <h2><a name="update" id="update">Update</a></h2>
 <div class="level2">
 
@@ -160,7 +167,7 @@ You can skip <code>make install-webconf</code> and <code>make install-init</code
 </p>
 
 </div>
-<!-- SECTION "Update" [3330-3954] -->
+<!-- SECTION "Update" [3703-4327] -->
 <h2><a name="the_components" id="the_components">The components</a></h2>
 <div class="level2">
 
@@ -170,10 +177,10 @@ After installation the components of PNP were copied to the appropriate places i
 </p>
 
 <p>
-the <acronym title="Hypertext Preprocessor">PHP</acronym>-Files for the web-frontend in
+the <acronym title="Hypertext Preprocessor">PHP</acronym>-Files for the web-frontend below
 
 </p>
-<pre class="code"> /usr/local/pnp4nagios/share/pnp</pre>
+<pre class="code"> /usr/local/pnp4nagios/share</pre>
 
 <p>
 
@@ -203,4 +210,4 @@ the config file config.php for the web frontend in
 </p>
 
 </div>
-<!-- SECTION "The components" [3955-] -->
+<!-- SECTION "The components" [4328-] -->

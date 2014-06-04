@@ -300,6 +300,11 @@ Weitere Informationen zu NPCD findet ihr <a href="/de/pnp-0.6/npcd" class="wikil
 
 <p>
 
+<strong>Achtung</strong>
+<em>Beginnend mit Nagios 4 haben sich die internen Strukturen ge&auml;ndert, so dass der Start des Moduls fehlschl&auml;gt. Bisher gibt es keine Pl&auml;ne, Nagios 4 zu unterst&uuml;tzen. Bitte w&auml;hlen Sie einen der anderen Modi.</em>
+</p>
+
+<p>
 <a href="/_detail/bulk-npcdmod.png?id=de%3Apnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> Bei diesem Modus kommt das Eventbroker-Modul npcdmod.o zu Einsatz. Der Datenfluss ist jedoch identisch zum “Bulk Mode mit NPCD”. Die internen Perfdata-Routinen von Nagios, die &uuml;ber die “*_perf_data_*” Optionen in der <code>nagios.cfg</code> konfiguriert werden, kommen <strong>NICHT</strong> mehr zu Einsatz. Das Modul npcdmod.o k&uuml;mmert sich um die f&uuml;r PNP n&ouml;tige Aufbereitung der Daten.
 </p>
 
@@ -350,7 +355,7 @@ Auszug aus den nagios.log
 </pre>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD und npcdmod" [10441-12226] -->
+<!-- SECTION "Bulk Mode with NPCD und npcdmod" [10441-12453] -->
 <h2><a name="gearman_mode" id="gearman_mode">Gearman Mode</a></h2>
 <div class="level2">
 
@@ -415,4 +420,4 @@ werden die Performance-Daten verarbeitet, die &uuml;ber den gearmand-Daemon auf 
 </p>
 
 </div>
-<!-- SECTION "Gearman Mode" [12227-] -->
+<!-- SECTION "Gearman Mode" [12454-] -->

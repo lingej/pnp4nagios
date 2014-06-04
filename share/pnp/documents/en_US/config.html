@@ -273,6 +273,11 @@ The option <code>-d</code> starts NPCD as a daemon in the background.
 
 <p>
 
+<strong>Attention</strong>
+<em>Starting with Nagios 4 the internal structures have changed so the start of the module will fail. So far there are no plans to support Nagios 4. Please select any other of the modes.</em>
+</p>
+
+<p>
 <a href="/_detail/bulk-npcdmod.png?id=pnp-0.6%3Aconfig" class="media" title="bulk-npcdmod.png"><img src="/_media/bulk-npcdmod.png?w=150" class="mediaright" align="right" alt="" width="150" /></a> This mode uses the event broker module npcdmod.o. The flow of data is identical to “bulk mode with NPCD”. The internal perfdata routines of Nagios activated by the “*_perf_data_*” directives in nagios.cfg are *NOT* used anymore. The module npcdmod.o takes over the task of processing the data required by PNP.
 </p>
 
@@ -323,7 +328,7 @@ Excerpt from nagios.log
 </pre>
 
 </div>
-<!-- SECTION "Bulk Mode with NPCD and npcdmod" [9340-11003] -->
+<!-- SECTION "Bulk Mode with NPCD and npcdmod" [9340-11205] -->
 <h2><a name="gearman_mode" id="gearman_mode">Gearman Mode</a></h2>
 <div class="level2">
 
@@ -387,4 +392,4 @@ the performance data will be processed which is provided by the gearmand daemon 
 </p>
 
 </div>
-<!-- SECTION "Gearman Mode" [11004-] -->
+<!-- SECTION "Gearman Mode" [11206-] -->
