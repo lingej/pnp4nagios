@@ -28,7 +28,7 @@
 <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all">
 
 <h3>Please check the documentation for information about the following error.</h3>
-<p><?php echo $message ?></p>
+<p><?php echo html::specialchars($message) ?></p>
 <?php if ( ! empty($line) AND ! empty($file)): ?>
 <h3>file [line]:</h3>
 <p><?php echo Kohana::lang('core.error_file_line', $file, $line) ?></p>

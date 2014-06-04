@@ -1,9 +1,11 @@
 **pnp-0.6.?? ??/??/2013**
+
+**pnp-0.6.22 04/06/2014**
   * Bugfix:  Fixed livestatus socket parsing ( Pekka Panula )
   * Bugfix:  Update check_mssql_health.php ( Miriam Zenk )
   * Feature: Add "version=tiny" to got get a stripped down version of graph ( Ricardo Bartels )
   * feature: Add STDIN Mode to process_perfdata.pl ( Robert Steininger )
-  * 
+  * Bugfix:  XSS issue fixed by Mikael Falkvidd. This issue was detected by Peter Österberg at Hexbit AB in a security assessment of op5 Monitor 6.3 on assignment by op5 AB. 
 
 **pnp-0.6.21 03/24/2013**
   * Feature: Helper functions rrd::alerter and rrd:alerter_gr both supports treshold detection (Martin Schirrmacher)
