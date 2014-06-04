@@ -1,5 +1,9 @@
 **pnp-0.6.?? ??/??/2013**
   * Bugfix:  Fixed livestatus socket parsing ( Pekka Panula )
+  * Bugfix:  Update check_mssql_health.php ( Miriam Zenk )
+  * Feature: Add "version=tiny" to got get a stripped down version of graph ( Ricardo Bartels )
+  * feature: Add STDIN Mode to process_perfdata.pl ( Robert Steininger )
+  * 
 
 **pnp-0.6.21 03/24/2013**
   * Feature: Helper functions rrd::alerter and rrd:alerter_gr both supports treshold detection (Martin Schirrmacher)
