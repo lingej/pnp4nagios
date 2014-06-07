@@ -7094,6 +7094,7 @@ $PERL subst sample-config/lighttpd.pnp4nagios.conf
 $PERL subst sample-config/nginx.pnp4nagios.conf
 $PERL subst sample-config/nagios.cfg-sample
 $PERL subst sample-config/misccommands.cfg-sample
+$PERL subst sample-config/icinga2-feature-perfdata.conf
 $PERL subst sample-config/pnp/config.php
 $PERL subst sample-config/pnp/npcd.cfg-sample
 $PERL subst sample-config/pnp/process_perfdata.cfg-sample

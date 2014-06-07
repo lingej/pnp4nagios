@@ -20,6 +20,7 @@ sample-config/pnp/process_perfdata.cfg-sample
 sample-config/pnp/npcd.cfg-sample
 sample-config/misccommands.cfg-sample
 sample-config/nagios.cfg-sample
+sample-config/icinga2-feature-perfdata.conf
 
 share/pnp/application/config/config.php
 share/pnp/index.php
