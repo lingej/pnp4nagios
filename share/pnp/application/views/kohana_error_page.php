@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php if(isset ( $_SERVER['REQUEST_URI'])):?> 
-<meta http-equiv="refresh" content="60; url=<?php echo $_SERVER['REQUEST_URI'] ?>">
+<meta http-equiv="refresh" content="60">
 <?php endif ?>
 <title><?php echo $error ?></title>
 <?php echo html::stylesheet('media/css/common.css') ?>
