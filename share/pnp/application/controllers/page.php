@@ -44,6 +44,8 @@ class Page_Controller extends System_Controller  {
         // Timerange Box Vars
         $this->template->page->timerange_box      = $this->add_view('timerange_box');
         $this->template->page->timerange_box->timeranges = $this->data->TIMERANGE;
+         // Timezone Box Vars
+        $this->template->page->timezone_box      = $this->add_view('timezone_box');
         // Pages Box
         $this->pages = $this->data->getPages();
         $this->template->page->pages_box          = $this->add_view('pages_box');
@@ -66,6 +68,8 @@ class Page_Controller extends System_Controller  {
             // Timerange Box Vars
             $this->template->page->timerange_box      = $this->add_view('timerange_box');
             $this->template->page->timerange_box->timeranges = $this->data->TIMERANGE;
+            // Timezone Box Vars
+            $this->template->page->timezone_box      = $this->add_view('timezone_box');
             // Pages Box
             $this->pages = $this->data->getPages();
             $this->template->page->pages_box          = $this->add_view('pages_box');

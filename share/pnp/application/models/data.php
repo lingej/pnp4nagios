@@ -680,6 +680,14 @@ class Data_Model extends System_Model
                 }
             }
         }
+
+        // Timezone
+        if (strpos($_SERVER['REQUEST_URI'], "timezone=")) {
+            $zone=urldecode($_GET['timezone']);
+            putenv("TZ=".$zone);
+            date_default_timezone_set($zone);
+        }
+
         if($start && $end){
             $timerange['title']   = Kohana::lang('common.timerange-selector-link');
             $timerange['start']   = $start;

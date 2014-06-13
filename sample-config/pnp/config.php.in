@@ -218,6 +218,18 @@ $views[] = array('title' => 'One Month', 'start' => (60*60*24*32) );
 $views[] = array('title' => 'One Year',  'start' => (60*60*24*380) );
 
 #
+# Show the timezone box
+#
+$conf['show_timezone'] = 1;
+
+# 
+# Define default zones with title and code for timezones
+#
+$zones[] = array('title' => 'UTC', 		'tz' => 'UTC');
+$zones[] = array('title' => 'EST/EDT', 	'tz' => 'US/Eastern');
+$zones[] = array('title' => 'PST/PDT', 	'tz' => 'US/Pacific');
+$zones[] = array('title' => 'IST', 		'tz' => 'Asia/Kolkata');
+#
 # rrdcached support
 # Use only with rrdtool svn revision 1511+
 #

@@ -72,6 +72,8 @@ class Graph_Controller extends System_Controller  {
             // Timerange Box Vars
             $this->template->graph->timerange_box = $this->add_view('timerange_box');
             $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
+            // Timezone Box Vars
+            $this->template->graph->timezone_box = $this->add_view('timezone_box');
             //
         // Host Overview
         }elseif($this->host != ""){
@@ -98,7 +100,8 @@ class Graph_Controller extends System_Controller  {
             // Timerange Box Vars
             $this->template->graph->timerange_box = $this->add_view('timerange_box');
             $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
-
+            // Timezone Box Vars
+            $this->template->graph->timezone_box = $this->add_view('timezone_box');
             $this->template->graph->icon_box->xml_icon = FALSE;
 
             $this->title = Kohana::lang('common.service-overview', $this->host);

@@ -40,6 +40,10 @@
      		echo $timerange_box;
 	} ?>
 
+	<?php if (!empty($timezone_box) && ($this->config->conf['show_timezone'])) {
+     		echo $timezone_box;
+	} ?>
+
 	<?php if (!empty($service_box)) {
      		echo $service_box;
 	} ?>

@@ -7,6 +7,7 @@ class Config_Model extends System_Model
 {
     public $conf = array();
     public $views = array();
+    public $zones = array();
     public $scheme = array();
 
     public function read_config(){
@@ -66,6 +67,7 @@ class Config_Model extends System_Model
             if (is_readable($config_file)) {
                 $array_a = $views;
                 $views = array();
+                $zones = array();
                 include ($config_file);
                 $array_b = $views;
                 if(sizeof($views) == 0 ){
@@ -76,6 +78,7 @@ class Config_Model extends System_Model
 
         $this->conf = $conf;
         $this->views = $views;
+        $this->zones = $zones;
         $this->scheme = $scheme;
     }
 }
