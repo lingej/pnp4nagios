@@ -74,6 +74,13 @@ class Config_Model extends System_Model
             }
         }
 
+        // Use graph_height & graph_width from URL if present
+        // Hint: In Kohana 3 Input class is removed
+        $input = Input::instance();
+        if($input->get('h') != "" ) $conf['graph_height'] = $input->get('h');
+        if($input->get('w') != "" ) $conf['graph_width']  = $input->get('w');
+        if($input->get('graph_height') != "" ) $conf['graph_height'] = $input->get('graph_height');
+        if($input->get('graph_width')  != "" ) $conf['graph_width']  = $input->get('graph_width');
         $this->conf = $conf;
         $this->views = $views;
         $this->scheme = $scheme;
