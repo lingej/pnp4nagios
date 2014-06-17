@@ -685,7 +685,7 @@ class Data_Model extends System_Model
         if (strpos($_SERVER['REQUEST_URI'], "timezone=")) {
             $zone=urldecode($_GET['timezone']);
             date_default_timezone_set($zone);
-            if (date_default_timezone_get() = $zone) {
+            if (date_default_timezone_get() == $zone) {
                   putenv("TZ=".$zone);
             }
         }
