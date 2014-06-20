@@ -24,7 +24,7 @@ jQuery(function() {
 					continue;
 				if( $key == "end" )
 					continue;
-				echo "<input type=\"hidden\" name=\"".$key."\" value=\"".$val."\">\n";
+				echo "<input type=\"hidden\" name=\"".htmlspecialchars($key)."\" value=\"".htmlspecialchars($val)."\">\n";
 			}?>
             <label for=start"><?php echo Kohana::lang('common.start') ?>: </label><input id="dpstart" type="text" size="18" maxlength="40" name="start" value="<?php echo $start?>">
 			<label for=end"><?php echo Kohana::lang('common.end') ?>: </label><input id="dpend" type="text" size="18" maxlength="40" name="end" value="<?php echo $end?>">
