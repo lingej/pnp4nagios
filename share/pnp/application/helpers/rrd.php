@@ -294,6 +294,9 @@ class rrd_Core {
         if($color === FALSE){
             throw new Kohana_exception("rrd::". __FUNCTION__ . "() Second Parameter 'color' is missing");   
         }
+	if($value == "~" ) {
+	    return "";
+	}
         $line = sprintf("HRULE:%s%s:\"%s\" ",$value,$color,$text);
         return $line;
     }
