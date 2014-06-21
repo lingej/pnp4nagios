@@ -316,6 +316,7 @@ sub process_perfdata {
     $NAGIOS{PERFDATA} =~ s/,/./g;
     $NAGIOS{PERFDATA} =~ s/\s+=/=/g;
     $NAGIOS{PERFDATA} =~ s/=\s+/=/g;
+    $NAGIOS{PERFDATA} =~ s/\\n//g;
     $NAGIOS{PERFDATA} .= " ";
     parse_perfstring( $NAGIOS{PERFDATA} );
     return 1;
