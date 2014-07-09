@@ -25,7 +25,7 @@ class Image_Controller extends System_Controller  {
         $this->source  = NULL;
 
         if($this->input->get('view') != "" )
-            $this->view = $this->input->get('view') ;
+            $this->view   = intval($this->input->get('view')) ;
 
         if($this->input->get('source') )
             $this->source = intval($this->input->get('source')) ;

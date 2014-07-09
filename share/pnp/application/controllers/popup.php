@@ -17,7 +17,7 @@ class Popup_Controller extends System_Controller  {
 
     public function index()
     {
-        $this->source  = $this->input->get('source');
+        $this->source  = intval($this->input->get('source'));
         $this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
@@ -28,7 +28,7 @@ class Popup_Controller extends System_Controller  {
 
 
         if(isset($_GET['width']) && $_GET['width'] !="" ){
-            $this->imgwidth = $this->input->get('width');
+            $this->imgwidth = intval($this->input->get('width'));
         }else{
             if(isset($this->config->conf['popup-width']) &&$this->config->conf['popup-width'] != ""){ 
                 $this->imgwidth = $this->config->conf['popup-width'];

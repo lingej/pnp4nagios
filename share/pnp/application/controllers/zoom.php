@@ -20,7 +20,7 @@ class Zoom_Controller extends System_Controller  {
 
     public function index()
     {
-        $this->source  = $this->input->get('source');
+        $this->source  = intval($this->input->get('source'));
         $this->view    = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
