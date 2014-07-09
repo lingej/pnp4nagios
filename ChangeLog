@@ -1,4 +1,5 @@
 **pnp-0.6.?? ??/??/2013**
+  * Bugfix: Fixed some more XSS issues
 
 **pnp-0.6.22 04/06/2014**
   * Bugfix:  Fixed livestatus socket parsing ( Pekka Panula )
