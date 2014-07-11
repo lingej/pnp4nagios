@@ -1,5 +1,6 @@
 **pnp-0.6.?? ??/??/2013**
   * Bugfix: Fixed some more XSS issues
+  * Bugfix: Fixed PHP issue while running on PHP 5.6 ( Reported by Sven Nierlein )
 
 **pnp-0.6.22 04/06/2014**
   * Bugfix:  Fixed livestatus socket parsing ( Pekka Panula )
