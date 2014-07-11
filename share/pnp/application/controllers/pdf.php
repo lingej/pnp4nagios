@@ -35,25 +35,16 @@ class Pdf_Controller extends System_Controller  {
 
     public function index(){
 
-        $this->tpl       = $this->input->get('tpl');
-        $this->view      = "";
+        $this->tpl       = pnp::clean($this->input->get('tpl'));
         $this->type      = "normal";
-
-        if(isset($_GET['view']) && $_GET['view'] != "" ){
-            $this->view = pnp::clean($_GET['view']);
-        }
-
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
         // Service Details
         if($this->host != "" && $this->service != ""){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
         // Host Overview
         }elseif($this->host != ""){
-            $this->host    = pnp::clean($this->host);
             if($this->view == ""){
                 $this->view = $this->config->conf['overview-range'];
             }

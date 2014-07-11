@@ -13,7 +13,6 @@ class Special_Controller extends System_Controller  {
         parent::__construct();
         $this->template        = $this->add_view('template');
         $this->template->graph = $this->add_view('graph');
-        $this->tpl             = $this->input->get('tpl');
         $this->templates       = $this->data->getSpecialTemplates();
         $this->data->GRAPH_TYPE = 'special';
         if($this->tpl == ''){

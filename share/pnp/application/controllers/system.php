@@ -23,17 +23,16 @@ class System_Controller extends Template_Controller {
         // Check for mod_rewrite
         $this->check_mod_rewrite();
 
-        $this->start             = $this->input->get('start',FALSE);
-        $this->end               = $this->input->get('end',FALSE);
-        $this->theme             = $this->input->get('theme',FALSE);
-        $this->view              = "";
-        $this->host              = $this->input->get('host',NULL);
-        $this->service           = $this->input->get('srv',NULL);
-        $this->version           = $this->input->get('version',NULL);
+        $this->start             = pnp::clean($this->input->get('start',FALSE));
+        $this->end               = pnp::clean($this->input->get('end',FALSE));
+        $this->theme             = pnp::clean($this->input->get('theme',FALSE));
+        $this->view              = pnp::clean($this->input->get('view', ""));
+        $this->host              = pnp::clean($this->input->get('host',NULL));
+        $this->service           = pnp::clean($this->input->get('srv',NULL));
+        $this->source            = pnp::clean($this->input->get('source',0));
+        $this->version           = pnp::clean($this->input->get('version',NULL));
+        $this->tpl               = pnp::clean($this->input->get('tpl'));
         $this->controller        = Router::$controller;
-
-        if(isset($_GET['view']) && $_GET['view'] != "" )
-            $this->view = pnp::clean($_GET['view']);
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
         if(Router::$controller != "image" && Router::$controller != "image_special"){

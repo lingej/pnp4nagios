@@ -17,19 +17,7 @@ class Image_Controller extends System_Controller  {
     {
         // Disable auto-rendering
         $this->auto_render = FALSE;
-    
-        $this->tpl     = $this->input->get('tpl');
-        $this->start   = $this->input->get('start');
-        $this->end     = $this->input->get('end');
-        $this->view    = $this->config->conf['overview-range']; //default value
-        $this->source  = NULL;
-
-        if($this->input->get('view') != "" )
-            $this->view   = intval($this->input->get('view')) ;
-
-        if($this->input->get('source') )
-            $this->source = intval($this->input->get('source')) ;
-
+        
         if($this->input->get('w') != "" )
             $this->rrdtool->config->conf['graph_width'] = intval($this->input->get('w'));
         if($this->input->get('graph_width') != "" )
@@ -42,15 +30,12 @@ class Image_Controller extends System_Controller  {
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
-        if(isset($this->tpl)){
-            $this->tpl    = pnp::clean($this->tpl);
+        if($this->tpl != ""){
             $this->data->buildDataStruct('__special',$this->tpl,$this->view,$this->source);
             #print Kohana::debug($this->data->STRUCT);
             $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);
             $this->rrdtool->streamImage($image);
         }elseif(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view,$this->source);
             if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE)
                 $this->rrdtool->streamImage("ERROR: NOT_AUTHORIZED"); 

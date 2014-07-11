@@ -17,31 +17,15 @@ class Popup_Controller extends System_Controller  {
 
     public function index()
     {
-        $this->source  = intval($this->input->get('source'));
-        $this->view    = "";
-
-        if(isset($_GET['view']) && $_GET['view'] != "" ){
-            $this->view = pnp::clean($_GET['view']);
-        }else{
+        if ( $this->view == "" ){
             $this->view = $this->config->conf['overview-range'];
         }
 
-
-        if(isset($_GET['width']) && $_GET['width'] !="" ){
-            $this->imgwidth = intval($this->input->get('width'));
-        }else{
-            if(isset($this->config->conf['popup-width']) &&$this->config->conf['popup-width'] != ""){ 
-                $this->imgwidth = $this->config->conf['popup-width'];
-            }else{
-                $this->imgwidth = FALSE;
-            }
-        }
+        $this->imgwidth = pnp::clean($this->input->get('width',$this->config->conf['popup-width']));
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
         if(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view,$this->source);
             $this->template->host      = $this->host;
             $this->template->srv       = $this->service;

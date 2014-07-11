@@ -19,7 +19,7 @@ class Ajax_Controller extends System_Controller  {
     }
 
     public function search() {
-        $query     = $this->input->get('term');
+        $query     = pnp::clean($this->input->get('term'));
         $result    = array();
         if(strlen($query)>=1) {
             $hosts = $this->data->getHosts();

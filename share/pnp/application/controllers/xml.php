@@ -17,14 +17,8 @@ class Xml_Controller extends System_Controller  {
     public function index()
     {
         $this->auto_render = FALSE;
-        if(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
-        }elseif(isset($this->host)){
-            $this->host    = pnp::clean($this->host);
-            $this->service = "_HOST_";
-        }else{
-            throw new Kohana_User_Exception('No Options', "RTFM my Friend, RTFM!");
+        if($this->service == "" && $this->host == ""){
+            url::redirect("graph", 302);
         }
         $this->data->readXML($this->host, $this->service);
         if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){

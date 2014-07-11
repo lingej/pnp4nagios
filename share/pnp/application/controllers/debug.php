@@ -18,16 +18,10 @@ class Debug_Controller extends System_Controller  {
 
     public function index()
     {
-        $this->view    = "";
-
-        if(isset($_GET['view']) && $_GET['view'] != "" )
-            $this->view = pnp::clean($_GET['view']);
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
         if(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->url      = "?host=".$this->host."&srv=".$this->service;
             if($this->start){
                 $this->url .= "&start=".$this->start;
@@ -42,8 +36,7 @@ class Debug_Controller extends System_Controller  {
 			$this->is_authorized = $this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']);
             $this->title = "Service Details ". $this->host ." -> " . $this->data->MACRO['DISP_SERVICEDESC'];
         }elseif(isset($this->host)){
-            $this->host    = pnp::clean($this->host);
-			$this->is_authorized = $this->auth->is_authorized($this->host);
+            $this->is_authorized = $this->auth->is_authorized($this->host);
             if($this->view == ""){
                 $this->view = $this->config->conf['overview-range'];
             }

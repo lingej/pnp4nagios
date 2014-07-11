@@ -9,7 +9,11 @@ class pnp_Core {
         if($string === FALSE){
             return;
         }
+        if($string == ""){
+            return $string;
+        }
         $string = preg_replace('/[ :\/\\\]/', "_", $string);
+        $string = htmlspecialchars($string);
         return $string;
     
     }

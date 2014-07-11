@@ -13,24 +13,12 @@ class Xport_Controller extends System_Controller  {
         parent::__construct();
         // Disable auto-rendering
         $this->auto_render = FALSE;
-    
-        $this->view    = 0; //fake value
-        $this->source  = "";
-
-        if($this->input->get('view') != "" )
-            $this->view = intval($this->input->get('view')) ;
-
-        if($this->input->get('source') )
-            $this->source = intval($this->input->get('source')) ;
-
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
     }
 
     public function xml(){
         if(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->data->buildXport($this->host,$this->service);
             if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 header('Content-Type: application/xml');
@@ -50,8 +38,6 @@ class Xport_Controller extends System_Controller  {
 
     public function json(){
         if(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->data->buildXport($this->host,$this->service);
             if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 header('Content-type: application/json');
@@ -69,8 +55,6 @@ class Xport_Controller extends System_Controller  {
 
     public function csv(){
         if(isset($this->host) && isset($this->service)){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $this->data->buildXport($this->host,$this->service);
             if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
                 header("Content-Type: text/plain; charset=UTF-8");

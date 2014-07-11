@@ -18,8 +18,6 @@ class Json_Controller extends System_Controller  {
         $this->auto_render = FALSE;
         // Service Details
         if($this->host != "" && $this->service != ""){
-            $this->service = pnp::clean($this->service);
-            $this->host    = pnp::clean($this->host);
             $services      = $this->data->getServices($this->host);
             $this->data->buildDataStruct($this->host,$this->service,$this->view);
             if($this->auth->is_authorized($this->data->MACRO['AUTH_HOSTNAME'], $this->data->MACRO['AUTH_SERVICEDESC']) === FALSE){
@@ -43,7 +41,6 @@ class Json_Controller extends System_Controller  {
                 print json_encode("not authorized");
                 exit;
             }
-            $this->host     = pnp::clean($this->host);
             $services = $this->data->getServices($this->host);
             foreach($services as $service){
                 if($service['state'] == 'active'){
