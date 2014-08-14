@@ -23,8 +23,8 @@ class System_Controller extends Template_Controller {
         // Check for mod_rewrite
         $this->check_mod_rewrite();
 
-        $this->start             = pnp::clean($this->input->get('start',FALSE));
-        $this->end               = pnp::clean($this->input->get('end',FALSE));
+        $this->start             = $this->input->get('start',FALSE);
+        $this->end               = $this->input->get('end',FALSE);
         $this->theme             = pnp::clean($this->input->get('theme',FALSE));
         $this->view              = pnp::clean($this->input->get('view', ""));
         $this->host              = pnp::clean($this->input->get('host',NULL));
