@@ -72,7 +72,7 @@ foreach ($this->DS as $KEY=>$VAL) {
         $def[$defcnt] .= rrd::area("ag","#$green");
         $def[$defcnt] .= rrd::area("ay","#$yellow");
         $def[$defcnt] .= rrd::area("ar","#$red");
-        $def[$defcnt] .= rrd::line1("fullscans","#000000", "Full table sacns");
+        $def[$defcnt] .= rrd::line1("fullscans","#000000", "Full table scans");
         $def[$defcnt] .= rrd::gprint("fullscans",array("MAX", "AVERAGE", "LAST"),"%3.2lf");
         $defcnt++;
     }
@@ -361,4 +361,3 @@ foreach ($this->DS as $KEY=>$VAL) {
 
 }
 ?>
-
