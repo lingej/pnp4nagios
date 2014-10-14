@@ -661,7 +661,7 @@ class Data_Model extends System_Model
             if(!is_numeric($end)){
                 $timestamp = strtotime($end);
                 if(!$timestamp){
-                    throw new Kohana_User_Exception('Wrong Format', "$end");
+                    throw new Kohana_User_Exception('Wrong Format', "End -> $end");
                 }else{
                     $end = $timestamp;
                 }
