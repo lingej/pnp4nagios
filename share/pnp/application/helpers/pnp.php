@@ -44,6 +44,8 @@ class pnp_Core {
     *
     */
     public static function zoom_icon($host,$service,$start,$end,$source,$view,$graph_width,$graph_height){
+        $service = urlencode(urlencode($service));
+        $host = urlencode(urlencode($host));
         print "<a href=\"javascript:Gzoom('".url::base(TRUE)."zoom?host=$host&srv=$service&view=$view&source=$source&end=$end&start=$start&graph_width=$graph_width&graph_height=$graph_height');\" title=\"Zoom into the Graph\"><img src=\"".url::base()."media/images/zoom.png\"></a>\n";
     }
 
