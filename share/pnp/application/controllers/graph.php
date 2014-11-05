@@ -48,7 +48,7 @@ class Graph_Controller extends System_Controller  {
         if($this->host != "" && $this->service != ""){
             $this->service = pnp::clean($this->service);
             $this->host    = pnp::clean($this->host);
-            $this->url     = "?host=".$this->host."&srv=".$this->service;
+            $this->url     = "?host=".urlencode($this->host)."&srv=".urlencode($this->service);
             $services      = $this->data->getServices($this->host);
             #Landingpage for mobile devices
             if($this->isMobileDevice()){

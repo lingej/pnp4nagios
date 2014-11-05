@@ -70,7 +70,7 @@ class Zoom_Controller extends System_Controller  {
             $this->template->source  = $this->source;
             $this->template->end     = $this->end;
             $this->template->start   = $this->start;
-            $this->url               = "?host=".$this->host."&srv=".$this->service;
+            $this->url               = "?host=".urlencode($this->host)."&srv=".urlencode($this->service);
             $this->template->graph_height = $this->graph_height;
             $this->template->graph_width  = $this->graph_width;
         }else{
