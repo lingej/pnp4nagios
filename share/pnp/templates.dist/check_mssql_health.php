@@ -359,5 +359,14 @@ foreach ($this->DS as $KEY=>$VAL) {
         $defcnt++;
     }
 
+    if(preg_match('/^sql_runtime$/', $VAL['NAME'])) {
+        $ds_name[$defcnt] = "SQL runtime";
+        $opt[$defcnt] = "--vertical-label \"Seconds\" --title \"Execution time of the SQL statement\" ";
+        $def[$defcnt] = "";
+        $def[$defcnt] .= rrd::def("runtime",$VAL['RRDFILE'],$VAL['DS'],"AVERAGE:reduce=LAST") ;
+        $def[$defcnt] .= rrd::area("runtime","#111111");
+        $def[$defcnt] .= rrd::gprint("runtime",array("LAST", "MAX", "AVERAGE"),"%3.2lf Seconds") ;
+        $defcnt++;
+    }
 }
 ?>
