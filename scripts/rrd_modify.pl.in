@@ -2,7 +2,7 @@
 # nagios: -epn
 ## @PKG_NAME@–@PKG_VERSION@
 #
-# Copyright (c) 2012 PNP4Nagios Developer Team (http://www.pnp4nagios.org)
+# Copyright (c) 2006-2015 PNP4Nagios Developer Team (http://www.pnp4nagios.org)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

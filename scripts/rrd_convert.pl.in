@@ -1,6 +1,6 @@
 #!@PERL@
 ## @PKG_NAME@–@PKG_VERSION@ rrd_convert.pl
-## Copyright (c) 2006-2010 Joerg Linge (http://www.pnp4nagios.org)
+## Copyright (c) 2006-2015 Joerg Linge (http://www.pnp4nagios.org)
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 #!@PERL@
 # nagios: -epn
 ## @PKG_NAME@–@PKG_VERSION@
-## Copyright (c) 2005-2010 Joerg Linge (http://www.pnp4nagios.org)
+## Copyright (c) 2005-2015 Joerg Linge (http://www.pnp4nagios.org)
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License
@@ -1548,7 +1548,7 @@ sub read_keyfile {
 sub print_help {
     print <<EOD;
 
-  Copyright (c) 2005-2010 Joerg Linge <pitchfork\@pnp4nagios.org>
+  Copyright (c) 2005-2015 Joerg Linge <pitchfork\@pnp4nagios.org>
   Use process_perfdata.pl to store Nagios Plugin Performance Data into RRD Databases
 
   Options:
