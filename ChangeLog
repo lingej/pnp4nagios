@@ -1,4 +1,10 @@
-**pnp-0.6.?? ??/??/2013**
+**pnp-0.6.?? ??/??/2015**
+
+**pnp-0.6.25 01/05/2015**
+  * Update:  FPDF Update to Version 1.7
+  * Bugfix:  Default source fixed by AWiddersheim
+  * Bugfix:  Fixed urlencoding of Host- and Servicenames by Andreas Doehler
+  * Bugfix:  Fixed Timeranges by AWiddersheim
 
 **pnp-0.6.24 07/30/2014**
   * Bugfix:  Fixed some more XSS issues
