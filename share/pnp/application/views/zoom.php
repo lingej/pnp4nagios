@@ -57,11 +57,6 @@ jQuery.noConflict();
 <div style="position:relative;">
 <?php 
 echo "<div start=$start end=$end style=\"width:".$graph_width."px; height:".$graph_height."px; position:absolute; top:33px\" class=\"graph\" id=\"".$this->url."\" ></div>";
-
-if (!empty($srv)){
-    $srv = urlencode($srv);
-}
-
 if(!empty($tpl)){
     echo "<img class=\"graph\" src=\"image?source=$source"
 	."&tpl=$tpl"
@@ -73,7 +68,7 @@ if(!empty($tpl)){
 }else{
     echo "<img src=\"image?source=$source"
 	."&host=$host"
-	."&srv=$srv"
+	."&srv=urlencode($srv)"
 	."&view=$view"
 	."&start=$start"
 	."&end=$end"
