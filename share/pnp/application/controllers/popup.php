@@ -20,6 +20,12 @@ class Popup_Controller extends System_Controller  {
         if ( $this->view == "" ){
             $this->view = $this->config->conf['overview-range'];
         }
+      
+        $this->source = $this->input->get('source');
+        if (! is_null($this->source)){
+            $this->source = intval($this->source);
+        }
+
 
         $this->imgwidth = pnp::clean($this->input->get('width',$this->config->conf['popup-width']));
 
