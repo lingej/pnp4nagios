@@ -770,9 +770,9 @@ class Data_Model extends System_Model
         }
     }
 
-    public function buildPageStruct($page,$view){
+    public function buildPageStruct($page,$view,$type=NULL){
         $servicelist = array();
-        $this->parse_page_cfg($page);
+        $this->parse_page_cfg($page,$type);
         $hosts = $this->getHostsByPage();
         # No regex so we keep the order defined by config
         if($this->PAGE_DEF['use_regex'] == 0){
@@ -811,12 +811,20 @@ class Data_Model extends System_Model
                 $this->buildDataStruct($s['host'],$s['service'],$view,$s['source']);
             }
         }else{
-            $this->ERROR = "ERROR: ". Kohana::lang('error.no-data-for-page', $page.".cfg" );
+            $this->ERROR = "ERROR: ". Kohana::lang('error.no-data-for-page');
         }
     }
 
 
-    public function parse_page_cfg($page){
+    public function parse_page_cfg($page,$type=NULL){
+        if($type == 'json'){
+            $this->parse_page_json($page);
+        }else{
+            $this->parse_page_file(pnp::clean($page));
+        }
+    }
+
+    private function parse_page_file($page){
         $page_cfg = $this->config->conf['page_dir'].$page.".cfg";
         if(is_readable($page_cfg)){
             $data = file($page_cfg);
@@ -856,6 +864,37 @@ class Data_Model extends System_Model
                 $inside=0;
                 $t = "";
                 continue;
+            }
+        }
+    }
+
+    private function parse_page_json($page){
+        $this->PAGE_DEF['page_name'] = 'UNDEF';
+        $this->PAGE_DEF['use_regex'] = 0;
+        $this->PAGE_GRAPH = array();
+        $count = 0;
+        $data = json_decode(htmlspecialchars_decode($page));
+        if ($data === NULL){
+            throw new Kohana_Exception('Could not decode JSON');
+        }
+        if (isset($data->page_name)){
+            $this->PAGE_DEF['page_name'] = trim($data->page_name);
+        }
+        if (isset($data->use_regex)){
+            $this->PAGE_DEF['use_regex'] = $data->use_regex;
+        }
+        if (isset($data->graphs) && is_array($data->graphs)){
+            foreach($data->graphs as $graph){
+	        if (isset($graph->host_name)){
+	            $this->PAGE_GRAPH[$count]['host_name'] = trim($graph->host_name);
+	        }
+	        if (isset($graph->service_desc)){
+	            $this->PAGE_GRAPH[$count]['service_desc'] = trim($graph->service_desc);
+	        }
+	        if (isset($graph->source)){
+	            $this->PAGE_GRAPH[$count]['source'] = trim($graph->source);
+	        }
+                $count++;
             }
         }
     }

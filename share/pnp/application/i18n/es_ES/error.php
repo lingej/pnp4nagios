@@ -14,7 +14,7 @@ $lang = array
 	'xml-structure-without-version-tag' => 'Error en la estructura XML. Etiqueta de Versión no encontrada. <a href="http://docs.pnp4nagios.org/es/faq/11">Leer FAQ en línea</a>',
 	'template-without-opt' => 'La plantilla %s no tiene el array $opt[]. <a href="http://docs.pnp4nagios.org/es/faq/12">Leer FAQ en línea</a>',
 	'template-without-def' => 'La plantilla %s no tiene el array $def[]. <a href="http://docs.pnp4nagios.org/es/faq/13">Leer FAQ en línea</a>',
-    'no-data-for-page' => 'Lo siento, no puedo encontrar ningún dato usando el fichero de configuración "%s", <a href="http://docs.pnp4nagios.org/es/faq/14">Leer FAQ en línea</a>',
+    'no-data-for-page' => 'Lo siento, no puedo encontrar ningún dato usando el fichero de configuración, <a href="http://docs.pnp4nagios.org/es/faq/14">Leer FAQ en línea</a>',
 	'page-not-readable' => 'El fichero de configuración "%s" no es legible o no existe. <a href="http://docs.pnp4nagios.org/es/faq/15">Leer FAQ en línea</a>',
     'auth-pages' => 'No está autorizado a ver "páginas" <a href="http://docs.pnp4nagios.org/es/faq/16">Leer FAQ en línea</a>',
     'page-config-dir' => 'No hay fichero de configuración de página en "%s" <a href="http://docs.pnp4nagios.org/es/faq/17">Leer FAQ en línea</a>',
@@ -29,4 +29,5 @@ $lang = array
     'not_authorized_for_host_overview' => 'You are not authorized to access this host overview page.',
     'xml-generic_error' => 'XML file "%s" not parsable.<p><strong>XML Errors:</strong>%s</p>',
     'gd-missing' => 'PHP GD functions are missing. More on <a href="http://www.php.net/manual/en/book.image.php">www.php.net</a>',
+    'imagecreatefrompng-failure' => 'Failure running imagecreatefrompng().',
 );

@@ -34,9 +34,9 @@ class Pdf_Controller extends System_Controller  {
     }
 
     public function index(){
-
-        $this->tpl       = pnp::clean($this->input->get('tpl'));
-        $this->type      = "normal";
+        $this->tpl        = pnp::clean($this->input->get('tpl'));
+        $this->type       = "normal";
+        $this->skip_error = pnp::clean($this->input->get('skip_error'));
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
@@ -84,6 +84,16 @@ class Pdf_Controller extends System_Controller  {
         // Title
         $header = TRUE;
         foreach($this->data->STRUCT as $key=>$data){
+            $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
+            try{
+                $img = $this->rrdtool->saveImage($image);
+            }catch(Exception $e){
+                if($this->skip_error == "true"){
+                    continue;
+                }else{
+                    throw $e;
+                }
+            }
             if($key != 0){
                 $header = FALSE;
             } 
@@ -118,8 +128,6 @@ class Pdf_Controller extends System_Controller  {
                     $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
                 }
             }
-            $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
-            $img = $this->rrdtool->saveImage($image);
             $Y = $pdf->GetY();
             $cell_height = ($img['height'] * 0.23);
             $cell_width = ($img['width'] * 0.23);
@@ -132,16 +140,18 @@ class Pdf_Controller extends System_Controller  {
     }
 
     public function page($page){
-        $this->start     = $this->input->get('start');
-        $this->end       = $this->input->get('end');
-        $this->view      = "";
+        $this->start      = $this->input->get('start');
+        $this->end        = $this->input->get('end');
+        $this->type       = pnp::clean($this->input->get('type'));
+        $this->skip_error = pnp::clean($this->input->get('skip_error'));
+        $this->view       = "";
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
             $this->view = pnp::clean($_GET['view']);
         }
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
-        $this->data->buildPageStruct($page,$this->view);
+        $this->data->buildPageStruct($page,$this->view,$this->type);
         // Define PDF background per url option
         if(isset($this->data->PAGE_DEF['background_pdf'])){
             if( is_readable( Kohana::config( 'core.pnp_etc_path')."/".$this->data->PAGE_DEF['background_pdf'] ) ){
@@ -166,6 +176,16 @@ class Pdf_Controller extends System_Controller  {
         $pdf->SetFont('Arial', '', 10);
         // Title
         foreach($this->data->STRUCT as $data){
+            $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
+            try{
+                $img = $this->rrdtool->saveImage($image);
+            }catch(Exception $e){
+                if($this->skip_error == "true"){
+                    continue;
+                }else{
+                    throw $e;
+                }
+            }
             if ($pdf->GetY() > 200) {
                 $pdf->AddPage();
                 if($this->use_bg){$pdf->useTemplate($tplIdx);}
@@ -181,8 +201,6 @@ class Pdf_Controller extends System_Controller  {
                 $pdf->SetFont('Arial', '', 8);
                 $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
             }
-            $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
-            $img = $this->rrdtool->saveImage($image);
             $Y = $pdf->GetY();
             $cell_height = ($img['height'] * 0.23);
             $cell_width = ($img['width'] * 0.23);
@@ -194,9 +212,10 @@ class Pdf_Controller extends System_Controller  {
     }
 
     public function basket(){
-        $this->start     = $this->input->get('start');
-        $this->end       = $this->input->get('end');
-        $this->view      = "";
+        $this->start      = $this->input->get('start');
+        $this->end        = $this->input->get('end');
+        $this->skip_error = pnp::clean($this->input->get('skip_error'));
+        $this->view       = "";
         if(isset($_GET['view']) && $_GET['view'] != "" ){
             $this->view = pnp::clean($_GET['view']);
         }
@@ -224,6 +243,16 @@ class Pdf_Controller extends System_Controller  {
         $pdf->SetFont('Arial', '', 10);
         // Title
         foreach($this->data->STRUCT as $data){
+            $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
+            try{
+                $img = $this->rrdtool->saveImage($image);
+            }catch(Exception $e){
+                if($this->skip_error == "true"){
+                    continue;
+                }else{
+                    throw $e;
+                }
+            }
             if ($pdf->GetY() > 200) {
                 $pdf->AddPage();
                 if($this->use_bg){$pdf->useTemplate($tplIdx);}
@@ -239,8 +268,6 @@ class Pdf_Controller extends System_Controller  {
                 $pdf->SetFont('Arial', '', 8);
                 $pdf->CELL(120, 5, "Datasource ".$data["ds_name"], 0, 1);
             }
-            $image = $this->rrdtool->doImage($data['RRD_CALL'],$out='PDF');
-            $img = $this->rrdtool->saveImage($image);
             $Y = $pdf->GetY();
             $cell_height = ($img['height'] * 0.23);
             $cell_width = ($img['width'] * 0.23);

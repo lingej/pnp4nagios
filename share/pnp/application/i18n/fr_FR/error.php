@@ -14,7 +14,7 @@ $lang = array
     'xml-structure-without-version-tag' => 'Structure XML incorrect. Balise de version introuvable dans "%s". <a href="http://docs.pnp4nagios.org/faq/11">Lire la FAQ</a>',
     'template-without-opt' => 'Le template %s ne renvoie pas de tableau $opt[]. <a href="http://docs.pnp4nagios.org/faq/12">Lire la FAQ</a>',
     'template-without-def' => 'Le template %s ne renvoie pas de tableau $def[]. <a href="http://docs.pnp4nagios.org/faq/13">Lire la FAQ</a>',
-    'no-data-for-page' => 'Désolé, mais impossible de trouver des données en utilisant le fichier de configuration "%s", <a href="http://docs.pnp4nagios.org/faq/14">Lire la FAQ</a>',
+    'no-data-for-page' => 'Désolé, mais impossible de trouver des données en utilisant le fichier de configuration, <a href="http://docs.pnp4nagios.org/faq/14">Lire la FAQ</a>',
     'page-not-readable' => 'Impossible de lire le fichier de configuration "%s" ou fichier introuvable. <a href="http://docs.pnp4nagios.org/faq/15">Lire la FAQ</a>',
     'auth-pages' => 'Vous n\'êtes pas autorisé de voir "pages" <a href="http://docs.pnp4nagios.org/faq/16">Lire la FAQ</a>',
     'page-config-dir' => 'Pas de fichier de configuration pour page dans "%s" <a href="http://docs.pnp4nagios.org/faq/17">Lire la FAQ</a>',
@@ -29,4 +29,5 @@ $lang = array
     'not_authorized_for_host_overview' => 'You are not authorized to access this host overview page.',
     'xml-generic_error' => 'XML file "%s" not parsable.<p><strong>XML Errors:</strong>%s</p>',
     'gd-missing' => 'PHP GD functions are missing. More on <a href="http://www.php.net/manual/en/book.image.php">www.php.net</a>',
+    'imagecreatefrompng-failure' => 'Failure running imagecreatefrompng().',
 );
