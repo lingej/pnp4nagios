@@ -139,7 +139,7 @@ class Pdf_Controller extends System_Controller  {
 
     }
 
-    public function page($page){
+    public function page($page=null){
         $this->start      = $this->input->get('start');
         $this->end        = $this->input->get('end');
         $this->type       = pnp::clean($this->input->get('type'));
@@ -148,6 +148,14 @@ class Pdf_Controller extends System_Controller  {
 
         if(isset($_GET['view']) && $_GET['view'] != "" ){
             $this->view = pnp::clean($_GET['view']);
+        }
+
+        if($page == null){
+            $page = $this->input->post('page');
+        }
+
+        if(!$page){
+            throw new Kohana_Exception('error.page-not-supplied');
         }
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);

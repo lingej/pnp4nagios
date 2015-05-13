@@ -31,6 +31,9 @@ class Page_Controller extends System_Controller  {
         $this->type = pnp::clean($this->input->get('type'));
         $this->page = $this->input->get('page');
         if($this->page == ""){
+            $this->page = $this->input->post('page');
+        }
+        if($this->page == ""){
             $this->page = $this->data->getFirstPage();
         }
         if($this->page == ""){

@@ -16,10 +16,11 @@ $lang = array
     'template-without-def' => 'Template %s übergibt Array $def[] nicht. <a href="http://docs.pnp4nagios.org/de/faq/13">FAQ online lesen</a>',
     'no-data-for-page' => 'Keine Daten für die Page, <a href="http://docs.pnp4nagios.org/de/faq/14">FAQ online lesen</a>',
     'page-not-readable' => 'Konfigurationsdatei "%s" ist nicht lesbar oder existiert nicht. <a href="http://docs.pnp4nagios.org/de/faq/15">FAQ online lesen</a>',
+    'page-not-supplied' => 'Page was not supplied.',
     'auth-pages' => 'Sie sind nicht berechtigt, "Pages" anzusehen <a href="http://docs.pnp4nagios.org/de/faq/16">FAQ online lesen</a>',
     'page-config-dir' => 'Keine page-Konfigurationsdatei in "%s" gefunden <a href="http://docs.pnp4nagios.org/de/faq/17">FAQ online lesen</a>',
     'xport-host-service' => 'Xport-Controller benötigt "host"- und "srv"-URL-Parameter. <a href="http://docs.pnp4nagios.org/de/faq/18">FAQ online lesen</a>',
-	'mod-rewrite' => 'Apache Rewrite Module ist nicht aktiviert. <a href="http://docs.pnp4nagios.org/de/faq/19">Read FAQ online</a>',
+    'mod-rewrite' => 'Apache Rewrite Module ist nicht aktiviert. <a href="http://docs.pnp4nagios.org/de/faq/19">Read FAQ online</a>',
     'tpl-no-services-found' => 'Es wurden keine Services gefunden "%s". <a href="http://docs.pnp4nagios.org/de/faq/20">Read FAQ online</a>',
     'tpl-no-hosts-found' => 'Es wurden keine Hosts gefunden "%s". <a href="http://docs.pnp4nagios.org/de/faq/21">Read FAQ online</a>',
     'no-templates-found' => 'Es wurde kein passendes Template gefunden. <a href="http://docs.pnp4nagios.org/de/faq/22">Read FAQ online</a>',
@@ -30,4 +31,5 @@ $lang = array
     'xml-generic_error' => 'XML file "%s" not parsable.<p><strong>XML Errors:</strong>%s</p>',
     'gd-missing' => 'PHP GD functions are missing. More on <a href="http://www.php.net/manual/en/book.image.php">www.php.net</a>',
     'imagecreatefrompng-failure' => 'Failure running imagecreatefrompng().',
+    '' => 'Failure running imagecreatefrompng().',
 );
