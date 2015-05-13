@@ -96,6 +96,10 @@ The same can be done when generating PDF reports for pages:
 <pre class="code">/pnp4nagios/pdf/page/{"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^Tape", "service_desc": "Traffic"}]}?type=json</pre>
 
 <p>
+You may also send the “page” parameter in a POST request if it should grow to be too long to send as part of the GET request.
+</p>
+
+<p>
 Sometimes images can be broken for whatever reason and will cause the entire PDF report to fail. To bypass broken images use the “skip_error” parameter:
 </p>
 <pre class="code">/pnp4nagios/pdf/page/{"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^Tape", "service_desc": "Traffic"}]}?type=json&amp;skip_error=true</pre>
