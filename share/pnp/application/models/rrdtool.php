@@ -228,6 +228,7 @@ class Rrdtool_Model extends System_Model
         if (function_exists('imagecreatefrompng')) {
             $image = @imagecreatefrompng($img['file']);
             if($image === FALSE){
+                unlink($img['file']);
                 throw new Kohana_Exception('error.imagecreatefrompng-failure');
             }
             imagepng($image, $img['file']);
