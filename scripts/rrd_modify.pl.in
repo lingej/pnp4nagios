@@ -188,7 +188,7 @@ sub processing {
 			next;
 		}
 		# value enclosed in XML tags
-		if (/<(\S+)>\s+(\S+)\s+</) {
+		if (/<(\S+)>\s*(\S+)\s*</) {
 			$xml{$1} = $2;
 		}
 		next unless ($out);
