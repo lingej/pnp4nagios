@@ -46,8 +46,10 @@ class Xport_Controller extends System_Controller  {
             }
             $data    = $this->rrdtool->doXport($this->data->XPORT);
             $json    = json_encode(simplexml_load_string($data));
+            $var_ds  = array("DS" => $this->data->DS);
+            $merge   = json_encode(array_merge(json_decode($json, true),$var_ds));
             header('Content-type: application/json');
-            print $json; 
+            print $merge;
         }else{
             throw new Kohana_Exception('error.xport-host-service');
         }
