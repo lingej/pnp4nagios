@@ -106,7 +106,7 @@ class Rrdtool_Model extends System_Model
         if ($height > 0){
             $command .= " --height=$height";
         }
-        if ($height < 81 ){
+        if ($height < 81 || (isset($conf['graph_only']) && $conf['graph_only'])){
             $command .= " --only-graph ";
         }
 
