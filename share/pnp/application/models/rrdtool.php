@@ -107,7 +107,10 @@ class Rrdtool_Model extends System_Model
             $command .= " --height=$height";
         }
         if ($height < 81 || (isset($conf['graph_only']) && $conf['graph_only'])){
-            $command .= " --only-graph ";
+            $command .= " --only-graph";
+        }
+        elseif (isset($conf['no_legend']) && $conf['no_legend']){
+            $command .= " --no-legend";
         }
 
         $command .= $RRD_CMD;
