@@ -380,7 +380,7 @@ sub restore_files(){
 
 sub backup_rrd_file{
 	my $rrdfile = shift;
-	if ( $conf{RRD_BACKUP} == 1 ){
+	if ( $conf{RRD_BACKUP} == 1  && $conf{'DRY_RUN'} == 0 ){
 		move($rrdfile, $rrdfile.".backup");
 	}
 }
