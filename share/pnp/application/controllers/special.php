@@ -45,6 +45,8 @@ class Special_Controller extends System_Controller  {
         // Timerange Box Vars
         $this->template->graph->timerange_box = $this->add_view('timerange_box');
         $this->template->graph->timerange_box->timeranges = $this->data->TIMERANGE;
+        // Timerange Box Vars
+        $this->template->graph->timezone_box = $this->add_view('timezone_box');
         $this->template->graph->header->title        = $this->data->MACRO['TITLE'];
         //print Kohana::debug($this->data);
     }

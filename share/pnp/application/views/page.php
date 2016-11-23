@@ -24,6 +24,10 @@
      		echo $timerange_box;
 	} ?>
 
+	<?php if (!empty($timezone_box) && ($this->config->conf['show_timezone'])) {
+     		echo $timezone_box;
+	} ?>
+
 	<?php if (!empty($basket_box)) {
      		echo $basket_box;
 	} ?>

@@ -15,7 +15,7 @@ if($this->data->MACRO['COMMENT'])
 
 foreach($this->data->STRUCT as $key=>$value){ 
     if($value['LEVEL'] == 0 ){
-		echo "<strong>".$value['TIMERANGE']['title']. "</strong> " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "\n";
+		echo "<strong>".$value['TIMERANGE']['title']. "</strong> " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. " ".getenv('TZ')."\n";
 		$count = 0;
 	}
     echo "<div class=\"ui-widget-header ui-corner-top\">";

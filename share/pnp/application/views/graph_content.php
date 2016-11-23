@@ -27,7 +27,7 @@ $count = 0;
 foreach($this->data->STRUCT as $key=>$value){ 
    	if($value['LEVEL'] == 0){
 		echo "<strong>Host: </strong>".$value['MACRO']['DISP_HOSTNAME']. " <strong>Service: </strong>".$value['MACRO']['DISP_SERVICEDESC']."<p>\n";
-		echo "<strong>".$value['TIMERANGE']['title']. "</strong> " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. "\n";
+		echo "<strong>".$value['TIMERANGE']['title']. "</strong> " .$value['TIMERANGE']['f_start']. " - " . $value['TIMERANGE']['f_end']. " ".getenv('TZ')."\n";
 		$count = 0;
 	}
 	if($value['VERSION'] != "valid" && $count == 0){
