@@ -541,12 +541,12 @@ sub write_rrd {
     if ( !-e "$rrdfile" ) {
         @rrd_create = parse_rra_config($TEMPLATE);
         if ( $conf{USE_RRDs} == 1 ) {
-            print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
-            RRDs::create( "$rrdfile", @rrd_create, @ds_create, "--start=$NAGIOS{TIMET}", "--step=$conf{RRA_STEP}" );
+            print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=0 --step=$conf{RRA_STEP}", 2 );
+            RRDs::create( "$rrdfile", @rrd_create, @ds_create, "--start=0", "--step=$conf{RRA_STEP}" );
 
             my $err = RRDs::error();
             if ($err) {
-            	print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 0 );
+            	print_log( "RRDs::create $rrdfile @rrd_create @ds_create --start=0 --step=$conf{RRA_STEP}", 0 );
                 print_log( "RRDs::create ERROR $err", 0 );
                 @rrd_state = ( 1, $err );
                 $stats{error}++;
@@ -559,10 +559,10 @@ sub write_rrd {
         }
         else {
             print_log( "RRDs Perl Modules are not installed. Falling back to rrdtool system call.",                           2 );
-            print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 2 );
-            system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}");
+            print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=0 --step=$conf{RRA_STEP}", 2 );
+            system("$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=0 --step=$conf{RRA_STEP}");
             if ( $? > 0 ) {
-            	print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=$NAGIOS{TIMET} --step=$conf{RRA_STEP}", 0 );
+            	print_log( "$conf{RRDTOOL} create $rrdfile @rrd_create @ds_create --start=0 --step=$conf{RRA_STEP}", 0 );
                 print_log( "rrdtool create returns $?", 0 );
                 @rrd_state = ( $?, "create failed" );
                 $stats{error}++;
