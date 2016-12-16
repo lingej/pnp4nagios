@@ -1,0 +1,40 @@
+/**
+ * The Icinga 2 PerfdataWriter type writes performance data files
+ * and rotates them in a regular interval.
+ *
+ * PNP needs to be installed with 'Bulk Mode with NPCD and npcdmod'
+ * with the Icinga 2 PerfdataWriter feature replacing the Icinga 1.x
+ * npcdmod NEB module.
+ *
+ * Below is an example with adapted paths and template details on the
+ * used runtime macros.
+ *
+ * Modify the feature configuration and enable it (paths may differ):
+ *
+ * 	# vim /etc/icinga2/feature-available/perfdata.conf
+ *	<...>
+ * 	# icinga2-enable-feature perfdata && service icinga2 restart
+ *
+ * More details can be found in the Icinga 2 documentation at
+ * https://docs.icinga.org
+ */
+
+library "perfdata"
+
+object PerfdataWriter "pnp" {
+
+  /* unix timestamp will be appended automatically on rotation */
+  host_perfdata_path = "@PERFDATA_SPOOL_DIR@/host-perfdata"
+  service_perfdata_path = "@PERFDATA_SPOOL_DIR@/service-perfdata"
+
+  /* temporary file, will be rotated */
+  host_temp_path = "@localstatedir@/host-perfdata"
+  service_temp_path = "@localstatedir@/service-perfdata"
+
+  /* Icinga 2 runtime macros mapped to attribute types */
+  host_format_template = "DATATYPE::HOSTPERFDATA\tTIMET::$icinga.timet$\tHOSTNAME::$host.name$\tHOSTPERFDATA::$host.perfdata$\tHOSTCHECKCOMMAND::$host.check_command$\tHOSTSTATE::$host.state$\tHOSTSTATETYPE::$host.state_type$"
+  service_format_template = "DATATYPE::SERVICEPERFDATA\tTIMET::$icinga.timet$\tHOSTNAME::$host.name$\tSERVICEDESC::$service.name$\tSERVICEPERFDATA::$service.perfdata$\tSERVICECHECKCOMMAND::$service.check_command$\tHOSTSTATE::$host.state$\tHOSTSTATETYPE::$host.state_type$\tSERVICESTATE::$service.state$\tSERVICESTATETYPE::$service.state_type$"
+
+  /* default rotation interval */
+  rotation_interval = 15s
+}
