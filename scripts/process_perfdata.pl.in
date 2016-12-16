@@ -530,8 +530,60 @@ sub data2rrd {
     close_template( $NAGIOS{XMLFILE} );
 }
 
+# Do the call to the RRDs:: or rrd binaries, with options
+sub call_rrd {
+    my $action = shift; # Create or update
+    my $rrdfile = shift;
+    my @options = @_;
+
+    # Check if user was smart and configured a rrdcached daemon
+    if ( $conf{RRD_DAEMON_OPTS} ) {
+        unshift @options, "--daemon" => $conf{RRD_DAEMON_OPTS};
+    }
+
+    # Check if we can use the perl RRD modules (faster)
+    if ( $conf{USE_RRDs} == 1 ) {
+        print_log( "RRDs::$action $rrdfile @options", 2 );
+        if( $action eq 'create' ) {
+            RRDs::create( $rrdfile, @options );
+        }
+        elsif( $action eq 'update' ) {
+            RRDs::update( $rrdfile, @options );
+        }
+        else {
+            print_log( "RRds:: do not understand $action", 1 );
+            return;
+        }
+
+        my $err = RRDs::error();
+        if ($err) {
+            $stats{error}++;
+            print_log( "RRDs::create ERROR $err", 1 );
+            return ( 1, $err );
+        }
+        else {
+            $stats{$action}++;
+            print_log( "$rrdfile ${action}d", 2 );
+            return ( 0, "just ${action}d" );
+        }
+    }
+    else { # Fallback to rrdtool binaries
+        my @cmd = ( "System exec: $conf{RRDTOOL}", $action => $rrdfile, @options );
+        print_log( "@cmd", 2 );
+        if ( system( @cmd ) == 0 ) {
+            print_log( "rrdtool $action returns $?", 2 );
+            $stats{$action}++;
+            return ( 0, "just ${action}d" );
+        }
+        else {
+            print_log( "rrdtool $action returns " . $? >> 8, 1 );
+            $stats{error}++;
+            return ( $? >> 8, "$action failed" );
+        }
+    }
+}
+
 sub write_rrd {
-    my @rrd_create = ();
     my @rrd_state  = ();
 
     print_log( "DEBUG: TPL-> $TEMPLATE",  3 );
@@ -620,7 +672,6 @@ sub write_rrd {
             }
         }
     }
-    return @rrd_state;
 }
 
 #
