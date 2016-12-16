@@ -803,13 +803,13 @@ sub read_custom_template {
                     }
                     print_log( "Adapting Template to $template.php as defined in $template_cfg", 2 );
                 }
-                if ( $1 eq "USE_MIN_ON_CREATE" && $2 eq "1" ) {
-                    $use_min_on_create = 1;
+                if ( $1 eq "USE_MIN_ON_CREATE" && ( $2 eq "0" || $2 eq "1" )) {
+                    $use_min_on_create = $2;
                 }
-                if ( $1 eq "USE_MAX_ON_CREATE" && $2 eq "1" ) {
-                    $use_max_on_create = 1;
+                if ( $1 eq "USE_MAX_ON_CREATE" && ( $2 eq "0" || $2 eq "1" )) {
+                    $use_max_on_create = $2;
                 }
-                if ( $1 eq "RRD_STORAGE_TYPE" && uc($2) eq "MULTIPLE" ) {
+                if ( $1 eq "RRD_STORAGE_TYPE" && ( uc($2) eq "SINGLE" || uc($2) eq "MULTIPLE" )) {
                     $rrd_storage_type = uc($2);
                 }
                 if ( $1 eq "RRD_HEARTBEAT" ) {
