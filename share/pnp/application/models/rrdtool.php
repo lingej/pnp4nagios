@@ -229,7 +229,11 @@ class Rrdtool_Model extends System_Model
         fwrite($fh, $data);
         fclose($fh);
         if (function_exists('imagecreatefrompng')) {
-            $image = imagecreatefrompng($img['file']);
+            $image = @imagecreatefrompng($img['file']);
+            if($image === FALSE){
+                unlink($img['file']);
+                throw new Kohana_Exception('error.imagecreatefrompng-failure');
+            }
             imagepng($image, $img['file']);
             list ($img['width'], $img['height'], $img['type'], $img['attr']) = getimagesize($img['file']);
         }else{

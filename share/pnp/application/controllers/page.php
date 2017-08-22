@@ -28,7 +28,11 @@ class Page_Controller extends System_Controller  {
         if( !$this->isAuthorizedFor('pages') ){
             throw new Kohana_Exception('error.auth-pages');
         }
-        $this->page = pnp::clean($this->input->get('page'));
+        $this->type = pnp::clean($this->input->get('type'));
+        $this->page = $this->input->get('page');
+        if($this->page == ""){
+            $this->page = $this->input->post('page');
+        }
         if($this->page == ""){
             $this->page = $this->data->getFirstPage();
         }
@@ -38,7 +42,7 @@ class Page_Controller extends System_Controller  {
         if($this->view == ""){
             $this->view = $this->config->conf['overview-range'];
         }
-        $this->data->buildPageStruct($this->page,$this->view);
+        $this->data->buildPageStruct($this->page,$this->view,$this->type);
         $this->template->page->header->title      = Kohana::lang('common.page',$this->data->PAGE_DEF['page_name']);
         $this->url = "?page&page=$this->page";
         // Timerange Box Vars
@@ -50,7 +54,7 @@ class Page_Controller extends System_Controller  {
         $this->template->page->pages_box->pages   = $this->pages;
         // Basket Box
         $this->template->page->basket_box         = $this->add_view('basket_box');
-        // Icon Box    
+        // Icon Box
         $this->template->page->icon_box           = $this->add_view('icon_box');
         $this->template->page->icon_box->position = "page";
 

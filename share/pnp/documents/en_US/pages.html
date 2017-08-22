@@ -7,11 +7,10 @@
 <p>
 
 “pages” provide the opportunity to collect graphs of different hosts/services on one page. That way - as an example - you can display the traffic rates of all tape libraries. Regular expressions are possible so you can accomplish a lot with only few definitions - provided that you have appropriate names.
-The directory specified using “$conf[&#039;page_dir&#039;]” contains one or more file with the extension ”.cfg”.
 </p>
 
 <p>
-Comments start with a hash-sign (#) and are possible within lines as well. Each file contains a “page” definition which specifies the name of the page and it determines whether the following graph definition contains regular expressions or not.<br/>
+There are two ways to create “pages”. The first is by creating one or more config files with the ”.cfg” extension in the “$conf[&#039;page_dir&#039;]” directory. Comments start with a hash-sign (#) and are possible within lines as well. Each file contains a “page” definition which specifies the name of the page and it determines whether the following graph definition contains regular expressions or not.<br/>
 
 The description behind <code>page_name</code> appears in the list of available pages and will be used as title of the browser window. <strong>Attention:</strong> “host_name” and “service_desc” refer to the name of the file in the perfdata directory, not to the definition in Nagios. Blanks are replaced by underscores (_).
 </p>
@@ -74,7 +73,7 @@ all services whose names contain an underscore followed by (at least) three digi
 }</pre>
 
 <p>
-In some cases you may want to limit the display to just one graph. To accomplish this you can use the optional directive “source” followed by a number specifying the position within the RRD file starting at 0
+In some cases you may want to limit the display to just one graph. To accomplish this you can use the optional directive “source” followed by a number specifying the position within the RRD file starting at 0:
 
 </p>
 <pre class="code">define graph {
@@ -82,6 +81,28 @@ In some cases you may want to limit the display to just one graph. To accomplish
        service_desc    PING
        source          1
 }</pre>
+
+<p>
+There are times where the page config files are not dynamic enough. It is possible to pass the page as a json string:
+</p>
+<pre class="code">/pnp4nagios/page?page={"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^Tape", "service_desc": "Traffic"}]}&amp;type=json</pre>
+<pre class="code">/pnp4nagios/page?page={"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^UX", "service_desc": "_\d3", "source": 1}&amp;type=json</pre>
+<pre class="code">/pnp4nagios/page?page={"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^(example1.org|example2.org)$", "service_desc": ".*"}]}&amp;type=json</pre>
+<pre class="code">/pnp4nagios/page?page={"page_name": "test", "use_regex": 0, "graphs": [{"host_name": "example1.org", "service_desc": "Load"},{"host_name": "example2.org", "service_desc": "Memory"}]}&amp;type=json</pre>
+
+<p>
+The same can be done when generating PDF reports for pages:
+</p>
+<pre class="code">/pnp4nagios/pdf/page/{"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^Tape", "service_desc": "Traffic"}]}?type=json</pre>
+
+<p>
+You may also send the “page” parameter in a POST request if it should grow to be too long to send as part of the GET request.
+</p>
+
+<p>
+Sometimes images can be broken for whatever reason and will cause the entire PDF report to fail. To bypass broken images use the “skip_error” parameter:
+</p>
+<pre class="code">/pnp4nagios/pdf/page/{"page_name": "test", "use_regex": 1, "graphs": [{"host_name": "^Tape", "service_desc": "Traffic"}]}?type=json&amp;skip_error=true</pre>
 
 <p>
 <a href="/pnp-0.6/start" class="wikilink1" title="pnp-0.6:start">back to contents</a> | <a href="/pnp-0.6/xport" class="wikilink1" title="pnp-0.6:xport"> data export</a>
