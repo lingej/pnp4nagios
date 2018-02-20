@@ -361,7 +361,8 @@ if($mode eq "bulk+npcd"){
 
 	my $npcd_cfg = "";
 	if($product eq "icinga2"){
-		$npcd_cfg = "$OMD_ROOT/etc/pnp4nagios/npcd.cfg";
+		$npcd_cfg = "$PNPCfg/npcd.cfg";
+		$npcd_cfg = "$OMD_ROOT/etc/pnp4nagios/npcd.cfg" if ($OMD_ROOT);
 	}else{
 		$npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
 	}
