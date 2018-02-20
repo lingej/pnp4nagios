@@ -27,7 +27,7 @@ use Term::ANSIColor;
 my $version = 'pnp4nagios-head';
 
 # process command line parameters
-use vars qw ( $help $debug $mode $vInfo $PNPCfg $MainCfg $last_check $object);
+use vars qw ( $help $debug $mode $vInfo $PNPCfg $MainCfg $last_check $object $user $group);
 my $start_options = $0 . " " . join(" ", @ARGV);
 Getopt::Long::Configure('bundling');
 GetOptions(
@@ -37,10 +37,12 @@ GetOptions(
 	"c|config=s" => \$MainCfg,
 	"p|pnpcfg=s" => \$PNPCfg,
 	"o|object=s" => \$object,
+	"u|user=s"   => \$user,
+	"g|group=s"  => \$group,
 );
 
 my @modes    = ("bulk", "bulk+npcd", "sync", "npcdmod");
-my @products = ("nagios", "icinga");
+my @products = ("nagios", "icinga", "icinga2");
 my @states   = ("OK", "WARN", "CRIT", "UNKN", "INFO", "HINT", "DBG");
 my @colors   = ("bold green", "bold yellow", "bold red", "bold blue", "bold blue", "bold yellow", "black on_red");
 my %process_perf_data_stats = ('hosts' => 0, 'services' => 0, 'noperf' => 0, 'noperf_but_enabled' => 0 , 0 => 0, 1 => 0);
@@ -90,6 +92,7 @@ my %modules  = ();
 my $uid      = 0;
 my $gid      = 0;
 my $process_perfdata_cfg = 0;
+my $OMD_ROOT = $ENV{OMD_ROOT} || "";
 
 #
 # Begin
@@ -100,9 +103,11 @@ info("My version is: ".$version,4);
 info("Start Options: ".$start_options, 4);
 
 #
-# Read Main config file
+# Read Main config file unless Icinga2
 # 
-process_nagios_cfg();
+if ($MainCfg !~ /.conf/) {
+	process_nagios_cfg();
+}
 #
 # get the product name
 #
@@ -113,26 +118,33 @@ if( $product eq 0 ){
 }else{
 	info("Running product is '$product'", 0);
 }
+if($product eq "icinga2" and $mode ne "bulk+npcd"){
+	info_and_exit ("Icinga2 only supports 'bulk+npcd' mode", 2);
+}
 
 #
 # Read objects cache file to get more information
 # Needs a running product
 #
-check_config_var('object_cache_file', 'exists', 'break');
-if( -r $cfg{'object_cache_file'} ){ 
-	process_objects_file($cfg{'object_cache_file'});
-}else{
-	info_and_exit($cfg{'object_cache_file'}. " is not readable", 2);
+if($product ne "icinga2"){
+	check_config_var('object_cache_file', 'exists', 'break');
+	if( -r $cfg{'object_cache_file'} ){ 
+		process_objects_file($cfg{'object_cache_file'});
+	}else{
+		info_and_exit($cfg{'object_cache_file'}. " is not readable", 2);
+	}
 }
 
 #
 # Read resource.cfg
 #
-check_config_var('resource_file', 'exists', 'break');
-if( -r $cfg{'resource_file'} ){
-	process_npcd_cfg($cfg{'resource_file'});
-}else{
-	info_and_exit($cfg{'resource_file'}. " is not readable", 2);
+if($product ne "icinga2"){
+	check_config_var('resource_file', 'exists', 'break');
+	if( -r $cfg{'resource_file'} ){
+		process_npcd_cfg($cfg{'resource_file'});
+	}else{
+		info_and_exit($cfg{'resource_file'}. " is not readable", 2);
+	}
 }
 
 #
@@ -163,24 +175,44 @@ if( -r "$PNPCfg/pnp4nagios_release" ){
 # Start Main config checks
 #
 
-if(config_var_exists($product.'_user') ){
-	my $user = get_config_var($product.'_user');
+unless($user){
+	if($product eq "icinga2"){
+		$user = `icinga2 object list --type user | grep " name = "`;
+		($user) = $user =~ m|"(.+)"|;
+	}else{
+		if(config_var_exists($product.'_user') ){
+			$user = get_config_var($product.'_user');
+		}
+	}
+	info( "Configured User is '$user'", 0);	
+}
+if($user){
 	$uid  = getpwnam($user);
-	info( "Effective User is '$user'", 0);
-	if($uid){
+	if(defined $uid){
+		info( "Effective User is '$user'", 0);
 		info("User $user exists with ID '$uid'", 0 );
 	}else{
-		info_and_exit("User $user does not exist", 2 );
+			info_and_exit("User $user does not exist", 2 );
 	}
 }else{
 	info_and_exit("Option '".$product."_user' not found in $MainCfg", 2);
 }
 
-if(config_var_exists($product.'_group') ){
-	my $group = get_config_var($product.'_group');
+unless($group){
+	if($product eq "icinga2"){
+		$group = `icinga2 object list --type user | grep "groups ="`;
+		($group) = $group =~ m|\[(.+)\]|;
+	}else{
+		if(config_var_exists($product.'_group') ){
+			$group = get_config_var($product.'_group');
+		}
+	}
+	info( "Configured Group is '$group'", 0);
+}
+if($group){
 	$gid  = getgrnam($group);
-	info( "Effective group is '$group'", 0);
-	if($gid){
+	if(defined $gid){
+		info( "Effective group is '$group'", 0);
 		info("Group $group exists with ID '$gid'", 0 );
 	}else{
 		info_and_exit("Group $group does not exist", 2 );
@@ -268,33 +300,75 @@ if($mode eq "bulk"){
 if($mode eq "bulk+npcd"){
 	info("========== Checking Bulk Mode + NPCD Config  ============",4);
 	
-	compare_config_var('process_performance_data', '1');
-	check_config_var('service_perfdata_file', 'exists');
-	check_config_var('service_perfdata_file_template', 'exists');
-	check_perfdata_file_template(get_config_var('service_perfdata_file_template'));
-	check_config_var('service_perfdata_file_mode', 'exists');
-	check_config_var('service_perfdata_file_processing_interval', 'exists');
-	check_config_var('service_perfdata_file_processing_command', 'exists');
+	if($product eq "icinga2"){
+		my $ena = `icinga2 feature list | grep 'Enabled features' 2>&1 | grep perfdata`;
+		if($?){
+			$last_check++;
+		}
+		unless ($ena){
+			info_and_exit ("Feature 'perfdata' not enabled",2);
+		}
+		my @lines = `icinga2 object list --type PerfdataWriter 2>/dev/null`;
+		if($?){
+			$last_check++;
+		}else{
+			for (@lines) {
+				chomp;
+				next unless (/=/);
+				next if (/%/);
+				my ($cmd,$val) = $_ =~ m|\*\s+(.*?)\s*=\s*["]?(.*)["]?|;
+				$cfg{$cmd} = $val;
+			}
+		}
+		check_config_var('service_perfdata_path', 'exists');
+		check_config_var('service_temp_path', 'exists');
+		check_config_var('service_format_template', 'exists');
+		check_perfdata_file_template(get_config_var('service_format_template'));
+	
+		check_config_var('host_perfdata_path', 'exists');
+		check_config_var('host_temp_path', 'exists');
+		check_config_var('host_format_template', 'exists');
+		check_perfdata_file_template(get_config_var('host_format_template'));
+ 	}else{
+		compare_config_var('process_performance_data', '1');
+		check_config_var('service_perfdata_file', 'exists');
+		check_config_var('service_perfdata_file_template', 'exists');
+		check_perfdata_file_template(get_config_var('service_perfdata_file_template'));
+		check_config_var('service_perfdata_file_mode', 'exists');
+		check_config_var('service_perfdata_file_processing_interval', 'exists');
+		check_config_var('service_perfdata_file_processing_command', 'exists');
 
-	check_config_var('host_perfdata_file', 'exists');
-	check_config_var('host_perfdata_file_template', 'exists');
-	check_perfdata_file_template(get_config_var('host_perfdata_file_template'));
-	check_config_var('host_perfdata_file_mode', 'exists');
-	check_config_var('host_perfdata_file_processing_interval', 'exists');
-	check_config_var('host_perfdata_file_processing_command', 'exists');
+		check_config_var('host_perfdata_file', 'exists');
+		check_config_var('host_perfdata_file_template', 'exists');
+		check_perfdata_file_template(get_config_var('host_perfdata_file_template'));
+		check_config_var('host_perfdata_file_mode', 'exists');
+		check_config_var('host_perfdata_file_processing_interval', 'exists');
+		check_config_var('host_perfdata_file_processing_command', 'exists');
+	}
 	last_info("Needed config options are missing. http://docs.pnp4nagios.org",5,$last_check);
 
 	# Options not allowed in bulk mode
-	check_config_var('service_perfdata_command', 'notexists');
-	check_config_var('host_perfdata_command', 'notexists');
-	check_config_var('broker_module', 'notexists');
+	if($product ne "icinga2"){
+		check_config_var('service_perfdata_command', 'notexists');
+		check_config_var('host_perfdata_command', 'notexists');
+		check_config_var('broker_module', 'notexists');
+	}
 	last_info("Config options are not allowed in bulk mode with npcd",5,$last_check);
 
 	info(ucfirst($product)." config looks good so far",4);
 	info("========== Checking config values ============",4);
 	my $command_line;
 
-	my $npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
+	my $npcd_cfg = "";
+	if($product eq "icinga2"){
+		$npcd_cfg = "$PNPCfg/npcd.cfg";
+		$npcd_cfg = "$OMD_ROOT/etc/pnp4nagios/npcd.cfg" if ($OMD_ROOT);
+	}else{
+		$npcd_cfg = check_proc_npcd(get_config_var($product.'_user'));
+	}
+	unless (-f $npcd_cfg){
+		$npcd_cfg = $PNPCfg . $npcd_cfg;
+	}
 	
 	if( -r $npcd_cfg){
 		info("$npcd_cfg is used by npcd and readable",0);
@@ -307,8 +381,10 @@ if($mode eq "bulk+npcd"){
 	check_config_var('perfdata_spool_dir', 'exists');
 	count_spool_files(get_config_var('perfdata_spool_dir'));
 	
-	$command_line = check_command_definition('service_perfdata_file_processing_command');
-	$command_line = check_command_definition('host_perfdata_file_processing_command');
+	if($product ne "icinga2"){
+		$command_line = check_command_definition('service_perfdata_file_processing_command');
+		$command_line = check_command_definition('host_perfdata_file_processing_command');
+	}
 
 	check_process_perfdata_pl($cfg{'perfdata_file_run_cmd'});
 }
@@ -345,20 +421,20 @@ if($mode eq "npcdmod"){
 	}
 
 	$val = get_config_var('broker_module');
-	if ($val) {
+	if($val){
 		check_config_var('broker_module', 'exists', 'break');
 
 		# extract npcd.cfg patch from broker_module definition
 		$npcdmod_npcd_cfg = $1 if ($val =~ /npcdmod\.o\s+config_file=(.*)$/i);
 	}else{
-		if (defined($modules{npcdmod})) {
-			info("module definition \"npcdmod\"",0);
+		if(defined($modules{npcdmod})){
+			info("module definition 'npcdmod'",0);
 			info("module: $modules{npcdmod}->{path}",0) if defined($modules{npcdmod}->{path});
-			if ($modules{npcdmod}->{args} =~ /config_file=(.*)$/) {
+			if($modules{npcdmod}->{args} =~ /config_file=(.*)$/){
 			   $npcdmod_npcd_cfg = $1;
 			}
 		}else{
-			info_and_exit("definition for (broker_)module \"npcdmod\" missing",2);
+			info_and_exit("definition for (broker_)module 'npcdmod' missing",2);
 		}
 	}
 	if($npcdmod_npcd_cfg){
@@ -398,8 +474,10 @@ if($mode eq "npcdmod"){
 }
 	
 info("========== Starting global checks ============",4);
-check_config_var('status_file', 'exists', 'break');
-process_status_file();
+if($product ne "icinga2"){
+	check_config_var('status_file', 'exists', 'break');
+	process_status_file();
+}
 info("==== Starting rrdtool checks ====",4);
 check_rrdtool();
 
@@ -407,21 +485,81 @@ info("==== Starting directory checks ====",4);
 check_config_var('RRDPATH', 'exists', 'break');
 check_perfdata_dir(get_config_var('RRDPATH'));
 
-if($process_perf_data_stats{1} == 0){
-	info("'process_perf_data 1' is not set for any of your hosts/services",2);
-} 
-if($process_perf_data_stats{'noperf'} > 0){
-	info($process_perf_data_stats{'noperf'}." hosts/services are not providing performance data",1);
-} 
-if($process_perf_data_stats{'noperf_but_enabled'} > 0){
-	info("'process_perf_data 1' is set for ".$process_perf_data_stats{'noperf_but_enabled'}." hosts/services which are not providing performance data!",1);
-} 
-if($process_perf_data_stats{0} > 0){
-	info("'process_perf_data 0' is set for ".$process_perf_data_stats{0}." of your hosts/services",1);
-} 
-if($process_perf_data_stats{1} > 0){
-	info("'process_perf_data 1' is set for ".$process_perf_data_stats{1}." of your hosts/services",0);
-} 
+if($product eq "icinga2"){
+	my @lines = `icinga2 object list --type host 2>/dev/null`;
+	if($?){
+		$last_check++;
+	}else{
+		for (@lines) {
+			chomp;
+			if(/name =/){
+				$process_perf_data_stats{'hosts'}++;
+				next;
+			}
+			if(/enable_perfdata =/){
+				my ($var,$val) = $_ =~ m|\*\s+(.*?)\s*=\s*["]?(.*)["]?|;
+				if($val eq "true"){
+					$process_perf_data_stats{1}++;
+				}else{
+					$process_perf_data_stats{0}++;
+				}
+				next;
+			}
+		}
+	}
+	@lines = `icinga2 object list --type service 2>/dev/null`;
+	if($?){
+		$last_check++;
+	}else{
+		for (@lines) {
+			chomp;
+			if(/name =/){
+				$process_perf_data_stats{'services'}++;
+				next;
+			}
+			if(/enable_perfdata =/){
+				my ($var,$val) = $_ =~ m|\*\s+(.*?)\s*=\s*["]?(.*)["]?|;
+				if($val eq "true"){
+					$process_perf_data_stats{1}++;
+				}else{
+					$process_perf_data_stats{0}++;
+				}
+				next;
+			}
+		}
+	}
+   if($process_perf_data_stats{1} == 0){
+      info("'enable_perfdata = true' is not set for any of your hosts/services",2);
+   }
+   if($process_perf_data_stats{'noperf'} > 0){
+      info($process_perf_data_stats{'noperf'}." hosts/services are not providing performance data",1);
+   }
+   if($process_perf_data_stats{'noperf_but_enabled'} > 0){
+      info("'enable_perfdata = true' is set for ".$process_perf_data_stats{'noperf_but_enabled'}." hosts/services which are not providing performance data!",1);
+   }
+   if($process_perf_data_stats{0} > 0){
+      info("'enable_perfdata = false' is set for ".$process_perf_data_stats{0}." of your hosts/services",1);
+   }
+   if($process_perf_data_stats{1} > 0){
+      info("'enable_perfdata = true' is set for ".$process_perf_data_stats{1}." of your hosts/services",0);
+   }
+}else{
+	if($process_perf_data_stats{1} == 0){
+		info("'process_perf_data 1' is not set for any of your hosts/services",2);
+	} 
+	if($process_perf_data_stats{'noperf'} > 0){
+		info($process_perf_data_stats{'noperf'}." hosts/services are not providing performance data",1);
+	} 
+	if($process_perf_data_stats{'noperf_but_enabled'} > 0){
+		info("'process_perf_data 1' is set for ".$process_perf_data_stats{'noperf_but_enabled'}." hosts/services which are not providing performance data!",1);
+	} 
+	if($process_perf_data_stats{0} > 0){
+		info("'process_perf_data 0' is set for ".$process_perf_data_stats{0}." of your hosts/services",1);
+	} 
+	if($process_perf_data_stats{1} > 0){
+		info("'process_perf_data 1' is set for ".$process_perf_data_stats{1}." of your hosts/services",0);
+	} 
+}
 
 if ( get_config_var('LOG_LEVEL') gt 0 ){
 	info("Logging is enabled in process_perfdata.cfg. This will reduce the overall performance of PNP4Nagios",1)
@@ -505,8 +643,10 @@ sub check_command_definition {
 	if($mode eq "bulk+npcd"){
 		my $dump_file = get_config_var( $option =~m/(.*)_processing_command/ );
 		my $perfdata_spool_dir = get_config_var( 'perfdata_spool_dir');
+		my ($file) = $dump_file =~ m|.*(/.+)|;
+		$file .= '/$TIMET$';
 		#print "$dump_file\n";
-		my $regex = qr/\/bin\/mv\s+$dump_file\s+$perfdata_spool_dir/;
+		my $regex = qr/\/bin\/mv\s+$dump_file\s+$perfdata_spool_dir($file)?/;
 		if( $val =~ m/$regex/){
 			info ( "Command looks good",0 );
 		}else{
@@ -616,6 +756,18 @@ sub print_stats {
 sub print_sizing {
 	my $object_count = ($process_perf_data_stats{'hosts'} + $process_perf_data_stats{'services'});
 	my $graph_count  = ($process_perf_data_stats{'hosts'} + $process_perf_data_stats{'services'});
+	if ($product eq "icinga2"){
+		my $count = `icinga2 object list --type host | grep 'Object' | wc -l`;
+		if ($?){
+			$last_check++;
+		}
+		$object_count += $count;
+		$count = `icinga2 object list --type service | grep 'Object' | wc -l`;
+		if ($?){
+			$last_check++;
+		}
+		$object_count += $count;
+	}
 	info("$object_count hosts/service objects defined",0);
 	foreach my $limit ( sort {$a <=> $b} keys %sizing){
 		if($graph_count >= $limit and $sizing{$limit} eq $mode){
@@ -983,6 +1135,9 @@ sub get_product {
 	for my $product (@products){ 
 		my $string = $product . "_user"; 
 		if ( exists $cfg{$string} ){
+			return $product;
+		}
+		if ($MainCfg =~ /$product.[cfg|conf]/) {
 			return $product;
 		}
 	}
