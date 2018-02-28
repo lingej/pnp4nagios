@@ -4,8 +4,16 @@ Alias @BASE_URL@ "@datarootdir@"
 
 <Directory "@datarootdir@">
    	AllowOverride None
-   	Order allow,deny
-   	Allow from all
+   	<IfVersion >= 2.3>
+   	   	<RequireAll>
+   	   	   	Require all granted
+   	   	   	# Require host 127.0.0.1
+   	   	</RequireAll>
+   	</IfVersion>
+   	<IfVersion < 2.3>
+   	   	Order allow,deny
+   	   	Allow from all
+   	</IfVersion>
    	#
    	# Use the same value as defined in nagios.conf
    	#
