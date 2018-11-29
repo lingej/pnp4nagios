@@ -64,9 +64,9 @@ install-config:
 	fi
 		
 	if [ -e $(DESTDIR)$(SYSCONFDIR)/npcd.cfg ] ;then \
-		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)/npcd.cfg.$(PKG_VERSION); \
+		$(INSTALL) -m 644  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)/npcd.cfg.$(PKG_VERSION); \
 	else\
-		$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)/npcd.cfg; \
+		$(INSTALL) -m 644  pnp/npcd.cfg-sample $(DESTDIR)$(SYSCONFDIR)/npcd.cfg; \
 	fi
 		
 	$(INSTALL) -m 644 $(INSTALL_OPTS)  pnp/rra.cfg-sample $(DESTDIR)$(SYSCONFDIR)
