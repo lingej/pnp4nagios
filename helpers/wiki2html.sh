@@ -39,4 +39,4 @@ for L in $LANG; do
     ((lindex++))
 done
 rm de_DE/dwnld.html
-ln -s en_US/dwnld.html de_DE/dwnld.html
+ln -s ../en_US/dwnld.html de_DE/dwnld.html
