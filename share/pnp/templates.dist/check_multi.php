@@ -4,7 +4,10 @@
 # Template for check_multi
 # 
 
-$opt[1] = "--lower-limit=$MIN[1] --vertical-label num  --title \"Number of Checks\" ";
+$opt[1] = "--vertical-label num  --title \"Number of Checks\" ";
+if (isset($MIN[1]) && is_numeric($MIN[1])) {
+    $opt[1] .= "--lower-limit=$MIN[1] ";
+}
 $ds_name[1] = "Executed Plugins";
 
 $def[1] =  "DEF:var1=$RRDFILE[1]:$DS[1]:AVERAGE " ;
