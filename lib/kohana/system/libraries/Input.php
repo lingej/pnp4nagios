@@ -56,7 +56,7 @@ class Input_Core {
 			// magic_quotes_runtime is enabled
 			if (function_exists('get_magic_quotes_runtime'))
 			{
-				ini_set('magic_quotes_runtime', 0)
+				ini_set('magic_quotes_runtime', 0);
 				Kohana::log('debug', 'Disable magic_quotes_runtime! It is evil and deprecated: http://php.net/magic_quotes');
 			}
 
