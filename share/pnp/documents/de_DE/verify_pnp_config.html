@@ -6,7 +6,7 @@
 
 <p>
 
-Bei Problemen kann das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <code>verify_pnp_config</code> von <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> helfen die aktuelle Nagios Konfiguration zu pr&uuml;fen und entsprechend Hinweise zur L&ouml;sung liefern.
+Bei Problemen kann das <acronym title="Practical Extraction and Report Language">Perl</acronym>-Script <code>verify_pnp_config</code> von <a href="http://verify.pnp4nagios.org" class="urlextern" title="http://verify.pnp4nagios.org"  rel="nofollow">http://verify.pnp4nagios.org</a> helfen die aktuelle Nagios/Icinga Konfiguration zu pr&uuml;fen und entsprechend Hinweise zur L&ouml;sung liefern.
 </p>
 
 <p>
@@ -14,15 +14,11 @@ Bei <a href="/de/pnp-0.6/about#support" class="wikilink1" title="de:pnp-0.6:abou
 </p>
 
 <p>
-<strong>* ACHTUNG </strong>*: Das Skript unterst&uuml;tzt NUR Nagios 3.x und Icinga 1.x als Monitoring-System.
-</p>
-
-<p>
 Feedback, Verbesserungsvorschl&auml;ge oder Patches bitte per Mail an support@pnp4nagios.org
 </p>
 
 </div>
-<!-- SECTION "verify_pnp_config" [1-604] -->
+<!-- SECTION "verify_pnp_config" [1-516] -->
 <h2><a name="download" id="download">Download</a></h2>
 <div class="level2">
 
@@ -35,7 +31,7 @@ wget http://verify.pnp4nagios.org/verify_pnp_config
 </pre>
 
 </div>
-<!-- SECTION "Download" [605-765] -->
+<!-- SECTION "Download" [517-677] -->
 <h2><a name="test" id="test">Test</a></h2>
 <div class="level2">
 
@@ -58,7 +54,7 @@ Weitere Infos &uuml;ber die einzelnen Modi und deren Konfiguration unter <a href
 </p>
 
 <p>
-Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) &uuml;ber die Option <code>--config</code> zu &uuml;bergeben. 
+Weiterhin ist der Pfad zur Nagios Config Datei (nagios.cfg) &uuml;ber die Option <code>--config</code> zu &uuml;bergeben. Auf einem Icinga System ist es entsprechend der Pfad zur icinga.cfg.
 </p>
 
 <p>
@@ -132,7 +128,7 @@ lenny:~# perl verify_pnp_config --mode npcdmod --config=/usr/local/nagios/etc/na
 </pre>
 
 </div>
-<!-- SECTION "Test" [766-4784] -->
+<!-- SECTION "Test" [678-4764] -->
 <h2><a name="performance_data" id="performance_data">Performance data</a></h2>
 <div class="level2">
 
@@ -154,4 +150,4 @@ Die Zeichenketten werden als regul&auml;re Ausdr&uuml;cke angesehen (<acronym ti
 </p>
 
 </div>
-<!-- SECTION "Performance data" [4785-] -->
+<!-- SECTION "Performance data" [4765-] -->
