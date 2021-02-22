@@ -49,7 +49,7 @@ my %conf = (
 );
 
 Getopt::Long::Configure('bundling');
-my ( $opt_V, $opt_h, $opt_c, $opt_l, $opt_x, $opt_p, $opt_s );
+my ( $opt_V, $opt_h, $opt_c, $opt_l, $opt_x, $opt_p );
 # defaults
 $opt_x = 1;
 
@@ -59,7 +59,6 @@ GetOptions(
     "c|check_command=s"    => \$opt_c,
     "p|cfg_dir=s"          => \$opt_p,
     "l|list_commands"      => \$opt_l,
-    "s|stepwise"           => \$opt_s,
     "x|no_structure_check" => \$opt_x,
     "d|dry-run"            => \$conf{DRY_RUN},
     "t|tmp_dir=s"          => \$conf{TMP_DIR},
@@ -108,8 +107,7 @@ sub main{
 		exit;
 	}
 	if($#worklist+1 > 0 ){
-		my $question = "Start converter? " . ($opt_s ? "(Each conversion will be prompted.) " : "");
-		my $answer = read_choice($question . "[n|y]");
+		my $answer = read_choice("Start Converter [n|y]?");
 		unless ( $answer =~ m/^y$/i ){
 			print "Exit...\n";
 			exit;
@@ -125,16 +123,7 @@ sub main{
 	write_custom_template();
 	my $t0 = [gettimeofday];
 	my $i = 0;
-	my $answered = "";
 	foreach my $xmlfile ( @worklist ) {
-		if($opt_s && ($answered !~ $xmlfile)){
-			my $answer = read_choice("Continue with $xmlfile [n|y]?");
-			unless ( $answer =~ m/^y$/i ){
-				print "Exit... (remember to remove the custom template, if created in this run!)\n";
-				exit;
-			}
-			$answered = $xmlfile;
-		}
 		$i++;
 		undef %ds_list;
 		undef %original_ds_list;
@@ -546,7 +535,6 @@ sub print_help{
 	print "          [ --dry-run ]\n";
 	print "          [ --tmp_dir=<temp directory> ]\n";
 	print "          [ --no_structure_check ]\n";
-    print "          [ --stepwise ]\n";
 	print "\n";
 	print "This script is used to switch to RRD_STORAGE_TYPE = MULTIPLE for a given Nagios Check Command\n";
 	print "More info online http://docs.pnp4nagios.org/pnp-0.6/rrd_convert\n";
