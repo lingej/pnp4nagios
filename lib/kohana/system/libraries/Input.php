@@ -54,14 +54,14 @@ class Input_Core {
 		if (Input::$instance === NULL)
 		{
 			// magic_quotes_runtime is enabled
-			if (function_exists('get_magic_quotes_runtime'))
+			if (get_magic_quotes_runtime())
 			{
-				ini_set('magic_quotes_runtime', 0)
+				set_magic_quotes_runtime(0);
 				Kohana::log('debug', 'Disable magic_quotes_runtime! It is evil and deprecated: http://php.net/magic_quotes');
 			}
 
 			// magic_quotes_gpc is enabled
-			if (function_exists('get_magic_quotes_gpc'))
+			if (get_magic_quotes_gpc())
 			{
 				$this->magic_quotes_gpc = TRUE;
 				Kohana::log('debug', 'Disable magic_quotes_gpc! It is evil and deprecated: http://php.net/magic_quotes');
