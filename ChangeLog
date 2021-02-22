@@ -1,4 +1,4 @@
-**pnp-0.6.?? ??/??/2017**
+**pnp-0.6.?? ??/??/2015**
 
 **pnp-0.6.26 08/21/2017**
   * Bugfix: Use complete option arguments for compatibility with rrdtool 1.6.0 (sbraz)
