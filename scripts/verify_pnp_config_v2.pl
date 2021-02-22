@@ -86,7 +86,6 @@ my %statistics = (
 
 my %cfg      = ();
 my %commands = ();
-my %modules  = ();
 my $uid      = 0;
 my $gid      = 0;
 my $process_perfdata_cfg = 0;
@@ -315,7 +314,6 @@ if($mode eq "bulk+npcd"){
 
 if($mode eq "npcdmod"){
 	my $val;
-	my $npcdmod_npcd_cfg;
 
 	info("========== Checking npcdmod Mode Config  ============",4);
 
@@ -344,24 +342,14 @@ if($mode eq "npcdmod"){
 		info_and_exit("event_broker_option bits 2 and/or 3 not enabled",2);
 	}
 
-	$val = get_config_var('broker_module');
-	if ($val) {
-		check_config_var('broker_module', 'exists', 'break');
+	check_config_var('broker_module', 'exists', 'break');
 
-		# extract npcd.cfg patch from broker_module definition
-		$npcdmod_npcd_cfg = $1 if ($val =~ /npcdmod\.o\s+config_file=(.*)$/i);
-	}else{
-		if (defined($modules{npcdmod})) {
-			info("module definition \"npcdmod\"",0);
-			info("module: $modules{npcdmod}->{path}",0) if defined($modules{npcdmod}->{path});
-			if ($modules{npcdmod}->{args} =~ /config_file=(.*)$/) {
-			   $npcdmod_npcd_cfg = $1;
-			}
-		}else{
-			info_and_exit("definition for (broker_)module \"npcdmod\" missing",2);
-		}
-	}
-	if($npcdmod_npcd_cfg){
+	$val = get_config_var('broker_module');
+	# extract npcd.cfg patch from broker_module definition 
+	my $npcdmod_npcd_cfg;
+	$val =~ /npcdmod\.o\s+config_file=(.*)$/;
+	if($1){
+		$npcdmod_npcd_cfg=$1;
 		info("npcdmod.o config file is $npcdmod_npcd_cfg",0);
 		if( -r $npcdmod_npcd_cfg){
 			info("$npcdmod_npcd_cfg used by npcdmod.o is readable",0);
@@ -786,7 +774,6 @@ sub trim {
 sub process_objects_file {
 	my ($file) = @_;
 	my $cmd = "";
-	my $mod = "";
 	my $line = "";
 	info ("Reading $file", 4);
 	open (CFILE, "$file") || info_and_exit("Failed to open '$file'. $! ", 2);
@@ -794,20 +781,8 @@ sub process_objects_file {
 		s/#.*//;
 		next if (/^$/);
 		chomp;
-		if (/^\s*command_name\s+(.+)/) {
-			($cmd) = $1;
-			next;
-		}
-		if (/^\s*module_name\s+(.+)/) {
-			($mod) = $1;
-			next;
-		}
-		if (/^\s*path\s+(.+)/) {
-			$modules{$mod}->{path} = $1;
-			next;
-		}
-		if (/^\s*args\s+(.+)/) {
-			$modules{$mod}->{args} = $1;
+		if (/command_name/) {
+			($cmd) = /command_name\s*(.*)/;
 			next;
 		}
 		next unless ( /command_line/);
