@@ -124,12 +124,12 @@ install-unstripped:
 	$(MAKE) install-basic
 
 install-basic:
-	$(INSTALL) -m 755 -d $(DESTDIR)$(BINDIR)
+	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(BINDIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LIBDIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(LOGDIR)
 	$(INSTALL) -m 755 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATA_DIR)
 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(PERFDATA_SPOOL_DIR)
-	$(INSTALL) -m 754 @npcd_name@ $(DESTDIR)$(BINDIR)
+	$(INSTALL) -m 754 $(INSTALL_OPTS) @npcd_name@ $(DESTDIR)$(BINDIR)
 	$(INSTALL) -m 754 $(INSTALL_OPTS) npcdmod.o $(DESTDIR)$(LIBDIR)
 
 strip-post-install:
