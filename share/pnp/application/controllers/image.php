@@ -31,9 +31,6 @@ class Image_Controller extends System_Controller  {
         if($this->input->get('graph_only') !== null)
             $this->rrdtool->config->conf['graph_only'] = 1;
 
-        if($this->input->get('hide_legend') !== null)
-            $this->rrdtool->config->conf['hide_legend'] = 1;
-
         $this->data->getTimeRange($this->start,$this->end,$this->view);
 
         if($this->tpl != ""){
