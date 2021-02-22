@@ -1044,7 +1044,6 @@ sub parse_perfstring {
         my $check_multi_blockcount = 0;
         my $multi_parent     = cleanup( $NAGIOS{SERVICEDESC} );
         my $auth_servicedesc = $NAGIOS{DISP_SERVICEDESC};
-        my $seen_multi_label = "";
         while ($perfstring) {
             ( $perfstring, %p ) = _parse($perfstring);
             if ( !$p{label} ) {
@@ -1053,19 +1052,8 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
-
-            if ( $p{label} =~ /$seen_multi_label/ ) {
-                # multi label format for each perfdata item (e.g Icinga2)
-                # we're in a sub tree of a multi block, adjust label for further processing
-                my $tmp_prefix = $seen_multi_label."::";
-                $p{label} =~ s/$tmp_prefix//;
-            }
-
             if ( $p{label} =~ /^[']?([a-zA-Z0-9\.\-_\s\/\#]+)::([a-zA-Z0-9\.\-_\s]+)::([^=]+)[']?$/ ) {
                 @multi = ( $1, $2, $3 );
-
-                $seen_multi_label = $multi[0]."::".$multi[1];
-
                 if ( $count == 0 ) {
                     print_log( "DEBUG: First check_multi block", 3 );
 
