@@ -116,7 +116,11 @@ class Auth_Model extends System_Model {
             $result = $this->queryLivestatus($query);
         }
 
-        return (!empty($result));
+        if(sizeof($result) > 0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
     }
 
 

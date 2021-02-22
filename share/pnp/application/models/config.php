@@ -68,7 +68,7 @@ class Config_Model extends System_Model
                 $views = array();
                 include ($config_file);
                 $array_b = $views;
-                if(empty($views)){
+                if(sizeof($views) == 0 ){
                     $views = $array_a;
                 }
             }

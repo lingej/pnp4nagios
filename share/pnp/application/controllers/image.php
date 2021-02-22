@@ -47,7 +47,7 @@ class Image_Controller extends System_Controller  {
                 $this->rrdtool->streamImage("ERROR: NOT_AUTHORIZED"); 
 
             #print Kohana::debug($this->data->STRUCT);
-            if(!empty($this->data->STRUCT)){
+            if(sizeof($this->data->STRUCT) > 0){
                 $image = $this->rrdtool->doImage($this->data->STRUCT[0]['RRD_CALL']);
             }else{
                 $image = FALSE;
