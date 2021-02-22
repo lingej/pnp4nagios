@@ -1019,23 +1019,13 @@ class Data_Model extends System_Model
         foreach($xml->meta->legend->entry as $key=>$value){
             $csv .= ";" . $value ;
         }
-
-        /*
-        * from rrdtool 1.5 on, timestamp ( value->t ) is not set anymore
-        * from 1.6 on it can be reactivated by -- showrime option to rrdtool xport
-        * here we take care of the timestamp ourselves regardless which 
-        * rrdtool version is used
-        */
-        $timestamp2 = $xml->meta->start;
-        $step = $xml->meta->step;
         $csv .= "\n";
         foreach($xml->data->row as $key=>$value){
-            $csv .= $timestamp2;
+            $csv .= (string) $value->t ;
             foreach($value->v as $item){
                 $csv .= ";".floatval((string) $item);
             }
             $csv .= "\n";
-            $timestamp2 = $timestamp2 + $step;
         }
         return $csv;    
     }
