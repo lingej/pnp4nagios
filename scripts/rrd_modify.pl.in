@@ -82,7 +82,7 @@ $no = 1 unless (defined $no);
 my $ds = `$rrdtool info $rrd | grep '^ds' | grep 'value' | wc -l`;
 # determine the decimal sign
 $sign = `$rrdtool info $rrd | grep '^ds' | grep 'value' | tail -1`;
-($sign) = $sign =~ /.* -?\d(.)\d+/;
+($sign) = $sign =~ /.* \d(.)\d+/;
 my $end = ($action eq "insert" ? $ds+$no : $ds);
 if (($start < 1) or ($start > $ds + 1)) {
 	print "ERROR: number ($start) must be within 1..".($ds+1)."\n";
