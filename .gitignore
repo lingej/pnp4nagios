@@ -36,6 +36,3 @@ scripts/rrd_convert.pl
 scripts/rrd_converter.pl
 
 man/npcd.8
-
-*.swp
-*.swo
