@@ -66,7 +66,6 @@ if(!empty($tpl)){
 	."&graph_height=$graph_height"
 	."&graph_width=$graph_width\">";
 }else{
-   $srv = urlencode($srv);
     echo "<img src=\"image?source=$source"
 	."&host=$host"
 	."&srv=urlencode($srv)"
