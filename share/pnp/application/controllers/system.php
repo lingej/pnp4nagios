@@ -35,7 +35,7 @@ class System_Controller extends Template_Controller {
         $this->controller        = Router::$controller;
 
         $this->data->getTimeRange($this->start,$this->end,$this->view);
-	if(! in_array(Router::$controller, array("image", "image_special", "xport"))){
+        if(Router::$controller != "image" && Router::$controller != "image_special"){
             $this->session = Session::instance();
 
             # Session withou theme info
