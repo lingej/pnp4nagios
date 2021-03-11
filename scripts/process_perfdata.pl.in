@@ -174,7 +174,7 @@ if( ! defined($opt_gm) ){
 sub main {
     my $job = shift;
     my $t0 = [gettimeofday];
-    my $t1;
+    my $t1 = [];
     my $rt;
     my $lines = 0;
     # Gearman Worker
