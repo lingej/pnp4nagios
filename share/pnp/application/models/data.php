@@ -1024,8 +1024,7 @@ class Data_Model extends System_Model
     public function buildXport($host,$service){
         // FIXME add max rows to config
         $this->XPORT = " -m 2000";
-        $this->XPORT .= " --start=".$this->TIMERANGE['start'];
-        $this->XPORT .= " --end=".$this->TIMERANGE['end'];
+        $this->XPORT .= $this->buildViewCmd(FALSE, $this->TIMERANGE['start'], $this->TIMERANGE['end']);
         $this->readXML($host,$service);
         $count = 0;
         $RRAs = array('MIN','MAX','AVERAGE');
