@@ -686,7 +686,7 @@ class Data_Model extends System_Model
             $timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
             $timerange['end']     = $end;
             $timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
-            $timerange['cmd']     = " --start $start --end $end ";
+            $timerange['cmd']     = $this->buildViewCmd(FALSE, $start, $end);
             $timerange['type']    = "start-end";
             $this->TIMERANGE = $timerange;
             return;
@@ -733,7 +733,7 @@ class Data_Model extends System_Model
            $timerange['f_start'] = date($this->config->conf['date_fmt'],$start);
            $timerange['end']     = $end;
            $timerange['f_end']   = date($this->config->conf['date_fmt'],$end);
-           $timerange['cmd']     = " --start $start --end $end ";
+           $timerange['cmd']     = $this->buildViewCmd($view, $start, $end);
            $timerange['type']    = "views";
            for ($i = 0; $i < count($this->config->views); $i++) {
                $timerange[$i]['title']   = $this->config->views[$i]['title'];
@@ -741,11 +741,38 @@ class Data_Model extends System_Model
                $timerange[$i]['f_start'] = date($this->config->conf['date_fmt'],$end - $this->config->views[$i]['start']);
                $timerange[$i]['end']     = $end;
                $timerange[$i]['f_end']   = date($this->config->conf['date_fmt'],$end);
-               $timerange[$i]['cmd']     = " --start " . ($end - $this->config->views[$i]['start']) . " --end  $end" ;
+               $timerange[$i]['cmd']     = $this->buildViewCmd($i, ($end - $this->config->views[$i]['start']), $end);
+               $timerange[$i]['type']    = "views";
            }
            $this->TIMERANGE = $timerange;
     }
 
+    public function buildViewCmd($view=FALSE, $start=FALSE, $end=FALSE) {
+        // abstract creation of RRDtool options string, so we can add more features to a view;
+        // implemented in this file by replacing cmd builds containing '--start'
+        if ($view !== FALSE && !array_key_exists($view, $this->config->views)) {
+            $view = 1;
+        }
+        $view = $this->config->views[$view];
+
+        $cmd = '';
+        if ($start !== FALSE) {
+            $cmd .= " --start $start";
+        } elseif (array_key_exists('start', $view)) {
+            $cmd .= (" --start " . $view['start']);
+        }
+        if ($end !== FALSE) {
+            $cmd .= " --end $end";
+        } elseif (array_key_exists('end', $view)) {
+            $cmd .= (" --end " . $view['end']);
+        }
+        if (array_key_exists('extra_args', $view)) {
+            $cmd .= (" " . $view['extra_args']);
+        }
+
+        return "$cmd ";
+    }
+	
     public function buildBasketStruct($basket,$view = NULL){
         if(is_array($basket) && (!empty($basket))){
 	    if($view == ""){
