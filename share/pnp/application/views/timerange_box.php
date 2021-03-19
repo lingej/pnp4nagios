@@ -6,7 +6,7 @@ echo "</div>\n";
 echo "<div class=\"p4 ui-widget-content ui-corner-bottom\">\n";
 $start = $this->session->get('start','');
 $end   = $this->session->get('end','');
-$path  = pnp::addToUri(array('start' => $start,'end' => $end));
+$path  = pnp::addToUri(array('view' => '', 'start' => $start,'end' => $end));
 if($start && $end){
 	echo "<a class=\"multi0\" href=\"".$path."\">".Kohana::lang('common.timerange-selector-link')."</a><br>\n"; 
 }
