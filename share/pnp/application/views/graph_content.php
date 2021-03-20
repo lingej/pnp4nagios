@@ -83,28 +83,35 @@ foreach($this->data->STRUCT as $key=>$value){
 		.Kohana::lang('common.service',$value['MACRO']['DISP_SERVICEDESC']) . " " 
 		.Kohana::lang('common.datasource',$value['ds_name']) . " " 
 		."\">\n";
-	echo "<div start=".$value['TIMERANGE']['start']." end=".$value['TIMERANGE']['end']." style=\"width:".$value['GRAPH_WIDTH']."px; height:".$value['GRAPH_HEIGHT']."px; position:absolute; top:33px\" class=\"graph\" id=\"".$this->url."\" ></div>";
-        
+	
+	# urlencode the graph id, to prevent # chars in service names being 
+	# treated like a url fragment when zooming
+	$gid = array();
+	parse_str(ltrim($this->url, '?'), $gid);
+	$gid = htmlentities("?host=".urlencode($gid["host"])."&srv=".urlencode($gid["srv"]));
+	
+	echo "<div start=".$value['TIMERANGE']['start']." end=".$value['TIMERANGE']['end']." style=\"width:".$value['GRAPH_WIDTH']."px; height:".$value['GRAPH_HEIGHT']."px; position:absolute; top:33px\" class=\"graph\" id=\"".$gid."\" ></div>";
+	
 	// build the URI which renders the dynamic graph image
 	$path = array('host'   => $value['MACRO']['HOSTNAME'],
-                      'srv'    => $value['MACRO']['SERVICEDESC'],
-                      'source' => $value['SOURCE']);
-
+	              'srv'    => $value['MACRO']['SERVICEDESC'],
+	              'source' => $value['SOURCE']);
+	
 	// only include `view` in the querystring if we are in a preset view; likewise, only 
 	// include timerange start/end if we are not in a preset view; this will help later
 	// to differentiate between preset and custom timeranges, for display purposes
 	if ($value['TIMERANGE']['type']=='views') {
 		$path['view']       =  $value['VIEW'];
-        } else {
+	} else {
 		$path['start']      =  $value['TIMERANGE']['start'];
 		$path['end']        =  $value['TIMERANGE']['end'];
-        }
+	}
+	
+	$path = pnp::addToUri($path, FALSE);
 
-        $path = pnp::addToUri($path, FALSE);
-
-        echo "<img class=\"graph\" src=\"".url::base(TRUE)."image" . $path . "\"></a>\n";
-        echo "</div>\n";
-   	echo "</div><p>\n";
+	echo "<img class=\"graph\" src=\"".url::base(TRUE)."image" . $path . "\"></a>\n";
+	echo "</div>\n";
+	echo "</div><p>\n";
 }
 echo "</div>\n";
 ?>

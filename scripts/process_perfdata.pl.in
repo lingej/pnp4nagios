@@ -55,6 +55,9 @@ my %conf = (
     KEY                => 'should_be_changed',
     KEY_FILE           => '@sysconfdir@/secret.key',
     UOM2TYPE           => { 'c' => 'DERIVE', 'd' => 'DERIVE' },
+    IGNORE_HOST_PATTERN => '',
+    IGNORE_SERVICE_PATTERN => '',
+    IGNORE_LABEL_PATTERN => '',
 );
 
 my %const = (
@@ -296,12 +299,27 @@ sub process_perfdata {
         $stats{skipped}++;
         return 1;
     }
+
     if ( ! defined($NAGIOS{PERFDATA}) && ! defined($opt_gm) ) {
         print_log( "No Performance Data for $NAGIOS{HOSTNAME} / $NAGIOS{SERVICEDESC} ", 1 );
         if ( !$opt_b && !$opt_s ) {
             print_log( "PNP exiting ...", 1 );
             exit 3;
         }
+    }
+
+    # Check if we want to ignore the host
+    my $pattern = $conf{IGNORE_HOST_PATTERN};
+    if ( $pattern ne '' && $NAGIOS{HOSTNAME} =~ /$pattern/) {
+        print_log( "Ignoring host due to a pattern: $NAGIOS{HOSTNAME}", 1 );
+        next;
+    }
+
+    # Check if we want to ignore the service
+    $pattern = $conf{IGNORE_SERVICE_PATTERN};
+    if ( $pattern ne '' && $NAGIOS{SERVICEDESC} =~ /$pattern/) {
+        print_log( "Ignoring service due to a pattern: $NAGIOS{SERVICEDESC}", 1 );
+        next;
     }
 
     if ( $NAGIOS{PERFDATA} =~ /^(.*)\s\[(.*)\]$/ ) {
@@ -1173,6 +1191,14 @@ sub parse_perfstring {
                 @perfs = ();
                 last;
             }
+
+            # Check if we want to ignore the perfdata by label
+            my $ignore_pattern = $conf{IGNORE_LABEL_PATTERN};
+            if ( $ignore_pattern ne '' && $p{label} =~ /$ignore_pattern/) {
+                print_log( "Ignoring perfdata label due to a pattern: $p{label}", 1 );
+                next;
+            }
+
             %CTPL = adjust_template( $NAGIOS{CHECK_COMMAND}, $p{uom}, $count );
 
             if ( $CTPL{'USE_MAX_ON_CREATE'} == 1 && defined $p{max} ) {

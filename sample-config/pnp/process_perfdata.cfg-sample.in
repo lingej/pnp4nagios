@@ -90,6 +90,27 @@ RRD_DAEMON_OPTS =
 #
 STATS_DIR = @localstatedir@/stats
 
+#
+# Ignore certain performance data based on host name
+#
+# You can put it any regular expression that matches the host name
+#
+#IGNORE_HOST_PATTERN =
+
+#
+# Ignore certain performance data based on service name
+#
+# You can put it any regular expression that matches the service name
+#
+#IGNORE_SERVICE_PATTERN =
+
+#
+# Ignore certain performance data based on label of an individual data point
+#
+# You can put it any regular expression that matches the label
+#
+#IGNORE_LABEL_PATTERN =
+
 
 #########################################################
 # Gearman Worker Config
