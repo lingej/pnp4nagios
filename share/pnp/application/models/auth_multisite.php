@@ -56,7 +56,11 @@ class Auth_Multisite_Model {
             throw new Exception();
         }
 
-        list($username, $issueTime, $cookieHash) = explode(':', $_COOKIE[$cookieName], 3);
+        $cookie = $_COOKIE[$cookieName];
+        if ($cookie[0] == '"') {
+            $cookie = trim($cookie, '"');
+        }
+        list($username, $issueTime, $cookieHash) = explode(':', $cookie, 3);
 
         if($this->authFile == 'htpasswd')
             $users = $this->loadAuthFile($this->htpasswdPath);
