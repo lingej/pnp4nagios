@@ -91,19 +91,27 @@ foreach($this->data->STRUCT as $key=>$value){
 	$gid = htmlentities("?host=".urlencode($gid["host"])."&srv=".urlencode($gid["srv"]));
 	
 	echo "<div start=".$value['TIMERANGE']['start']." end=".$value['TIMERANGE']['end']." style=\"width:".$value['GRAPH_WIDTH']."px; height:".$value['GRAPH_HEIGHT']."px; position:absolute; top:33px\" class=\"graph\" id=\"".$gid."\" ></div>";
-        
-	$path = pnp::addToUri( array(
-                                'host'   => $value['MACRO']['HOSTNAME'],
-                                'srv'    => $value['MACRO']['SERVICEDESC'],
-                                'view'   => $value['VIEW'],
-                                'source' => $value['SOURCE'],
-                                'start'  => $value['TIMERANGE']['start'],
-                                'end'    => $value['TIMERANGE']['end']
-                               ), FALSE
-                             );
-        echo "<img class=\"graph\" src=\"".url::base(TRUE)."image" . $path . "\"></a>\n";
-        echo "</div>\n";
-   	echo "</div><p>\n";
+	
+	// build the URI which renders the dynamic graph image
+	$path = array('host'   => $value['MACRO']['HOSTNAME'],
+	              'srv'    => $value['MACRO']['SERVICEDESC'],
+	              'source' => $value['SOURCE']);
+	
+	// only include `view` in the querystring if we are in a preset view; likewise, only 
+	// include timerange start/end if we are not in a preset view; this will help later
+	// to differentiate between preset and custom timeranges, for display purposes
+	if ($value['TIMERANGE']['type']=='views') {
+		$path['view']       =  $value['VIEW'];
+	} else {
+		$path['start']      =  $value['TIMERANGE']['start'];
+		$path['end']        =  $value['TIMERANGE']['end'];
+	}
+	
+	$path = pnp::addToUri($path, FALSE);
+
+	echo "<img class=\"graph\" src=\"".url::base(TRUE)."image" . $path . "\"></a>\n";
+	echo "</div>\n";
+	echo "</div><p>\n";
 }
 echo "</div>\n";
 ?>

@@ -208,7 +208,14 @@ $conf['use_calendar'] = 1;
 #
 # Define default views with title and start timerange in seconds 
 #
-# remarks: required escape on " with backslash
+# supported keys:
+#   'title' => The name of the view, e.g. "4 Hours"
+#   'start' => The number of seconds before the current time from whence the graph x-axis should start
+#   'extra_args' => additional arguments passed to rrdtool for this view's graph
+#
+# remarks: 
+#    required escape on " with backslash
+#    extra_args are appended to args/opts defined elsewhere (e.g. in templates), but no effort is made to de-duplicate
 #
 #$views[] = array('title' => 'One Hour',  'start' => (60*60) );
 $views[] = array('title' => '4 Hours',   'start' => (60*60*4) );
