@@ -648,7 +648,7 @@ sub open_template {
     my $xmlfile = shift;
     $delayed_write = 0;
     if( -e $xmlfile ){
-        my $mtime = (stat($xmlfile))[9];
+        my $mtime = (stat(_))[9];
         my $t = time();
         my $age = ($t - $mtime);
         if ( $age < $conf{'XML_UPDATE_DELAY'} ){
@@ -1285,17 +1285,22 @@ sub handle_signal {
     #
     if ( defined ( $opt_gm ) ){
         if($signal eq "CHLD" && defined($opt_gm) ){
-            my $pid = waitpid(-1, &WNOHANG);
-            if($pid == -1){
-                print_log( "### no hanging child ###", 1 );
-            } elsif ( WIFEXITED($?)) {
-                print_log( "### child $pid exited ###", 1 );
-                $children--;
-            } else {
-                print_log( "### wrong signal ###", 1 );
-                $children--;
+            while(my $pid = waitpid(-1, &WNOHANG)) {
+                if($pid == -1){
+                    print_log( "### no hanging child ###", 1 );
+                    last;
+                } elsif ( WIFEXITED($?)) {
+                    print_log( "### child $pid exited ###", 1 );
+                    delete $children{$pid};
+                    $children--;
+                } else {
+                    print_log( "### wrong signal ###", 1 );
+                    delete $children{$pid};
+                    $children--;
+                }
+                $SIG{'CHLD'} = \&handle_signal;
             }
-            $SIG{'CHLD'} = \&handle_signal;
+            return;
         }
         if($signal eq "INT" || $signal eq "TERM"){
             local($SIG{CHLD}) = 'IGNORE';   # we're going to kill our children
@@ -1499,6 +1504,12 @@ sub new_child {
         # Child can *not* return from this subroutine.
         $SIG{INT} = 'DEFAULT';      # make SIGINT kill us as it did before
 
+        # empty children list so we won't kill siblings if one children dies
+        %children = ();
+
+        # do not delete pidfile if child exits
+        undef $opt_pidfile;
+
         # unblock signals
         sigprocmask(SIG_UNBLOCK, $sigset)
             or die "Can't unblock SIGINT for fork: $!\n";
@@ -1506,7 +1517,7 @@ sub new_child {
         my $worker = Gearman::Worker->new();
         my @job_servers = split(/,/, $conf{'GEARMAN_HOST'}); # allow multiple gearman job servers
         $worker->job_servers(@job_servers);
-        $worker->register_function("perfdata", 2, sub { return main(@_); });
+        $worker->register_function("perfdata", undef, sub { return main(@_); });
         my %opt = (
                     on_complete => sub { $req++; },
                     stop_if => sub { if ( $req > $conf{'REQUESTS_PER_CHILD'} ) { return 1;}; }
