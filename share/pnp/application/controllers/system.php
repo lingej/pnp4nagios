@@ -123,14 +123,11 @@ class System_Controller extends Template_Controller {
     }
 
     public function check_mod_rewrite(){
-        if(!function_exists('apache_get_modules')){
-            // Add index.php to every URL while not running withn apache mod_php 
-            Kohana::config_set('core.index_page','index.php');
-            return TRUE;
-        }
-        if(!in_array('mod_rewrite', apache_get_modules())){
-            // Add index.php to every URL while mod_rewrite is not available
-            Kohana::config_set('core.index_page','index.php');
+        if(function_exists('apache_get_modules')){
+            if(!in_array('mod_rewrite', apache_get_modules())){
+                // Add index.php to every URL while mod_rewrite is not available
+                Kohana::config_set('core.index_page','index.php');
+            }
         }
         if ( $this->config->conf['use_url_rewriting'] == 0 ){
             Kohana::config_set('core.index_page','index.php');
