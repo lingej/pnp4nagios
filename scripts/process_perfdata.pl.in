@@ -177,7 +177,6 @@ if( ! defined($opt_gm) ){
 sub main {
     my $job = shift;
     my $t0 = [gettimeofday];
-    my $t1;
     my $rt;
     my $lines = 0;
     # Gearman Worker
@@ -185,8 +184,7 @@ sub main {
         print_log( "Gearman Worker Job start", 1 );
         %NAGIOS = parse_env($job->arg);
         $lines = process_perfdata();
-        $t1 = [gettimeofday];
-        $rt = tv_interval $t0, $t1;
+        $rt = tv_interval($t0, [gettimeofday]);
         $stats{runtime} += $rt;
         $stats{rows}++;
         if( ( int $stats{timet} / 60 ) < ( int time / 60 )){
@@ -218,7 +216,7 @@ sub main {
         %NAGIOS = parse_env();
         $lines = process_perfdata();
     }
-    $rt = tv_interval $t0, $t1;
+	$rt = tv_interval($t0, [gettimeofday]);
     $stats{runtime} = $rt;
     $stats{rows} = $lines;
     store_internals();
