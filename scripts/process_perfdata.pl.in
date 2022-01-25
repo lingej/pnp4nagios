@@ -356,7 +356,7 @@ sub process_perfdata_file {
         }
 
         print_log( "reading $pdfile for bulk update", 2 );
-        open( PDFILE, "< $pdfile" );
+        open( PDFILE, "< $pdfile" ) || die "Can't open '$pdfile': $!";
         my $count = 0;
         while (<PDFILE>) {
 			my $job_data = $_;
@@ -779,7 +779,7 @@ sub read_custom_template {
     if ( -e $template_cfg ) {
         print_log( "DEBUG: adjust_template() => $template_cfg", 3 );
         my $initial_dstype = $dstype;
-        open FH, "<", $template_cfg;
+        open FH, "<", $template_cfg || die "Can't open '$template_cfg': $!";
         while (<FH>) {
             next if /^#/;
             next if /^$/;
@@ -858,7 +858,7 @@ sub parse_config {
     my $line        = 0;
 
     if ( -e $config_file ) {
-        open CFG, '<', "$config_file";
+        open CFG, '<', "$config_file" || die "Can't open '$config_file': $!";
         while (<CFG>) {
             $line++;
             chomp;
@@ -902,7 +902,7 @@ sub parse_rra_config {
 
     if ( $rra_template ne "" ) {
         @rrd_create = ();
-        open RRA, "<", $rra_template;
+        open RRA, "<", $rra_template || die "Can't open '$rra_template': $!";
         while (<RRA>) {
             next if /^#/;
             next if /^$/;
@@ -1377,7 +1377,7 @@ sub store_internals {
 sub check_internals {
     my $file;
     my @files;
-    opendir(STATS, $conf{'STATS_DIR'});
+    opendir(STATS, $conf{'STATS_DIR'}) || die "Can't open '$conf{'STATS_DIR'}': $!";
     while ( defined ( my $file = readdir STATS) ){
         next if $file =~ /^\.\.?$/; # skip . and ..
         next if $file =~ /-PID-/;   # skip temporary files
@@ -1398,7 +1398,7 @@ sub read_internals {
             print_log( "ERROR: renaming stats file " . $conf{'STATS_DIR'}."/".$file . " to " . $conf{'STATS_DIR'}."/".$file."-PID-".$$ . " failed", 1 );
             next;
         }
-        open( STAT, "< ".$conf{'STATS_DIR'}."/".$file."-PID-".$$ );
+        open( STAT, "< ".$conf{'STATS_DIR'}."/".$file."-PID-".$$ ) || die "Can't open '$conf{'STATS_DIR'}/$file-PID-$$': $!";
         %stats = (
             timet       => 0,
             error       => 0,
@@ -1538,7 +1538,7 @@ sub pidlock {
     my $PIDFILE = $opt_pidfile;
     if($action eq "create"){
         if ( -e $PIDFILE ) {
-            if ( open( OLDPID, "<$PIDFILE" ) ) {
+            if ( open( OLDPID, "<$PIDFILE" ) || die "Can't open '$PIDFILE': $!") {
                 $_ = <OLDPID>;
                 chop($_);
                 my $oldpid = $_;
@@ -1575,7 +1575,7 @@ sub read_keyfile {
     my $file = shift;
     my $key = '';
     if( -r $file){
-        open(FH, "<", $file);
+        open(FH, "<", $file) || die "Can't open '$file': $!";
         while(<FH>){
             chomp(); # avoid \n on last field
             $conf{'KEY'} = $_;
